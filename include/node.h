@@ -17,10 +17,12 @@
 
 namespace YAML
 {
+	class AliasManager;
 	class Content;
 	class Scanner;
 	class Emitter;
-	struct ParserState;
+	class EventHandler;
+	struct NodeProperties;
 
 	enum CONTENT_TYPE { CT_NONE, CT_SCALAR, CT_SEQUENCE, CT_MAP };
 
@@ -32,7 +34,16 @@ namespace YAML
 
 		void Clear();
 		std::auto_ptr<Node> Clone() const;
-		void Parse(Scanner *pScanner, ParserState& state);
+		void EmitEvents(EventHandler& eventHandler) const;
+		void EmitEvents(AliasManager& am, EventHandler& eventHandler) const;
+
+		void Init(CONTENT_TYPE type, const Mark& mark, const std::string& tag);
+		void InitNull(const std::string& tag);
+		void InitAlias(const Mark& mark, const Node& identity);
+		
+		void SetData(const std::string& data);
+		void Append(std::auto_ptr<Node> pNode);
+		void Insert(std::auto_ptr<Node> pKey, std::auto_ptr<Node> pValue);
 
 		CONTENT_TYPE GetType() const;
 
@@ -97,19 +108,10 @@ namespace YAML
 
 		template <typename T>
 		const Node *FindValueForKey(const T& key) const;
-		
-		// helper for cloning
-		Node(const Mark& mark, const std::string& anchor, const std::string& tag, const Content *pContent);
-
-		// helpers for parsing
-		void ParseHeader(Scanner *pScanner, ParserState& state);
-		void ParseTag(Scanner *pScanner, ParserState& state);
-		void ParseAnchor(Scanner *pScanner, ParserState& state);
-		void ParseAlias(Scanner *pScanner, ParserState& state);
 
 	private:
 		Mark m_mark;
-		std::string m_anchor, m_tag;
+		std::string m_tag;
 		Content *m_pContent;
 		bool m_alias;
 		const Node *m_pIdentity;
