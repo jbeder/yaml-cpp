@@ -1,9 +1,25 @@
 #include "yaml.h"
 #include <fstream>
 #include <iostream>
+#include <vector>
+
+struct Params {
+	bool hasFile;
+	std::string fileName;
+};
+
+Params ParseArgs(int argc, char **argv) {
+	Params p;
+
+	std::vector<char*> args(argv + 1, argv + argc);
+	
+	return p;
+}
 
 int main(int argc, char **argv)
 {
+	Params p = ParseArgs(argc, argv);
+
 	std::ifstream fin;
 	if(argc > 1)
 		fin.open(argv[1]);
