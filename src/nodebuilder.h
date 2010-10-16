@@ -3,55 +3,49 @@
 #ifndef NODEBUILDER_H_62B23520_7C8E_11DE_8A39_0800200C9A66
 #define NODEBUILDER_H_62B23520_7C8E_11DE_8A39_0800200C9A66
 
-#include "eventhandler.h"
-#include "ptr_stack.h"
 #include <map>
 #include <memory>
 #include <stack>
+#include <string>
+
+#include "ptr_stack.h"
 
 namespace YAML
 {
 	class Node;
+	class Mark;
 	
-	class NodeBuilder: public EventHandler
+	class NodeBuilder
 	{
 	public:
+		typedef YAML::Node Node;
+		typedef YAML::Node Map;
+		typedef YAML::Node Sequence;
+		
 		explicit NodeBuilder(Node& root);
+		NodeBuilder(const NodeBuilder& o);
 		virtual ~NodeBuilder();
 
-		virtual void OnDocumentStart(const Mark& mark);
-		virtual void OnDocumentEnd();
+		Node *NewNull(const std::string& tag, Node *pParent);
+		Node *AnchorReference(const Mark& mark, Node *pNode);
+		Node *NewScalar(const Mark& mark, const std::string& tag, Node *pParent, const std::string& value);
 		
-		virtual void OnNull(const std::string& tag, anchor_t anchor);
-		virtual void OnAlias(const Mark& mark, anchor_t anchor);
-		virtual void OnScalar(const Mark& mark, const std::string& tag, anchor_t anchor, const std::string& value);
+		Sequence *NewSequence(const Mark& mark, const std::string& tag, Node *pParent);
+		void AppendToSequence(Sequence *pSequence, Node *pNode);
+		void SequenceComplete(Sequence *pSequence) {(void)pSequence;}
 		
-		virtual void OnSequenceStart(const Mark& mark, const std::string& tag, anchor_t anchor);
-		virtual void OnSequenceEnd();
-		
-		virtual void OnMapStart(const Mark& mark, const std::string& tag, anchor_t anchor);
-		virtual void OnMapEnd();
+		Map *NewMap(const Mark& mark, const std::string& tag, Node *pParent);
+		void AssignInMap(Map *pMap, Node *pKeyNode, Node *pValueNode);
+		void MapComplete(Map *pMap) {(void)pMap;}
 		
 	private:
-		Node& Push(anchor_t anchor);
-		Node& Push();
-		Node& Top();
-		void Pop();
-
-		void Insert(std::auto_ptr<Node> pNode);
-		void RegisterAnchor(anchor_t anchor, const Node& node);
+		Node* NewNode();
 		
 	private:
 		Node& m_root;
 		bool m_initializedRoot;
-		bool m_finished;
 		
-		ptr_stack<Node> m_stack;
-		ptr_stack<Node> m_pendingKeys;
-		std::stack<bool> m_didPushKey;
-
-		typedef std::vector<const Node *> Anchors;
-		Anchors m_anchors;
+		ptr_stack<Node> m_unlinked;
 	};
 }
 

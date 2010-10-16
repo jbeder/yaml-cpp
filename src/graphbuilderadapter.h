@@ -3,6 +3,7 @@
 
 #include <map>
 #include <stack>
+#include "anchordict.h"
 #include "eventhandler.h"
 #include "graphbuilder.h"
 
@@ -50,7 +51,7 @@ namespace YAML
       static int sequenceMarker;
     };
     typedef std::stack<ContainerFrame> ContainerStack;
-    typedef std::map<anchor_t, void*> AnchorMap;
+    typedef AnchorDict<void*> AnchorMap;
     
     GraphBuilderInterface& m_builder;
     ContainerStack m_containers;

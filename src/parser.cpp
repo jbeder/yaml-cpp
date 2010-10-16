@@ -75,7 +75,7 @@ namespace YAML
 	bool Parser::GetNextDocument(Node& document)
 	{
 		NodeBuilder builder(document);
-		return HandleNextDocument(builder);
+		return BuildNextDocumentGraph(builder);
 	}
 
 	// ParseDirectives
