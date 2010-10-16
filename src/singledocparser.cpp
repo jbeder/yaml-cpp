@@ -8,6 +8,7 @@
 #include "token.h"
 #include <sstream>
 #include <cstdio>
+#include <algorithm>
 
 namespace YAML
 {
@@ -72,6 +73,17 @@ namespace YAML
 		std::string tag;
 		anchor_t anchor;
 		ParseProperties(tag, anchor);
+		
+		if (tag.empty()) {
+			const Token& token = m_scanner.peek();
+			const std::vector<std::string>& tparams = token.params;
+			if (token.type != Token::SCALAR ||
+					std::find(tparams.begin(), tparams.end(), Token::PLAIN_SCALAR) != tparams.end()) {
+				tag = "?";
+			} else {
+				tag = "!";
+			}
+		}
 		
 		// now split based on what kind of node we should be
 		switch(m_scanner.peek().type) {

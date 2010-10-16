@@ -77,6 +77,8 @@ namespace YAML
 		void EmitEndMap();
 		void EmitKey();
 		void EmitValue();
+		void EmitKindTag();
+		void EmitTag(bool verbatim, const _Tag& tag);
 		
 	private:
 		ostream m_stream;
