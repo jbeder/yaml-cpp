@@ -5,6 +5,7 @@
 #include "emitfromevents.h"
 #include "emitter.h"
 #include "eventhandler.h"
+#include "graphbuilderadapter.h"
 #include "iterpriv.h"
 #include "map.h"
 #include "nodebuilder.h"
@@ -47,7 +48,9 @@ namespace YAML
 	{
 		std::auto_ptr<Node> pNode(new Node);
 		NodeBuilder nodeBuilder(*pNode);
-		EmitEvents(nodeBuilder);
+		GraphBuilder<NodeBuilder> graphBuilder(nodeBuilder);
+		GraphBuilderAdapter eventHandler(graphBuilder);
+		EmitEvents(eventHandler);
 		return pNode;
 	}
 

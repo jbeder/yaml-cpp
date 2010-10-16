@@ -15,7 +15,7 @@ namespace YAML
   
   void GraphBuilderAdapter::OnAlias(const Mark& mark, anchor_t anchor)
   {
-    void *pReffedNode = m_anchors[anchor];
+    void *pReffedNode = m_anchors.Get(anchor);
     DispositionNode(m_builder.AnchorReference(mark, pReffedNode));
   }
   
@@ -70,7 +70,7 @@ namespace YAML
   void GraphBuilderAdapter::RegisterAnchor(anchor_t anchor, void *pNode)
   {
     if (anchor) {
-      m_anchors[anchor] = pNode;
+      m_anchors.Register(anchor, pNode);
     }
   }
   
