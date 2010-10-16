@@ -59,6 +59,8 @@ namespace YAML
 			TAG,
 			SCALAR
 		};
+		
+		static const std::string PLAIN_SCALAR;
 				
 		// data
 		Token(TYPE type_, const Mark& mark_): status(VALID), type(type_), mark(mark_), data(0) {}

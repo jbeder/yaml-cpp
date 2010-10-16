@@ -276,7 +276,12 @@ namespace YAML
 		} else {
 			bool canBeHandle;
 			token.value = ScanTagHandle(INPUT, canBeHandle);
-			token.data = (token.value.empty() ? Tag::SECONDARY_HANDLE : Tag::PRIMARY_HANDLE);
+			if(!canBeHandle && token.value.empty())
+				token.data = Tag::NON_SPECIFIC;
+			else if(token.value.empty())
+				token.data = Tag::SECONDARY_HANDLE;
+			else
+				token.data = Tag::PRIMARY_HANDLE;
 			
 			// is there a suffix?
 			if(canBeHandle && INPUT.peek() == Keys::Tag) {
@@ -323,6 +328,7 @@ namespace YAML
 
 		Token token(Token::SCALAR, mark);
 		token.value = scalar;
+		token.params.push_back(Token::PLAIN_SCALAR);
 		m_tokens.push(token);
 	}
 
