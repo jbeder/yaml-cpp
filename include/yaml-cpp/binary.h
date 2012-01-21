@@ -48,6 +48,10 @@ namespace YAML
             return true;
         }
         
+        bool operator != (const Binary& rhs) const {
+            return !(*this == rhs);
+        }
+        
     private:
         std::vector<unsigned char> m_data;
         const unsigned char *m_unownedData;
