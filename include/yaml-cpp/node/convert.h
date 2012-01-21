@@ -6,6 +6,7 @@
 #endif
 
 
+#include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/null.h"
@@ -181,6 +182,26 @@ namespace YAML
 			for(const_iterator it=node.begin();it!=node.end();++it)
 				rhs.push_back(it->as<T>());
 			return true;
+		}
+	};
+    
+    // binary
+    template<>
+	struct convert<Binary> {
+		static Node encode(const Binary& rhs) {
+            return Node(EncodeBase64(rhs.data(), rhs.size()));
+		}
+		
+		static bool decode(const Node& node, Binary& rhs) {
+			if(!node.IsScalar())
+				return false;
+            
+            std::vector<unsigned char> data = DecodeBase64(node.Scalar());
+            if(data.empty() && !node.Scalar().empty())
+                return false;
+            
+            rhs.swap(data);
+            return true;
 		}
 	};
 }
