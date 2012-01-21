@@ -252,17 +252,17 @@ namespace YAML
 	
 	// sequence
 	template<typename T>
-	inline void Node::append(const T& rhs)
+	inline void Node::push_back(const T& rhs)
 	{
-		append(Node(rhs));
+		push_back(Node(rhs));
 	}
 	
-	inline void Node::append(const Node& rhs)
+	inline void Node::push_back(const Node& rhs)
 	{
 		EnsureNodeExists();
 		rhs.EnsureNodeExists();
 		
-		m_pNode->append(*rhs.m_pNode, m_pMemory);
+		m_pNode->push_back(*rhs.m_pNode, m_pMemory);
 		m_pMemory->merge(*rhs.m_pMemory);
 	}
 

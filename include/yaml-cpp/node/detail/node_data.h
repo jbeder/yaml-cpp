@@ -45,7 +45,7 @@ namespace YAML
 			node_iterator end();
 
 			// sequence
-			void append(node& node, shared_memory_holder pMemory);
+			void push_back(node& node, shared_memory_holder pMemory);
 			void insert(node& key, node& value, shared_memory_holder pMemory);
 
 			// indexing

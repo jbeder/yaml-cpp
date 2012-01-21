@@ -40,9 +40,9 @@ namespace Test
 		TEST SimpleAppendSequence()
 		{
 			YAML::Node node;
-			node.append(10);
-			node.append("foo");
-			node.append("monkey");
+			node.push_back(10);
+			node.push_back("foo");
+			node.push_back("monkey");
 			YAML_ASSERT(node.IsSequence());
 			YAML_ASSERT(node.size() == 3);
 			YAML_ASSERT(node[0].as<int>() == 10);

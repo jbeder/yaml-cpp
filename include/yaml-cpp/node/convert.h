@@ -149,7 +149,7 @@ namespace YAML
 		static Node encode(const std::vector<T>& rhs) {
 			Node node(NodeType::Sequence);
 			for(typename std::vector<T>::const_iterator it=rhs.begin();it!=rhs.end();++it)
-				node.append(*it);
+				node.push_back(*it);
 			return node;
 		}
 		
@@ -170,7 +170,7 @@ namespace YAML
 		static Node encode(const std::list<T>& rhs) {
 			Node node(NodeType::Sequence);
 			for(typename std::list<T>::const_iterator it=rhs.begin();it!=rhs.end();++it)
-				node.append(*it);
+				node.push_back(*it);
 			return node;
 		}
 		
