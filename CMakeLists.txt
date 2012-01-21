@@ -56,26 +56,12 @@ option(MSVC_STHREADED_RT "MSVC: Build with single-threaded static runtime libs (
 ###
 set(header_directory "include/yaml-cpp/")
 
-file(GLOB common_sources "src/[a-zA-Z]*.cpp")
-file(GLOB new_api_sources 
-	"src/node/[a-zA-Z]*.cpp"
-	"src/node/detail/[a-zA-Z]*.cpp"
-)
-
-file(GLOB common_public_headers "include/yaml-cpp/[a-zA-Z]*.h")
-file(GLOB new_api_public_headers
-	"include/yaml-cpp/node/[a-zA-Z]*.h"
-	"include/yaml-cpp/node/detail/[a-zA-Z]*.h"
-)
-
-file(GLOB common_private_headers "src/[a-zA-Z]*.h")
-file(GLOB new_api_private_headers "src/node/[a-zA-Z]*.h")
+file(GLOB sources "src/[a-zA-Z]*.cpp")
+file(GLOB_RECURSE public_headers "include/yaml-cpp/[a-zA-Z]*.h")
+file(GLOB private_headers "src/[a-zA-Z]*.h")
 
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
-list(APPEND sources ${common_sources} ${new_api_sources})
-list(APPEND public_headers ${common_public_headers} ${new_api_public_headers})
-list(APPEND private_headers ${common_private_headers} ${new_api_private_headers})
 
 if(YAML_CPP_BUILD_CONTRIB)
 	file(GLOB contrib_sources "src/contrib/[a-zA-Z]*.cpp")
