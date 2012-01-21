@@ -87,8 +87,8 @@ namespace YAML
 			node_iterator end() { return m_pRef->end(); }
 
 			// sequence
-			void append(node& node, shared_memory_holder pMemory) {
-				m_pRef->append(node, pMemory);
+			void push_back(node& node, shared_memory_holder pMemory) {
+				m_pRef->push_back(node, pMemory);
 				node.add_dependency(*this);
 			}
 			void insert(node& key, node& value, shared_memory_holder pMemory) {

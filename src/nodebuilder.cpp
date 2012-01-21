@@ -112,7 +112,7 @@ namespace YAML
 		detail::node& collection = *m_stack.back();
 		
 		if(collection.type() == NodeType::Sequence) {
-			collection.append(node, m_pMemory);
+			collection.push_back(node, m_pMemory);
 		} else if(collection.type() == NodeType::Map) {
 			assert(!m_keys.empty());
 			PushedKey& key = m_keys.back();

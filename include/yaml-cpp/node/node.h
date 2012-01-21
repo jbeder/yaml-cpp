@@ -64,8 +64,8 @@ namespace YAML
 		iterator end();
 		
 		// sequence
-		template<typename T> void append(const T& rhs);
-		void append(const Node& rhs);
+		template<typename T> void push_back(const T& rhs);
+		void push_back(const Node& rhs);
 		
 		// indexing
 		template<typename Key> const Node operator[](const Key& key) const;

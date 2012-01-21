@@ -153,7 +153,7 @@ namespace YAML
 		}
 
 		// sequence
-		void node_data::append(node& node, shared_memory_holder /* pMemory */)
+		void node_data::push_back(node& node, shared_memory_holder /* pMemory */)
 		{
 			if(m_type == NodeType::Undefined || m_type == NodeType::Null) {
 				m_type = NodeType::Sequence;
@@ -161,7 +161,7 @@ namespace YAML
 			}
 			
 			if(m_type != NodeType::Sequence)
-				throw std::runtime_error("Can't append to a non-sequence node");
+				throw std::runtime_error("Can't push_back to a non-sequence node");
 			
 			m_sequence.push_back(&node);
 		}
