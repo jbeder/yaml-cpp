@@ -9,11 +9,6 @@
 #include <sstream>
 #include <cstdio>
 
-#ifdef YAML_CPP_OLD_API
-#include "yaml-cpp/old-api/node.h"
-#include "old-api/nodebuilder.h"
-#endif
-
 namespace YAML
 {
 	Parser::Parser()
@@ -57,17 +52,6 @@ namespace YAML
 		sdp.HandleDocument(eventHandler);
 		return true;
 	}
-
-#ifdef YAML_CPP_OLD_API
-	// GetNextDocument
-	// . Reads the next document in the queue (of tokens).
-	// . Throws a ParserException on error.
-	bool Parser::GetNextDocument(Node& document)
-	{
-		NodeBuilder builder(document);
-		return HandleNextDocument(builder);
-	}
-#endif
 
 	// ParseDirectives
 	// . Reads any directives that are next in the queue.
