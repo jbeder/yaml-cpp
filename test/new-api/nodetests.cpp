@@ -316,6 +316,14 @@ namespace Test
             YAML_ASSERT(node[6].as<int>() == 13);
             return true;
         }
+        
+        TEST Binary()
+        {
+            YAML::Node node = YAML::Load("[!!binary \"SGVsbG8sIFdvcmxkIQ==\", !!binary \"TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4K\"]");
+            YAML_ASSERT(node[0].as<YAML::Binary>() == YAML::Binary(reinterpret_cast<const unsigned char*>("Hello, World!"), 13));
+            YAML_ASSERT(node[1].as<YAML::Binary>() == YAML::Binary(reinterpret_cast<const unsigned char*>("Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.\n"), 270));
+            return true;
+        }
 	}
 	
 	void RunNodeTest(TEST (*test)(), const std::string& name, int& passed, int& total) {
@@ -364,6 +372,7 @@ namespace Test
 		RunNodeTest(&Node::Reassign, "reassign", passed, total);
 		RunNodeTest(&Node::FallbackValues, "fallback values", passed, total);
 		RunNodeTest(&Node::NumericConversion, "numeric conversion", passed, total);
+		RunNodeTest(&Node::Binary, "binary", passed, total);
 
 		std::cout << "Node tests: " << passed << "/" << total << " passed\n";
 		return passed == total;

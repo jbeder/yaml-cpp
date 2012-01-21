@@ -35,6 +35,19 @@ namespace YAML
             }
         }
         
+        bool operator == (const Binary& rhs) const {
+            const std::size_t s = size();
+            if(s != rhs.size())
+                return false;
+            const unsigned char *d1 = data();
+            const unsigned char *d2 = rhs.data();
+            for(std::size_t i=0;i<s;i++) {
+                if(*d1++ != *d2++)
+                    return false;
+            }
+            return true;
+        }
+        
     private:
         std::vector<unsigned char> m_data;
         const unsigned char *m_unownedData;
