@@ -332,18 +332,24 @@ namespace Test
             int seq[] = {1, 3, 5, 7};
             int i=0;
             for(YAML::const_iterator it=node.begin();it!=node.end();++it) {
+                YAML_ASSERT(i < 4);
                 int x = seq[i++];
                 YAML_ASSERT(it->as<int>() == x);
             }
+            YAML_ASSERT(i == 4);
             return true;
         }
         
         TEST IterateMap()
         {
             YAML::Node node = YAML::Load("{a: A, b: B, c: C}");
+            int i=0;
             for(YAML::const_iterator it=node.begin();it!=node.end();++it) {
+                YAML_ASSERT(i < 3);
+                i++;
                 YAML_ASSERT(it->first.as<char>() + 'A' - 'a' == it->second.as<char>());
             }
+            YAML_ASSERT(i == 3);
             return true;
         }
         
