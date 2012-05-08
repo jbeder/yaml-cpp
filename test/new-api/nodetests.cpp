@@ -364,6 +364,15 @@ namespace Test
             }
             return true;
         }
+
+        TEST ForEachMap()
+        {
+            YAML::Node node = YAML::Load("{a: A, b: B, c: C}");
+            BOOST_FOREACH(const YAML::const_iterator::value_type &p, node) {
+                YAML_ASSERT(p.first.as<char>() + 'A' - 'a' == p.second.as<char>());
+            }
+            return true;
+        }
 	}
 	
 	void RunNodeTest(TEST (*test)(), const std::string& name, int& passed, int& total) {
@@ -416,6 +425,7 @@ namespace Test
 		RunNodeTest(&Node::IterateSequence, "iterate sequence", passed, total);
 		RunNodeTest(&Node::IterateMap, "iterate map", passed, total);
 		RunNodeTest(&Node::ForEach, "for each", passed, total);
+		RunNodeTest(&Node::ForEachMap, "for each map", passed, total);
 
 		std::cout << "Node tests: " << passed << "/" << total << " passed\n";
 		return passed == total;
