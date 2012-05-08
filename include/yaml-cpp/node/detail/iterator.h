@@ -30,6 +30,8 @@ namespace YAML
 			template<typename> friend class iterator_base;
 			struct enabler {};
 			typedef typename iterator_base::base_type base_type;
+            
+        public:
 			typedef typename iterator_base::value_type value_type;
 			
 		public:
