@@ -326,6 +326,27 @@ namespace Test
             return true;
         }
         
+        TEST IterateSequence()
+        {
+            YAML::Node node = YAML::Load("[1, 3, 5, 7]");
+            int seq[] = {1, 3, 5, 7};
+            int i=0;
+            for(YAML::const_iterator it=node.begin();it!=node.end();++it) {
+                int x = seq[i++];
+                YAML_ASSERT(it->as<int>() == x);
+            }
+            return true;
+        }
+        
+        TEST IterateMap()
+        {
+            YAML::Node node = YAML::Load("{a: A, b: B, c: C}");
+            for(YAML::const_iterator it=node.begin();it!=node.end();++it) {
+                YAML_ASSERT(it->first.as<char>() + 'A' - 'a' == it->second.as<char>());
+            }
+            return true;
+        }
+        
         TEST ForEach()
         {
             YAML::Node node = YAML::Load("[1, 3, 5, 7]");
@@ -386,6 +407,8 @@ namespace Test
 		RunNodeTest(&Node::FallbackValues, "fallback values", passed, total);
 		RunNodeTest(&Node::NumericConversion, "numeric conversion", passed, total);
 		RunNodeTest(&Node::Binary, "binary", passed, total);
+		RunNodeTest(&Node::IterateSequence, "iterate sequence", passed, total);
+		RunNodeTest(&Node::IterateMap, "iterate map", passed, total);
 		RunNodeTest(&Node::ForEach, "for each", passed, total);
 
 		std::cout << "Node tests: " << passed << "/" << total << " passed\n";
