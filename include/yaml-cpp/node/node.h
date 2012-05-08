@@ -23,6 +23,9 @@ namespace YAML
 		friend class detail::node_data;
 		template<typename> friend class detail::iterator_base;
         template<typename T, typename S> friend struct as_if;
+        
+        typedef iterator iterator;
+        typedef const_iterator const_iterator;
 		
 		Node();
 		explicit Node(NodeType::value type);

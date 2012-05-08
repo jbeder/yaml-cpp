@@ -1,5 +1,6 @@
 #include "nodetests.h"
 #include "yaml-cpp/yaml.h"
+#include <boost/foreach.hpp>
 #include <iostream>
 
 namespace {
@@ -324,6 +325,18 @@ namespace Test
             YAML_ASSERT(node[1].as<YAML::Binary>() == YAML::Binary(reinterpret_cast<const unsigned char*>("Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.\n"), 270));
             return true;
         }
+        
+        TEST ForEach()
+        {
+            YAML::Node node = YAML::Load("[1, 3, 5, 7]");
+            int seq[] = {1, 3, 5, 7};
+            int i = 0;
+            BOOST_FOREACH(const YAML::Node &item, node) {
+                int x = seq[i++];
+                YAML_ASSERT(item.as<int>() == x);
+            }
+            return true;
+        }
 	}
 	
 	void RunNodeTest(TEST (*test)(), const std::string& name, int& passed, int& total) {
@@ -373,6 +386,7 @@ namespace Test
 		RunNodeTest(&Node::FallbackValues, "fallback values", passed, total);
 		RunNodeTest(&Node::NumericConversion, "numeric conversion", passed, total);
 		RunNodeTest(&Node::Binary, "binary", passed, total);
+		RunNodeTest(&Node::ForEach, "for each", passed, total);
 
 		std::cout << "Node tests: " << passed << "/" << total << " passed\n";
 		return passed == total;
