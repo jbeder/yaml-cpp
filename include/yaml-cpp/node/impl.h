@@ -10,6 +10,7 @@
 #include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/memory.h"
 #include "yaml-cpp/node/detail/node.h"
+#include "yaml-cpp/exceptions.h"
 #include <string>
 
 namespace YAML
@@ -102,12 +103,12 @@ namespace YAML
         
         const T operator()() const {
             if(!node.m_pNode)
-                throw std::runtime_error("Unable to convert to type");
+                throw TypedBadConversion<T>();
 			
             T t;
             if(convert<T>::decode(node, t))
                 return t;
-            throw std::runtime_error("Unable to convert to type");
+            throw TypedBadConversion<T>();
         }
     };
     
@@ -118,7 +119,7 @@ namespace YAML
         
         const std::string operator()() const {
             if(node.Type() != NodeType::Scalar)
-                throw std::runtime_error("Unable to convert to string, not a scalar");
+                throw TypedBadConversion<std::string>();
             return node.Scalar();
         }
     };

@@ -61,7 +61,7 @@ namespace YAML
 						return *pNode;
 					return pMemory->create_node();
 				case NodeType::Scalar:
-					throw std::runtime_error("Can't call operator[] on a scalar");
+                    throw BadSubscript();
 			}
 
 			for(node_map::const_iterator it=m_map.begin();it!=m_map.end();++it) {
@@ -89,7 +89,7 @@ namespace YAML
 					convert_to_map(pMemory);
 					break;
 				case NodeType::Scalar:
-					throw std::runtime_error("Can't call operator[] on a scalar");
+                    throw BadSubscript();
 			}
 			
 			for(node_map::const_iterator it=m_map.begin();it!=m_map.end();++it) {
