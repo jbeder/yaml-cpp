@@ -1,8 +1,8 @@
 #include "yaml-cpp/node/detail/node_data.h"
 #include "yaml-cpp/node/detail/memory.h"
 #include "yaml-cpp/node/detail/node.h"
+#include "yaml-cpp/exceptions.h"
 #include <sstream>
-#include <stdexcept>
 
 namespace YAML
 {
@@ -161,7 +161,7 @@ namespace YAML
 			}
 			
 			if(m_type != NodeType::Sequence)
-				throw std::runtime_error("Can't push_back to a non-sequence node");
+                throw BadPushback();
 			
 			m_sequence.push_back(&node);
 		}
@@ -177,7 +177,7 @@ namespace YAML
 					convert_to_map(pMemory);
 					break;
 				case NodeType::Scalar:
-					throw std::runtime_error("Can't call operator[] on a scalar");
+                    throw BadSubscript();
 			}
 
 			insert_map_pair(key, value);
@@ -208,7 +208,7 @@ namespace YAML
 					convert_to_map(pMemory);
 					break;
 				case NodeType::Scalar:
-					throw std::runtime_error("Can't call operator[] on a scalar");
+                    throw BadSubscript();
 			}
 
 			for(node_map::const_iterator it=m_map.begin();it!=m_map.end();++it) {

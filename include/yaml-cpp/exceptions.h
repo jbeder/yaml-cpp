@@ -57,7 +57,10 @@ namespace YAML
 
 		const char * const INVALID_SCALAR         = "invalid scalar";
 		const char * const KEY_NOT_FOUND          = "key not found";
+        const char * const BAD_CONVERSION         = "bad conversion";
 		const char * const BAD_DEREFERENCE        = "bad dereference";
+        const char * const BAD_SUBSCRIPT          = "operator[] call on a scalar";
+        const char * const BAD_PUSHBACK           = "appending to a non-sequence";
 		
 		const char * const UNMATCHED_GROUP_TAG    = "unmatched group tag";
 		const char * const UNEXPECTED_END_SEQ     = "unexpected end sequence token";
@@ -148,10 +151,35 @@ namespace YAML
 		return TypedKeyNotFound <T> (mark, key);
 	}
 
+	class BadConversion: public RepresentationException {
+	public:
+		BadConversion()
+        : RepresentationException(Mark::null(), ErrorMsg::BAD_CONVERSION) {}
+	};
+
+    template<typename T>
+	class TypedBadConversion: public BadConversion {
+	public:
+		TypedBadConversion()
+        : BadConversion() {}
+	};
+
 	class BadDereference: public RepresentationException {
 	public:
 		BadDereference()
 		: RepresentationException(Mark::null(), ErrorMsg::BAD_DEREFERENCE) {}
+	};
+
+	class BadSubscript: public RepresentationException {
+	public:
+		BadSubscript()
+		: RepresentationException(Mark::null(), ErrorMsg::BAD_SUBSCRIPT) {}
+	};
+
+	class BadPushback: public RepresentationException {
+	public:
+		BadPushback()
+		: RepresentationException(Mark::null(), ErrorMsg::BAD_PUSHBACK) {}
 	};
 	
 	class EmitterException: public Exception {
