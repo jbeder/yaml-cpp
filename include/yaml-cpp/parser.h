@@ -18,7 +18,6 @@ class EventHandler;
 class Node;
 class Scanner;
 struct Directives;
-struct Mark;
 struct Token;
 
 class YAML_CPP_API Parser : private noncopyable {
