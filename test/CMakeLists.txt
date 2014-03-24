@@ -9,10 +9,10 @@ if(WIN32 AND BUILD_SHARED_LIBS)
 endif()
 
 file(GLOB test_headers [a-z_]*.h)
-file(GLOB test_sources [a-z_]*.cpp integration/[a-z_]*.cpp)
-file(GLOB test_core_sources core/[a-z]*.cpp)
+file(GLOB test_sources [a-z_]*.cpp integration/[a-z_]*.cpp node/[a-z_]*.cpp)
+file(GLOB test_new_api_sources new-api/[a-z]*.cpp)
 
-list(APPEND test_sources ${test_core_sources})
+list(APPEND test_sources ${test_new_api_sources})
 
 include_directories(${YAML_CPP_SOURCE_DIR}/test)
 
