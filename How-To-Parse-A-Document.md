@@ -1,4 +1,4 @@
-_The following describes the old API. For the new API, see the [Tutorial](Tutorial.md)._
+_The following describes the old API. For the new API, see the [Tutorial](https://github.com/jbeder/yaml-cpp/wiki/Tutorial)._
 
 ## Contents ##
 
@@ -87,7 +87,7 @@ One thing to be keep in mind: reading a map by key (as immediately above) requir
 
 ## Optional Keys ##
 
-If you try to access a key that doesn't exist, `yaml-cpp` throws an exception (see [HowToParseADocument#When\_Something\_Goes\_Wrong](HowToParseADocument#When_Something_Goes_Wrong.md) When Something Goes Wrong). If you have optional keys, you it's often easier to use `FindValue` instead of `operator[]`:
+If you try to access a key that doesn't exist, `yaml-cpp` throws an exception (see [When Something Goes Wrong](https://github.com/jbeder/yaml-cpp/wiki/HowToParseADocument(OldApi)#When_Something_Goes_Wrong) When Something Goes Wrong). If you have optional keys, you it's often easier to use `FindValue` instead of `operator[]`:
 
 ```
 YAML::Node doc;    // already parsed
