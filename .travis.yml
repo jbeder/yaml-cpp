@@ -5,6 +5,9 @@ os:
 compiler:
   - clang
   - gcc
+env:
+  - YAML_CPP_SUPPORT_MERGE_KEYS=ON
+  - YAML_CPP_SUPPORT_MERGE_KEYS=OFF
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -17,7 +20,7 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DYAML_CPP_SUPPORT_MERGE_KEYS=$YAML_CPP_SUPPORT_MERGE_KEYS
 script:
   - make
   - test/run-tests

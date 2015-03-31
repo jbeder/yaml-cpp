@@ -185,6 +185,39 @@ TEST(LoadNodeTest, DereferenceIteratorError) {
   EXPECT_THROW(node.begin()->begin()->Type(), InvalidNode);
 }
 
+#ifdef YAML_CPP_SUPPORT_MERGE_KEYS
+TEST(NodeTest, MergeKeyScalarSupport) {
+  Node node = Load("{<<: {a: 1}}");
+  ASSERT_FALSE(!node["a"]);
+  EXPECT_EQ(1, node["a"].as<int>());
+}
+
+TEST(NodeTest, MergeKeyExistingKey) {
+  Node node = Load("{a: 1, <<: {a: 2}}");
+  ASSERT_FALSE(!node["a"]);
+  EXPECT_EQ(1, node["a"].as<int>());
+}
+
+TEST(NodeTest, MergeKeySequenceSupport) {
+  Node node = Load("<<: [{a: 1}, {a: 2, b: 3}]");
+  ASSERT_FALSE(!node["a"]);
+  ASSERT_FALSE(!node["b"]);
+  EXPECT_EQ(1, node["a"].as<int>());
+  EXPECT_EQ(3, node["b"].as<int>());
+}
+
+TEST(NodeTest, NestedMergeKeys) {
+  Node node = Load("{<<: {<<: {a: 1}}}");
+  ASSERT_FALSE(!node["a"]);
+  EXPECT_EQ(1, node["a"].as<int>());
+}
+#else
+TEST(NodeTest, MergeKeySupport) {
+  Node node = Load("{<<: {a: 1}}");
+  ASSERT_FALSE(node["a"]);
+}
+#endif
+
 TEST(NodeTest, EmitEmptyNode) {
   Node node;
   Emitter emitter;

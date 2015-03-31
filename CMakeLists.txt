@@ -41,6 +41,7 @@ enable_testing()
 option(YAML_CPP_BUILD_TESTS "Enable testing" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
+option(YAML_CPP_SUPPORT_MERGE_KEYS "Support YAML merge keys ('<<') in yaml-cpp's executable targets. Use '#define YAML_CPP_SUPPORT_MERGE_KEYS' instead when linking from another project." OFF)
 
 ## Build options
 # --> General
@@ -95,6 +96,10 @@ if(YAML_CPP_BUILD_CONTRIB)
 	file(GLOB contrib_private_headers "src/contrib/[a-zA-Z]*.h")
 else()
 	add_definitions(-DYAML_CPP_NO_CONTRIB)
+endif()
+
+if (YAML_CPP_SUPPORT_MERGE_KEYS)
+    add_definitions(-DYAML_CPP_SUPPORT_MERGE_KEYS)
 endif()
 
 set(library_sources

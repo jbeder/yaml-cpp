@@ -122,12 +122,23 @@ class node {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
     // it, and returns a pointer so that it can be NULL (if there is no such
     // key).
-    return static_cast<const node_ref&>(*m_pRef).get(key, pMemory);
+    node* value = static_cast<const node_ref&>(*m_pRef).get(key, pMemory);
+#ifdef YAML_CPP_SUPPORT_MERGE_KEYS
+    if (!value || value->type() == NodeType::Undefined) {
+      return get_value_from_merge_key(key, value, pMemory);
+    }
+#endif
+    return value;
   }
   template <typename Key>
   node& get(const Key& key, shared_memory_holder pMemory) {
     node& value = m_pRef->get(key, pMemory);
     value.add_dependency(*this);
+#ifdef YAML_CPP_SUPPORT_MERGE_KEYS
+    if (value.type() == NodeType::Undefined) {
+      return *get_value_from_merge_key(key, &value, pMemory);
+    }
+#endif
     return value;
   }
   template <typename Key>
@@ -159,6 +170,33 @@ class node {
   }
 
  private:
+#ifdef YAML_CPP_SUPPORT_MERGE_KEYS
+  template <typename Key>
+  inline node* get_value_from_merge_key(const Key& key, node* currentValue,
+                                        shared_memory_holder pMemory) const {
+    node* mergeValue =
+      static_cast<const node_ref&>(*m_pRef).get(std::string("<<"), pMemory);
+    if (!mergeValue) {
+      return currentValue;
+    }
+    if (mergeValue->type() == NodeType::Map) {
+      return &mergeValue->get(key, pMemory);
+    }
+    if (mergeValue->type() == NodeType::Sequence) {
+      for (const_node_iterator it = mergeValue->begin();
+            it != mergeValue->end(); ++it) {
+        if (it->pNode && it->pNode->type() == NodeType::Map) {
+          node* value = it->pNode->get(key, pMemory);
+          if (value && value->type() != NodeType::Undefined) {
+            return value;
+          }
+        }
+      }
+    }
+    return currentValue;
+  }
+#endif
+
   shared_node_ref m_pRef;
   typedef std::set<node*> nodes;
   nodes m_dependencies;
