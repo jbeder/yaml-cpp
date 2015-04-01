@@ -7,6 +7,7 @@
 #pragma once
 #endif
 
+#include <chrono>
 #include <limits>
 #include <list>
 #include <map>
@@ -281,6 +282,25 @@ struct convert<Binary> {
     return true;
   }
 };
+
+// std::chrono::time_point<std::chrono::system_clock>
+// Notes:
+//   - Formats supported in spec at http://http://yaml.org/type/timestamp.html
+//       canonical: 2001-12-15T02:59:43.1Z
+//       iso8601:   2001-12-14t21:59:43.10-05:00
+//       spaced:    2001-12-14 21:59:43.10 -5
+//       date:      2002-12-14
+//   - Some platforms cannot handle time_points before January 1st, 1970 00:00Z
+template <>
+struct convert<std::chrono::time_point<std::chrono::system_clock>> {
+  
+  YAML_CPP_API static Node encode(
+    const std::chrono::time_point<std::chrono::system_clock>& rhs);
+
+  YAML_CPP_API static bool decode(const Node& node, 
+    std::chrono::time_point<std::chrono::system_clock>& rhs);
+};
+
 }
 
 #endif  // NODE_CONVERT_H_62B23520_7C8E_11DE_8A39_0800200C9A66
