@@ -27,7 +27,7 @@ add_executable(run-tests
 	${test_headers}
 )
 set_target_properties(run-tests PROPERTIES
-  COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags} ${yaml_test_flags}"
+  COMPILE_FLAGS "${yaml_test_flags}"
 )
 target_link_libraries(run-tests yaml-cpp gmock)
 
