@@ -7,8 +7,7 @@
 #pragma once
 #endif
 
-#include <boost/shared_ptr.hpp>
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <memory>
 #include <set>
 
 #include "yaml-cpp/dll.h"
@@ -40,7 +39,7 @@ class YAML_CPP_API memory_holder {
   void merge(memory_holder& rhs);
 
  private:
-  boost::shared_ptr<memory> m_pMemory;
+  std::shared_ptr<memory> m_pMemory;
 };
 }
 }
