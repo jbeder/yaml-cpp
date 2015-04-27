@@ -36,7 +36,7 @@ class iterator_base
 
   template <class W>
   iterator_base(const iterator_base<W>& rhs,
-                typename std::enable_if<boost::is_convertible<W*, V*>::value,
+                typename std::enable_if<std::is_convertible<W*, V*>::value,
                                           enabler>::type = enabler())
       : iterator_base::iterator_adaptor_(rhs.base()),
         m_pMemory(rhs.m_pMemory) {}
