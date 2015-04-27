@@ -13,13 +13,14 @@
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/detail/node_ref.h"
 #include <set>
-#include <boost/utility.hpp>
 
 namespace YAML {
 namespace detail {
-class node : private boost::noncopyable {
+class node {
  public:
   node() : m_pRef(new node_ref) {}
+  node(const node&) = delete;
+  node& operator=(const node&) = delete;
 
   bool is(const node& rhs) const { return m_pRef == rhs.m_pRef; }
   const node_ref* ref() const { return m_pRef.get(); }
