@@ -11,7 +11,6 @@
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/detail/node_iterator.h"
 #include <boost/iterator/iterator_adaptor.hpp>
-#include <boost/utility.hpp>
 
 namespace YAML {
 namespace detail {
@@ -37,7 +36,7 @@ class iterator_base
 
   template <class W>
   iterator_base(const iterator_base<W>& rhs,
-                typename boost::enable_if<boost::is_convertible<W*, V*>,
+                typename std::enable_if<boost::is_convertible<W*, V*>::value,
                                           enabler>::type = enabler())
       : iterator_base::iterator_adaptor_(rhs.base()),
         m_pMemory(rhs.m_pMemory) {}
@@ -45,7 +44,7 @@ class iterator_base
  private:
   friend class boost::iterator_core_access;
 
-  void increment() { this->base_reference() = boost::next(this->base()); }
+  void increment() { this->base_reference() = std::next(this->base()); }
 
   value_type dereference() const {
     const typename base_type::value_type& v = *this->base();

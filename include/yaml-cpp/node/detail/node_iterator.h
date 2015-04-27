@@ -10,7 +10,6 @@
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/node/ptr.h"
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <map>
 #include <utility>
 #include <vector>
@@ -80,7 +79,7 @@ class node_iterator_base
 
   template <typename W>
   node_iterator_base(const node_iterator_base<W>& rhs,
-                     typename boost::enable_if<boost::is_convertible<W*, V*>,
+                     typename std::enable_if<std::is_convertible<W*, V*>::value,
                                                enabler>::type = enabler())
       : m_type(rhs.m_type),
         m_seqIt(rhs.m_seqIt),
