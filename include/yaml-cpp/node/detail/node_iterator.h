@@ -9,7 +9,8 @@
 
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/node/ptr.h"
-#include <boost/iterator/iterator_facade.hpp>
+#include <iterator>
+#include <memory>
 #include <map>
 #include <utility>
 #include <vector>
@@ -51,11 +52,19 @@ struct node_iterator_type<const V> {
 
 template <typename V>
 class node_iterator_base
-    : public boost::iterator_facade<
-          node_iterator_base<V>, node_iterator_value<V>,
-          std::forward_iterator_tag, node_iterator_value<V> > {
+    : public std::iterator<
+          std::forward_iterator_tag, node_iterator_value<V>,
+          ptrdiff_t, node_iterator_value<V>*, node_iterator_value<V> > {
  private:
   struct enabler {};
+
+  struct proxy {
+    explicit proxy(const node_iterator_value<V>& x) : m_ref(x) {}
+    node_iterator_value<V>* operator->() { return std::addressof(m_ref); }
+    operator node_iterator_value<V>*() { return std::addressof(m_ref); }
+
+    node_iterator_value<V> m_ref;
+  };
 
  public:
   typedef typename node_iterator_type<V>::seq SeqIter;
@@ -86,13 +95,11 @@ class node_iterator_base
         m_mapIt(rhs.m_mapIt),
         m_mapEnd(rhs.m_mapEnd) {}
 
- private:
-  friend class boost::iterator_core_access;
   template <typename>
   friend class node_iterator_base;
 
   template <typename W>
-  bool equal(const node_iterator_base<W>& rhs) const {
+  bool operator==(const node_iterator_base<W>& rhs) const {
     if (m_type != rhs.m_type)
       return false;
 
@@ -107,7 +114,12 @@ class node_iterator_base
     return true;
   }
 
-  void increment() {
+  template <typename W>
+  bool operator!=(const node_iterator_base<W>& rhs) const {
+    return !(*this==rhs);
+  }
+
+  node_iterator_base<V>& operator++() {
     switch (m_type) {
       case iterator_type::None:
         break;
@@ -119,9 +131,10 @@ class node_iterator_base
         m_mapIt = increment_until_defined(m_mapIt);
         break;
     }
+    return *this;
   }
 
-  value_type dereference() const {
+  value_type operator*() const {
     switch (m_type) {
       case iterator_type::None:
         return value_type();
@@ -131,6 +144,10 @@ class node_iterator_base
         return value_type(*m_mapIt->first, *m_mapIt->second);
     }
     return value_type();
+  }
+
+  value_type* operator->() const {
+    return proxy(**this);
   }
 
   MapIter increment_until_defined(MapIter it) {
