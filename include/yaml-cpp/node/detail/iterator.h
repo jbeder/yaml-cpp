@@ -39,7 +39,7 @@ class iterator_base
   typedef typename iterator_base::value_type value_type;
 
  public:
-  iterator_base() {}
+  iterator_base() : m_iterator(), m_pMemory() {}
   explicit iterator_base(base_type rhs, shared_memory_holder pMemory)
       : m_iterator(rhs), m_pMemory(pMemory) {}
 
