@@ -14,6 +14,7 @@
 #include <map>
 #include <utility>
 #include <vector>
+#include <cstddef>
 
 namespace YAML {
 namespace detail {
@@ -54,7 +55,7 @@ template <typename V>
 class node_iterator_base
     : public std::iterator<
           std::forward_iterator_tag, node_iterator_value<V>,
-          ptrdiff_t, node_iterator_value<V>*, node_iterator_value<V> > {
+          std::ptrdiff_t, node_iterator_value<V>*, node_iterator_value<V> > {
  private:
   struct enabler {};
 

@@ -11,6 +11,7 @@
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/detail/node_iterator.h"
 #include <iterator>
+#include <cstddef>
 
 namespace YAML {
 namespace detail {
@@ -18,7 +19,7 @@ struct iterator_value;
 
 template <typename V>
 class iterator_base
-    : public std::iterator<std::forward_iterator_tag, V, ptrdiff_t, V*, V> {
+    : public std::iterator<std::forward_iterator_tag, V, std::ptrdiff_t, V*, V> {
 
  private:
   template <typename>
