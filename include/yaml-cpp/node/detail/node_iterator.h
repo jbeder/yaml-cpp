@@ -147,7 +147,7 @@ class node_iterator_base
     return value_type();
   }
 
-  value_type* operator->() const {
+  proxy operator->() const {
     return proxy(**this);
   }
 
