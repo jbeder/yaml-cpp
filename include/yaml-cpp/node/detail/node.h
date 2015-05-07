@@ -66,9 +66,7 @@ class node {
     m_pRef->set_data(*rhs.m_pRef);
   }
 
-  void set_mark(const Mark& mark) {
-    m_pRef->set_mark(mark);
-  }
+  void set_mark(const Mark& mark) { m_pRef->set_mark(mark); }
 
   void set_type(NodeType::value type) {
     if (type != NodeType::Undefined)

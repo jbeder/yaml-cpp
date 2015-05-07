@@ -18,8 +18,8 @@ namespace detail {
 struct iterator_value;
 
 template <typename V>
-class iterator_base
-    : public std::iterator<std::forward_iterator_tag, V, std::ptrdiff_t, V*, V> {
+class iterator_base : public std::iterator<std::forward_iterator_tag, V,
+                                           std::ptrdiff_t, V*, V> {
 
  private:
   template <typename>
@@ -46,10 +46,13 @@ class iterator_base
   template <class W>
   iterator_base(const iterator_base<W>& rhs,
                 typename std::enable_if<std::is_convertible<W*, V*>::value,
-                                          enabler>::type = enabler())
+                                        enabler>::type = enabler())
       : m_iterator(rhs.m_iterator), m_pMemory(rhs.m_pMemory) {}
 
-  iterator_base<V>& operator++() { ++m_iterator; return *this; }
+  iterator_base<V>& operator++() {
+    ++m_iterator;
+    return *this;
+  }
 
   template <typename W>
   bool operator==(const iterator_base<W>& rhs) {
@@ -70,9 +73,7 @@ class iterator_base
     return value_type();
   }
 
-  proxy operator->() const {
-    return proxy(**this);
-  }
+  proxy operator->() const { return proxy(**this); }
 
  private:
   base_type m_iterator;

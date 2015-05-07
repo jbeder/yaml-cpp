@@ -28,9 +28,7 @@ void node_data::mark_defined() {
   m_isDefined = true;
 }
 
-void node_data::set_mark(const Mark& mark) {
-  m_mark = mark;
-}
+void node_data::set_mark(const Mark& mark) { m_mark = mark; }
 
 void node_data::set_type(NodeType::value type) {
   if (type == NodeType::Undefined) {

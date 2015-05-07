@@ -22,9 +22,9 @@ struct get_idx {
 };
 
 template <typename Key>
-struct get_idx<
-    Key, typename std::enable_if<std::is_unsigned<Key>::value &&
-                                     !std::is_same<Key, bool>::value>::type> {
+struct get_idx<Key,
+               typename std::enable_if<std::is_unsigned<Key>::value &&
+                                       !std::is_same<Key, bool>::value>::type> {
   static node* get(const std::vector<node*>& sequence, const Key& key,
                    shared_memory_holder /* pMemory */) {
     return key < sequence.size() ? sequence[key] : 0;
@@ -41,7 +41,7 @@ struct get_idx<
 };
 
 template <typename Key>
-struct get_idx<Key, typename std::enable_if<std::is_signed<Key>::value >::type> {
+struct get_idx<Key, typename std::enable_if<std::is_signed<Key>::value>::type> {
   static node* get(const std::vector<node*>& sequence, const Key& key,
                    shared_memory_holder pMemory) {
     return key >= 0 ? get_idx<std::size_t>::get(

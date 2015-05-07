@@ -53,9 +53,9 @@ struct node_iterator_type<const V> {
 
 template <typename V>
 class node_iterator_base
-    : public std::iterator<
-          std::forward_iterator_tag, node_iterator_value<V>,
-          std::ptrdiff_t, node_iterator_value<V>*, node_iterator_value<V> > {
+    : public std::iterator<std::forward_iterator_tag, node_iterator_value<V>,
+                           std::ptrdiff_t, node_iterator_value<V>*,
+                           node_iterator_value<V> > {
  private:
   struct enabler {};
 
@@ -90,7 +90,7 @@ class node_iterator_base
   template <typename W>
   node_iterator_base(const node_iterator_base<W>& rhs,
                      typename std::enable_if<std::is_convertible<W*, V*>::value,
-                                               enabler>::type = enabler())
+                                             enabler>::type = enabler())
       : m_type(rhs.m_type),
         m_seqIt(rhs.m_seqIt),
         m_mapIt(rhs.m_mapIt),
@@ -117,7 +117,7 @@ class node_iterator_base
 
   template <typename W>
   bool operator!=(const node_iterator_base<W>& rhs) const {
-    return !(*this==rhs);
+    return !(*this == rhs);
   }
 
   node_iterator_base<V>& operator++() {
@@ -147,9 +147,7 @@ class node_iterator_base
     return value_type();
   }
 
-  proxy operator->() const {
-    return proxy(**this);
-  }
+  proxy operator->() const { return proxy(**this); }
 
   MapIter increment_until_defined(MapIter it) {
     while (it != m_mapEnd && !is_defined(it))
