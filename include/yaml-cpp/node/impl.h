@@ -149,7 +149,7 @@ inline const T Node::as() const {
 template <typename T, typename S>
 inline const T Node::as(const S& fallback) const {
   if (!m_isValid)
-    throw InvalidNode();
+    return fallback;
   return as_if<T, S>(*this)(fallback);
 }
 
