@@ -136,7 +136,7 @@ void EmitterState::StartedGroup(GroupType::value type) {
     pGroup->flowType = FlowType::Flow;
   pGroup->indent = GetIndent();
 
-  m_groups.push(pGroup);
+  m_groups.push(std::move(pGroup));
 }
 
 void EmitterState::EndedGroup(GroupType::value type) {
