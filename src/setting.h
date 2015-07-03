@@ -81,8 +81,8 @@ class SettingChanges : private noncopyable {
       return *this;
 
     clear();
-    m_settingChanges = std::move(rhs.m_settingChanges);
-    rhs.m_settingChanges.clear();
+    std::swap(m_settingChanges, rhs.m_settingChanges);
+
     return *this;
   }
 
