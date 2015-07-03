@@ -127,7 +127,10 @@ void EmitterState::StartedGroup(GroupType::value type) {
   std::unique_ptr<Group> pGroup(new Group(type));
 
   // transfer settings (which last until this group is done)
-  pGroup->modifiedSettings = m_modifiedSettings;
+  //
+  // NB: if pGroup->modifiedSettings == m_modifiedSettings,
+  // m_modifiedSettings is not changed!
+  pGroup->modifiedSettings = std::move(m_modifiedSettings);
 
   // set up group
   if (GetFlowType(type) == Block)

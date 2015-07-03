@@ -62,10 +62,6 @@ class SettingChanges : private noncopyable {
 
   void clear() {
     restore();
-
-    for (setting_changes::const_iterator it = m_settingChanges.begin();
-         it != m_settingChanges.end(); ++it)
-      delete *it;
     m_settingChanges.clear();
   }
 
@@ -76,22 +72,22 @@ class SettingChanges : private noncopyable {
   }
 
   void push(std::unique_ptr<SettingChangeBase> pSettingChange) {
-    m_settingChanges.push_back(pSettingChange.release());
+    m_settingChanges.push_back(std::move(pSettingChange));
   }
 
   // like std::unique_ptr - assignment is transfer of ownership
-  SettingChanges& operator=(SettingChanges& rhs) {
+  SettingChanges& operator=(SettingChanges&& rhs) {
     if (this == &rhs)
       return *this;
 
     clear();
-    m_settingChanges = rhs.m_settingChanges;
+    m_settingChanges = std::move(rhs.m_settingChanges);
     rhs.m_settingChanges.clear();
     return *this;
   }
 
  private:
-  typedef std::vector<SettingChangeBase*> setting_changes;
+  typedef std::vector<std::unique_ptr<SettingChangeBase>> setting_changes;
   setting_changes m_settingChanges;
 };
 }
