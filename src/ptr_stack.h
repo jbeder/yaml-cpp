@@ -29,12 +29,12 @@ class ptr_stack : private YAML::noncopyable {
   std::size_t size() const { return m_data.size(); }
   bool empty() const { return m_data.empty(); }
 
-  void push(std::auto_ptr<T> t) {
+  void push(std::unique_ptr<T> t) {
     m_data.push_back(NULL);
     m_data.back() = t.release();
   }
-  std::auto_ptr<T> pop() {
-    std::auto_ptr<T> t(m_data.back());
+  std::unique_ptr<T> pop() {
+    std::unique_ptr<T> t(m_data.back());
     m_data.pop_back();
     return t;
   }
