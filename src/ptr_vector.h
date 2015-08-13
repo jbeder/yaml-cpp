@@ -31,7 +31,7 @@ class ptr_vector : private YAML::noncopyable {
   std::size_t size() const { return m_data.size(); }
   bool empty() const { return m_data.empty(); }
 
-  void push_back(std::auto_ptr<T> t) {
+  void push_back(std::unique_ptr<T> t) {
     m_data.push_back(NULL);
     m_data.back() = t.release();
   }
