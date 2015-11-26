@@ -19,16 +19,16 @@ yaml-cpp uses [CMake](http://www.cmake.org) to support cross-platform building. 
 
 2. Navigate into the source directory, and type:
 
-```
-mkdir build
-cd build
-```
+
+    mkdir build
+    cd build
+
 
 3. Run CMake. The basic syntax is:
 
-```
-cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
-```
+
+    cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
+
 
   * The `generator` is whatever type of build system you'd like to use. To see a full list of generators on your platform, just run `cmake` (with no arguments). For example:
     * On Windows, you might use "Visual Studio 12 2013" to generate a Visual Studio 2013 solution
@@ -36,6 +36,11 @@ cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
     * On a UNIX-y system, simply omit the option to generate a makefile
 
   * yaml-cpp defaults to building a static library, but you may build a shared library by specifying `-DBUILD_SHARED_LIBS=ON`.
+
+	* By default the build is configured to generate doxygen documentation for the
+		library. If you'd like to turn this off use `-DUSE_DOXYGEN=OFF`. If you _do_
+		use doxygen then __make sure you run__: `make doc` __before__ running `make
+		install`.
 
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 

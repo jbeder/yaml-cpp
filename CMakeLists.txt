@@ -35,6 +35,7 @@ enable_testing()
 ## Project stuff
 option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" ON)
 option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
+option(USE_DOXYGEN "Enable doxygen generation" ON)
 
 ## Build options
 # --> General
@@ -115,6 +116,7 @@ include_directories(${YAML_CPP_SOURCE_DIR}/include)
 
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
+
 
 
 ###
@@ -250,14 +252,17 @@ endif()
 ###
 if(WIN32)
 	set(_library_dir bin)	# .dll are in PATH, like executables
+	set(_share_dir bin)
 else()
 	set(_library_dir lib)
+	set(_share_dir share)
 endif()
 
 set(INCLUDE_INSTALL_ROOT_DIR include)
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
 set(LIB_INSTALL_DIR "${_library_dir}${LIB_SUFFIX}")
+set(SHARE_INSTALL_DIR "${_share_dir}${LIB_SUFFIX}")
 
 set(_INSTALL_DESTINATIONS
 	RUNTIME DESTINATION bin
@@ -323,6 +328,38 @@ if(UNIX)
 	install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif()
 
+###
+### Doxygen 
+###
+if(USE_DOXYGEN)
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+
+set(DOC_DIR "${PROJECT_BINARY_DIR}/doc")
+
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
+	"${PROJECT_BINARY_DIR}/Doxyfile"
+	@ONLY
+	)
+
+add_custom_target(doc
+	COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/Doxyfile
+	WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+	COMMENT "Generating API documentation with Doxygen" VERBATIM
+	)
+
+install(DIRECTORY
+	"${DOC_DIR}/"
+	DESTINATION 
+	"${SHARE_INSTALL_DIR}/doc/yaml-cpp${LIB_SUFFIX}"
+	PATTERN "${DOC_DIR}/*"
+	)
+
+endif(DOXYGEN_FOUND)
+
+endif(USE_DOXYGEN)
 
 ###
 ### Extras
