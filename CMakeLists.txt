@@ -116,6 +116,8 @@ include_directories(${YAML_CPP_SOURCE_DIR}/include)
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
+# Create version.h
+configure_file(${header_directory}/version.h.in ${CMAKE_SOURCE_DIR}/${header_directory}/version.h)
 
 ###
 ### General compilation settings
