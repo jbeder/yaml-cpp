@@ -90,7 +90,7 @@ and
 ```
 YAML::Emitter out;
 out << YAML::Flow;
-out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 < YAML::EndSeq;
+out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 << YAML::EndSeq;
 ```
 produces
 ```
