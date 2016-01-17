@@ -84,8 +84,8 @@ Node convert<std::chrono::time_point<std::chrono::system_clock>>::encode(
   const std::chrono::time_point<std::chrono::system_clock>& rhs
 ) {
   // Constants
-  const uint16_t MS_PER_S = 1000;
-  const uint16_t TM_BASE_YEAR = 1900;
+  constexpr uint16_t MS_PER_S = 1000;
+  constexpr uint16_t TM_BASE_YEAR = 1900;
   
   std::time_t tt = std::chrono::system_clock::to_time_t(rhs);
   std::tm utc_tm = *std::gmtime(&tt);
@@ -116,12 +116,12 @@ bool convert<std::chrono::time_point<std::chrono::system_clock>>::decode(
   if (!node.IsScalar()) { return false; }
   
   // Constants
-  const uint16_t TM_BASE_YEAR = 1900;
-  const uint16_t MIN_PER_HR = 60;
-  const uint16_t MS_PER_S = 1000;
-  const uint16_t S_PER_MIN = 60;
-  const uint16_t S_PER_HR = 3600;
-  const uint32_t S_PER_DAY = 86400;
+  constexpr uint16_t TM_BASE_YEAR = 1900;
+  constexpr uint16_t MIN_PER_HR = 60;
+  constexpr uint16_t MS_PER_S = 1000;
+  constexpr uint16_t S_PER_MIN = 60;
+  constexpr uint16_t S_PER_HR = 3600;
+  constexpr uint32_t S_PER_DAY = 86400;
   
   const std::string s = node.Scalar();
     
