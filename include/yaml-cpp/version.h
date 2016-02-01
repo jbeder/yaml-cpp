@@ -7,11 +7,11 @@
 #pragma once
 #endif
 
-#define YAML_CPP_VERSION_MAJOR ${YAML_CPP_VERSION_MAJOR}
-#define YAML_CPP_VERSION_MINOR ${YAML_CPP_VERSION_MINOR}
-#define YAML_CPP_VERSION_PATCH ${YAML_CPP_VERSION_PATCH}
+#define YAML_CPP_VERSION_MAJOR 0
+#define YAML_CPP_VERSION_MINOR 5
+#define YAML_CPP_VERSION_PATCH 2
 
 // String representation of the current version (ie. "0.1.2")
-#define YAML_CPP_VERSION "${YAML_CPP_VERSION}"
+#define YAML_CPP_VERSION "0.5.2"
 
 #endif  // YAML_CPP_VERSION_H
