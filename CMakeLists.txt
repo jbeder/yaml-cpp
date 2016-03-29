@@ -1,19 +1,10 @@
 ###
 ### CMake settings
 ###
-## Due to Mac OSX we need to keep compatibility with CMake 2.6
-# see http://www.cmake.org/Wiki/CMake_Policies
-cmake_minimum_required(VERSION 2.6)
-# see http://www.cmake.org/cmake/help/cmake-2-8-docs.html#policy:CMP0012
-if(POLICY CMP0012)
-	cmake_policy(SET CMP0012 OLD)
-endif()
-# see http://www.cmake.org/cmake/help/cmake-2-8-docs.html#policy:CMP0015
-if(POLICY CMP0015)
-	cmake_policy(SET CMP0015 OLD)
-endif()
 
+cmake_minimum_required(VERSION 2.8)
 include(CheckCXXCompilerFlag)
+include(GNUInstallDirs)
 
 
 ###
@@ -41,9 +32,6 @@ option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
 # see http://www.cmake.org/cmake/help/cmake2.6docs.html#variable:BUILD_SHARED_LIBS
 #     http://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library
 option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
-
-# --> Apple
-option(APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
 
 # --> Microsoft Visual C++
 # see http://msdn.microsoft.com/en-us/library/aa278396(v=VS.60).aspx
@@ -127,12 +115,6 @@ else()
 	set(LABEL_SUFFIX "static")
 endif()
 
-if(APPLE)
-	if(APPLE_UNIVERSAL_BIN)
-		set(CMAKE_OSX_ARCHITECTURES ppc;i386)
-	endif()
-endif()
-
 if(IPHONE)
 	set(CMAKE_OSX_SYSROOT "iphoneos4.2")
 	set(CMAKE_OSX_ARCHITECTURES "armv6;armv7")
@@ -157,22 +139,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 		set(CMAKE_LINK_DEF_FILE_FLAG "")	# CMake workaround (2.8.3)
 	endif()
 
-	### Project stuff
-	if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-		set(CMAKE_BUILD_TYPE Release)
-	endif()
-	#
-	set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-	set(CMAKE_CXX_FLAGS_DEBUG "-g")
-	set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os")
-	#
-	set(GCC_EXTRA_OPTIONS "")
-	#
-	if(BUILD_SHARED_LIBS)
-		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} -fPIC")
-	endif()
-	#
 	set(FLAG_TESTED "-Wextra")
 	check_cxx_compiler_flag(${FLAG_TESTED} FLAG_WEXTRA)
 	if(FLAG_WEXTRA)
@@ -180,18 +146,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 	endif()
 	#
 	set(yaml_cxx_flags "-Wall ${GCC_EXTRA_OPTIONS} -pedantic -Wno-long-long -std=c++11 ${yaml_cxx_flags}")
-
-	### Make specific
-	if(${CMAKE_BUILD_TOOL} MATCHES make OR ${CMAKE_BUILD_TOOL} MATCHES gmake)
-		add_custom_target(debuggable $(MAKE) clean
-			COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Debug ${CMAKE_SOURCE_DIR}
-			COMMENT "Adjusting settings for debug compilation"
-			VERBATIM)
-		add_custom_target(releasable $(MAKE) clean
-			COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release ${CMAKE_SOURCE_DIR}
-			COMMENT "Adjusting settings for release compilation"
-			VERBATIM)
-	endif()
 endif()
 
 # Microsoft VisualC++ specialities
@@ -250,21 +204,15 @@ endif()
 ###
 ### General install settings
 ###
-if(WIN32)
-	set(_library_dir bin)	# .dll are in PATH, like executables
-else()
-	set(_library_dir lib)
-endif()
 
-set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/include)
+set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${_library_dir}${LIB_SUFFIX}")
 
 set(_INSTALL_DESTINATIONS
-	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-	ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}"
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
 
 
@@ -288,18 +236,6 @@ if(IPHONE)
 	)
 endif()
 
-if(MSVC)
-	if(NOT BUILD_SHARED_LIBS)
-		# correct library names
-		set_target_properties(yaml-cpp PROPERTIES
-			DEBUG_POSTFIX "${LIB_TARGET_SUFFIX}d"
-			RELEASE_POSTFIX "${LIB_TARGET_SUFFIX}"
-			MINSIZEREL_POSTFIX "${LIB_TARGET_SUFFIX}"
-			RELWITHDEBINFO_POSTFIX "${LIB_TARGET_SUFFIX}"
-		)
-	endif()
-endif()
-
 install(TARGETS yaml-cpp EXPORT yaml-cpp-targets ${_INSTALL_DESTINATIONS})
 install(
 	DIRECTORY ${header_directory}
@@ -309,38 +245,28 @@ install(
 
 export(
     TARGETS yaml-cpp
-    FILE "${PROJECT_BINARY_DIR}/yaml-cpp-targets.cmake")
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp-targets.cmake")
 export(PACKAGE yaml-cpp)
 set(EXPORT_TARGETS yaml-cpp CACHE INTERNAL "export targets")
 
-set(CONFIG_INCLUDE_DIRS "${YAML_CPP_SOURCE_DIR}/include")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake" @ONLY)
+configure_file(yaml-cpp-config.cmake.in
+	yaml-cpp-config.cmake @ONLY)
 
-if(WIN32 AND NOT CYGWIN)
-	set(INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/CMake)
-else()
-	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/yaml-cpp)
-endif()
+set(INSTALL_CMAKE_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/yaml-cpp")
 
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
-set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake" @ONLY)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config-version.cmake.in
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake" @ONLY)
+configure_file(yaml-cpp-config-version.cmake.in
+	yaml-cpp-config-version.cmake @ONLY)
 
 install(FILES
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake"
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp-config.cmake"
+	"${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp-config-version.cmake"
 	DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 install(EXPORT yaml-cpp-targets DESTINATION ${INSTALL_CMAKE_DIR})
 
 if(UNIX)
-	set(PC_FILE ${CMAKE_BINARY_DIR}/yaml-cpp.pc)
-	configure_file("yaml-cpp.pc.cmake" ${PC_FILE} @ONLY)
-	install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+	configure_file(yaml-cpp.pc.cmake yaml-cpp.pc @ONLY)
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp.pc"
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 endif()
 
 
