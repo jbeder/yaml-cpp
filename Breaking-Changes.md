@@ -2,6 +2,14 @@
 
 # New API #
 
+## HEAD ##
+
+  * Requires C++11.
+
+## 0.5.3 ##
+
+_none_
+
 ## 0.5.2 ##
 
 _none_
