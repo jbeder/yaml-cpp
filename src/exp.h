@@ -20,6 +20,10 @@ namespace YAML {
 
 namespace Exp {
 // misc
+inline const RegEx& Empty() {
+  static const RegEx e;
+  return e;
+}
 inline const RegEx& Space() {
   static const RegEx e = RegEx(' ');
   return e;
@@ -165,6 +169,15 @@ inline const RegEx& EndScalarInFlow() {
   return e;
 }
 
+inline const RegEx& ScanScalarEndInFlow() {
+  static const RegEx e = (EndScalarInFlow() || (BlankOrBreak() + Comment()));
+  return e;
+}
+
+inline const RegEx& ScanScalarEnd() {
+  static const RegEx e = EndScalar() || (BlankOrBreak() + Comment());
+  return e;
+}
 inline const RegEx& EscSingleQuote() {
   static const RegEx e = RegEx("\'\'");
   return e;
