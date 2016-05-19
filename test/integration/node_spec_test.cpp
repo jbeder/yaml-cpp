@@ -239,6 +239,78 @@ TEST(NodeSpecTest, Ex2_18_MultiLineFlowScalars) {
 
 // TODO: 2.19 - 2.22 schema tags
 
+TEST(NodeSpecTest, Ex2_22_Timestamps_untagged) {
+    
+  // Invalid time_t
+  Node tt("1234-99-99");
+                                      
+  // Un-parsable Scalar
+  Node us("asdf");
+
+  ASSERT_THROW(tt.as<std::chrono::system_clock::time_point>(),
+                YAML::TypedBadConversion<std::chrono::time_point
+                  <std::chrono::system_clock>>);
+  ASSERT_THROW(us.as<std::chrono::system_clock::time_point>(),
+                YAML::TypedBadConversion<std::chrono::time_point
+                  <std::chrono::system_clock>>);
+
+  // Valid timestamps
+  std::vector<std::tuple<std::string, std::string>> timestamps;
+  // Spec Example Tests
+  timestamps.push_back(std::make_tuple("2001-12-15T02:59:43.1Z",
+                                      "2001-12-15T02:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14t21:59:43.10-06:00",
+                                      "2001-12-15T03:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14 21:59:43.10 -5",
+                                      "2001-12-15T02:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-15 2:59:43.10",
+                                      "2001-12-15T02:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2002-12-14",
+                                      "2002-12-14T00:00:00.0Z"));
+  // Variable Digit Count Tests                
+  timestamps.push_back(std::make_tuple("2000-12-3",
+                                      "2000-12-03T00:00:00.0Z"));
+  timestamps.push_back(std::make_tuple("2000-1-23",
+                                      "2000-01-23T00:00:00.0Z"));
+  timestamps.push_back(std::make_tuple("2000-1-2",
+                                      "2000-01-02T00:00:00.0Z"));
+  // Canonical Tests
+  timestamps.push_back(std::make_tuple("2001-12-15T02:59:43.1Z",
+                                      "2001-12-15T02:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-15T2:09:43.1Z",
+                                      "2001-12-15T02:09:43.1Z"));
+  // ISO8601 Subset Tests
+  timestamps.push_back(std::make_tuple("2001-12-14t21:59:43.10-05:00",
+                                      "2001-12-15T02:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14t1:59:43.10-05:30",
+                                      "2001-12-14T07:29:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14t1:59:43.10+05:30",
+                                      "2001-12-13T20:29:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14t1:59:43.10+05:00",
+                                      "2001-12-13T20:59:43.1Z"));
+  // Spaced Date/Time/Zone Tests
+  timestamps.push_back(std::make_tuple("2001-12-14 1:59:43.10 -5",
+                                      "2001-12-14T06:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14 21:59:43.10 +5",
+                                      "2001-12-14T16:59:43.1Z"));
+  // No Timezone Test
+  timestamps.push_back(std::make_tuple("2001-12-14 1:59:43.1",
+                                      "2001-12-14T01:59:43.1Z"));
+  timestamps.push_back(std::make_tuple("2001-12-14 21:59:43.12",
+                                      "2001-12-14T21:59:43.1Z"));
+
+  Node s_node, tp_node;
+  for(auto t : timestamps) {
+    s_node = std::get<0>(t);
+    tp_node = s_node.as<std::chrono::system_clock::time_point>();
+    
+    EXPECT_TRUE(s_node.IsScalar());
+    EXPECT_TRUE(tp_node.IsScalar());
+    
+    EXPECT_EQ(std::get<1>(t), tp_node.Scalar());
+  }
+}
+
 TEST(NodeSpecTest, Ex2_23_VariousExplicitTags) {
   Node doc = Load(ex2_23);
   EXPECT_EQ(3, doc.size());
