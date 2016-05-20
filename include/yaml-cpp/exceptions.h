@@ -114,6 +114,8 @@ class Exception : public std::runtime_error {
       : std::runtime_error(build_what(mark_, msg_)), mark(mark_), msg(msg_) {}
   virtual ~Exception() noexcept {}
 
+  Exception(const Exception&) = default;
+
   Mark mark;
   std::string msg;
 
