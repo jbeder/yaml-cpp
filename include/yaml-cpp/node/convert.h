@@ -241,6 +241,35 @@ struct convert<std::list<T> > {
   }
 };
 
+// std::array
+template <typename T, std::size_t S>
+struct convert<std::array<T, S> > {
+  static Node encode(const std::array<T, S>& rhs) {
+    Node node(NodeType::Sequence);
+    for (typename std::array<T, S>::const_iterator it = rhs.begin();
+        it != rhs.end(); ++it)
+      node.push_back(*it);
+    return node;
+  }
+
+  static bool decode(const Node& node, std::array<T, S>& rhs) {
+    if (!node.IsSequence())
+      return false;
+
+    std::size_t index = 0;
+    for (const_iterator it = node.begin(); it != node.end(); ++it) {
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs.at(index) = it->template as<T>();
+#else
+      rhs.at(index) = it->as<T>();
+#endif
+      ++index;
+    }
+    return true;
+  }
+};
+
 // std::pair
 template <typename T, typename U>
 struct convert<std::pair<T, U> > {
