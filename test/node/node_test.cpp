@@ -154,6 +154,20 @@ TEST(NodeTest, SimpleSubkeys) {
   EXPECT_EQ("monkey", node["username"].as<std::string>());
 }
 
+TEST(NodeTest, StdArray) {
+  std::array<int, 5> evens;
+  evens[0] = 2;
+  evens[1] = 4;
+  evens[2] = 6;
+  evens[3] = 8;
+  evens[4] = 10;
+
+  Node node;
+  node["evens"] = evens;
+  std::array<int, 5> actualEvens = node["evens"].as<std::array<int, 5> >();
+  EXPECT_EQ(evens, actualEvens);
+}
+
 TEST(NodeTest, StdVector) {
   std::vector<int> primes;
   primes.push_back(2);
