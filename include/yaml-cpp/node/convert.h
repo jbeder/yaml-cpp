@@ -254,10 +254,9 @@ struct convert<std::array<T, N>> {
   }
 
   static bool decode(const Node& node, std::array<T, N>& rhs) {
-    if (!node.IsSequence())
+    if (!isNodeValid(node)) {
       return false;
-    if (node.size() != N)
-        return false;
+    }
 
     for (auto i = 0u; i < node.size(); ++i) {
 #if defined(__GNUC__) && __GNUC__ < 4
@@ -268,6 +267,12 @@ struct convert<std::array<T, N>> {
 #endif
     }
     return true;
+  }
+
+private:
+
+  static bool isNodeValid(const Node& node) {
+    return node.IsSequence() && node.size() == N;
   }
 };
 
