@@ -12,6 +12,14 @@
 using ::testing::AnyOf;
 using ::testing::Eq;
 
+#define EXPECT_THROW_REPRESENTATION_EXCEPTION(statement, message) \
+  ASSERT_THROW(statement, RepresentationException);               \
+  try {                                                   \
+    statement;                                            \
+  } catch (const RepresentationException& e) {                    \
+    EXPECT_EQ(e.msg, message);                            \
+  }
+
 namespace YAML {
 namespace {
 TEST(NodeTest, SimpleScalar) {
@@ -155,17 +163,19 @@ TEST(NodeTest, SimpleSubkeys) {
 }
 
 TEST(NodeTest, StdArray) {
-  std::array<int, 5> evens;
-  evens[0] = 2;
-  evens[1] = 4;
-  evens[2] = 6;
-  evens[3] = 8;
-  evens[4] = 10;
-
+  std::array<int, 5> evens {{ 2, 4, 6, 8, 10 }};
   Node node;
   node["evens"] = evens;
-  std::array<int, 5> actualEvens = node["evens"].as<std::array<int, 5> >();
+  std::array<int, 5> actualEvens = node["evens"].as<std::array<int, 5>>();
   EXPECT_EQ(evens, actualEvens);
+}
+
+TEST(NodeTest, StdArrayWrongSize) {
+  std::array<int, 3> evens {{ 2, 4, 6 }};
+  Node node;
+  node["evens"] = evens;
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["evens"].as<std::array<int, 5>>()),
+                                        ErrorMsg::BAD_CONVERSION);
 }
 
 TEST(NodeTest, StdVector) {

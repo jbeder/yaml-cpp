@@ -7,12 +7,12 @@
 #pragma once
 #endif
 
+#include <array>
 #include <limits>
 #include <list>
 #include <map>
 #include <sstream>
 #include <vector>
-#include <array>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/impl.h"
@@ -243,29 +243,29 @@ struct convert<std::list<T> > {
 };
 
 // std::array
-template <typename T, std::size_t S>
-struct convert<std::array<T, S> > {
-  static Node encode(const std::array<T, S>& rhs) {
+template <typename T, std::size_t N>
+struct convert<std::array<T, N>> {
+  static Node encode(const std::array<T, N>& rhs) {
     Node node(NodeType::Sequence);
-    for (typename std::array<T, S>::const_iterator it = rhs.begin();
-        it != rhs.end(); ++it)
-      node.push_back(*it);
+    for (auto element : rhs) {
+      node.push_back(element);
+    }
     return node;
   }
 
-  static bool decode(const Node& node, std::array<T, S>& rhs) {
+  static bool decode(const Node& node, std::array<T, N>& rhs) {
     if (!node.IsSequence())
       return false;
+    if (node.size() != N)
+        return false;
 
-    std::size_t index = 0;
-    for (const_iterator it = node.begin(); it != node.end(); ++it) {
+    for (auto i = 0u; i < node.size(); ++i) {
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs.at(index) = it->template as<T>();
+      rhs[i] = node[i].template as<T>();
 #else
-      rhs.at(index) = it->as<T>();
+      rhs[i] = node[i].as<T>();
 #endif
-      ++index;
     }
     return true;
   }
