@@ -247,7 +247,7 @@ template <typename T, std::size_t N>
 struct convert<std::array<T, N>> {
   static Node encode(const std::array<T, N>& rhs) {
     Node node(NodeType::Sequence);
-    for (auto element : rhs) {
+    for (const auto& element : rhs) {
       node.push_back(element);
     }
     return node;
