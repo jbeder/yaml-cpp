@@ -256,18 +256,7 @@ void node_data::reset_map() {
 }
 
 void node_data::insert_map_pair(node& key, node& value) {
-
-  bool found = false;
-  for (auto& entry : m_map) {
-    if (entry.first == &key) {
-      entry.second = &value;
-      found = true;
-      break;
-    }
-  }
-  if (!found) {
-    m_map.emplace_back(&key, &value);
-  }
+  m_map.emplace_back(&key, &value);
 
   if (!key.is_defined() || !value.is_defined())
     m_undefinedPairs.emplace_back(&key, &value);
