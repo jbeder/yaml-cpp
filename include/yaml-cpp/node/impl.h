@@ -42,6 +42,16 @@ inline Node::Node(const Node& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
+inline Node::Node(Node&& rhs)
+    : m_isValid(rhs.m_isValid),
+      m_pMemory(rhs.m_pMemory),
+      m_pNode(rhs.m_pNode) {
+
+    rhs.m_pMemory.reset(new detail::memory_holder);
+    rhs.m_pNode = &rhs.m_pMemory->create_node();
+    rhs.m_pNode->set_null();
+}
+
 inline Node::Node(Zombie) : m_isValid(false), m_pNode(NULL) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
@@ -244,6 +254,20 @@ inline Node& Node::operator=(const Node& rhs) {
   if (is(rhs))
     return *this;
   AssignNode(rhs);
+  return *this;
+}
+
+inline Node& Node::operator=(Node&& rhs) {
+  if (!m_isValid || !rhs.m_isValid)
+    throw InvalidNode();
+  if (is(rhs))
+    return *this;
+  AssignNode(rhs);
+
+  rhs.m_pMemory.reset(new detail::memory_holder);
+  rhs.m_pNode = &rhs.m_pMemory->create_node();
+  rhs.m_pNode->set_null();
+
   return *this;
 }
 
