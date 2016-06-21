@@ -494,5 +494,56 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
 
   ExpectOutput("{position: [1.01, 2.01, 3.01]}", mapNode);
 }
+
+TEST(NodeTest, CopyConstructor) {
+  Node node = Node("Hello, World!");
+  Node copy(node);
+
+  node = Node("Bye, World!");
+
+  EXPECT_EQ("Hello, World!", copy.as<std::string>());
+  EXPECT_EQ("Bye, World!", node.as<std::string>());
+}
+
+TEST(NodeTest, CopyAssignment) {
+  Node node = Node("Hello, World!");
+  Node copy = Node("Nice to meet you!");
+
+  copy = node;
+
+  node = Node("Bye, World!");
+
+  EXPECT_EQ("Hello, World!", copy.as<std::string>());
+  EXPECT_EQ("Bye, World!", node.as<std::string>());
+}
+
+TEST(NodeTest, BrokenCopyAssignmentAndConstructorWithVectorInsert) {
+
+  std::vector<YAML::Node> nodes;
+
+  nodes.insert(nodes.begin(), Node("0"));
+  nodes.insert(nodes.begin(), Node("1"));
+  nodes.insert(nodes.begin(), Node("2"));
+  nodes.insert(nodes.begin(), Node("3"));
+
+  EXPECT_EQ("3", nodes[0].Scalar());
+  EXPECT_EQ("2", nodes[1].Scalar());
+  EXPECT_EQ("1", nodes[2].Scalar());
+  EXPECT_EQ("0", nodes[3].Scalar());
+}
+
+TEST(NodeTest, BrokenCopyAssignmentAndConstructorWithVectorInsert2) {
+
+  std::vector<YAML::Node> nodes;
+  nodes.reserve(3);
+  nodes.insert(nodes.begin(), Node("0"));
+  nodes.insert(nodes.begin(), Node("1"));
+  nodes.insert(nodes.begin(), Node("2"));
+
+  EXPECT_EQ("2", nodes[0].Scalar());
+  EXPECT_EQ("1", nodes[1].Scalar());
+  EXPECT_EQ("0", nodes[2].Scalar());
+}
+
 }
 }
