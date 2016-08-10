@@ -36,6 +36,8 @@ cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
 
   * yaml-cpp defaults to building a static library, but you may build a shared library by specifying `-DBUILD_SHARED_LIBS=ON`.
 
+  * You might also have to specify the path to Boost binaries using the -DBOOST_ROOT argument.
+  
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
 4. Build it!
