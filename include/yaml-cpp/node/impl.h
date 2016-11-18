@@ -247,13 +247,13 @@ inline Node& Node::operator=(const Node& rhs) {
   return *this;
 }
 
-inline void Node::AssignData(const Node& rhs) {
+inline void Node::AssignData(Node&& rhs) {
   if (!m_isValid || !rhs.m_isValid)
     throw InvalidNode();
   EnsureNodeExists();
   rhs.EnsureNodeExists();
 
-  m_pNode->set_data(*rhs.m_pNode);
+  m_pNode->set_data(std::move(*rhs.m_pNode));
   m_pMemory->merge(*rhs.m_pMemory);
 }
 

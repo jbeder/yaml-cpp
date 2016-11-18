@@ -125,7 +125,7 @@ class YAML_CPP_API Node {
   void Assign(const char* rhs);
   void Assign(char* rhs);
 
-  void AssignData(const Node& rhs);
+  void AssignData(Node&& rhs);
   void AssignNode(const Node& rhs);
 
  private:

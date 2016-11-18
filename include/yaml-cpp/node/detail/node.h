@@ -11,19 +11,19 @@
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/node/type.h"
 #include "yaml-cpp/node/ptr.h"
-#include "yaml-cpp/node/detail/node_ref.h"
+#include "yaml-cpp/node/detail/node_data.h"
 #include <set>
 
 namespace YAML {
 namespace detail {
 class node {
  public:
-  node() : m_pRef(new node_ref) {}
+  node() : m_pRef(new node_data) {}
   node(const node&) = delete;
   node& operator=(const node&) = delete;
 
   bool is(const node& rhs) const { return m_pRef == rhs.m_pRef; }
-  const node_ref* ref() const { return m_pRef.get(); }
+  const node_data* ref() const { return m_pRef.get(); }
 
   bool is_defined() const { return m_pRef->is_defined(); }
   const Mark& mark() const { return m_pRef->mark(); }
@@ -60,10 +60,10 @@ class node {
       mark_defined();
     m_pRef = rhs.m_pRef;
   }
-  void set_data(const node& rhs) {
+  void set_data(node&& rhs) {
     if (rhs.is_defined())
       mark_defined();
-    m_pRef->set_data(*rhs.m_pRef);
+    m_pRef = std::move(rhs.m_pRef);
   }
 
   void set_mark(const Mark& mark) { m_pRef->set_mark(mark); }
@@ -96,12 +96,12 @@ class node {
   std::size_t size() const { return m_pRef->size(); }
 
   const_node_iterator begin() const {
-    return static_cast<const node_ref&>(*m_pRef).begin();
+    return static_cast<const node_data&>(*m_pRef).begin();
   }
   node_iterator begin() { return m_pRef->begin(); }
 
   const_node_iterator end() const {
-    return static_cast<const node_ref&>(*m_pRef).end();
+    return static_cast<const node_data&>(*m_pRef).end();
   }
   node_iterator end() { return m_pRef->end(); }
 
@@ -122,7 +122,7 @@ class node {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
     // it, and returns a pointer so that it can be NULL (if there is no such
     // key).
-    return static_cast<const node_ref&>(*m_pRef).get(key, pMemory);
+    return static_cast<const node_data&>(*m_pRef).get(key, pMemory);
   }
   template <typename Key>
   node& get(const Key& key, shared_memory_holder pMemory) {
@@ -139,7 +139,7 @@ class node {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
     // it, and returns a pointer so that it can be NULL (if there is no such
     // key).
-    return static_cast<const node_ref&>(*m_pRef).get(key, pMemory);
+    return static_cast<const node_data&>(*m_pRef).get(key, pMemory);
   }
   node& get(node& key, shared_memory_holder pMemory) {
     node& value = m_pRef->get(key, pMemory);
@@ -159,7 +159,7 @@ class node {
   }
 
  private:
-  shared_node_ref m_pRef;
+  shared_node_data m_pRef;
   typedef std::set<node*> nodes;
   nodes m_dependencies;
 };

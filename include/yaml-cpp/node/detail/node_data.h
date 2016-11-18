@@ -32,6 +32,7 @@ class YAML_CPP_API node_data {
   node_data();
   node_data(const node_data&) = delete;
   node_data& operator=(const node_data&) = delete;
+  node_data& operator=(node_data&&) = default;
 
   void mark_defined();
   void set_mark(const Mark& mark);

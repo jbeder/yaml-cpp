@@ -41,7 +41,7 @@ class NodeEvents {
     anchor_t _CreateNewAnchor() { return ++m_curAnchor; }
 
    private:
-    typedef std::map<const detail::node_ref*, anchor_t> AnchorByIdentity;
+    typedef std::map<const detail::node_data*, anchor_t> AnchorByIdentity;
     AnchorByIdentity m_anchorByIdentity;
 
     anchor_t m_curAnchor;
@@ -56,7 +56,7 @@ class NodeEvents {
   detail::shared_memory_holder m_pMemory;
   detail::node* m_root;
 
-  typedef std::map<const detail::node_ref*, int> RefCount;
+  typedef std::map<const detail::node_data*, int> RefCount;
   RefCount m_refCount;
 };
 }
