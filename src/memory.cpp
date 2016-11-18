@@ -5,22 +5,27 @@
 namespace YAML {
 namespace detail {
 
+typedef ref_holder<node> node_ref;
+
 void memory_holder::merge(memory_holder& rhs) {
   if (m_pMemory == rhs.m_pMemory)
     return;
 
-  m_pMemory->merge(*rhs.m_pMemory);
+  m_pMemory->merge(std::move(*rhs.m_pMemory));
   rhs.m_pMemory = m_pMemory;
 }
 
 node& memory::create_node() {
-  shared_node pNode(new node);
-  m_nodes.insert(pNode);
-  return *pNode;
+  m_nodes.emplace_back();
+  return m_nodes.back();
 }
 
-void memory::merge(const memory& rhs) {
-  m_nodes.insert(rhs.m_nodes.begin(), rhs.m_nodes.end());
-}
+void memory::merge(memory&& rhs) { m_nodes.splice(m_nodes.end(), rhs.m_nodes); }
+
+memory_holder::memory_holder() : m_pMemory(new memory) {}
+memory_holder::~memory_holder() {}
+
+memory::memory() {}
+memory::~memory() {}
 }
 }

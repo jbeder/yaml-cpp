@@ -15,7 +15,6 @@
 
 namespace YAML {
 namespace detail {
-struct iterator_value;
 
 template <typename V>
 class iterator_base : public std::iterator<std::forward_iterator_tag, V,
@@ -39,7 +38,7 @@ class iterator_base : public std::iterator<std::forward_iterator_tag, V,
   typedef typename iterator_base::value_type value_type;
 
  public:
-  iterator_base() : m_iterator(), m_pMemory() {}
+  iterator_base() : m_iterator(), m_pMemory(nullptr) {}
   explicit iterator_base(base_type rhs, shared_memory_holder pMemory)
       : m_iterator(rhs), m_pMemory(pMemory) {}
 

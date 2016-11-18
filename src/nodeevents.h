@@ -11,11 +11,12 @@
 #include <vector>
 
 #include "yaml-cpp/anchor.h"
-#include "yaml-cpp/node/ptr.h"
+#include "yaml-cpp/node/detail/memory.h"
 
 namespace YAML {
 namespace detail {
 class node;
+class node_data;
 }  // namespace detail
 }  // namespace YAML
 

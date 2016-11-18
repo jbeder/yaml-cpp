@@ -7,7 +7,7 @@
 #pragma once
 #endif
 
-#include <set>
+#include <list>
 
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/node/ptr.h"
@@ -15,31 +15,43 @@
 namespace YAML {
 namespace detail {
 class node;
+
 }  // namespace detail
 }  // namespace YAML
 
 namespace YAML {
 namespace detail {
-class YAML_CPP_API memory {
+
+class YAML_CPP_API memory : public ref_counted {
  public:
   node& create_node();
-  void merge(const memory& rhs);
+  void merge(memory&& rhs);
+
+  memory();
+  ~memory();
 
  private:
-  typedef std::set<shared_node> Nodes;
+  typedef std::list<node> Nodes;
   Nodes m_nodes;
 };
 
-class YAML_CPP_API memory_holder {
+typedef ref_holder<memory> shared_memory;
+
+class YAML_CPP_API memory_holder : public ref_counted {
  public:
-  memory_holder() : m_pMemory(new memory) {}
+   memory_holder();
+  ~memory_holder();
 
   node& create_node() { return m_pMemory->create_node(); }
   void merge(memory_holder& rhs);
 
  private:
   shared_memory m_pMemory;
+
 };
+
+typedef ref_holder<memory_holder> shared_memory_holder;
+
 }
 }
 

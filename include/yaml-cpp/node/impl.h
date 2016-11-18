@@ -15,12 +15,16 @@
 #include <string>
 
 namespace YAML {
-inline Node::Node() : m_isValid(true), m_pNode(NULL) {}
+inline Node::Node()
+    : m_isValid(true),
+      //m_pMemory(nullptr),
+      m_pMemory(new detail::memory_holder),
+      m_pNode(NULL) {}
 
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
       m_pMemory(new detail::memory_holder),
-      m_pNode(&m_pMemory->create_node()) {
+      m_pNode(&(m_pMemory->create_node())) {
   m_pNode->set_type(type);
 }
 
@@ -28,7 +32,7 @@ template <typename T>
 inline Node::Node(const T& rhs)
     : m_isValid(true),
       m_pMemory(new detail::memory_holder),
-      m_pNode(&m_pMemory->create_node()) {
+      m_pNode(&(m_pMemory->create_node())) {
   Assign(rhs);
 }
 
@@ -42,10 +46,15 @@ inline Node::Node(const Node& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(Zombie) : m_isValid(false), m_pNode(NULL) {}
+inline Node::Node(Zombie)
+    : m_isValid(false),
+      m_pMemory(nullptr),
+      m_pNode(NULL) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
-    : m_isValid(true), m_pMemory(pMemory), m_pNode(&node) {}
+    : m_isValid(true),
+      m_pMemory(pMemory),
+      m_pNode(&node) {}
 
 inline Node::~Node() {}
 

@@ -12,13 +12,19 @@
 #include "yaml-cpp/node/type.h"
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/detail/node_data.h"
+#include "yaml-cpp/node/detail/memory.h"
 #include <set>
 
 namespace YAML {
 namespace detail {
 class node {
+
+ using node_data_ref = ref_holder<node_data>;
+
  public:
-  node() : m_pRef(new node_data) {}
+
+  node() : m_pRef(new node_data){}
+
   node(const node&) = delete;
   node& operator=(const node&) = delete;
 
@@ -36,24 +42,6 @@ class node {
   template <typename T>
   bool equals(const T& rhs, shared_memory_holder pMemory);
   bool equals(const char* rhs, shared_memory_holder pMemory);
-
-  void mark_defined() {
-    if (is_defined())
-      return;
-
-    m_pRef->mark_defined();
-    for (nodes::iterator it = m_dependencies.begin();
-         it != m_dependencies.end(); ++it)
-      (*it)->mark_defined();
-    m_dependencies.clear();
-  }
-
-  void add_dependency(node& rhs) {
-    if (is_defined())
-      rhs.mark_defined();
-    else
-      m_dependencies.insert(&rhs);
-  }
 
   void set_ref(const node& rhs) {
     if (rhs.is_defined())
@@ -159,7 +147,25 @@ class node {
   }
 
  private:
-  shared_node_data m_pRef;
+  void mark_defined() {
+    if (is_defined())
+      return;
+
+    m_pRef->mark_defined();
+    for (nodes::iterator it = m_dependencies.begin();
+         it != m_dependencies.end(); ++it)
+      (*it)->mark_defined();
+    m_dependencies.clear();
+  }
+
+  void add_dependency(node& rhs) {
+    if (is_defined())
+      rhs.mark_defined();
+    else
+      m_dependencies.insert(&rhs);
+  }
+
+  mutable node_data_ref m_pRef;
   typedef std::set<node*> nodes;
   nodes m_dependencies;
 };
