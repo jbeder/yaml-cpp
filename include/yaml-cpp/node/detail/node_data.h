@@ -61,25 +61,24 @@ class YAML_CPP_API node_data : public ref_counted {
   node_iterator end();
 
   // sequence
-  void push_back(node& node, shared_memory_holder pMemory);
-  void insert(node& key, node& value, shared_memory_holder pMemory);
+  void push_back(node& node, shared_memory pMemory);
+  void insert(node& key, node& value, shared_memory pMemory);
 
   // indexing
   template <typename Key>
-  node* get(const Key& key, shared_memory_holder pMemory) const;
+  node* get(const Key& key, shared_memory pMemory) const;
   template <typename Key>
-  node& get(const Key& key, shared_memory_holder pMemory);
+  node& get(const Key& key, shared_memory pMemory);
   template <typename Key>
-  bool remove(const Key& key, shared_memory_holder pMemory);
+  bool remove(const Key& key, shared_memory pMemory);
 
-  node* get(node& key, shared_memory_holder pMemory) const;
-  node& get(node& key, shared_memory_holder pMemory);
-  bool remove(node& key, shared_memory_holder pMemory);
+  node* get(node& key, shared_memory pMemory) const;
+  node& get(node& key, shared_memory pMemory);
+  bool remove(node& key, shared_memory pMemory);
 
   // map
   template <typename Key, typename Value>
-  void force_insert(const Key& key, const Value& value,
-                    shared_memory_holder pMemory);
+  void force_insert(const Key& key, const Value& value, shared_memory pMemory);
 
  public:
   static std::string empty_scalar;
@@ -92,11 +91,11 @@ class YAML_CPP_API node_data : public ref_counted {
   void reset_map();
 
   void insert_map_pair(node& key, node& value);
-  void convert_to_map(shared_memory_holder pMemory);
-  void convert_sequence_to_map(shared_memory_holder pMemory);
+  void convert_to_map(shared_memory pMemory);
+  void convert_sequence_to_map(shared_memory pMemory);
 
   template <typename T>
-  static node& convert_to_node(const T& rhs, shared_memory_holder pMemory);
+  static node& convert_to_node(const T& rhs, shared_memory pMemory);
 
  private:
   bool m_isDefined;

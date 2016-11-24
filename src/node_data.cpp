@@ -166,7 +166,7 @@ node_iterator node_data::end() {
 }
 
 // sequence
-void node_data::push_back(node& node, shared_memory_holder /* pMemory */) {
+void node_data::push_back(node& node, shared_memory /* pMemory */) {
   if (m_type == NodeType::Undefined || m_type == NodeType::Null) {
     m_type = NodeType::Sequence;
     reset_sequence();
@@ -178,7 +178,7 @@ void node_data::push_back(node& node, shared_memory_holder /* pMemory */) {
   m_sequence.push_back(&node);
 }
 
-void node_data::insert(node& key, node& value, shared_memory_holder pMemory) {
+void node_data::insert(node& key, node& value, shared_memory pMemory) {
   switch (m_type) {
     case NodeType::Map:
       break;
@@ -195,7 +195,7 @@ void node_data::insert(node& key, node& value, shared_memory_holder pMemory) {
 }
 
 // indexing
-node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
+node* node_data::get(node& key, shared_memory /* pMemory */) const {
   if (m_type != NodeType::Map) {
     return NULL;
   }
@@ -208,7 +208,7 @@ node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
   return NULL;
 }
 
-node& node_data::get(node& key, shared_memory_holder pMemory) {
+node& node_data::get(node& key, shared_memory pMemory) {
   switch (m_type) {
     case NodeType::Map:
       break;
@@ -231,7 +231,7 @@ node& node_data::get(node& key, shared_memory_holder pMemory) {
   return value;
 }
 
-bool node_data::remove(node& key, shared_memory_holder /* pMemory */) {
+bool node_data::remove(node& key, shared_memory /* pMemory */) {
   if (m_type != NodeType::Map)
     return false;
 
@@ -262,7 +262,7 @@ void node_data::insert_map_pair(node& key, node& value) {
     m_undefinedPairs.emplace_back(&key, &value);
 }
 
-void node_data::convert_to_map(shared_memory_holder pMemory) {
+void node_data::convert_to_map(shared_memory pMemory) {
   switch (m_type) {
     case NodeType::Undefined:
     case NodeType::Null:
@@ -280,7 +280,7 @@ void node_data::convert_to_map(shared_memory_holder pMemory) {
   }
 }
 
-void node_data::convert_sequence_to_map(shared_memory_holder pMemory) {
+void node_data::convert_sequence_to_map(shared_memory pMemory) {
   assert(m_type == NodeType::Sequence);
 
   reset_map();

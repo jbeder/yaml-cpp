@@ -119,7 +119,7 @@ class YAML_CPP_API Node {
  private:
   enum Zombie { ZombieNode };
   explicit Node(Zombie);
-  explicit Node(detail::node& node, detail::shared_memory_holder pMemory);
+  explicit Node(detail::node& node, detail::shared_memory pMemory);
 
   void EnsureNodeExists() const;
 
@@ -132,10 +132,11 @@ class YAML_CPP_API Node {
   void AssignNode(const Node& rhs);
 
  private:
-  mutable detail::shared_memory_holder m_pMemory;
+  mutable detail::shared_memory m_pMemory;
   mutable detail::node* m_pNode;
 
   bool isValid() const { return m_pMemory; }
+  void mergeMemory(const Node& rhs) const;
 };
 
 YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);

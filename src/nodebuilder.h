@@ -54,7 +54,7 @@ class NodeBuilder : public EventHandler {
   void RegisterAnchor(anchor_t anchor, detail::node& node);
 
  private:
-  detail::shared_memory_holder m_pMemory;
+  detail::shared_memory m_pMemory;
   detail::node* m_pRoot;
 
   typedef std::vector<detail::node*> Nodes;

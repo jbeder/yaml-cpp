@@ -54,7 +54,7 @@ class NodeEvents {
   bool IsAliased(const detail::node& node) const;
 
  private:
-  detail::shared_memory_holder m_pMemory;
+  detail::shared_memory m_pMemory;
   detail::node* m_root;
 
   typedef std::map<const detail::node_data*, int> RefCount;

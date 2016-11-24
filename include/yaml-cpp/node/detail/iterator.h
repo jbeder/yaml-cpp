@@ -39,7 +39,7 @@ class iterator_base : public std::iterator<std::forward_iterator_tag, V,
 
  public:
   iterator_base() : m_iterator(), m_pMemory(nullptr) {}
-  explicit iterator_base(base_type rhs, shared_memory_holder pMemory)
+  explicit iterator_base(base_type rhs, shared_memory pMemory)
       : m_iterator(rhs), m_pMemory(pMemory) {}
 
   template <class W>
@@ -82,7 +82,7 @@ class iterator_base : public std::iterator<std::forward_iterator_tag, V,
 
  private:
   base_type m_iterator;
-  shared_memory_holder m_pMemory;
+  shared_memory m_pMemory;
 };
 }
 }

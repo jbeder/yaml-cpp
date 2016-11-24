@@ -15,17 +15,17 @@
 #include <string>
 
 namespace YAML {
-inline Node::Node() : m_pMemory(new detail::memory_holder), m_pNode(NULL) {}
+inline Node::Node() : m_pMemory(new detail::memory), m_pNode(NULL) {}
 
 inline Node::Node(NodeType::value type)
-    : m_pMemory(new detail::memory_holder),
+    : m_pMemory(new detail::memory),
       m_pNode(&(m_pMemory->create_node())) {
   m_pNode->set_type(type);
 }
 
 template <typename T>
 inline Node::Node(const T& rhs)
-    : m_pMemory(new detail::memory_holder),
+    : m_pMemory(new detail::memory),
       m_pNode(&(m_pMemory->create_node())) {
   Assign(rhs);
 }
@@ -43,7 +43,7 @@ inline Node::Node(Node&& rhs)
   rhs.m_pNode = nullptr;
 }
 
-inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
+inline Node::Node(detail::node& node, detail::shared_memory pMemory)
     : m_pMemory(pMemory), m_pNode(&node) {}
 
 inline Node::~Node() {}
@@ -52,7 +52,7 @@ inline void Node::EnsureNodeExists() const {
   if (!isValid())
     throw InvalidNode();
   if (!m_pNode) {
-    m_pMemory.reset(new detail::memory_holder);
+    m_pMemory.reset(new detail::memory);
     m_pNode = &m_pMemory->create_node();
     m_pNode->set_null();
   }
@@ -257,6 +257,12 @@ inline Node& Node::operator=(Node&& rhs) {
   return *this;
 }
 
+inline void Node::mergeMemory(const Node& rhs) const {
+  if (m_pMemory != rhs.m_pMemory) {
+      m_pMemory->merge(*rhs.m_pMemory);
+      rhs.m_pMemory = m_pMemory;
+  }
+}
 inline void Node::AssignData(Node&& rhs) {
   if (!isValid() || !rhs.isValid())
     throw InvalidNode();
@@ -264,7 +270,7 @@ inline void Node::AssignData(Node&& rhs) {
   rhs.EnsureNodeExists();
 
   m_pNode->set_data(std::move(*rhs.m_pNode));
-  m_pMemory->merge(*rhs.m_pMemory);
+  mergeMemory(rhs);
 }
 
 inline void Node::AssignNode(const Node& rhs) {
@@ -279,7 +285,7 @@ inline void Node::AssignNode(const Node& rhs) {
   }
 
   m_pNode->set_ref(*rhs.m_pNode);
-  m_pMemory->merge(*rhs.m_pMemory);
+  mergeMemory(rhs);
   m_pNode = rhs.m_pNode;
 }
 
@@ -330,7 +336,7 @@ inline void Node::push_back(const Node& rhs) {
   rhs.EnsureNodeExists();
 
   m_pNode->push_back(*rhs.m_pNode, m_pMemory);
-  m_pMemory->merge(*rhs.m_pMemory);
+  mergeMemory(rhs);
 }
 
 // helpers for indexing
@@ -414,7 +420,8 @@ inline const Node Node::operator[](const Node& key) const {
     throw InvalidNode();
   EnsureNodeExists();
   key.EnsureNodeExists();
-  m_pMemory->merge(*key.m_pMemory);
+  mergeMemory(key);
+
   detail::node* value =
       static_cast<const detail::node&>(*m_pNode).get(*key.m_pNode, m_pMemory);
   if (!value) {
@@ -428,7 +435,8 @@ inline Node Node::operator[](const Node& key) {
     throw InvalidNode();
   EnsureNodeExists();
   key.EnsureNodeExists();
-  m_pMemory->merge(*key.m_pMemory);
+  mergeMemory(key);
+
   detail::node& value = m_pNode->get(*key.m_pNode, m_pMemory);
   return Node(value, m_pMemory);
 }

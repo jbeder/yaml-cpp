@@ -39,8 +39,8 @@ class node {
   EmitterStyle::value style() const { return m_pRef->style(); }
 
   template <typename T>
-  bool equals(const T& rhs, shared_memory_holder pMemory);
-  bool equals(const char* rhs, shared_memory_holder pMemory);
+  bool equals(const T& rhs, shared_memory pMemory);
+  bool equals(const char* rhs, shared_memory pMemory);
 
   void set_ref(const node& rhs) {
     if (rhs.is_defined())
@@ -93,11 +93,11 @@ class node {
   node_iterator end() { return m_pRef->end(); }
 
   // sequence
-  void push_back(node& node, shared_memory_holder pMemory) {
+  void push_back(node& node, shared_memory pMemory) {
     m_pRef->push_back(node, pMemory);
     node.add_dependency(*this);
   }
-  void insert(node& key, node& value, shared_memory_holder pMemory) {
+  void insert(node& key, node& value, shared_memory pMemory) {
     m_pRef->insert(key, value, pMemory);
     key.add_dependency(*this);
     value.add_dependency(*this);
@@ -105,43 +105,42 @@ class node {
 
   // indexing
   template <typename Key>
-  node* get(const Key& key, shared_memory_holder pMemory) const {
+  node* get(const Key& key, shared_memory pMemory) const {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
     // it, and returns a pointer so that it can be NULL (if there is no such
     // key).
     return static_cast<const node_data&>(*m_pRef).get(key, pMemory);
   }
   template <typename Key>
-  node& get(const Key& key, shared_memory_holder pMemory) {
+  node& get(const Key& key, shared_memory pMemory) {
     node& value = m_pRef->get(key, pMemory);
     value.add_dependency(*this);
     return value;
   }
   template <typename Key>
-  bool remove(const Key& key, shared_memory_holder pMemory) {
+  bool remove(const Key& key, shared_memory pMemory) {
     return m_pRef->remove(key, pMemory);
   }
 
-  node* get(node& key, shared_memory_holder pMemory) const {
+  node* get(node& key, shared_memory pMemory) const {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
     // it, and returns a pointer so that it can be NULL (if there is no such
     // key).
     return static_cast<const node_data&>(*m_pRef).get(key, pMemory);
   }
-  node& get(node& key, shared_memory_holder pMemory) {
+  node& get(node& key, shared_memory pMemory) {
     node& value = m_pRef->get(key, pMemory);
     key.add_dependency(*this);
     value.add_dependency(*this);
     return value;
   }
-  bool remove(node& key, shared_memory_holder pMemory) {
+  bool remove(node& key, shared_memory pMemory) {
     return m_pRef->remove(key, pMemory);
   }
 
   // map
   template <typename Key, typename Value>
-  void force_insert(const Key& key, const Value& value,
-                    shared_memory_holder pMemory) {
+  void force_insert(const Key& key, const Value& value, shared_memory pMemory) {
     m_pRef->force_insert(key, value, pMemory);
   }
 
