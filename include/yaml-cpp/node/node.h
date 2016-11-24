@@ -47,6 +47,8 @@ class YAML_CPP_API Node {
   explicit Node(const T& rhs);
   explicit Node(const detail::iterator_value& rhs);
   Node(const Node& rhs);
+  Node(Node&& rhs);
+
   ~Node();
 
   YAML::Mark Mark() const;
@@ -81,6 +83,7 @@ class YAML_CPP_API Node {
   template <typename T>
   Node& operator=(const T& rhs);
   Node& operator=(const Node& rhs);
+  Node& operator=(Node&& rhs);
   void reset(const Node& rhs = Node());
 
   // size/iterator

@@ -51,6 +51,14 @@ inline Node::Node(Zombie)
       m_pMemory(nullptr),
       m_pNode(NULL) {}
 
+inline Node::Node(Node&& rhs)
+    : m_isValid(rhs.m_isValid),
+      m_pMemory(rhs.m_pMemory), // move ?
+      m_pNode(rhs.m_pNode) {
+
+    rhs.m_pNode = nullptr;
+}
+
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
     : m_isValid(true),
       m_pMemory(pMemory),
@@ -253,6 +261,17 @@ inline Node& Node::operator=(const Node& rhs) {
   if (is(rhs))
     return *this;
   AssignNode(rhs);
+  return *this;
+}
+
+inline Node& Node::operator=(Node&& rhs) {
+  if (!m_isValid || !rhs.m_isValid)
+    throw InvalidNode();
+  if (is(rhs))
+    return *this;
+
+  AssignNode(rhs);
+
   return *this;
 }
 
