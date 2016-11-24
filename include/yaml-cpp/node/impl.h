@@ -15,9 +15,7 @@
 #include <string>
 
 namespace YAML {
-inline Node::Node()
-    : m_pMemory(new detail::memory_holder),
-      m_pNode(NULL) {}
+inline Node::Node() : m_pMemory(new detail::memory_holder), m_pNode(NULL) {}
 
 inline Node::Node(NodeType::value type)
     : m_pMemory(new detail::memory_holder),
@@ -33,26 +31,20 @@ inline Node::Node(const T& rhs)
 }
 
 inline Node::Node(const detail::iterator_value& rhs)
-    : m_pMemory(rhs.m_pMemory),
-      m_pNode(rhs.m_pNode) {}
+    : m_pMemory(rhs.m_pMemory), m_pNode(rhs.m_pNode) {}
 
 inline Node::Node(const Node& rhs)
-    : m_pMemory(rhs.m_pMemory),
-      m_pNode(rhs.m_pNode) {}
+    : m_pMemory(rhs.m_pMemory), m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(Zombie)
-    : m_pMemory(nullptr),
-      m_pNode(NULL) {}
+inline Node::Node(Zombie) : m_pMemory(nullptr), m_pNode(NULL) {}
 
 inline Node::Node(Node&& rhs)
-    : m_pMemory(std::move(rhs.m_pMemory)),
-      m_pNode(rhs.m_pNode) {
-    rhs.m_pNode = nullptr;
+    : m_pMemory(std::move(rhs.m_pMemory)), m_pNode(rhs.m_pNode) {
+  rhs.m_pNode = nullptr;
 }
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
-    : m_pMemory(pMemory),
-      m_pNode(&node) {}
+    : m_pMemory(pMemory), m_pNode(&node) {}
 
 inline Node::~Node() {}
 
@@ -392,8 +384,8 @@ inline const Node Node::operator[](const Key& key) const {
   if (!isValid())
     throw InvalidNode();
   EnsureNodeExists();
-  detail::node* value = static_cast<const detail::node&>(*m_pNode)
-                            .get(detail::to_value(key), m_pMemory);
+  detail::node* value = static_cast<const detail::node&>(*m_pNode).get(
+      detail::to_value(key), m_pMemory);
   if (!value) {
     return Node(ZombieNode);
   }

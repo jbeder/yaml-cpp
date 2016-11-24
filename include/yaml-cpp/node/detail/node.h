@@ -19,11 +19,10 @@ namespace YAML {
 namespace detail {
 class node {
 
- using node_data_ref = ref_holder<node_data>;
+  using node_data_ref = ref_holder<node_data>;
 
  public:
-
-  node() : m_pRef(new node_data){}
+  node() : m_pRef(new node_data) {}
 
   node(const node&) = delete;
   node& operator=(const node&) = delete;

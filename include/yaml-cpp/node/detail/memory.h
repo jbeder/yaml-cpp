@@ -39,7 +39,7 @@ typedef ref_holder<memory> shared_memory;
 
 class YAML_CPP_API memory_holder : public ref_counted {
  public:
-   memory_holder();
+  memory_holder();
   ~memory_holder();
 
   node& create_node() { return m_pMemory->create_node(); }
@@ -47,11 +47,9 @@ class YAML_CPP_API memory_holder : public ref_counted {
 
  private:
   shared_memory m_pMemory;
-
 };
 
 typedef ref_holder<memory_holder> shared_memory_holder;
-
 }
 }
 

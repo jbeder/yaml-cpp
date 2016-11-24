@@ -19,22 +19,23 @@ namespace YAML {
 namespace detail {
 struct iterator_value : public Node, std::pair<Node, Node> {
   iterator_value()
-    : Node(Node::ZombieNode),
-      std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
+      : Node(Node::ZombieNode),
+        std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
 
   explicit iterator_value(const Node& rhs)
-    : Node(rhs),
-      std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
+      : Node(rhs),
+        std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
 
   explicit iterator_value(const Node& key, const Node& value)
-    : Node(Node::ZombieNode), std::pair<Node, Node>(key, value) {}
+      : Node(Node::ZombieNode), std::pair<Node, Node>(key, value) {}
 
   explicit iterator_value(Node&& rhs)
-    : Node(std::move(rhs)),
-      std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
+      : Node(std::move(rhs)),
+        std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
 
   explicit iterator_value(Node&& key, Node&& value)
-    : Node(Node::ZombieNode), std::pair<Node, Node>(std::move(key), std::move(value)) {}
+      : Node(Node::ZombieNode),
+        std::pair<Node, Node>(std::move(key), std::move(value)) {}
 };
 }
 }
