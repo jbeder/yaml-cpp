@@ -10,135 +10,271 @@
 #include <ios>
 #include <string>
 
-#include "regex_yaml.h"
 #include "stream.h"
+#include "stringsource.h"
+#include "streamcharsource.h"
+
+#define REGEXP_INLINE inline __attribute__((always_inline))
+#define TEST_INLINE inline __attribute__((always_inline))
+//#define TEST_INLINE __attribute__((noinline))
 
 namespace YAML {
+
+namespace Exp {
+
+template <char N>
+struct Char {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    return (source.get() == N) ? 1 : -1;
+  }
+};
+
+template <typename A, typename... B>
+struct OR {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    int pos = A::match(source);
+    if (pos >= 0) {
+      return pos;
+    }
+
+    return OR<B...>::match(source);
+  }
+};
+
+template <typename A>
+struct OR<A> {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    return A::match(source);
+  }
+};
+
+template <typename A, typename... B>
+struct SEQ {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    int a = A::match(source);
+    if (a < 0) {
+      return -1;
+    }
+
+    const Source nextSource = source + a;
+    // if (nextSource) { c = nextSource[0]; }
+
+    int b = SEQ<B...>::match(nextSource);
+    if (b < 0) {
+      return -1;
+    }
+
+    return a + b;
+  }
+};
+
+template <typename A>
+struct SEQ<A> {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    return A::match(source);
+  }
+};
+
+// TODO empty???
+template <typename A>
+struct NOT {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    return A::match(source) >= 0 ? -1 : 1;
+  }
+};
+
+template <char A, char Z>
+struct Range {
+  static_assert(A <= Z, "Invalid Range");
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    return (source.get() < A || source.get() > Z) ? -1 : 1;
+  }
+};
+
+struct Empty {
+  template <typename Source>
+  REGEXP_INLINE static int match(const Source& source) {
+    return source.get() == Stream::eof() ? 0 : -1;
+  }
+  REGEXP_INLINE static int match(const StringCharSource& source) {
+    // the empty regex only is successful on the empty string
+    // return c == '\0' ? 0 : -1;
+    return !source ? 0 : -1;
+  }
+};
+
+template <typename Source>
+inline bool IsValidSource(const Source& source) {
+  return source;
+}
+
+template <>
+inline bool IsValidSource<StringCharSource>(const StringCharSource& source) {
+  // switch (m_op) {
+  // case REGEX_MATCH:
+  // case REGEX_RANGE:
+  return source;
+  // default:
+  //     return true;
+  // }
+}
+
+template <typename Exp>
+struct Matcher {
+  template <typename Source>
+  TEST_INLINE static int Match(const Source& source) {
+    // return IsValidSource(source) ? Exp::match(source, source[0]) : -1;
+    return Exp::match(source);
+  }
+
+  template <typename Source>
+  TEST_INLINE static bool Matches(const Source& source) {
+    return Match(source) >= 0;
+  }
+
+  TEST_INLINE static int Match(const Stream& in) {
+    StreamCharSource source(in);
+    return Match(source);
+  }
+  TEST_INLINE static bool Matches(const Stream& in) {
+    StreamCharSource source(in);
+    return Matches(source);
+  }
+
+  TEST_INLINE static int Match(const std::string& str) {
+    StringCharSource source(str.c_str(), str.size());
+    return Match(source);
+  }
+
+  TEST_INLINE static bool Matches(const std::string& str) {
+    return Match(str) >= 0;
+  }
+
+  TEST_INLINE static bool Matches(char ch) {
+    std::string str;
+    str += ch;
+    return Matches(str);
+  }
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 // Here we store a bunch of expressions for matching different parts of the
 // file.
 
-namespace Exp {
-// misc
-inline const RegEx& Empty() {
-  static const RegEx e;
-  return e;
-}
-inline const RegEx& Space() {
-  static const RegEx e = RegEx(' ');
-  return e;
-}
-inline const RegEx& Tab() {
-  static const RegEx e = RegEx('\t');
-  return e;
-}
-inline const RegEx& Blank() {
-  static const RegEx e = Space() || Tab();
-  return e;
-}
-inline const RegEx& Break() {
-  static const RegEx e = RegEx('\n') || RegEx("\r\n");
-  return e;
-}
-inline const RegEx& BlankOrBreak() {
-  static const RegEx e = Blank() || Break();
-  return e;
-}
-inline const RegEx& Digit() {
-  static const RegEx e = RegEx('0', '9');
-  return e;
-}
-inline const RegEx& Alpha() {
-  static const RegEx e = RegEx('a', 'z') || RegEx('A', 'Z');
-  return e;
-}
-inline const RegEx& AlphaNumeric() {
-  static const RegEx e = Alpha() || Digit();
-  return e;
-}
-inline const RegEx& Word() {
-  static const RegEx e = AlphaNumeric() || RegEx('-');
-  return e;
-}
-inline const RegEx& Hex() {
-  static const RegEx e = Digit() || RegEx('A', 'F') || RegEx('a', 'f');
-  return e;
-}
-// Valid Unicode code points that are not part of c-printable (YAML 1.2, sec.
-// 5.1)
-inline const RegEx& NotPrintable() {
-  static const RegEx e =
-      RegEx(0) ||
-      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OR) ||
-      RegEx(0x0E, 0x1F) ||
-      (RegEx('\xC2') + (RegEx('\x80', '\x84') || RegEx('\x86', '\x9F')));
-  return e;
-}
-inline const RegEx& Utf8_ByteOrderMark() {
-  static const RegEx e = RegEx("\xEF\xBB\xBF");
-  return e;
-}
+namespace detail {
 
-// actual tags
+using Space = Char<' '>;
 
-inline const RegEx& DocStart() {
-  static const RegEx e = RegEx("---") + (BlankOrBreak() || RegEx());
-  return e;
-}
-inline const RegEx& DocEnd() {
-  static const RegEx e = RegEx("...") + (BlankOrBreak() || RegEx());
-  return e;
-}
-inline const RegEx& DocIndicator() {
-  static const RegEx e = DocStart() || DocEnd();
-  return e;
-}
-inline const RegEx& BlockEntry() {
-  static const RegEx e = RegEx('-') + (BlankOrBreak() || RegEx());
-  return e;
-}
-inline const RegEx& Key() {
-  static const RegEx e = RegEx('?') + BlankOrBreak();
-  return e;
-}
-inline const RegEx& KeyInFlow() {
-  static const RegEx e = RegEx('?') + BlankOrBreak();
-  return e;
-}
-inline const RegEx& Value() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx());
-  return e;
-}
-inline const RegEx& ValueInFlow() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx(",}", REGEX_OR));
-  return e;
-}
-inline const RegEx& ValueInJSONFlow() {
-  static const RegEx e = RegEx(':');
-  return e;
-}
-inline const RegEx Comment() {
-  static const RegEx e = RegEx('#');
-  return e;
-}
-inline const RegEx& Anchor() {
-  static const RegEx e = !(RegEx("[]{},", REGEX_OR) || BlankOrBreak());
-  return e;
-}
-inline const RegEx& AnchorEnd() {
-  static const RegEx e = RegEx("?:,]}%@`", REGEX_OR) || BlankOrBreak();
-  return e;
-}
-inline const RegEx& URI() {
-  static const RegEx e = Word() || RegEx("#;/?:@&=+$,_.!~*'()[]", REGEX_OR) ||
-                         (RegEx('%') + Hex() + Hex());
-  return e;
-}
-inline const RegEx& Tag() {
-  static const RegEx e = Word() || RegEx("#;/?:@&=+$_.~*'", REGEX_OR) ||
-                         (RegEx('%') + Hex() + Hex());
-  return e;
-}
+using Tab = Char<'\t'>;
+
+using Blank = OR < Space, Tab >;
+
+using Break =
+  OR < Char<'\n'>,
+       SEQ < Char<'\r'>,
+             Char<'\n'> >>;
+
+using BlankOrBreak = OR < Blank, Break >;
+
+using Digit = Range<'0', '9'>;
+
+using Alpha =
+  OR < Range<'a', 'z'>,
+       Range<'A', 'Z'> >;
+
+using AlphaNumeric = OR < Alpha, Digit >;
+
+using Word = OR < AlphaNumeric, Char<'-'> >;
+
+using Hex = OR < Digit, Range<'a','f'>, Range<'A', 'F'>>;
+
+// why not range?
+using NotPrintable =
+  OR < Char<0>, Char<'\x01'>,
+       Char<'\x02'>, Char<'\x03'>,
+       Char<'\x04'>, Char<'\x05'>,
+       Char<'\x06'>, Char<'\x07'>,
+       Char<'\x08'>, Char<'\x0B'>,
+       Char<'\x0C'>, Char<'\x7F'>,
+       Range<0x0E, 0x1F>,
+       SEQ < Char<'\xC2'>,
+             OR < Range<'\x80', '\x84'>,
+                  Range<'\x86', '\x9F'>>>>;
+
+using Utf8_ByteOrderMark =
+  SEQ < Char<'\xEF'>,
+        Char<'\xBB'>,
+        Char<'\xBF'>>;
+
+using DocStart =
+  SEQ < Char<'-'>,
+        Char<'-'>,
+        Char<'-'>,
+        OR < BlankOrBreak, Empty >>;
+
+using DocEnd =
+  SEQ < Char<'.'>,
+        Char<'.'>,
+        Char<'.'>,
+        OR < BlankOrBreak, Empty>>;
+
+using BlockEntry =
+  SEQ < Char<'-'>,
+        OR < BlankOrBreak, Empty >>;
+
+using Key = SEQ<Char<'?'>, BlankOrBreak>;
+
+using KeyInFlow = SEQ<Char<'?'>, BlankOrBreak>;
+
+using Value =
+  SEQ < Char<':'>,
+        OR < BlankOrBreak, Empty >>;
+
+using ValueInFlow =
+  SEQ < Char<':'>,
+        OR < BlankOrBreak,
+             Char<','>,
+             Char<'}'>>>;
+
+using ValueInJSONFlow = Char<':'>;
+
+using Comment = Char<'#'>;
+
+using Anchor = NOT<
+  OR < Char<'['>, Char<']'>,
+       Char<'{'>, Char<'}'>,
+       Char<','>,
+       BlankOrBreak>>;
+
+using AnchorEnd =
+  OR < Char<'?'>, Char<':'>,
+       Char<','>, Char<']'>,
+       Char<'}'>, Char<'%'>,
+       Char<'@'>, Char<'`'>,
+       BlankOrBreak>;
+
+using URI =
+  OR < Word,
+       Char<'#'>, Char<';'>, Char<'/'>, Char<'?'>, Char<':'>,
+       Char<'@'>, Char<'&'>, Char<'='>, Char<'+'>, Char<'$'>,
+       Char<','>, Char<'_'>, Char<'.'>, Char<'!'>, Char<'~'>,
+       Char<'*'>, Char<'\''>, Char<'('>, Char<')'>, Char<'['>,
+       Char<']'>,
+       SEQ < Char<'%'>, Hex, Hex>>;
+
+using Tag =
+  OR < Word,
+       Char<'#'>, Char<';'>, Char<'/'>, Char<'?'>, Char<':'>,
+       Char<'@'>, Char<'&'>, Char<'='>, Char<'+'>, Char<'$'>,
+       Char<'_'>, Char<'.'>, Char<'~'>, Char<'*'>, Char<'\''>,
+       SEQ < Char <'%'>, Hex, Hex>>;
 
 // Plain scalar rules:
 // . Cannot start with a blank.
@@ -146,59 +282,81 @@ inline const RegEx& Tag() {
 // . In the block context - ? : must be not be followed with a space.
 // . In the flow context ? is illegal and : and - must not be followed with a
 // space.
-inline const RegEx& PlainScalar() {
-  static const RegEx e =
-      !(BlankOrBreak() || RegEx(",[]{}#&*!|>\'\"%@`", REGEX_OR) ||
-        (RegEx("-?:", REGEX_OR) + (BlankOrBreak() || RegEx())));
-  return e;
-}
-inline const RegEx& PlainScalarInFlow() {
-  static const RegEx e =
-      !(BlankOrBreak() || RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OR) ||
-        (RegEx("-:", REGEX_OR) + Blank()));
-  return e;
-}
-inline const RegEx& EndScalar() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx());
-  return e;
-}
-inline const RegEx& EndScalarInFlow() {
-  static const RegEx e =
-      (RegEx(':') + (BlankOrBreak() || RegEx() || RegEx(",]}", REGEX_OR))) ||
-      RegEx(",?[]{}", REGEX_OR);
-  return e;
-}
+using PlainScalarCommon =
+  NOT < OR < BlankOrBreak,
+             Char<','>, Char<'['>, Char<']'>, Char<'{'>, Char<'}'>,
+             Char<'#'>, Char<'&'>, Char<'*'>, Char<'!'>, Char<'|'>,
+             Char<'>'>, Char<'\''>, Char<'\"'>, Char<'%'>, Char<'@'>,
+             Char<'`'>>>;
 
-inline const RegEx& ScanScalarEndInFlow() {
-  static const RegEx e = (EndScalarInFlow() || (BlankOrBreak() + Comment()));
-  return e;
-}
+using PlainScalar =
+  NOT < SEQ < OR < Char<'-'>,
+                   Char<'?'>,
+                   Char<':'>>,
+              OR < BlankOrBreak,
+                   Empty >>>;
 
-inline const RegEx& ScanScalarEnd() {
-  static const RegEx e = EndScalar() || (BlankOrBreak() + Comment());
-  return e;
-}
-inline const RegEx& EscSingleQuote() {
-  static const RegEx e = RegEx("\'\'");
-  return e;
-}
-inline const RegEx& EscBreak() {
-  static const RegEx e = RegEx('\\') + Break();
-  return e;
-}
+using PlainScalarInFlow =
+  NOT < OR < Char<'?'>,
+             SEQ < OR < Char<'-'>,
+                        Char<':'>>,
+                    Blank >>>;
+using EndScalar =
+  SEQ < Char<':'>,
+        OR < BlankOrBreak, Empty >>;
 
-inline const RegEx& ChompIndicator() {
-  static const RegEx e = RegEx("+-", REGEX_OR);
-  return e;
-}
-inline const RegEx& Chomp() {
-  static const RegEx e = (ChompIndicator() + Digit()) ||
-                         (Digit() + ChompIndicator()) || ChompIndicator() ||
-                         Digit();
-  return e;
-}
+using EndScalarInFlow =
+  OR < SEQ < Char<':'>,
+             OR < BlankOrBreak,
+                  Empty,
+                  Char<','>,
+                  Char<']'>,
+                  Char<'}'>>>,
+       Char<','>,
+       Char<'?'>,
+       Char<'['>,
+       Char<']'>,
+       Char<'{'>,
+       Char<'}'>>;
 
-// and some functions
+
+
+using ChompIndicator = OR < Char<'+'>, Char<'-'> >;
+
+using Chomp =
+  OR < SEQ < ChompIndicator, Digit >,
+       SEQ < Digit,ChompIndicator >,
+       ChompIndicator,
+       Digit>;
+
+} // end detail
+
+using Tab = Matcher<detail::Tab>;
+using Blank = Matcher<detail::Blank>;
+using Break = Matcher<detail::Break>;
+using Digit = Matcher<detail::Digit>;
+using BlankOrBreak = Matcher<detail::BlankOrBreak>;
+using Word = Matcher<detail::Word>;
+using DocStart = Matcher<detail::DocStart>;
+using DocEnd = Matcher<detail::DocEnd>;
+using BlockEntry = Matcher<detail::BlockEntry>;
+using Key = Matcher<detail::Key>;
+using KeyInFlow = Matcher<detail::KeyInFlow>;
+using Value = Matcher<detail::Value>;
+using ValueInFlow = Matcher<detail::ValueInFlow>;
+using ValueInJSONFlow = Matcher<detail::ValueInJSONFlow>;
+using Comment = Matcher<detail::Comment>;
+using Anchor = Matcher<detail::Anchor>;
+using AnchorEnd = Matcher<detail::AnchorEnd>;
+using URI = Matcher<detail::URI>;
+using Tag = Matcher<detail::Tag>;
+using PlainScalarCommon = Matcher<detail::PlainScalarCommon>;
+using PlainScalar = Matcher<detail::PlainScalar>;
+using PlainScalarInFlow = Matcher<detail::PlainScalarInFlow>;
+using EscSingleQuote = Matcher<SEQ < Char<'\''>, Char<'\''> >>;
+using EscBreak = Matcher<SEQ < Char<'\\'>, detail::Break >>;
+using Chomp = Matcher<detail::Chomp>;
+
 std::string Escape(Stream& in);
 }
 

@@ -103,11 +103,11 @@ void Scanner::ScanNextToken() {
   }
 
   // document token
-  if (INPUT.column() == 0 && Exp::DocStart().Matches(INPUT)) {
+  if (INPUT.column() == 0 && Exp::DocStart::Matches(INPUT)) {
     return ScanDocStart();
   }
 
-  if (INPUT.column() == 0 && Exp::DocEnd().Matches(INPUT)) {
+  if (INPUT.column() == 0 && Exp::DocEnd::Matches(INPUT)) {
     return ScanDocEnd();
   }
 
@@ -126,15 +126,18 @@ void Scanner::ScanNextToken() {
   }
 
   // block/map stuff
-  if (Exp::BlockEntry().Matches(INPUT)) {
+  if (Exp::BlockEntry::Matches(INPUT)) {
     return ScanBlockEntry();
   }
 
-  if ((InBlockContext() ? Exp::Key() : Exp::KeyInFlow()).Matches(INPUT)) {
+  if (InBlockContext() ? Exp::Key::Matches(INPUT) : Exp::KeyInFlow::Matches(INPUT)) {
     return ScanKey();
   }
 
-  if (GetValueRegex().Matches(INPUT)) {
+  if ((InBlockContext() && Exp::Value::Matches(INPUT)) ||
+      (m_canBeJSONFlow ?
+       Exp::ValueInJSONFlow::Matches(INPUT) :
+       Exp::ValueInFlow::Matches(INPUT))) {
     return ScanValue();
   }
 
@@ -158,10 +161,13 @@ void Scanner::ScanNextToken() {
     return ScanQuotedScalar();
   }
 
-  // plain scalars
-  if ((InBlockContext() ? Exp::PlainScalar() : Exp::PlainScalarInFlow())
-          .Matches(INPUT)) {
-    return ScanPlainScalar();
+  if (Exp::PlainScalarCommon::Matches(INPUT)) {
+    // plain scalars
+    if (InBlockContext() ?
+      Exp::PlainScalar::Matches(INPUT) :
+      Exp::PlainScalarInFlow::Matches(INPUT)) {
+      return ScanPlainScalar();
+    }
   }
 
   // don't know what it is!
@@ -172,27 +178,27 @@ void Scanner::ScanToNextToken() {
   while (1) {
     // first eat whitespace
     while (INPUT && IsWhitespaceToBeEaten(INPUT.peek())) {
-      if (InBlockContext() && Exp::Tab().Matches(INPUT)) {
+      if (InBlockContext() && Exp::Tab::Matches(INPUT)) {
         m_simpleKeyAllowed = false;
       }
       INPUT.eat(1);
     }
 
     // then eat a comment
-    if (Exp::Comment().Matches(INPUT)) {
+    if (Exp::Comment::Matches(INPUT)) {
       // eat until line break
-      while (INPUT && !Exp::Break().Matches(INPUT)) {
+      while (INPUT && !Exp::Break::Matches(INPUT)) {
         INPUT.eat(1);
       }
     }
 
     // if it's NOT a line break, then we're done!
-    if (!Exp::Break().Matches(INPUT)) {
+    if (!Exp::Break::Matches(INPUT)) {
       break;
     }
 
     // otherwise, let's eat the line break and keep going
-    int n = Exp::Break().Match(INPUT);
+    int n = Exp::Break::Match(INPUT);
     INPUT.eat(n);
 
     // oh yeah, and let's get rid of that simple key
@@ -229,13 +235,6 @@ bool Scanner::IsWhitespaceToBeEaten(char ch) {
   return false;
 }
 
-const RegEx& Scanner::GetValueRegex() const {
-  if (InBlockContext()) {
-    return Exp::Value();
-  }
-
-  return m_canBeJSONFlow ? Exp::ValueInJSONFlow() : Exp::ValueInFlow();
-}
 
 void Scanner::StartStream() {
   m_startedStream = true;
@@ -322,7 +321,7 @@ void Scanner::PopIndentToHere() {
     }
     if (indent.column == INPUT.column() &&
         !(indent.type == IndentMarker::SEQ &&
-          !Exp::BlockEntry().Matches(INPUT))) {
+          !Exp::BlockEntry::Matches(INPUT))) {
       break;
     }
 

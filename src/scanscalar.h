@@ -8,8 +8,8 @@
 #endif
 
 #include <string>
+#include <functional>
 
-#include "regex_yaml.h"
 #include "stream.h"
 
 namespace YAML {
@@ -19,8 +19,7 @@ enum FOLD { DONT_FOLD, FOLD_BLOCK, FOLD_FLOW };
 
 struct ScanScalarParams {
   ScanScalarParams()
-      : end(nullptr),
-        eatEnd(false),
+    :   eatEnd(false),
         indent(0),
         detectIndent(false),
         eatLeadingWhitespace(0),
@@ -33,8 +32,7 @@ struct ScanScalarParams {
         leadingSpaces(false) {}
 
   // input:
-  const RegEx* end;   // what condition ends this scalar?
-                      // unowned.
+  std::function<int(const Stream& in)> end;   // what condition ends this scalar?
   bool eatEnd;        // should we eat that condition when we see it?
   int indent;         // what level of indentation should be eaten and ignored?
   bool detectIndent;  // should we try to autodetect the indent?
@@ -57,7 +55,25 @@ struct ScanScalarParams {
   bool leadingSpaces;
 };
 
-std::string ScanScalar(Stream& INPUT, ScanScalarParams& info);
+struct ScanScalar {
+    static int MatchScalarEmpty(const Stream& in);
+
+    static int MatchScalarSingleQuoted(const Stream& in);
+
+    static int MatchScalarDoubleQuoted(const Stream& in);
+
+    static int MatchScalarEnd(const Stream& in);
+
+    static int MatchScalarEndInFlow(const Stream& in);
+
+    static std::string Apply(Stream& INPUT, ScanScalarParams& info);
+
+private:
+    static bool MatchDocIndicator(const Stream& in);
+    static bool CheckDocIndicator(Stream& INPUT, ScanScalarParams& params);
+
+};
+
 }
 
 #endif  // SCANSCALAR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

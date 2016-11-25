@@ -133,10 +133,6 @@ class Scanner {
 
   bool IsWhitespaceToBeEaten(char ch);
 
-  /**
-   * Returns the appropriate regex to check if the next token is a value token.
-   */
-  const RegEx &GetValueRegex() const;
 
   struct SimpleKey {
     SimpleKey(const Mark &mark_, std::size_t flowLevel_);

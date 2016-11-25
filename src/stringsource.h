@@ -16,7 +16,9 @@ class StringCharSource {
       : m_str(str), m_size(size), m_offset(0) {}
 
   operator bool() const { return m_offset < m_size; }
-  char operator[](std::size_t i) const { return m_str[m_offset + i]; }
+  char operator[](std::size_t i) const {
+    return  m_str ? m_str[m_offset + i] : 0x04; // EOF
+  }
   bool operator!() const { return !static_cast<bool>(*this); }
 
   const StringCharSource operator+(int i) const {
@@ -37,6 +39,8 @@ class StringCharSource {
     m_offset += offset;
     return *this;
   }
+
+  char get() const { return m_str[m_offset]; }
 
  private:
   const char* m_str;

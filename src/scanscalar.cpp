@@ -3,11 +3,78 @@
 #include <algorithm>
 
 #include "exp.h"
-#include "regeximpl.h"
 #include "stream.h"
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 
 namespace YAML {
+
+int ScanScalar::MatchScalarEmpty(const Stream&) {
+  // This is checked by !INPUT as well
+  return -1;
+}
+
+int ScanScalar::MatchScalarSingleQuoted(const Stream& in) {
+  using namespace Exp;
+  return (Matcher<Char<'\''>>::Matches(in) &&
+          !EscSingleQuote::Matches(in)) ? 1 : -1;
+}
+
+int ScanScalar::MatchScalarDoubleQuoted(const Stream& in) {
+  using namespace Exp;
+  return Matcher<Char<'\"'>>::Match(in);
+}
+
+int ScanScalar::MatchScalarEnd(const Stream& in) {
+  using namespace Exp;
+  using ScalarEnd = Matcher<
+      OR < SEQ < Char<':'>,
+                 OR < detail::BlankOrBreak,
+                      Empty >>,
+           SEQ < detail::BlankOrBreak,
+                 detail::Comment>>>;
+
+  return ScalarEnd::Match(in);
+}
+
+int ScanScalar::MatchScalarEndInFlow(const Stream& in) {
+  using namespace Exp;
+  using ScalarEndInFlow = Matcher <
+      OR < SEQ < Char<':'>,
+                 OR < detail::BlankOrBreak,
+                      Char<','>,
+                      Char<']'>,
+                      Char<'}'>,
+                      Empty >>,
+           Char<','>,
+           Char<'?'>,
+           Char<'['>,
+           Char<']'>,
+           Char<'{'>,
+           Char<'}'>,
+           SEQ < detail::BlankOrBreak,
+                 detail::Comment>>>;
+
+  return ScalarEndInFlow::Match(in);
+}
+
+bool ScanScalar::MatchDocIndicator(const Stream& in) {
+ using namespace Exp;
+ using DocIndicator = Matcher<OR <detail::DocStart, detail::DocEnd>>;
+
+ return DocIndicator::Matches(in);
+}
+
+bool ScanScalar::CheckDocIndicator(Stream& INPUT, ScanScalarParams& params) {
+  if (MatchDocIndicator(INPUT)) {
+    if (params.onDocIndicator == BREAK) {
+      return true;
+    } else if (params.onDocIndicator == THROW) {
+      throw ParserException(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
+    }
+  }
+  return false;
+}
+
 // ScanScalar
 // . This is where the scalar magic happens.
 //
@@ -18,7 +85,7 @@ namespace YAML {
 //
 // . Depending on the parameters given, we store or stop
 //   and different places in the above flow.
-std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
+std::string ScanScalar::Apply(Stream& INPUT, ScanScalarParams& params) {
   bool foundNonEmptyLine = false;
   bool pastOpeningBreak = (params.fold == FOLD_FLOW);
   bool emptyLine = false, moreIndented = false;
@@ -28,58 +95,68 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
   std::string scalar;
   params.leadingSpaces = false;
 
-  if (!params.end) {
-    params.end = &Exp::Empty();
-  }
-
   while (INPUT) {
     // ********************************
     // Phase #1: scan until line ending
 
-    std::size_t lastNonWhitespaceChar = scalar.size();
     bool escapedNewline = false;
-    while (!params.end->Matches(INPUT) && !Exp::Break().Matches(INPUT)) {
+    std::size_t lastNonWhitespaceChar = scalar.size();
+
+    while (1) {
+
+      // find end posiion
+      if (params.end(INPUT) >= 0) {
+        break;
+      }
+
       if (!INPUT) {
         break;
       }
 
-      // document indicator?
-      if (INPUT.column() == 0 && Exp::DocIndicator().Matches(INPUT)) {
-        if (params.onDocIndicator == BREAK) {
-          break;
-        } else if (params.onDocIndicator == THROW) {
-          throw ParserException(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
-        }
+      // find break posiion
+      char ch = INPUT.peek();
+
+      bool isWhiteSpace = (ch == ' ' || ch == '\t');
+
+      if (!isWhiteSpace) {
+          if (ch == '\n' || (ch == '\r' && Exp::Break::Matches(INPUT))) {
+              break;
+          }
+          // document indicator?
+          if (INPUT.column() == 0 && CheckDocIndicator(INPUT, params)) {
+              break;
+          }
       }
 
       foundNonEmptyLine = true;
       pastOpeningBreak = true;
 
-      // escaped newline? (only if we're escaping on slash)
-      if (params.escape == '\\' && Exp::EscBreak().Matches(INPUT)) {
-        // eat escape character and get out (but preserve trailing whitespace!)
-        INPUT.get();
-        lastNonWhitespaceChar = scalar.size();
-        lastEscapedChar = scalar.size();
-        escapedNewline = true;
-        break;
-      }
+      if (params.escape != ch) {
+        // just add the character
+        scalar += ch;
+        INPUT.eat();
 
-      // escape this?
-      if (INPUT.peek() == params.escape) {
-        scalar += Exp::Escape(INPUT);
-        lastNonWhitespaceChar = scalar.size();
-        lastEscapedChar = scalar.size();
-        continue;
-      }
+        if (!isWhiteSpace) {
+          lastNonWhitespaceChar = scalar.size();
+        }
 
-      // otherwise, just add the damn character
-      char ch = INPUT.get();
-      scalar += ch;
-      if (ch != ' ' && ch != '\t') {
-        lastNonWhitespaceChar = scalar.size();
+      } else {
+        // escaped newline? (only if we're escaping on slash)
+        if (params.escape == '\\' && Exp::EscBreak::Matches(INPUT)) {
+          // eat escape character and get out (but preserve trailing whitespace!)
+          INPUT.eat();
+          lastNonWhitespaceChar = scalar.size();
+          lastEscapedChar = scalar.size();
+          escapedNewline = true;
+          break;
+
+        } else {
+          scalar += Exp::Escape(INPUT);
+          lastNonWhitespaceChar = scalar.size();
+          lastEscapedChar = scalar.size();
+        }
       }
-    }
+    } // end while(1)
 
     // eof? if we're looking to eat something, then we throw
     if (!INPUT) {
@@ -90,14 +167,14 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     }
 
     // doc indicator?
-    if (params.onDocIndicator == BREAK && INPUT.column() == 0 &&
-        Exp::DocIndicator().Matches(INPUT)) {
+    if (params.onDocIndicator == BREAK &&
+        INPUT.column() == 0 &&
+        MatchDocIndicator(INPUT)) {
       break;
     }
 
     // are we done via character match?
-    int n = params.end->Match(INPUT);
-    if (n >= 0) {
+    if (int n = params.end(INPUT) >= 0) {
       if (params.eatEnd) {
         INPUT.eat(n);
       }
@@ -110,9 +187,9 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
     // ********************************
     // Phase #2: eat line ending
-    n = Exp::Break().Match(INPUT);
-    INPUT.eat(n);
-
+    if (int n = Exp::Break::Match(INPUT)) {
+        INPUT.eat(n);
+    }
     // ********************************
     // Phase #3: scan initial spaces
 
@@ -120,7 +197,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     while (INPUT.peek() == ' ' &&
            (INPUT.column() < params.indent ||
             (params.detectIndent && !foundNonEmptyLine)) &&
-           !params.end->Matches(INPUT)) {
+           !(params.end(INPUT) >= 0)) {
       INPUT.eat(1);
     }
 
@@ -130,9 +207,9 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     }
 
     // and then the rest of the whitespace
-    while (Exp::Blank().Matches(INPUT)) {
+    for (char c = INPUT.peek(); (c == ' ' || c == '\t'); c = INPUT.peek()) {
       // we check for tabs that masquerade as indentation
-      if (INPUT.peek() == '\t' && INPUT.column() < params.indent &&
+      if (c == '\t' && INPUT.column() < params.indent &&
           params.onTabInIndentation == THROW) {
         throw ParserException(INPUT.mark(), ErrorMsg::TAB_IN_INDENTATION);
       }
@@ -141,7 +218,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
         break;
       }
 
-      if (params.end->Matches(INPUT)) {
+      if (params.end(INPUT) >= 0) {
         break;
       }
 
@@ -149,8 +226,8 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     }
 
     // was this an empty line?
-    bool nextEmptyLine = Exp::Break().Matches(INPUT);
-    bool nextMoreIndented = Exp::Blank().Matches(INPUT);
+    bool nextEmptyLine = Exp::Break::Matches(INPUT);
+    bool nextMoreIndented = Exp::Blank::Matches(INPUT);
     if (params.fold == FOLD_BLOCK && foldedNewlineCount == 0 && nextEmptyLine)
       foldedNewlineStartedMoreIndented = moreIndented;
 

@@ -1,8 +1,6 @@
 #include <sstream>
 
 #include "exp.h"
-#include "regex_yaml.h"
-#include "regeximpl.h"
 #include "scanner.h"
 #include "scanscalar.h"
 #include "scantag.h"  // IWYU pragma: keep
@@ -33,22 +31,22 @@ void Scanner::ScanDirective() {
   INPUT.eat(1);
 
   // read name
-  while (INPUT && !Exp::BlankOrBreak().Matches(INPUT))
+  while (INPUT && !Exp::BlankOrBreak::Matches(INPUT))
     token.value += INPUT.get();
 
   // read parameters
   while (1) {
     // first get rid of whitespace
-    while (Exp::Blank().Matches(INPUT))
+    while (Exp::Blank::Matches(INPUT))
       INPUT.eat(1);
 
     // break on newline or comment
-    if (!INPUT || Exp::Break().Matches(INPUT) || Exp::Comment().Matches(INPUT))
+    if (!INPUT || Exp::Break::Matches(INPUT) || Exp::Comment::Matches(INPUT))
       break;
 
     // now read parameter
     std::string param;
-    while (INPUT && !Exp::BlankOrBreak().Matches(INPUT))
+    while (INPUT && !Exp::BlankOrBreak::Matches(INPUT))
       param += INPUT.get();
 
     token.params.push_back(param);
@@ -233,7 +231,7 @@ void Scanner::ScanAnchorOrAlias() {
   alias = (indicator == Keys::Alias);
 
   // now eat the content
-  while (INPUT && Exp::Anchor().Matches(INPUT))
+  while (INPUT && Exp::Anchor::Matches(INPUT))
     name += INPUT.get();
 
   // we need to have read SOMETHING!
@@ -242,7 +240,7 @@ void Scanner::ScanAnchorOrAlias() {
                                               : ErrorMsg::ANCHOR_NOT_FOUND);
 
   // and needs to end correctly
-  if (INPUT && !Exp::AnchorEnd().Matches(INPUT))
+  if (INPUT && !Exp::AnchorEnd::Matches(INPUT))
     throw ParserException(INPUT.mark(), alias ? ErrorMsg::CHAR_IN_ALIAS
                                               : ErrorMsg::CHAR_IN_ANCHOR);
 
@@ -291,14 +289,19 @@ void Scanner::ScanTag() {
   m_tokens.push(token);
 }
 
+
 // PlainScalar
 void Scanner::ScanPlainScalar() {
   std::string scalar;
 
   // set up the scanning parameters
   ScanScalarParams params;
-  params.end =
-      (InFlowContext() ? &Exp::ScanScalarEndInFlow() : &Exp::ScanScalarEnd());
+  if (InFlowContext()) {
+      params.end = ScanScalar::MatchScalarEndInFlow;
+  } else {
+      params.end = ScanScalar::MatchScalarEnd;
+  }
+
   params.eatEnd = false;
   params.indent = (InFlowContext() ? 0 : GetTopIndent() + 1);
   params.fold = FOLD_FLOW;
@@ -312,7 +315,7 @@ void Scanner::ScanPlainScalar() {
   InsertPotentialSimpleKey();
 
   Mark mark = INPUT.mark();
-  scalar = ScanScalar(INPUT, params);
+  scalar = ScanScalar::Apply(INPUT, params);
 
   // can have a simple key only if we ended the scalar by starting a new line
   m_simpleKeyAllowed = params.leadingSpaces;
@@ -327,6 +330,7 @@ void Scanner::ScanPlainScalar() {
   m_tokens.push(token);
 }
 
+
 // QuotedScalar
 void Scanner::ScanQuotedScalar() {
   std::string scalar;
@@ -338,8 +342,11 @@ void Scanner::ScanQuotedScalar() {
 
   // setup the scanning parameters
   ScanScalarParams params;
-  RegEx end = (single ? RegEx(quote) && !Exp::EscSingleQuote() : RegEx(quote));
-  params.end = &end;
+  if (single) {
+      params.end = ScanScalar::MatchScalarSingleQuoted;
+  } else {
+      params.end = ScanScalar::MatchScalarDoubleQuoted;
+  }
   params.eatEnd = true;
   params.escape = (single ? '\'' : '\\');
   params.indent = 0;
@@ -358,7 +365,7 @@ void Scanner::ScanQuotedScalar() {
   INPUT.get();
 
   // and scan
-  scalar = ScanScalar(INPUT, params);
+  scalar = ScanScalar::Apply(INPUT, params);
   m_simpleKeyAllowed = false;
   m_canBeJSONFlow = true;
 
@@ -366,6 +373,8 @@ void Scanner::ScanQuotedScalar() {
   token.value = scalar;
   m_tokens.push(token);
 }
+
+
 
 // BlockScalarToken
 // . These need a little extra processing beforehand.
@@ -379,6 +388,8 @@ void Scanner::ScanBlockScalar() {
   params.indent = 1;
   params.detectIndent = true;
 
+  params.end = ScanScalar::MatchScalarEmpty;
+
   // eat block indicator ('|' or '>')
   Mark mark = INPUT.mark();
   char indicator = INPUT.get();
@@ -386,14 +397,14 @@ void Scanner::ScanBlockScalar() {
 
   // eat chomping/indentation indicators
   params.chomp = CLIP;
-  int n = Exp::Chomp().Match(INPUT);
+  int n = Exp::Chomp::Match(INPUT);
   for (int i = 0; i < n; i++) {
     char ch = INPUT.get();
     if (ch == '+')
       params.chomp = KEEP;
     else if (ch == '-')
       params.chomp = STRIP;
-    else if (Exp::Digit().Matches(ch)) {
+    else if (Exp::Digit::Matches(ch)) {
       if (ch == '0')
         throw ParserException(INPUT.mark(), ErrorMsg::ZERO_INDENT_IN_BLOCK);
 
@@ -403,16 +414,16 @@ void Scanner::ScanBlockScalar() {
   }
 
   // now eat whitespace
-  while (Exp::Blank().Matches(INPUT))
+  while (Exp::Blank::Matches(INPUT))
     INPUT.eat(1);
 
   // and comments to the end of the line
-  if (Exp::Comment().Matches(INPUT))
-    while (INPUT && !Exp::Break().Matches(INPUT))
+  if (Exp::Comment::Matches(INPUT))
+    while (INPUT && !Exp::Break::Matches(INPUT))
       INPUT.eat(1);
 
   // if it's not a line break, then we ran into a bad character inline
-  if (INPUT && !Exp::Break().Matches(INPUT))
+  if (INPUT && !Exp::Break::Matches(INPUT))
     throw ParserException(INPUT.mark(), ErrorMsg::CHAR_IN_BLOCK);
 
   // set the initial indentation
@@ -423,7 +434,7 @@ void Scanner::ScanBlockScalar() {
   params.trimTrailingSpaces = false;
   params.onTabInIndentation = THROW;
 
-  scalar = ScanScalar(INPUT, params);
+  scalar = ScanScalar::Apply(INPUT, params);
 
   // simple keys always ok after block scalars (since we're gonna start a new
   // line anyways)

@@ -32,7 +32,7 @@ class Stream : private noncopyable {
   std::string get(int n);
   void eat(int n = 1);
 
-  static char eof() { return 0x04; }
+  static constexpr char eof() { return 0x04; }
 
   const Mark mark() const { return m_mark; }
   int pos() const { return m_mark.pos; }

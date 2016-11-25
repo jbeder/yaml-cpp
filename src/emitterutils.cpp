@@ -4,8 +4,6 @@
 #include "emitterutils.h"
 #include "exp.h"
 #include "indentation.h"
-#include "regex_yaml.h"
-#include "regeximpl.h"
 #include "stringsource.h"
 #include "yaml-cpp/binary.h"  // IWYU pragma: keep
 #include "yaml-cpp/ostream_wrapper.h"
@@ -159,35 +157,34 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
   }
 
   // check the start
-  const RegEx& start = (flowType == FlowType::Flow ? Exp::PlainScalarInFlow()
-                                                   : Exp::PlainScalar());
-  if (!start.Matches(str)) {
-    return false;
+  if (flowType == FlowType::Flow) {
+      if (!Exp::PlainScalarInFlow::Matches(str)) { return false; }
+  } else {
+      if (!Exp::PlainScalar::Matches(str)) { return false; }
   }
-
   // and check the end for plain whitespace (which can't be faithfully kept in a
   // plain scalar)
   if (!str.empty() && *str.rbegin() == ' ') {
     return false;
   }
-
   // then check until something is disallowed
-  static const RegEx& disallowed_flow =
-      Exp::EndScalarInFlow() || (Exp::BlankOrBreak() + Exp::Comment()) ||
-      Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||
-      Exp::Tab();
-  static const RegEx& disallowed_block =
-      Exp::EndScalar() || (Exp::BlankOrBreak() + Exp::Comment()) ||
-      Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||
-      Exp::Tab();
-  const RegEx& disallowed =
-      flowType == FlowType::Flow ? disallowed_flow : disallowed_block;
+  using namespace Exp;
+  using Disallowed = Matcher <
+      OR < SEQ < detail::BlankOrBreak, detail::Comment >,
+           detail::NotPrintable,
+           detail::Utf8_ByteOrderMark,
+           detail::Break,
+           detail::Tab>>;
 
   StringCharSource buffer(str.c_str(), str.size());
   while (buffer) {
-    if (disallowed.Matches(buffer)) {
-      return false;
+      if ((flowType == FlowType::Flow ?
+           Matcher<detail::EndScalarInFlow>::Matches(buffer) :
+           Matcher<detail::EndScalar>::Matches(buffer)) ||
+          Disallowed::Matches(buffer)) {
+        return false;
     }
+
     if (allowOnlyAscii && (0x80 <= static_cast<unsigned char>(buffer[0]))) {
       return false;
     }
@@ -424,9 +421,13 @@ bool WriteAnchor(ostream_wrapper& out, const std::string& str) {
 bool WriteTag(ostream_wrapper& out, const std::string& str, bool verbatim) {
   out << (verbatim ? "!<" : "!");
   StringCharSource buffer(str.c_str(), str.size());
-  const RegEx& reValid = verbatim ? Exp::URI() : Exp::Tag();
+  auto reValid = verbatim ?
+      [](StringCharSource& s) { return Exp::URI::Match(s); } :
+      [](StringCharSource& s) { return Exp::Tag::Match(s); };
+
   while (buffer) {
-    int n = reValid.Match(buffer);
+
+    int n = reValid(buffer);
     if (n <= 0) {
       return false;
     }
@@ -447,7 +448,7 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
   out << "!";
   StringCharSource prefixBuffer(prefix.c_str(), prefix.size());
   while (prefixBuffer) {
-    int n = Exp::URI().Match(prefixBuffer);
+    int n = Exp::URI::Match(prefixBuffer);
     if (n <= 0) {
       return false;
     }
@@ -461,7 +462,7 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
   out << "!";
   StringCharSource tagBuffer(tag.c_str(), tag.size());
   while (tagBuffer) {
-    int n = Exp::Tag().Match(tagBuffer);
+    int n = Exp::Tag::Match(tagBuffer);
     if (n <= 0) {
       return false;
     }
