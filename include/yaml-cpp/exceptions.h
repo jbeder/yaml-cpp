@@ -7,6 +7,12 @@
 #pragma once
 #endif
 
+#ifdef _MSC_VER
+#define NOEXCEPT _NOEXCEPT
+#else
+#define NOEXCEPT noexcept
+#endif
+
 #include "yaml-cpp/mark.h"
 #include "yaml-cpp/traits.h"
 #include <stdexcept>
@@ -112,7 +118,7 @@ class Exception : public std::runtime_error {
  public:
   Exception(const Mark& mark_, const std::string& msg_)
       : std::runtime_error(build_what(mark_, msg_)), mark(mark_), msg(msg_) {}
-  virtual ~Exception() noexcept {}
+  virtual ~Exception() NOEXCEPT {}
 
   Exception(const Exception&) = default;
 
@@ -165,7 +171,7 @@ class TypedKeyNotFound : public KeyNotFound {
  public:
   TypedKeyNotFound(const Mark& mark_, const T& key_)
       : KeyNotFound(mark_, key_), key(key_) {}
-  virtual ~TypedKeyNotFound() noexcept {}
+  virtual ~TypedKeyNotFound() NOEXCEPT {}
 
   T key;
 };
