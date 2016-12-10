@@ -495,5 +495,62 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
 
   ExpectOutput("{position: [1.01, 2.01, 3.01]}", mapNode);
 }
+
+TEST(NodeTest, ChildNodesAliveAfterOwnerNodeExitsScope) {
+
+  Node node;
+  {
+    Node tmp;
+    Node n = tmp["Message"];
+    n["Hello"] = "World";
+    node = tmp;
+  }
+
+  EXPECT_TRUE(node.IsMap());
+  EXPECT_TRUE(node["Message"].IsMap());
+  EXPECT_TRUE(node["Message"]["Hello"].IsScalar());
+  EXPECT_EQ(node["Message"]["Hello"].Scalar(), "World");
+}
+
+TEST(NodeTest, AdvancedMemoryMerging) {
+
+  {
+    Node src;
+    src["A"] = "a";
+    {
+      Node dst;
+      dst["B"] = "b";
+      dst = src["A"];
+    }
+    printf("dropped dst\n");
+    EXPECT_TRUE(src.IsMap());
+    EXPECT_EQ(src["A"].Scalar(), "a");
+  }
+  {
+    Node src;
+    src["A"] = "a";
+    {
+      Node dst;
+      dst["A"] = src["A"];
+    }
+    printf("dropped dst\n");
+    EXPECT_TRUE(src.IsMap());
+    EXPECT_EQ(src["A"].Scalar(), "a");
+  }
+  {
+    Node src;
+    src["A"] = "a";
+    {
+      Node dst;
+      for (const auto& entry : src) {
+        dst[entry.first] = entry.second;
+      }
+    }
+    printf("dropped dst\n");
+    EXPECT_TRUE(src.IsMap());
+    EXPECT_EQ(src["A"].Scalar(), "a");
+  }
+}
+
 }
 }
