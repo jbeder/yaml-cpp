@@ -15,17 +15,17 @@
 #include <string>
 
 namespace YAML {
-inline Node::Node() : m_pMemory(new detail::memory), m_pNode(NULL) {}
+inline Node::Node() : m_pMemory(new detail::memory_ref), m_pNode(NULL) {}
 
 inline Node::Node(NodeType::value type)
-    : m_pMemory(new detail::memory),
+    : m_pMemory(new detail::memory_ref),
       m_pNode(&(m_pMemory->create_node())) {
   m_pNode->set_type(type);
 }
 
 template <typename T>
 inline Node::Node(const T& rhs)
-    : m_pMemory(new detail::memory),
+    : m_pMemory(new detail::memory_ref),
       m_pNode(&(m_pMemory->create_node())) {
   Assign(rhs);
 }
@@ -52,7 +52,7 @@ inline void Node::EnsureNodeExists() const {
   if (!isValid())
     throw InvalidNode();
   if (!m_pNode) {
-    m_pMemory.reset(new detail::memory);
+    m_pMemory.reset(new detail::memory_ref);
     m_pNode = &m_pMemory->create_node();
     m_pNode->set_null();
   }

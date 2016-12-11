@@ -35,7 +35,25 @@ class YAML_CPP_API memory : public ref_counted {
   Nodes m_nodes;
 };
 
-typedef ref_holder<memory> shared_memory;
+struct memory_ref : ref_counted {
+
+  ref_holder<memory> m_ptr;
+
+  memory_ref() : m_ptr(new memory) {}
+  ~memory_ref() {}
+
+  node& create_node() { return m_ptr->create_node(); }
+
+  void merge(memory_ref& rhs) {
+    if (m_ptr == rhs.m_ptr) {
+       return;
+    }
+    m_ptr->merge(*rhs.m_ptr);
+    rhs.m_ptr = m_ptr;
+  };
+};
+
+typedef ref_holder<memory_ref> shared_memory;
 
 }
 }
