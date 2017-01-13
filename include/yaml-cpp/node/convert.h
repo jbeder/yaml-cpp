@@ -7,6 +7,7 @@
 #pragma once
 #endif
 
+#include <array>
 #include <limits>
 #include <list>
 #include <map>
@@ -162,7 +163,7 @@ struct convert<bool> {
 
 // std::map
 template <typename K, typename V>
-struct convert<std::map<K, V> > {
+struct convert<std::map<K, V>> {
   static Node encode(const std::map<K, V>& rhs) {
     Node node(NodeType::Map);
     for (typename std::map<K, V>::const_iterator it = rhs.begin();
@@ -189,7 +190,7 @@ struct convert<std::map<K, V> > {
 
 // std::vector
 template <typename T>
-struct convert<std::vector<T> > {
+struct convert<std::vector<T>> {
   static Node encode(const std::vector<T>& rhs) {
     Node node(NodeType::Sequence);
     for (typename std::vector<T>::const_iterator it = rhs.begin();
@@ -216,7 +217,7 @@ struct convert<std::vector<T> > {
 
 // std::list
 template <typename T>
-struct convert<std::list<T> > {
+struct convert<std::list<T>> {
   static Node encode(const std::list<T>& rhs) {
     Node node(NodeType::Sequence);
     for (typename std::list<T>::const_iterator it = rhs.begin();
@@ -241,9 +242,42 @@ struct convert<std::list<T> > {
   }
 };
 
+// std::array
+template <typename T, std::size_t N>
+struct convert<std::array<T, N>> {
+  static Node encode(const std::array<T, N>& rhs) {
+    Node node(NodeType::Sequence);
+    for (const auto& element : rhs) {
+      node.push_back(element);
+    }
+    return node;
+  }
+
+  static bool decode(const Node& node, std::array<T, N>& rhs) {
+    if (!isNodeValid(node)) {
+      return false;
+    }
+
+    for (auto i = 0u; i < node.size(); ++i) {
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[i] = node[i].template as<T>();
+#else
+      rhs[i] = node[i].as<T>();
+#endif
+    }
+    return true;
+  }
+
+ private:
+  static bool isNodeValid(const Node& node) {
+    return node.IsSequence() && node.size() == N;
+  }
+};
+
 // std::pair
 template <typename T, typename U>
-struct convert<std::pair<T, U> > {
+struct convert<std::pair<T, U>> {
   static Node encode(const std::pair<T, U>& rhs) {
     Node node(NodeType::Sequence);
     node.push_back(rhs.first);

@@ -32,7 +32,7 @@ struct get_idx<Key,
 
   static node* get(std::vector<node*>& sequence, const Key& key,
                    shared_memory_holder pMemory) {
-    if (key > sequence.size())
+   if (key > sequence.size() || (key > 0 && !sequence[key-1]->is_defined()))
       return 0;
     if (key == sequence.size())
       sequence.push_back(&pMemory->create_node());
@@ -131,6 +131,14 @@ template <typename Key>
 inline bool node_data::remove(const Key& key, shared_memory_holder pMemory) {
   if (m_type != NodeType::Map)
     return false;
+
+  kv_pairs::iterator it = m_undefinedPairs.begin();
+  while (it != m_undefinedPairs.end()) {
+    kv_pairs::iterator jt = std::next(it);
+    if (it->first->equals(key, pMemory))
+      m_undefinedPairs.erase(it);
+    it = jt;
+  }
 
   for (node_map::iterator it = m_map.begin(); it != m_map.end(); ++it) {
     if (it->first->equals(key, pMemory)) {

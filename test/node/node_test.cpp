@@ -12,6 +12,14 @@
 using ::testing::AnyOf;
 using ::testing::Eq;
 
+#define EXPECT_THROW_REPRESENTATION_EXCEPTION(statement, message) \
+  ASSERT_THROW(statement, RepresentationException);               \
+  try {                                                           \
+    statement;                                                    \
+  } catch (const RepresentationException& e) {                    \
+    EXPECT_EQ(e.msg, message);                                    \
+  }
+
 namespace YAML {
 namespace {
 TEST(NodeTest, SimpleScalar) {
@@ -80,6 +88,24 @@ TEST(NodeTest, MapWithUndefinedValues) {
   EXPECT_EQ(2, node.size());
 }
 
+TEST(NodeTest, SeqIntoMap) {
+  Node node;
+  node[0] = "test";
+  node[1];
+  node[2] = "value";
+  EXPECT_TRUE(node.IsMap());
+  EXPECT_EQ("test", node[0].as<std::string>());
+  EXPECT_EQ("value", node[2].as<std::string>());
+  EXPECT_EQ(2, node.size());
+}
+
+TEST(NodeTest, RemoveUnassignedNode) {
+  Node node(NodeType::Map);
+  node["key"];
+  node.remove("key");
+  EXPECT_EQ(0, node.size());
+}
+
 TEST(NodeTest, MapForceInsert) {
   Node node;
   Node k1("k1");
@@ -95,8 +121,8 @@ TEST(NodeTest, MapForceInsert) {
 
   node.force_insert(k2, v2);
   EXPECT_EQ("v1", node["k1"].as<std::string>());
-  EXPECT_EQ("v2", node["k2"].as<std::string>());
-  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("v1", node["k2"].as<std::string>());
+  EXPECT_EQ(3, node.size());
 }
 
 TEST(NodeTest, UndefinedConstNodeWithFallback) {
@@ -124,7 +150,7 @@ TEST(NodeTest, ConstIteratorOnConstUndefinedNode) {
   std::size_t count = 0;
   for (const_iterator it = undefinedCn.begin(); it != undefinedCn.end(); ++it) {
     count++;
- }
+  }
   EXPECT_EQ(0, count);
 }
 
@@ -136,7 +162,8 @@ TEST(NodeTest, IteratorOnConstUndefinedNode) {
   Node& nonConstUndefinedNode = const_cast<Node&>(undefinedCn);
 
   std::size_t count = 0;
-  for (iterator it = nonConstUndefinedNode.begin(); it != nonConstUndefinedNode.end(); ++it) {
+  for (iterator it = nonConstUndefinedNode.begin();
+       it != nonConstUndefinedNode.end(); ++it) {
     count++;
   }
   EXPECT_EQ(0, count);
@@ -154,6 +181,22 @@ TEST(NodeTest, SimpleSubkeys) {
   EXPECT_EQ("monkey", node["username"].as<std::string>());
 }
 
+TEST(NodeTest, StdArray) {
+  std::array<int, 5> evens{{2, 4, 6, 8, 10}};
+  Node node;
+  node["evens"] = evens;
+  std::array<int, 5> actualEvens = node["evens"].as<std::array<int, 5>>();
+  EXPECT_EQ(evens, actualEvens);
+}
+
+TEST(NodeTest, StdArrayWrongSize) {
+  std::array<int, 3> evens{{2, 4, 6}};
+  Node node;
+  node["evens"] = evens;
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node["evens"].as<std::array<int, 5>>()), ErrorMsg::BAD_CONVERSION);
+}
+
 TEST(NodeTest, StdVector) {
   std::vector<int> primes;
   primes.push_back(2);
@@ -165,7 +208,7 @@ TEST(NodeTest, StdVector) {
 
   Node node;
   node["primes"] = primes;
-  EXPECT_EQ(primes, node["primes"].as<std::vector<int> >());
+  EXPECT_EQ(primes, node["primes"].as<std::vector<int>>());
 }
 
 TEST(NodeTest, StdList) {
@@ -179,7 +222,7 @@ TEST(NodeTest, StdList) {
 
   Node node;
   node["primes"] = primes;
-  EXPECT_EQ(primes, node["primes"].as<std::list<int> >());
+  EXPECT_EQ(primes, node["primes"].as<std::list<int>>());
 }
 
 TEST(NodeTest, StdMap) {
@@ -192,7 +235,7 @@ TEST(NodeTest, StdMap) {
 
   Node node;
   node["squares"] = squares;
-  std::map<int, int> actualSquares = node["squares"].as<std::map<int, int> >();
+  std::map<int, int> actualSquares = node["squares"].as<std::map<int, int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
@@ -204,7 +247,7 @@ TEST(NodeTest, StdPair) {
   Node node;
   node["pair"] = p;
   std::pair<int, std::string> actualP =
-      node["pair"].as<std::pair<int, std::string> >();
+      node["pair"].as<std::pair<int, std::string>>();
   EXPECT_EQ(p, actualP);
 }
 

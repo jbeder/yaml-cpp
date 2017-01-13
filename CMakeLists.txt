@@ -12,6 +12,11 @@ endif()
 if(POLICY CMP0015)
 	cmake_policy(SET CMP0015 OLD)
 endif()
+# see https://cmake.org/cmake/help/latest/policy/CMP0042.html
+if(POLICY CMP0042)
+	# Enable MACOSX_RPATH by default.
+	cmake_policy(SET CMP0042 NEW)
+endif()
 
 include(CheckCXXCompilerFlag)
 
@@ -149,9 +154,11 @@ if(WIN32)
 	endif()
 endif()
 
-# GCC or Clang specialities
+# GCC or Clang or Intel Compiler specialities
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
-   CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+   CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
+   CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+
 	### General stuff
 	if(WIN32)
 		set(CMAKE_SHARED_LIBRARY_PREFIX "")	# DLLs do not have a "lib" prefix
@@ -219,13 +226,14 @@ if(MSVC)
 		endif()
 
 		# correct linker options
-		foreach(flag_var  yaml_c_flags  yaml_cxx_flags)
+		foreach(flag_var  CMAKE_C_FLAGS  CMAKE_CXX_FLAGS)
 			foreach(config_name  ""  DEBUG  RELEASE  MINSIZEREL  RELWITHDEBINFO)
 				set(var_name "${flag_var}")
 				if(NOT "${config_name}" STREQUAL "")
 					set(var_name "${var_name}_${config_name}")
 				endif()
 				string(REPLACE "/MD" "${LIB_RT_OPTION}" ${var_name} "${${var_name}}")
+				set(${var_name} "${${var_name}}" CACHE STRING "" FORCE)
 			endforeach()
 		endforeach()
 	endif()

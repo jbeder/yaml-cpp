@@ -354,7 +354,7 @@ bool WriteDoubleQuotedString(ostream_wrapper& out, const std::string& str,
 }
 
 bool WriteLiteralString(ostream_wrapper& out, const std::string& str,
-                        int indent) {
+                        std::size_t indent) {
   out << "|\n";
   out << IndentTo(indent);
   int codePoint;
@@ -380,6 +380,8 @@ bool WriteChar(ostream_wrapper& out, char ch) {
     out << "\"\\n\"";
   } else if (ch == '\b') {
     out << "\"\\b\"";
+  } else if (ch == '\\') {
+    out << "\"\\\\\"";
   } else if ((0x20 <= ch && ch <= 0x7e) || ch == ' ') {
     out << "\"" << ch << "\"";
   } else {
@@ -391,7 +393,7 @@ bool WriteChar(ostream_wrapper& out, char ch) {
 }
 
 bool WriteComment(ostream_wrapper& out, const std::string& str,
-                  int postCommentIndent) {
+                  std::size_t postCommentIndent) {
   const std::size_t curIndent = out.col();
   out << "#" << Indentation(postCommentIndent);
   out.set_comment();

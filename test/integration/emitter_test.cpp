@@ -46,6 +46,12 @@ TEST_F(EmitterTest, SimpleScalar) {
   ExpectEmit("Hello, World!");
 }
 
+TEST_F(EmitterTest, SimpleQuotedScalar) {
+  Node n(Load("\"test\""));
+  out << n;
+  ExpectEmit("test");
+}
+
 TEST_F(EmitterTest, SimpleSeq) {
   out << BeginSeq;
   out << "eggs";
@@ -968,6 +974,14 @@ TEST_F(EmitterTest, ValueOfDoubleQuote) {
   out << YAML::EndMap;
 
   ExpectEmit("foo: \"\\\"\"");
+}
+
+TEST_F(EmitterTest, ValueOfBackslash) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "foo" << YAML::Value << '\\';
+  out << YAML::EndMap;
+
+  ExpectEmit("foo: \"\\\\\"");
 }
 
 class EmitterErrorTest : public ::testing::Test {
