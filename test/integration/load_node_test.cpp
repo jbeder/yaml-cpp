@@ -231,5 +231,55 @@ TEST(NodeTest, LoadTildeAsNull) {
   ASSERT_TRUE(node.IsNull());
 }
 
+TEST(NodeTest, MapOfSequences) {
+  const auto doc = Load(R"(
+homebrews:
+  vita:
+    - name: "PSP2048"
+      author: dots-tb
+    - name: "PSVident"
+      author: Freakler
+  )");
+
+  const auto homebrews = doc["homebrews"];
+  // should succeed
+  std::map<std::string, std::vector<std::map<std::string, std::string>>> info;
+  info = homebrews.as<
+      std::map<std::string, std::vector<std::map<std::string, std::string>>>>();
+  const auto vita = info["vita"];
+  const auto vita0 = vita[0];
+  const auto vita1 = vita[1];
+  EXPECT_NE(vita0.end(), vita0.find("name"));
+  EXPECT_NE(vita1.end(), vita1.find("name"));
+  EXPECT_NE(vita0.end(), vita0.find("author"));
+  EXPECT_NE(vita1.end(), vita1.find("author"));
+
+  const auto name0 = vita0.find("name");
+  const auto name1 = vita1.find("name");
+  const auto author0 = vita0.find("author");
+  const auto author1 = vita1.find("author");
+
+  EXPECT_EQ(name0->second, "PSP2048");
+  EXPECT_EQ(name1->second, "PSVident");
+  EXPECT_EQ(author0->second, "dots-tb");
+  EXPECT_EQ(author1->second, "Freakler");
+}
+
+TEST(NodeTest, SeqMap) {
+  const auto doc = Load(R"(
+- firstname: john
+  surname: doe
+  )");
+
+  const auto info = doc.as<std::vector<std::map<std::string, std::string>>>();
+
+  EXPECT_EQ(1, info.size());
+
+  auto name = info[0];
+  EXPECT_EQ(2, name.size());
+  EXPECT_EQ("john", name["firstname"]);
+  EXPECT_EQ("doe", name["surname"]);
+}
+
 }  // namespace
 }  // namespace YAML
