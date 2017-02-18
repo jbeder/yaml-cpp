@@ -106,6 +106,14 @@ TEST(NodeTest, RemoveUnassignedNode) {
   EXPECT_EQ(0, node.size());
 }
 
+TEST(NodeTest, RemoveUnassignedNodeFromMap) {
+  Node node(NodeType::Map);
+  Node n;
+  node[n];
+  node.remove(n);
+  EXPECT_EQ(0, node.size());
+}
+
 TEST(NodeTest, MapForceInsert) {
   Node node;
   Node k1("k1");
