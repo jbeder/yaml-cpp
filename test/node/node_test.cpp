@@ -47,6 +47,30 @@ TEST(NodeTest, SimpleAppendSequence) {
   EXPECT_TRUE(node.IsSequence());
 }
 
+TEST(NodeTest, SequenceElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(1);
+  EXPECT_TRUE(node.IsMap());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("c", node[2].as<std::string>());
+}
+
+TEST(NodeTest, SequenceLastElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(2);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("b", node[1].as<std::string>());
+}
+
 TEST(NodeTest, MapElementRemoval) {
   Node node;
   node["foo"] = "bar";
