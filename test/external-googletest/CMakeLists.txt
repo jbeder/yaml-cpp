@@ -23,8 +23,15 @@
 # *also* use gtest.
 #
 
-set(gtest_force_shared_crt ${MSVC_SHARED_RT} CACHE BOOL
-  "Use shared (DLL) run-time lib even when Google Test built as a static lib.")
+include(FindGTest)
+find_package(GTest)
+if(NOT GTEST_FOUND)
+  set(gtest_force_shared_crt ${MSVC_SHARED_RT} CACHE BOOL
+    "Use shared (DLL) run-time lib even when Google Test built as a static lib.")
 
-add_subdirectory(googletest)
+  add_subdirectory(googletest)
+endif()
+if(NOT GTEST_ROOT)
+  set(GTEST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/googletest" CACHE PATH "Path to googletest")
+endif()
 

@@ -1,4 +1,12 @@
 add_subdirectory(external-googletest)
+find_package(GTest REQUIRED)
+
+# to link against gmock
+get_filename_component(GTEST_LIBRARY_DIR "${GTEST_LIBRARIES}" PATH)
+find_library(GMOCK_LIBRARY gmock
+	HINTS
+	"${GTEST_LIBRARY_DIR}"
+)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
   add_definitions("-DGTEST_LINKED_AS_SHARED_LIBRARY")
@@ -31,6 +39,6 @@ add_executable(run-tests
 set_target_properties(run-tests PROPERTIES
   COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags} ${yaml_test_flags}"
 )
-target_link_libraries(run-tests yaml-cpp gmock gtest)
+target_link_libraries(run-tests yaml-cpp GTest::Main ${GMOCK_LIBRARY})
 
 add_test(yaml-test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/run-tests)
