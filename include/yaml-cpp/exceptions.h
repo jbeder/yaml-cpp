@@ -8,12 +8,16 @@
 #endif
 
 #ifndef NOEXCEPT
-#ifndef _MSC_VER
-#define NOEXCEPT noexcept
-#else
+#ifdef _MSC_VER
+#ifdef _NOEXCEPT
 #define NOEXCEPT _NOEXCEPT
-#endif
-#endif
+#else
+#define NOEXCEPT
+#endif // ifdef _NOEXCEPT
+#else
+#define NOEXCEPT noexcept
+#endif // ifdef _MSC_VER
+#endif // ifdef NOEXCEPT
 
 #include "yaml-cpp/mark.h"
 #include "yaml-cpp/traits.h"
