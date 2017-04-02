@@ -19,6 +19,7 @@ enum EMITTER_MANIP {
   // output character set
   EmitNonAscii,
   EscapeNonAscii,
+  EscapeAsJson,
 
   // string manipulators
   // Auto, // duplicate

@@ -231,6 +231,7 @@ bool EmitterState::SetOutputCharset(EMITTER_MANIP value,
   switch (value) {
     case EmitNonAscii:
     case EscapeNonAscii:
+    case EscapeAsJson:
       _Set(m_charset, value, scope);
       return true;
     default:
