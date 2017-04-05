@@ -123,9 +123,6 @@ include_directories(${YAML_CPP_SOURCE_DIR}/include)
 ###
 ### General compilation settings
 ###
-set(yaml_c_flags ${CMAKE_C_FLAGS})
-set(yaml_cxx_flags ${CMAKE_CXX_FLAGS})
-
 if(BUILD_SHARED_LIBS)
 	set(LABEL_SUFFIX "shared")
 else()
@@ -186,7 +183,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} ${FLAG_TESTED}")
 	endif()
 	#
-	set(yaml_cxx_flags "-Wall ${GCC_EXTRA_OPTIONS} -pedantic -Wno-long-long -std=c++11 ${yaml_cxx_flags}")
+	set(yaml_cxx_flags "-Wall ${GCC_EXTRA_OPTIONS} -pedantic -Wno-long-long -std=c++11")
 
 	### Make specific
 	if(${CMAKE_BUILD_TOOL} MATCHES make OR ${CMAKE_BUILD_TOOL} MATCHES gmake)
@@ -251,7 +248,7 @@ if(MSVC)
 	# /W3 = set warning level; see http://msdn.microsoft.com/en-us/library/thxezb7y.aspx
 	# /wd4127 = disable warning C4127 "conditional expression is constant"; see http://msdn.microsoft.com/en-us/library/6t66728h.aspx
 	# /wd4355 = disable warning C4355 "'this' : used in base member initializer list"; http://msdn.microsoft.com/en-us/library/3c594ae3.aspx
-	set(yaml_cxx_flags "/W3 /wd4127 /wd4355 ${yaml_cxx_flags}")
+	set(CMAKE_CXX_FLAGS "/W3 /wd4127 /wd4355 ${CMAKE_CXX_FLAGS}")
 endif()
 
 
@@ -281,7 +278,7 @@ set(_INSTALL_DESTINATIONS
 ###
 add_library(yaml-cpp ${library_sources})
 set_target_properties(yaml-cpp PROPERTIES
-  COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
+  COMPILE_FLAGS "${yaml_cxx_flags}"
 )
 
 set_target_properties(yaml-cpp PROPERTIES
