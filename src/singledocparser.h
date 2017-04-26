@@ -51,6 +51,8 @@ class SingleDocParser : private noncopyable {
   anchor_t LookupAnchor(const Mark& mark, const std::string& name) const;
 
  private:
+  int depth = 0;
+  int depth_limit = 2000;
   Scanner& m_scanner;
   const Directives& m_directives;
   std::unique_ptr<CollectionStack> m_pCollectionStack;
