@@ -47,6 +47,8 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
 }
 
 void SingleDocParser::HandleNode(EventHandler& eventHandler) {
+  assert(depth < depth_limit);
+  depth++;
   // an empty node *is* a possibility
   if (m_scanner.empty()) {
     eventHandler.OnNull(m_scanner.mark(), NullAnchor);
