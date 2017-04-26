@@ -50,7 +50,6 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   if (depth > depth_limit) {
     throw ParserException(m_scanner.mark(), ErrorMsg::BAD_FILE);
   }
-  depth++;
   // an empty node *is* a possibility
   if (m_scanner.empty()) {
     eventHandler.OnNull(m_scanner.mark(), NullAnchor);
@@ -62,9 +61,11 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
 
   // special case: a value node by itself must be a map, with no header
   if (m_scanner.peek().type == Token::VALUE) {
+    depth++;
     eventHandler.OnMapStart(mark, "?", NullAnchor, EmitterStyle::Default);
     HandleMap(eventHandler);
     eventHandler.OnMapEnd();
+    depth--;
     return;
   }
 
@@ -109,32 +110,42 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
       m_scanner.pop();
       return;
     case Token::FLOW_SEQ_START:
+      depth++;
       eventHandler.OnSequenceStart(mark, tag, anchor, EmitterStyle::Flow);
       HandleSequence(eventHandler);
       eventHandler.OnSequenceEnd();
+      depth--;
       return;
     case Token::BLOCK_SEQ_START:
+      depth++;
       eventHandler.OnSequenceStart(mark, tag, anchor, EmitterStyle::Block);
       HandleSequence(eventHandler);
       eventHandler.OnSequenceEnd();
+      depth--;
       return;
     case Token::FLOW_MAP_START:
+      depth++;
       eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Flow);
       HandleMap(eventHandler);
       eventHandler.OnMapEnd();
+      depth--;
       return;
     case Token::BLOCK_MAP_START:
+      depth++;
       eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Block);
       HandleMap(eventHandler);
       eventHandler.OnMapEnd();
+      depth--;
       return;
     case Token::KEY:
       // compact maps can only go in a flow sequence
       if (m_pCollectionStack->GetCurCollectionType() ==
           CollectionType::FlowSeq) {
+        depth++;
         eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Flow);
         HandleMap(eventHandler);
         eventHandler.OnMapEnd();
+        depth--;
         return;
       }
       break;
