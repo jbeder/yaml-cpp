@@ -47,7 +47,9 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
 }
 
 void SingleDocParser::HandleNode(EventHandler& eventHandler) {
-  assert(depth < depth_limit);
+  if (depth > depth_limit) {
+    throw ParserException(m_scanner.mark(), ErrorMsg::BAD_FILE);
+  }
   depth++;
   // an empty node *is* a possibility
   if (m_scanner.empty()) {
