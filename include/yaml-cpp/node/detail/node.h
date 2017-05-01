@@ -66,30 +66,30 @@ class node {
     m_pRef->set_data(*rhs.m_pRef);
   }
 
-  void set_mark(const Mark& mark) { m_pRef->set_mark(mark); }
+  void set_mark(const Mark& mark_in) { m_pRef->set_mark(mark_in); }
 
-  void set_type(NodeType::value type) {
-    if (type != NodeType::Undefined)
+  void set_type(NodeType::value type_in) {
+    if (type_in != NodeType::Undefined)
       mark_defined();
-    m_pRef->set_type(type);
+    m_pRef->set_type(type_in);
   }
   void set_null() {
     mark_defined();
     m_pRef->set_null();
   }
-  void set_scalar(const std::string& scalar) {
+  void set_scalar(const std::string& scalar_in) {
     mark_defined();
-    m_pRef->set_scalar(scalar);
+    m_pRef->set_scalar(scalar_in);
   }
-  void set_tag(const std::string& tag) {
+  void set_tag(const std::string& tag_in) {
     mark_defined();
-    m_pRef->set_tag(tag);
+    m_pRef->set_tag(tag_in);
   }
 
   // style
-  void set_style(EmitterStyle::value style) {
+  void set_style(EmitterStyle::value style_in) {
     mark_defined();
-    m_pRef->set_style(style);
+    m_pRef->set_style(style_in);
   }
 
   // size/iterator
