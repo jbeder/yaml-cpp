@@ -10,10 +10,10 @@ compile_commands.json
 CTestTestfile.cmake
 
 /libyaml-cpp.a
-/test/gmock-*/gtest/libgtest.a
-/test/gmock-*/gtest/libgtest_main.a
-/test/gmock-*/libgmock.a
-/test/gmock-*/libgmock_main.a
+/test/gtest-1.8.0/googlemock/gtest/libgtest.a
+/test/gtest-1.8.0/googlemock/gtest/libgtest_main.a
+/test/gtest-1.8.0/googlemock/libgmock.a
+/test/gtest-1.8.0/googlemock/libgmock_main.a
 /test/run-tests
 /util/parse
 /util/read
