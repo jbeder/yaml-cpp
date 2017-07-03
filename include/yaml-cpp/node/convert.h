@@ -33,6 +33,7 @@ struct convert;
 
 namespace YAML {
 namespace conversion {
+
 static const std::regex re_true("true|True|TRUE");
 static const std::regex re_false("false|False|FALSE");
 static const std::regex re_decimal("[-+]?[0-9]+");
@@ -42,6 +43,15 @@ static const std::regex re_float(
     "[-+]?(\\.[0-9]+|[0-9]+(\\.[0-9]*)?)([eE][-+]?[0-9]+)?");
 static const std::regex re_inf("[-+]?(\\.inf|\\.Inf|\\.INF)");
 static const std::regex re_nan("\\.nan|\\.NaN|\\.NAN");
+
+template <typename T>
+struct is_character {
+  using value_type = bool;
+  static constexpr bool value =
+      (std::is_same<T, char>::value || std::is_same<T, wchar_t>::value ||
+       std::is_same<T, char16_t>::value || std::is_same<T, char32_t>::value);
+  using type = std::integral_constant<bool, value>;
+};
 }
 
 // Node
@@ -88,11 +98,30 @@ struct convert<_Null> {
   }
 };
 
-// signed integral
+// character types
 template <typename type>
-struct convert<type,
-               typename std::enable_if<std::is_integral<type>::value &&
-                                       std::is_signed<type>::value>::type> {
+struct convert<type, typename std::enable_if<
+                         conversion::is_character<type>::value>::type> {
+  static Node encode(const type& rhs) { return Node(std::string(1,rhs)); }
+
+  static bool decode(const Node& node, type& rhs) {
+    if (node.Type() != NodeType::Scalar)
+      return false;
+    const std::string& input = node.Scalar();
+    if (input.length() != 1) {
+      return false;
+    }
+    rhs = input[0];
+    return true;
+  }
+};
+
+// signed integral (sans char)
+template <typename type>
+struct convert<
+    type, typename std::enable_if<
+              std::is_integral<type>::value && std::is_signed<type>::value &&
+              !conversion::is_character<type>::value>::type> {
   static Node encode(const type& rhs) { return Node(std::to_string(rhs)); }
 
   static bool decode(const Node& node, type& rhs) {
@@ -130,11 +159,12 @@ struct convert<type,
   }
 };
 
-// unsigned integral
+// unsigned integral (sans char)
 template <typename type>
-struct convert<type,
-               typename std::enable_if<std::is_integral<type>::value &&
-                                       std::is_unsigned<type>::value>::type> {
+struct convert<
+    type, typename std::enable_if<
+              std::is_integral<type>::value && std::is_unsigned<type>::value &&
+              !conversion::is_character<type>::value>::type> {
   static Node encode(const type& rhs) { return Node(std::to_string(rhs)); }
 
   static bool decode(const Node& node, type& rhs) {
