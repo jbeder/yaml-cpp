@@ -42,19 +42,6 @@ static const std::regex re_float(
     "[-+]?(\\.[0-9]+|[0-9]+(\\.[0-9]*)?)([eE][-+]?[0-9]+)?");
 static const std::regex re_inf("[-+]?(\\.inf|\\.Inf|\\.INF)");
 static const std::regex re_nan("\\.nan|\\.NaN|\\.NAN");
-
-inline bool IsInfinity(const std::string& input) {
-  return input == ".inf" || input == ".Inf" || input == ".INF" ||
-         input == "+.inf" || input == "+.Inf" || input == "+.INF";
-}
-
-inline bool IsNegativeInfinity(const std::string& input) {
-  return input == "-.inf" || input == "-.Inf" || input == "-.INF";
-}
-
-inline bool IsNaN(const std::string& input) {
-  return input == ".nan" || input == ".NaN" || input == ".NAN";
-}
 }
 
 // Node
@@ -199,11 +186,14 @@ struct convert<
       }
       return Node(".inf");
     }
-    auto str = std::to_string(rhs);
+    std::stringstream stream;
+    stream.precision(std::numeric_limits<type>::max_digits10);
+    stream << rhs;
+    auto str = stream.str();
     if (std::regex_match(str, conversion::re_decimal)) {
       return Node(str + ".");  // Disambiguate float from int
     }
-    return Node(std::to_string(rhs));
+    return Node(str);
   }
 
   static bool decode(const Node& node, type& rhs) {
