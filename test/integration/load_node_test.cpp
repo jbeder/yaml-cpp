@@ -20,7 +20,7 @@ TEST(LoadNodeTest, FallbackValues) {
 }
 
 TEST(LoadNodeTest, NumericConversion) {
-  Node node = Load("[1.5, 1, .nan, .inf, -.inf, 0x15, 015]");
+  Node node = Load("[1.5, 1, .nan, .inf, -.inf, 0x15, 0o15]");
   EXPECT_EQ(1.5f, node[0].as<float>());
   EXPECT_EQ(1.5, node[0].as<double>());
   EXPECT_THROW(node[0].as<int>(), TypedBadConversion<int>);
