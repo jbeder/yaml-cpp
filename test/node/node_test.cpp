@@ -1,10 +1,10 @@
 #include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/emit.h"
-#include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/convert.h"
-#include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/impl.h"
+#include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/node/node.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -393,6 +393,8 @@ class NodeEmitterTest : public ::testing::Test {
  protected:
   void ExpectOutput(const std::string& output, const Node& node) {
     Emitter emitter;
+    // ASSERT_TRUE(emitter.SetFloatPrecision(3));
+    // ASSERT_TRUE(emitter.SetDoublePrecision(3));
     emitter << node;
     ASSERT_TRUE(emitter.good());
     EXPECT_EQ(output, emitter.c_str());
@@ -410,29 +412,32 @@ class NodeEmitterTest : public ::testing::Test {
 TEST_F(NodeEmitterTest, SimpleFlowSeqNode) {
   Node node;
   node.SetStyle(EmitterStyle::Flow);
-  node.push_back(1.01);
-  node.push_back(2.01);
-  node.push_back(3.01);
+  node.push_back(0.32);
+  node.push_back(0.64);
+  node.push_back(10.24);
 
-  ExpectOutput("[1.01, 2.01, 3.01]", node);
+  ExpectOutput("[0.32000000000000001, 0.64000000000000001, 10.24]", node);
 }
 
 TEST_F(NodeEmitterTest, NestFlowSeqNode) {
   Node node, cell0, cell1;
 
-  cell0.push_back(1.01);
-  cell0.push_back(2.01);
-  cell0.push_back(3.01);
+  cell0.push_back(1.08);
+  cell0.push_back(2.08);
+  cell0.push_back(3.08);
 
-  cell1.push_back(4.01);
-  cell1.push_back(5.01);
-  cell1.push_back(6.01);
+  cell1.push_back(4.08);
+  cell1.push_back(5.08);
+  cell1.push_back(6.08);
 
   node.SetStyle(EmitterStyle::Flow);
   node.push_back(cell0);
   node.push_back(cell1);
 
-  ExpectOutput("[[1.01, 2.01, 3.01], [4.01, 5.01, 6.01]]", node);
+  ExpectOutput(
+      "[[1.0800000000000001, 2.0800000000000001, 3.0800000000000001], "
+      "[4.0800000000000001, 5.0800000000000001, 6.0800000000000001]]",
+      node);
 }
 
 TEST_F(NodeEmitterTest, MixBlockFlowSeqNode) {
@@ -451,7 +456,13 @@ TEST_F(NodeEmitterTest, MixBlockFlowSeqNode) {
   node.push_back(cell0);
   node.push_back(cell1);
 
-  ExpectOutput("- [1.01, 2.01, 3.01]\n-\n  - 4.01\n  - 5.01\n  - 6.01", node);
+  ExpectOutput(
+      R"(- [1.01, 2.0099999999999998, 3.0099999999999998]
+-
+  - 4.0099999999999998
+  - 5.0099999999999998
+  - 6.0099999999999998)",
+      node);
 }
 
 TEST_F(NodeEmitterTest, NestBlockFlowMapListNode) {
@@ -467,7 +478,9 @@ TEST_F(NodeEmitterTest, NestBlockFlowMapListNode) {
   blockNode.push_back(1.01);
   blockNode.push_back(mapNode);
 
-  ExpectOutput("- 1.01\n- {position: [1.01, 2.01, 3.01]}", blockNode);
+  ExpectOutput(
+      "- 1.01\n- {position: [1.01, 2.0099999999999998, 3.0099999999999998]}",
+      blockNode);
 }
 
 TEST_F(NodeEmitterTest, NestBlockMixMapListNode) {
@@ -484,8 +497,10 @@ TEST_F(NodeEmitterTest, NestBlockMixMapListNode) {
   blockNode["object"] = mapNode;
 
   ExpectAnyOutput(blockNode,
-                  "scalar: 1.01\nobject: {position: [1.01, 2.01, 3.01]}",
-                  "object: {position: [1.01, 2.01, 3.01]}\nscalar: 1.01");
+                  "scalar: 1.01\nobject: {position: [1.01, 2.0099999999999998, "
+                  "3.0099999999999998]}",
+                  "object: {position: [1.01, 2.0099999999999998, "
+                  "3.0099999999999998]}\nscalar: 1.01");
 }
 
 TEST_F(NodeEmitterTest, NestBlockMapListNode) {
@@ -498,7 +513,9 @@ TEST_F(NodeEmitterTest, NestBlockMapListNode) {
   mapNode.SetStyle(EmitterStyle::Block);
   mapNode["position"] = node;
 
-  ExpectOutput("position:\n  - 1.01\n  - 2.01\n  - 3.01", mapNode);
+  ExpectOutput(
+      "position:\n  - 1.01\n  - 2.0099999999999998\n  - 3.0099999999999998",
+      mapNode);
 }
 
 TEST_F(NodeEmitterTest, NestFlowMapListNode) {
@@ -511,7 +528,8 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
   mapNode.SetStyle(EmitterStyle::Flow);
   mapNode["position"] = node;
 
-  ExpectOutput("{position: [1.01, 2.01, 3.01]}", mapNode);
+  ExpectOutput("{position: [1.01, 2.0099999999999998, 3.0099999999999998]}",
+               mapNode);
 }
 }
 }
