@@ -1370,6 +1370,8 @@ class ActionResultHolder : public UntypedActionResultHolderBase {
 template <>
 class ActionResultHolder<void> : public UntypedActionResultHolderBase {
  public:
+  explicit ActionResultHolder() {}
+
   void GetValueAndDelete() const { delete this; }
 
   virtual void PrintAsActionResult(::std::ostream* /* os */) const {}
@@ -1381,7 +1383,7 @@ class ActionResultHolder<void> : public UntypedActionResultHolderBase {
       const typename Function<F>::ArgumentTuple& args,
       const string& call_description) {
     func_mocker->PerformDefaultAction(args, call_description);
-    return NULL;
+    return new ActionResultHolder();
   }
 
   // Performs the given action and returns NULL.
@@ -1390,7 +1392,7 @@ class ActionResultHolder<void> : public UntypedActionResultHolderBase {
       const Action<F>& action,
       const typename Function<F>::ArgumentTuple& args) {
     action.Perform(args);
-    return NULL;
+    return new ActionResultHolder();
   }
 };
 
