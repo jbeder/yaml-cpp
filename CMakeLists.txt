@@ -20,7 +20,6 @@ endif()
 
 include(CheckCXXCompilerFlag)
 
-
 ###
 ### Project settings
 ###
@@ -115,10 +114,7 @@ if(VERBOSE)
 	message(STATUS "contrib_private_headers: ${contrib_private_headers}")
 endif()
 
-include_directories(${YAML_CPP_SOURCE_DIR}/src)
-include_directories(${YAML_CPP_SOURCE_DIR}/include)
-
-
+include_directories(include)
 
 ###
 ### General compilation settings
@@ -267,12 +263,12 @@ endif()
 set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/include)
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${_library_dir}${LIB_SUFFIX}")
+set(LIB_INSTALL_DIR "${_library_dir}${LIB_SUFFIX}")
 
 set(_INSTALL_DESTINATIONS
-	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-	ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}"
+	ARCHIVE DESTINATION "lib${LIB_SUFFIX}"
 )
 
 
@@ -281,7 +277,7 @@ set(_INSTALL_DESTINATIONS
 ###
 add_library(yaml-cpp ${library_sources})
 set_target_properties(yaml-cpp PROPERTIES
-  COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
+	COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
 )
 
 set_target_properties(yaml-cpp PROPERTIES
@@ -331,7 +327,7 @@ else()
 	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/yaml-cpp)
 endif()
 
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
+file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
 set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
 	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake" @ONLY)

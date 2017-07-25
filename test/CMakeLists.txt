@@ -3,6 +3,7 @@ set(gtest_force_shared_crt ${MSVC_SHARED_RT} CACHE BOOL
 add_subdirectory(gmock-1.7.0)
 include_directories(SYSTEM gmock-1.7.0/gtest/include)
 include_directories(SYSTEM gmock-1.7.0/include)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
   add_definitions("-DGTEST_LINKED_AS_SHARED_LIBRARY")
