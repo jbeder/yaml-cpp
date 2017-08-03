@@ -20,6 +20,7 @@ endif()
 
 include(CheckCXXCompilerFlag)
 
+set(YAML_CPP "yaml-cpp")
 
 ###
 ### Project settings
@@ -47,6 +48,16 @@ option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
 #     http://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library
 option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
+# Enable this option when building static yaml static library which will be linked to
+# your app dynamic library
+option(BUILD_STATIC_WITH_PIC "Build static library with PIC" OFF)
+
+# Create Doxygen documentation
+option(DOXYGEN_BUILD "Generate doxygen documentation" OFF)
+
+# Install Doxygen documentation
+option(DOXYGEN_INSTALL "Install doxygen documentation" OFF)
+
 # --> Apple
 option(APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
 
@@ -55,6 +66,10 @@ option(APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
 #     http://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.71).aspx
 option(MSVC_SHARED_RT "MSVC: Build with shared runtime libs (/MD)" ON)
 option(MSVC_STHREADED_RT "MSVC: Build with single-threaded static runtime libs (/ML until VS .NET 2003)" OFF)
+
+if( DOXYGEN_INSTALL )
+    set(DOXYGEN_BUILD ON)
+endif(DOXYGEN_INSTALL)
 
 ###
 ### Sources, headers, directories and libs
@@ -119,6 +134,21 @@ include_directories(${YAML_CPP_SOURCE_DIR}/src)
 include_directories(${YAML_CPP_SOURCE_DIR}/include)
 
 
+if(DOXYGEN_BUILD)
+    # add a target to generate API documentation with Doxygen
+    find_package(Doxygen)
+    if(NOT DOXYGEN_FOUND)
+        message(STATUS "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        if(APPLE)
+            message(STATUS "brew install doxygen graphviz")
+        else()
+            message(STATUS "sudo apt-get install doxygen-gui graphviz")
+        endif()
+        message(STATUS "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        message(FATAL_ERROR " You need to install doxygen utility")
+    endif(NOT DOXYGEN_FOUND)
+endif(DOXYGEN_BUILD)
+
 
 ###
 ### General compilation settings
@@ -176,9 +206,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 	#
 	set(GCC_EXTRA_OPTIONS "")
 	#
-	if(BUILD_SHARED_LIBS)
+    if(BUILD_SHARED_LIBS OR BUILD_STATIC_WITH_PIC)
 		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} -fPIC")
-	endif()
+    endif()
 	#
 	set(FLAG_TESTED "-Wextra")
 	check_cxx_compiler_flag(${FLAG_TESTED} FLAG_WEXTRA)
@@ -275,6 +305,17 @@ set(_INSTALL_DESTINATIONS
 	ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}"
 )
 
+message(STATUS "-------------- Build Options -----------------")
+message(STATUS " -DYAML_CPP_BUILD_TOOLS=${YAML_CPP_BUILD_TOOLS}")
+message(STATUS " -DYAML_CPP_BUILD_CONTRIB=${YAML_CPP_BUILD_CONTRIB}")
+message(STATUS " -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}")
+message(STATUS " -DBUILD_STATIC_WITH_PIC=${BUILD_STATIC_WITH_PIC}")
+message(STATUS " -DDOXYGEN_BUILD=${DOXYGEN_BUILD}")
+message(STATUS " -DDOXYGEN_INSTALL=${DOXYGEN_INSTALL}")
+message(STATUS " -DAPPLE_UNIVERSAL_BIN=${APPLE_UNIVERSAL_BIN}")
+message(STATUS " -DMSVC_SHARED_RT=${MSVC_SHARED_RT}")
+message(STATUS " -DMSVC_STHREADED_RT=${MSVC_STHREADED_RT}")
+message(STATUS "----------------------------------------------")
 
 ###
 ### Library
@@ -289,6 +330,22 @@ set_target_properties(yaml-cpp PROPERTIES
 	SOVERSION "${YAML_CPP_VERSION_MAJOR}.${YAML_CPP_VERSION_MINOR}"
 	PROJECT_LABEL "yaml-cpp ${LABEL_SUFFIX}"
 )
+
+if(DOXYGEN_FOUND)
+    message(STATUS "= Building doxygen documentation")
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config/doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/config/doxyfile @ONLY)
+
+    # Remove ALL if you do not want to auto create
+    # doxygen on make. If you remove ALL then you will
+    # have to do "make doxygen"
+    #add_custom_target(doxygen ALL
+    add_custom_target(doxygen
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/config/doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen" VERBATIM)
+
+endif(DOXYGEN_FOUND)
 
 if(IPHONE)
 	set_target_properties(yaml-cpp PROPERTIES
@@ -345,12 +402,15 @@ install(FILES
 	DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 install(EXPORT yaml-cpp-targets DESTINATION ${INSTALL_CMAKE_DIR})
 
+if(DOXYGEN_BUILD AND DOXYGEN_INSTALL)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen-html/ DESTINATION share/${YAML_CPP})
+endif(DOXYGEN_BUILD AND DOXYGEN_INSTALL)
+
 if(UNIX)
 	set(PC_FILE ${CMAKE_BINARY_DIR}/yaml-cpp.pc)
 	configure_file("yaml-cpp.pc.cmake" ${PC_FILE} @ONLY)
 	install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif()
-
 
 ###
 ### Extras
