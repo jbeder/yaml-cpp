@@ -40,6 +40,7 @@ enable_testing()
 ## Project stuff
 option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" ON)
 option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
+option(USE_DOXYGEN "Enable doxygen generation" ON)
 
 ## Build options
 # --> General
@@ -117,6 +118,7 @@ endif()
 
 include_directories(${YAML_CPP_SOURCE_DIR}/src)
 include_directories(${YAML_CPP_SOURCE_DIR}/include)
+
 
 
 
@@ -260,14 +262,17 @@ endif()
 ###
 if(WIN32)
 	set(_library_dir bin)	# .dll are in PATH, like executables
+	set(_share_dir bin)
 else()
 	set(_library_dir lib)
+	set(_share_dir share)
 endif()
 
 set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/include)
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${_library_dir}${LIB_SUFFIX}")
+set(LIB_INSTALL_DIR "${_library_dir}${LIB_SUFFIX}")
+set(SHARE_INSTALL_DIR "${_share_dir}${LIB_SUFFIX}")
 
 set(_INSTALL_DESTINATIONS
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
@@ -331,7 +336,7 @@ else()
 	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/yaml-cpp)
 endif()
 
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
+file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
 set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
 	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake" @ONLY)
@@ -351,6 +356,39 @@ if(UNIX)
 	install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif()
 
+###
+### Doxygen 
+###
+if(USE_DOXYGEN)
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+
+set(DOC_DIR "${PROJECT_BINARY_DIR}/doc")
+
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
+	"${PROJECT_BINARY_DIR}/Doxyfile"
+	@ONLY
+	)
+
+add_custom_target(doc
+	COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/Doxyfile
+	WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+	COMMENT "Generating API documentation with Doxygen" VERBATIM
+	)
+
+install(DIRECTORY
+	"${DOC_DIR}/"
+	DESTINATION 
+	"${SHARE_INSTALL_DIR}/doc/yaml-cpp${LIB_SUFFIX}"
+	OPTIONAL
+	PATTERN "${DOC_DIR}/*"
+	)
+
+endif(DOXYGEN_FOUND)
+
+endif(USE_DOXYGEN)
 
 ###
 ### Extras
