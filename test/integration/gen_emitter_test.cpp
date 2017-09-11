@@ -10,7 +10,7 @@ namespace {
 
 typedef HandlerTest GenEmitterTest;
 
-TEST_F(GenEmitterTest, testbf4e63edf2258c91fb88) {
+TEST_F(GenEmitterTest, testf2a8b6e6359fb2c30830) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -23,7 +23,7 @@ TEST_F(GenEmitterTest, testbf4e63edf2258c91fb88) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8c2aa26989357a4c8d2d) {
+TEST_F(GenEmitterTest, testa2c9c04eab06a05bf1a3) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -36,7 +36,7 @@ TEST_F(GenEmitterTest, test8c2aa26989357a4c8d2d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf8818f97591e2c51179c) {
+TEST_F(GenEmitterTest, testc5fae995bf84b2f62627) {
   Emitter out;
   out << BeginDoc;
   out << "foo";
@@ -49,7 +49,7 @@ TEST_F(GenEmitterTest, testf8818f97591e2c51179c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2b9d697f1ec84bdc484f) {
+TEST_F(GenEmitterTest, test208b4fb7399a936fce93) {
   Emitter out;
   out << BeginDoc;
   out << "foo";
@@ -62,7 +62,7 @@ TEST_F(GenEmitterTest, test2b9d697f1ec84bdc484f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test969d8cf1535db02242b4) {
+TEST_F(GenEmitterTest, test402085442ada9788bc4e) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -74,7 +74,7 @@ TEST_F(GenEmitterTest, test969d8cf1535db02242b4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4d16d2c638f0b1131d42) {
+TEST_F(GenEmitterTest, test279346c761f7d9a10aec) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -86,7 +86,7 @@ TEST_F(GenEmitterTest, test4d16d2c638f0b1131d42) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3bdad9a4ffa67cc4201b) {
+TEST_F(GenEmitterTest, test386f6766d57a48ccb316) {
   Emitter out;
   out << BeginDoc;
   out << "foo";
@@ -98,7 +98,7 @@ TEST_F(GenEmitterTest, test3bdad9a4ffa67cc4201b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa57103d877a04b0da3c9) {
+TEST_F(GenEmitterTest, test989baa41ede860374193) {
   Emitter out;
   out << BeginDoc;
   out << "foo";
@@ -110,7 +110,7 @@ TEST_F(GenEmitterTest, testa57103d877a04b0da3c9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf838cbd6db90346652d6) {
+TEST_F(GenEmitterTest, test718fa11b9bfa9dfc6632) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -123,7 +123,7 @@ TEST_F(GenEmitterTest, testf838cbd6db90346652d6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste65456c6070d7ed9b292) {
+TEST_F(GenEmitterTest, test7986c74c7cab2ff062e7) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -136,7 +136,7 @@ TEST_F(GenEmitterTest, teste65456c6070d7ed9b292) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test365273601c89ebaeec61) {
+TEST_F(GenEmitterTest, test1a432be0760ebcf72dde) {
   Emitter out;
   out << BeginDoc;
   out << "foo\n";
@@ -149,7 +149,7 @@ TEST_F(GenEmitterTest, test365273601c89ebaeec61) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test92d67b382f78c6a58c2a) {
+TEST_F(GenEmitterTest, test9b4714c8c6dd71f963f1) {
   Emitter out;
   out << BeginDoc;
   out << "foo\n";
@@ -162,7 +162,7 @@ TEST_F(GenEmitterTest, test92d67b382f78c6a58c2a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test49e0bb235c344722e0df) {
+TEST_F(GenEmitterTest, test59d039102f43b05233b2) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -174,7 +174,7 @@ TEST_F(GenEmitterTest, test49e0bb235c344722e0df) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3010c495cd1c61d1ccf2) {
+TEST_F(GenEmitterTest, test15371be5fc126b3601ee) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -186,7 +186,7 @@ TEST_F(GenEmitterTest, test3010c495cd1c61d1ccf2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test22e48c3bc91b32853688) {
+TEST_F(GenEmitterTest, test5a2a5702a41d71567a10) {
   Emitter out;
   out << BeginDoc;
   out << "foo\n";
@@ -198,7 +198,7 @@ TEST_F(GenEmitterTest, test22e48c3bc91b32853688) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test03e42bee2a2c6ffc1dd8) {
+TEST_F(GenEmitterTest, test7975acd31f55f66c21a9) {
   Emitter out;
   out << BeginDoc;
   out << "foo\n";
@@ -210,7 +210,7 @@ TEST_F(GenEmitterTest, test03e42bee2a2c6ffc1dd8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9662984f64ea0b79b267) {
+TEST_F(GenEmitterTest, test9ab358e41e3af0e1852c) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -224,7 +224,7 @@ TEST_F(GenEmitterTest, test9662984f64ea0b79b267) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf3867ffaec6663c515ff) {
+TEST_F(GenEmitterTest, test6571b17e1089f3f34d41) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -238,7 +238,7 @@ TEST_F(GenEmitterTest, testf3867ffaec6663c515ff) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfd8783233e21636f7f12) {
+TEST_F(GenEmitterTest, test7c8476d0a02eeab3326f) {
   Emitter out;
   out << BeginDoc;
   out << VerbatimTag("tag");
@@ -252,7 +252,7 @@ TEST_F(GenEmitterTest, testfd8783233e21636f7f12) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3fc20508ecea0f4cb165) {
+TEST_F(GenEmitterTest, test0883fa5d170d96324325) {
   Emitter out;
   out << BeginDoc;
   out << VerbatimTag("tag");
@@ -266,7 +266,7 @@ TEST_F(GenEmitterTest, test3fc20508ecea0f4cb165) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste120c09230c813be6c30) {
+TEST_F(GenEmitterTest, test7f44d870f57878e83749) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -279,7 +279,7 @@ TEST_F(GenEmitterTest, teste120c09230c813be6c30) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test835d37d226cbacaa4b2d) {
+TEST_F(GenEmitterTest, testc7b8d9af2a71da438220) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -292,7 +292,7 @@ TEST_F(GenEmitterTest, test835d37d226cbacaa4b2d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7a26848396e9291bf1f1) {
+TEST_F(GenEmitterTest, testa27a4f0174aee7622160) {
   Emitter out;
   out << BeginDoc;
   out << VerbatimTag("tag");
@@ -305,7 +305,7 @@ TEST_F(GenEmitterTest, test7a26848396e9291bf1f1) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test34a821220a5e1441f553) {
+TEST_F(GenEmitterTest, testf06e77dc66bc51682e57) {
   Emitter out;
   out << BeginDoc;
   out << VerbatimTag("tag");
@@ -318,7 +318,7 @@ TEST_F(GenEmitterTest, test34a821220a5e1441f553) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test53e5179db889a79c3ea2) {
+TEST_F(GenEmitterTest, test28c636f42558c217d90b) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -327,12 +327,13 @@ TEST_F(GenEmitterTest, test53e5179db889a79c3ea2) {
   out << EndDoc;
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb8450c68977e0df66c5b) {
+TEST_F(GenEmitterTest, testa8e930c2f4f761519825) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -341,12 +342,13 @@ TEST_F(GenEmitterTest, testb8450c68977e0df66c5b) {
   out << EndDoc;
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste0277d1ed537e53294b4) {
+TEST_F(GenEmitterTest, testc73b721f492b45035034) {
   Emitter out;
   out << BeginDoc;
   out << Anchor("anchor");
@@ -355,12 +357,13 @@ TEST_F(GenEmitterTest, teste0277d1ed537e53294b4) {
   out << EndDoc;
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd6ebe62492bf8757ddde) {
+TEST_F(GenEmitterTest, testb401b54145c71ea07848) {
   Emitter out;
   out << BeginDoc;
   out << Anchor("anchor");
@@ -369,12 +372,13 @@ TEST_F(GenEmitterTest, testd6ebe62492bf8757ddde) {
   out << Comment("comment");
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test56c67a81a5989623dad7) {
+TEST_F(GenEmitterTest, test380d9af0ae2e27279526) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -382,12 +386,13 @@ TEST_F(GenEmitterTest, test56c67a81a5989623dad7) {
   out << "foo";
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testea4c45819b88c22d02b6) {
+TEST_F(GenEmitterTest, test6969308096c6106d1f55) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -395,12 +400,13 @@ TEST_F(GenEmitterTest, testea4c45819b88c22d02b6) {
   out << "foo";
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfa05ed7573dd54074344) {
+TEST_F(GenEmitterTest, testa8afc0036fffa3b2d185) {
   Emitter out;
   out << BeginDoc;
   out << Anchor("anchor");
@@ -408,12 +414,13 @@ TEST_F(GenEmitterTest, testfa05ed7573dd54074344) {
   out << Comment("comment");
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test52431165a20aa2a085dc) {
+TEST_F(GenEmitterTest, test7b41f0a32b90bf5f138d) {
   Emitter out;
   out << BeginDoc;
   out << Anchor("anchor");
@@ -421,24 +428,13 @@ TEST_F(GenEmitterTest, test52431165a20aa2a085dc) {
   out << Comment("comment");
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2e1bf781941755fc5944) {
-  Emitter out;
-  out << Comment("comment");
-  out << "foo";
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test5405b9f863e524bb3e81) {
+TEST_F(GenEmitterTest, test99b1e0027d74c641f4fc) {
   Emitter out;
   out << Comment("comment");
   out << "foo";
@@ -450,7 +446,19 @@ TEST_F(GenEmitterTest, test5405b9f863e524bb3e81) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0a7d85109d068170e547) {
+TEST_F(GenEmitterTest, test8e45fdb3ff3c00d56f27) {
+  Emitter out;
+  out << Comment("comment");
+  out << "foo";
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testf898ade0c92d48d498cf) {
   Emitter out;
   out << "foo";
   out << Comment("comment");
@@ -462,7 +470,7 @@ TEST_F(GenEmitterTest, test0a7d85109d068170e547) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testba8dc6889d6983fb0f05) {
+TEST_F(GenEmitterTest, test3eb11fe6897b9638b90c) {
   Emitter out;
   out << "foo";
   out << EndDoc;
@@ -474,7 +482,7 @@ TEST_F(GenEmitterTest, testba8dc6889d6983fb0f05) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd8743fc1225fef185b69) {
+TEST_F(GenEmitterTest, test4e7428248511a461fdae) {
   Emitter out;
   out << Comment("comment");
   out << "foo";
@@ -485,7 +493,7 @@ TEST_F(GenEmitterTest, testd8743fc1225fef185b69) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc2f808fe5fb8b2970b89) {
+TEST_F(GenEmitterTest, testb811cba8e9f57399cd40) {
   Emitter out;
   out << Comment("comment");
   out << "foo";
@@ -496,7 +504,7 @@ TEST_F(GenEmitterTest, testc2f808fe5fb8b2970b89) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test984d0572a31be4451efc) {
+TEST_F(GenEmitterTest, testc625669ef35d9165757f) {
   Emitter out;
   out << "foo";
   out << Comment("comment");
@@ -507,7 +515,7 @@ TEST_F(GenEmitterTest, test984d0572a31be4451efc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa3883cf6b7f84c32ba99) {
+TEST_F(GenEmitterTest, test0bc005214f48707274f7) {
   Emitter out;
   out << "foo";
   out << Comment("comment");
@@ -518,7 +526,7 @@ TEST_F(GenEmitterTest, testa3883cf6b7f84c32ba99) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1fe1f2d242b3a00c5f83) {
+TEST_F(GenEmitterTest, testdccc5288dfb2f680dd82) {
   Emitter out;
   out << Comment("comment");
   out << "foo\n";
@@ -530,7 +538,7 @@ TEST_F(GenEmitterTest, test1fe1f2d242b3a00c5f83) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test80e82792ed68bb0cadbc) {
+TEST_F(GenEmitterTest, test0a928620b149d5644a3b) {
   Emitter out;
   out << Comment("comment");
   out << "foo\n";
@@ -542,7 +550,7 @@ TEST_F(GenEmitterTest, test80e82792ed68bb0cadbc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6756b87f08499449fd53) {
+TEST_F(GenEmitterTest, test72bf9f8ba5207fb041c3) {
   Emitter out;
   out << "foo\n";
   out << Comment("comment");
@@ -554,7 +562,7 @@ TEST_F(GenEmitterTest, test6756b87f08499449fd53) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7d768a7e214b2e791928) {
+TEST_F(GenEmitterTest, test39ba33ec287e431e70d0) {
   Emitter out;
   out << "foo\n";
   out << EndDoc;
@@ -566,7 +574,7 @@ TEST_F(GenEmitterTest, test7d768a7e214b2e791928) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test73470e304962e94c82ee) {
+TEST_F(GenEmitterTest, testce39fe4e650942b617c6) {
   Emitter out;
   out << Comment("comment");
   out << "foo\n";
@@ -577,7 +585,7 @@ TEST_F(GenEmitterTest, test73470e304962e94c82ee) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test220fcaca9f58ed63ab66) {
+TEST_F(GenEmitterTest, test680e99eab986e1cdac01) {
   Emitter out;
   out << Comment("comment");
   out << "foo\n";
@@ -588,7 +596,7 @@ TEST_F(GenEmitterTest, test220fcaca9f58ed63ab66) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7e4c037d370d52aa4da4) {
+TEST_F(GenEmitterTest, teste6e7f73dfac0048154af) {
   Emitter out;
   out << "foo\n";
   out << Comment("comment");
@@ -599,7 +607,7 @@ TEST_F(GenEmitterTest, test7e4c037d370d52aa4da4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test79a2ffc6c8161726f1ed) {
+TEST_F(GenEmitterTest, test19e2c91493d21a389511) {
   Emitter out;
   out << "foo\n";
   out << Comment("comment");
@@ -610,7 +618,7 @@ TEST_F(GenEmitterTest, test79a2ffc6c8161726f1ed) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2a634546fd8c4b92ad18) {
+TEST_F(GenEmitterTest, testc15cdbdbf9661c853def) {
   Emitter out;
   out << Comment("comment");
   out << VerbatimTag("tag");
@@ -623,7 +631,7 @@ TEST_F(GenEmitterTest, test2a634546fd8c4b92ad18) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test84a311c6ca4fe200eff5) {
+TEST_F(GenEmitterTest, testa349878c464f03fa6d4e) {
   Emitter out;
   out << Comment("comment");
   out << VerbatimTag("tag");
@@ -636,7 +644,7 @@ TEST_F(GenEmitterTest, test84a311c6ca4fe200eff5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testef05b48cc1f9318b612f) {
+TEST_F(GenEmitterTest, testc063a846f87b1e20e4e9) {
   Emitter out;
   out << VerbatimTag("tag");
   out << "foo";
@@ -649,7 +657,7 @@ TEST_F(GenEmitterTest, testef05b48cc1f9318b612f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa77250518abd6e019ab8) {
+TEST_F(GenEmitterTest, testdfb3a9ec6da3b792f392) {
   Emitter out;
   out << VerbatimTag("tag");
   out << "foo";
@@ -662,7 +670,7 @@ TEST_F(GenEmitterTest, testa77250518abd6e019ab8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3e9c6f05218917c77c62) {
+TEST_F(GenEmitterTest, test6f545990782be38424bf) {
   Emitter out;
   out << Comment("comment");
   out << VerbatimTag("tag");
@@ -674,7 +682,7 @@ TEST_F(GenEmitterTest, test3e9c6f05218917c77c62) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7392dd9d6829b8569e16) {
+TEST_F(GenEmitterTest, test9d7dd5e044527a4e8f31) {
   Emitter out;
   out << Comment("comment");
   out << VerbatimTag("tag");
@@ -686,7 +694,7 @@ TEST_F(GenEmitterTest, test7392dd9d6829b8569e16) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8b3e535afd61211d988f) {
+TEST_F(GenEmitterTest, testba570ae83f89342779ff) {
   Emitter out;
   out << VerbatimTag("tag");
   out << "foo";
@@ -698,7 +706,7 @@ TEST_F(GenEmitterTest, test8b3e535afd61211d988f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa88d36caa958ac21e487) {
+TEST_F(GenEmitterTest, testc6fc50c169793aa60531) {
   Emitter out;
   out << VerbatimTag("tag");
   out << "foo";
@@ -710,7 +718,7 @@ TEST_F(GenEmitterTest, testa88d36caa958ac21e487) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0afc4387fea5a0ad574d) {
+TEST_F(GenEmitterTest, testd10a9c9671992acd494d) {
   Emitter out;
   out << Comment("comment");
   out << Anchor("anchor");
@@ -718,12 +726,13 @@ TEST_F(GenEmitterTest, test0afc4387fea5a0ad574d) {
   out << EndDoc;
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6e02b45ba1f87d0b17fa) {
+TEST_F(GenEmitterTest, testd5ee8a3bdb42c8639ad4) {
   Emitter out;
   out << Comment("comment");
   out << Anchor("anchor");
@@ -731,12 +740,13 @@ TEST_F(GenEmitterTest, test6e02b45ba1f87d0b17fa) {
   out << EndDoc;
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1ecee6697402f1ced486) {
+TEST_F(GenEmitterTest, test24914f6c2b7f7d5843c4) {
   Emitter out;
   out << Anchor("anchor");
   out << "foo";
@@ -744,12 +754,13 @@ TEST_F(GenEmitterTest, test1ecee6697402f1ced486) {
   out << EndDoc;
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf778d3e7e1fd4bc81ac8) {
+TEST_F(GenEmitterTest, test9af19fe8c77aa18cd462) {
   Emitter out;
   out << Anchor("anchor");
   out << "foo";
@@ -757,60 +768,65 @@ TEST_F(GenEmitterTest, testf778d3e7e1fd4bc81ac8) {
   out << Comment("comment");
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testce2ddd97c4f7b7cad993) {
+TEST_F(GenEmitterTest, testc2f9274717aaf39b0838) {
   Emitter out;
   out << Comment("comment");
   out << Anchor("anchor");
   out << "foo";
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9801aff946ce11347b78) {
+TEST_F(GenEmitterTest, test75f3a7f62b5b77411653) {
   Emitter out;
   out << Comment("comment");
   out << Anchor("anchor");
   out << "foo";
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test02ae081b4d9719668378) {
+TEST_F(GenEmitterTest, testea51373e6b4e598b2adf) {
   Emitter out;
   out << Anchor("anchor");
   out << "foo";
   out << Comment("comment");
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1c75e643ba55491e9d58) {
+TEST_F(GenEmitterTest, testa594204f0724101d4931) {
   Emitter out;
   out << Anchor("anchor");
   out << "foo";
   out << Comment("comment");
 
   EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa834d5e30e0fde106520) {
+TEST_F(GenEmitterTest, test87638f2fba55c5235720) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -825,7 +841,7 @@ TEST_F(GenEmitterTest, testa834d5e30e0fde106520) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test26c5da2b48377ba6d9c3) {
+TEST_F(GenEmitterTest, test786f027ec8e380bdeb45) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -840,7 +856,7 @@ TEST_F(GenEmitterTest, test26c5da2b48377ba6d9c3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste5df2b4f5b7ed31f5843) {
+TEST_F(GenEmitterTest, test9d9ca2fc29536ef5d392) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -855,7 +871,7 @@ TEST_F(GenEmitterTest, teste5df2b4f5b7ed31f5843) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7da7e14ccc523f8ef682) {
+TEST_F(GenEmitterTest, testde9c33927d8f706e5191) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -870,7 +886,7 @@ TEST_F(GenEmitterTest, test7da7e14ccc523f8ef682) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5dc6d560b8a5defab6a6) {
+TEST_F(GenEmitterTest, testa03392eb1d9af2180eb2) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -885,7 +901,7 @@ TEST_F(GenEmitterTest, test5dc6d560b8a5defab6a6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5c2184c2ae1d09d7e486) {
+TEST_F(GenEmitterTest, test8826ba8a4954e2775441) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -899,7 +915,7 @@ TEST_F(GenEmitterTest, test5c2184c2ae1d09d7e486) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcb7ca22e0d0c01cdfd6c) {
+TEST_F(GenEmitterTest, testf116d1ab8a1646bb4295) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -913,7 +929,7 @@ TEST_F(GenEmitterTest, testcb7ca22e0d0c01cdfd6c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test764d56ed21bef8c8ed1d) {
+TEST_F(GenEmitterTest, test1d4afe394248c5d6f190) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -927,7 +943,7 @@ TEST_F(GenEmitterTest, test764d56ed21bef8c8ed1d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testff49b69cd78b76f680f4) {
+TEST_F(GenEmitterTest, test4cc7b190d6dd08368f08) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -941,7 +957,7 @@ TEST_F(GenEmitterTest, testff49b69cd78b76f680f4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb8bbef15bc67a7e8a4f1) {
+TEST_F(GenEmitterTest, testc623063380afa67c57c4) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -955,7 +971,7 @@ TEST_F(GenEmitterTest, testb8bbef15bc67a7e8a4f1) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfe636c029a18a80da2bc) {
+TEST_F(GenEmitterTest, teste24ef3f378c4c33107b2) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -972,7 +988,7 @@ TEST_F(GenEmitterTest, testfe636c029a18a80da2bc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste61e3e6d8f0e748525e6) {
+TEST_F(GenEmitterTest, test2aa8f68b872fd07fde8c) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -989,7 +1005,7 @@ TEST_F(GenEmitterTest, teste61e3e6d8f0e748525e6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test410c9f00cef2fbe84d3f) {
+TEST_F(GenEmitterTest, test940bf9330572d48b476f) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1006,7 +1022,7 @@ TEST_F(GenEmitterTest, test410c9f00cef2fbe84d3f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2438e75da6ea8f014749) {
+TEST_F(GenEmitterTest, testd710bce67052a991abfa) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1023,7 +1039,7 @@ TEST_F(GenEmitterTest, test2438e75da6ea8f014749) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0eb1e1c40f31df48889a) {
+TEST_F(GenEmitterTest, testd2ac557dae648cd1ba66) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1040,7 +1056,7 @@ TEST_F(GenEmitterTest, test0eb1e1c40f31df48889a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7d9b8575590f008b6dcf) {
+TEST_F(GenEmitterTest, testb394f0e282404d1235d3) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1057,7 +1073,7 @@ TEST_F(GenEmitterTest, test7d9b8575590f008b6dcf) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test65e209ba68cc24d8b595) {
+TEST_F(GenEmitterTest, testaf620080909b118a715d) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1073,7 +1089,7 @@ TEST_F(GenEmitterTest, test65e209ba68cc24d8b595) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test507a8de1564951289f94) {
+TEST_F(GenEmitterTest, testfc23fc6f424006e5907f) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1089,7 +1105,7 @@ TEST_F(GenEmitterTest, test507a8de1564951289f94) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfad3bc4da4b3117cbaac) {
+TEST_F(GenEmitterTest, testbc5517fe466dd4988ce2) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1105,7 +1121,7 @@ TEST_F(GenEmitterTest, testfad3bc4da4b3117cbaac) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test56e0e2370b233fb813d0) {
+TEST_F(GenEmitterTest, testc0db52f1be33ddf93852) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1121,7 +1137,7 @@ TEST_F(GenEmitterTest, test56e0e2370b233fb813d0) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0a4ab861864d922b0ef3) {
+TEST_F(GenEmitterTest, test279a9eef5b2d2cf98ecf) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1137,7 +1153,7 @@ TEST_F(GenEmitterTest, test0a4ab861864d922b0ef3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdfefc6ca543a9fdd2ab4) {
+TEST_F(GenEmitterTest, test7f55b2f00c1090e43af5) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1153,7 +1169,7 @@ TEST_F(GenEmitterTest, testdfefc6ca543a9fdd2ab4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test812eee6d9f35f45d4c74) {
+TEST_F(GenEmitterTest, test1be996b4b790d9bd565d) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1171,7 +1187,7 @@ TEST_F(GenEmitterTest, test812eee6d9f35f45d4c74) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test40cad31d965f6c4799b2) {
+TEST_F(GenEmitterTest, testa5dea69e968ea27412cc) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1189,7 +1205,7 @@ TEST_F(GenEmitterTest, test40cad31d965f6c4799b2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcd959e61fe82eb217264) {
+TEST_F(GenEmitterTest, test77fe0d4370db4aa8af1a) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1207,7 +1223,7 @@ TEST_F(GenEmitterTest, testcd959e61fe82eb217264) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6d9e41274914945389ad) {
+TEST_F(GenEmitterTest, test6d0319a28dd1a931f211) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1225,7 +1241,7 @@ TEST_F(GenEmitterTest, test6d9e41274914945389ad) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testab6b07362d96686c11d0) {
+TEST_F(GenEmitterTest, test0031c4cd5331366162a6) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1243,7 +1259,7 @@ TEST_F(GenEmitterTest, testab6b07362d96686c11d0) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd4c0512efd628009c912) {
+TEST_F(GenEmitterTest, testc0c74d483811e3322ed2) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1261,7 +1277,7 @@ TEST_F(GenEmitterTest, testd4c0512efd628009c912) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2774792a756fc53a2ca9) {
+TEST_F(GenEmitterTest, test0d0938c9dca1e78401d6) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1278,7 +1294,7 @@ TEST_F(GenEmitterTest, test2774792a756fc53a2ca9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9f03b22824667c3b1189) {
+TEST_F(GenEmitterTest, test0c83b8f0404e62673099) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1295,7 +1311,7 @@ TEST_F(GenEmitterTest, test9f03b22824667c3b1189) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test24dd60172cf27492a619) {
+TEST_F(GenEmitterTest, test733fd2f94ae082ea6076) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1312,7 +1328,7 @@ TEST_F(GenEmitterTest, test24dd60172cf27492a619) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa48e3f886fe68e9b48f5) {
+TEST_F(GenEmitterTest, test04b57f98a492b0f2c1ad) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1329,24 +1345,7 @@ TEST_F(GenEmitterTest, testa48e3f886fe68e9b48f5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfc1258212ed3c60e6e0c) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginSeq;
-  out << VerbatimTag("tag");
-  out << "foo";
-  out << EndSeq;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 0, "foo"));
-  EXPECT_CALL(handler, OnSequenceEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test31c3570f387278586efc) {
+TEST_F(GenEmitterTest, test80d83a80f235341f1bff) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1363,7 +1362,24 @@ TEST_F(GenEmitterTest, test31c3570f387278586efc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0d2e56437573e1a68e06) {
+TEST_F(GenEmitterTest, testecbe137bf7436ccd7976) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginSeq;
+  out << VerbatimTag("tag");
+  out << "foo";
+  out << EndSeq;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 0, "foo"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testf14f2e8202cacdf9252d) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1375,13 +1391,14 @@ TEST_F(GenEmitterTest, test0d2e56437573e1a68e06) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test87f2bba12c122a5ef611) {
+TEST_F(GenEmitterTest, test9c029f7cf565580a56fd) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1393,13 +1410,14 @@ TEST_F(GenEmitterTest, test87f2bba12c122a5ef611) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testce2b83660fc3c47881d9) {
+TEST_F(GenEmitterTest, test129cd28cda34c7b97a89) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1411,13 +1429,14 @@ TEST_F(GenEmitterTest, testce2b83660fc3c47881d9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1192cd9aee9977c43f91) {
+TEST_F(GenEmitterTest, test1c55ee081412be96e00f) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1429,13 +1448,14 @@ TEST_F(GenEmitterTest, test1192cd9aee9977c43f91) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5ec743a4a5f5d9f250e6) {
+TEST_F(GenEmitterTest, testf9e9d15d9e09a8e98681) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1447,13 +1467,14 @@ TEST_F(GenEmitterTest, test5ec743a4a5f5d9f250e6) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test989ce0d2a8d41f94e563) {
+TEST_F(GenEmitterTest, test03dd7104722840fe7fee) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1465,13 +1486,14 @@ TEST_F(GenEmitterTest, test989ce0d2a8d41f94e563) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test16b16527ce6d2047b885) {
+TEST_F(GenEmitterTest, teste6c856a08270255404b6) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1482,13 +1504,14 @@ TEST_F(GenEmitterTest, test16b16527ce6d2047b885) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test190462c295b7c1b9be90) {
+TEST_F(GenEmitterTest, testf285ed8797058c0e4e2f) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1499,13 +1522,14 @@ TEST_F(GenEmitterTest, test190462c295b7c1b9be90) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste179dd43311786d15564) {
+TEST_F(GenEmitterTest, test906076647b894281787e) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1516,13 +1540,14 @@ TEST_F(GenEmitterTest, teste179dd43311786d15564) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test448c118909ba10e1e5c2) {
+TEST_F(GenEmitterTest, test8a836336041c56130c5c) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1533,13 +1558,14 @@ TEST_F(GenEmitterTest, test448c118909ba10e1e5c2) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2aa064c8455651bbbccf) {
+TEST_F(GenEmitterTest, testc7f61ada097fb34f24ce) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1550,13 +1576,14 @@ TEST_F(GenEmitterTest, test2aa064c8455651bbbccf) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test68e7564605ae7013b858) {
+TEST_F(GenEmitterTest, testec075d926fd1f95a1bae) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1567,13 +1594,14 @@ TEST_F(GenEmitterTest, test68e7564605ae7013b858) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test11fa4cf5f845696bf8c9) {
+TEST_F(GenEmitterTest, testa79ce9edc0c3593faa31) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1586,13 +1614,14 @@ TEST_F(GenEmitterTest, test11fa4cf5f845696bf8c9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2b2cd9f7d03b725c77f7) {
+TEST_F(GenEmitterTest, test525c133ebf8f46a1962f) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1605,13 +1634,14 @@ TEST_F(GenEmitterTest, test2b2cd9f7d03b725c77f7) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test846d35c91609d010038a) {
+TEST_F(GenEmitterTest, testb06604d03a8c9cfbe7c2) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1624,13 +1654,14 @@ TEST_F(GenEmitterTest, test846d35c91609d010038a) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0295ace15e4d18d3efff) {
+TEST_F(GenEmitterTest, teste268ba5f2d54120eb665) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1643,13 +1674,14 @@ TEST_F(GenEmitterTest, test0295ace15e4d18d3efff) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test31f01031d12ec0623b22) {
+TEST_F(GenEmitterTest, test7a646350a81bba70e44a) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1662,13 +1694,14 @@ TEST_F(GenEmitterTest, test31f01031d12ec0623b22) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9dfa64a8b15cb1e411f3) {
+TEST_F(GenEmitterTest, test025df570e0d8a1f818da) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1681,13 +1714,14 @@ TEST_F(GenEmitterTest, test9dfa64a8b15cb1e411f3) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2e707476963eb0157f56) {
+TEST_F(GenEmitterTest, test897087b9aba1d5773870) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1699,13 +1733,14 @@ TEST_F(GenEmitterTest, test2e707476963eb0157f56) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test455d60cf99b6ecf73d46) {
+TEST_F(GenEmitterTest, testa45ee0501da4a4e5da54) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1717,13 +1752,14 @@ TEST_F(GenEmitterTest, test455d60cf99b6ecf73d46) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa370b09ea89f5df32d03) {
+TEST_F(GenEmitterTest, teste751c06ea558ccca1821) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1735,13 +1771,14 @@ TEST_F(GenEmitterTest, testa370b09ea89f5df32d03) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test325554fe67b486e0ac43) {
+TEST_F(GenEmitterTest, test8526d26e85cc930eecec) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1753,13 +1790,14 @@ TEST_F(GenEmitterTest, test325554fe67b486e0ac43) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0e511740421ef2391918) {
+TEST_F(GenEmitterTest, teste9a5a4a0f0e44311d01a) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1771,13 +1809,14 @@ TEST_F(GenEmitterTest, test0e511740421ef2391918) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test48e6238da58855f75d2d) {
+TEST_F(GenEmitterTest, testac8a091ab93b65aee893) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1789,13 +1828,14 @@ TEST_F(GenEmitterTest, test48e6238da58855f75d2d) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test985ccda3f305aebbe7c1) {
+TEST_F(GenEmitterTest, testee014788f524623b5075) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1814,7 +1854,7 @@ TEST_F(GenEmitterTest, test985ccda3f305aebbe7c1) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test48a885b1b5192b7d6c42) {
+TEST_F(GenEmitterTest, test57a067545c01c42a7b4e) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1833,7 +1873,7 @@ TEST_F(GenEmitterTest, test48a885b1b5192b7d6c42) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2d59de662bffd75bdd4e) {
+TEST_F(GenEmitterTest, test948ac02da8825214c869) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1852,7 +1892,7 @@ TEST_F(GenEmitterTest, test2d59de662bffd75bdd4e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1876b50ad981242e1b5e) {
+TEST_F(GenEmitterTest, testa3d6c5e8a1658c1dd726) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1871,7 +1911,7 @@ TEST_F(GenEmitterTest, test1876b50ad981242e1b5e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3be092fd7c3394e57a02) {
+TEST_F(GenEmitterTest, test548d71006d7cafde91da) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1890,7 +1930,7 @@ TEST_F(GenEmitterTest, test3be092fd7c3394e57a02) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdaaf6202df0524d94ba2) {
+TEST_F(GenEmitterTest, test35e08ea7459dbee9eab8) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1909,7 +1949,7 @@ TEST_F(GenEmitterTest, testdaaf6202df0524d94ba2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0f9c4973bc77d8baa80b) {
+TEST_F(GenEmitterTest, test87e79665a4339434d781) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1928,7 +1968,7 @@ TEST_F(GenEmitterTest, test0f9c4973bc77d8baa80b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfb738d9af8c3f5d0d89b) {
+TEST_F(GenEmitterTest, test4928d09bc979129c05ca) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -1946,7 +1986,7 @@ TEST_F(GenEmitterTest, testfb738d9af8c3f5d0d89b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7ba35bde1bf4471d19fd) {
+TEST_F(GenEmitterTest, test1d2f73011af6b4486504) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -1964,7 +2004,7 @@ TEST_F(GenEmitterTest, test7ba35bde1bf4471d19fd) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2fc98e907a537e17f435) {
+TEST_F(GenEmitterTest, test2460718f7277d5f42306) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -1982,7 +2022,7 @@ TEST_F(GenEmitterTest, test2fc98e907a537e17f435) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1c2cbe9d3ad5bca645f1) {
+TEST_F(GenEmitterTest, test52309e87b3f0185f982b) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2000,7 +2040,7 @@ TEST_F(GenEmitterTest, test1c2cbe9d3ad5bca645f1) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test999bff6d585448f6f195) {
+TEST_F(GenEmitterTest, testa51d8f1cedfead1de5ab) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2018,7 +2058,7 @@ TEST_F(GenEmitterTest, test999bff6d585448f6f195) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8972a583224ae4553b81) {
+TEST_F(GenEmitterTest, test537bf14b4d578f212f4d) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2036,7 +2076,7 @@ TEST_F(GenEmitterTest, test8972a583224ae4553b81) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test77d2c64329579c726156) {
+TEST_F(GenEmitterTest, teste19e3fd4d5cd52bf6754) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2054,7 +2094,7 @@ TEST_F(GenEmitterTest, test77d2c64329579c726156) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf60e4d264223ca1d8ed0) {
+TEST_F(GenEmitterTest, testf27e53142f2ca0e96a99) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -2070,14 +2110,16 @@ TEST_F(GenEmitterTest, testf60e4d264223ca1d8ed0) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test954d6b81ce04cb78b6a9) {
+TEST_F(GenEmitterTest, test8ce13fdbb0e53e131cbe) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -2093,14 +2135,16 @@ TEST_F(GenEmitterTest, test954d6b81ce04cb78b6a9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test24e333326d100b0fb309) {
+TEST_F(GenEmitterTest, test9fa693277f014353aa34) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2116,14 +2160,16 @@ TEST_F(GenEmitterTest, test24e333326d100b0fb309) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test996f3742f7296a3dfc08) {
+TEST_F(GenEmitterTest, testc3e4849fb38bc3556f45) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2139,14 +2185,16 @@ TEST_F(GenEmitterTest, test996f3742f7296a3dfc08) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7c795dad3124d186fe05) {
+TEST_F(GenEmitterTest, test34049495795f40da2d52) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2162,14 +2210,16 @@ TEST_F(GenEmitterTest, test7c795dad3124d186fe05) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc2b03c01b73703fad10f) {
+TEST_F(GenEmitterTest, test14353701fc865919ab50) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2185,14 +2235,16 @@ TEST_F(GenEmitterTest, testc2b03c01b73703fad10f) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testab877782f99ac0c76a54) {
+TEST_F(GenEmitterTest, test74547fc0ba8d387c5423) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2208,14 +2260,16 @@ TEST_F(GenEmitterTest, testab877782f99ac0c76a54) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test784517e5fb6049b5eeb8) {
+TEST_F(GenEmitterTest, test52d2b69b185f6ccfff4c) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -2230,14 +2284,16 @@ TEST_F(GenEmitterTest, test784517e5fb6049b5eeb8) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testbb2a1aa3c8fb0b8c763f) {
+TEST_F(GenEmitterTest, test44d442585e5bc9a7644a) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -2252,14 +2308,16 @@ TEST_F(GenEmitterTest, testbb2a1aa3c8fb0b8c763f) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb360035c1b0988456eb8) {
+TEST_F(GenEmitterTest, test3dc263684801dec471c9) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2274,14 +2332,16 @@ TEST_F(GenEmitterTest, testb360035c1b0988456eb8) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test547ca5f2968b36666091) {
+TEST_F(GenEmitterTest, testa04cde3245ad9b929b9a) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2296,14 +2356,16 @@ TEST_F(GenEmitterTest, test547ca5f2968b36666091) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcfb6b5ffda618b49a876) {
+TEST_F(GenEmitterTest, testd911e740ca36e0509dfa) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2318,14 +2380,16 @@ TEST_F(GenEmitterTest, testcfb6b5ffda618b49a876) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0f42ce2ba53fb3e486f9) {
+TEST_F(GenEmitterTest, testde44215fe9b2e87846ba) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2340,14 +2404,16 @@ TEST_F(GenEmitterTest, test0f42ce2ba53fb3e486f9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test93e437d10dbd42ac83bb) {
+TEST_F(GenEmitterTest, test6390021323a4889f19d2) {
   Emitter out;
   out << BeginDoc;
   out << BeginSeq;
@@ -2362,14 +2428,16 @@ TEST_F(GenEmitterTest, test93e437d10dbd42ac83bb) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4267b4f75e3d9582d981) {
+TEST_F(GenEmitterTest, test1db2fcb7347f6cb37dd4) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2383,7 +2451,7 @@ TEST_F(GenEmitterTest, test4267b4f75e3d9582d981) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test62c1e6598c987e3d28a2) {
+TEST_F(GenEmitterTest, test06b32e9d75498ee291d2) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2397,7 +2465,7 @@ TEST_F(GenEmitterTest, test62c1e6598c987e3d28a2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testbcf0ccd5a35fe73714b0) {
+TEST_F(GenEmitterTest, test86654989004963952b15) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2411,7 +2479,7 @@ TEST_F(GenEmitterTest, testbcf0ccd5a35fe73714b0) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa4c54e8a23771f781411) {
+TEST_F(GenEmitterTest, test53d875fc5058faa44a4e) {
   Emitter out;
   out << BeginSeq;
   out << EndSeq;
@@ -2425,7 +2493,7 @@ TEST_F(GenEmitterTest, testa4c54e8a23771f781411) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testad0a081525db9f568450) {
+TEST_F(GenEmitterTest, test3f4b49a82b6e07eb11fd) {
   Emitter out;
   out << BeginSeq;
   out << EndSeq;
@@ -2439,7 +2507,7 @@ TEST_F(GenEmitterTest, testad0a081525db9f568450) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1c24a291665d1cc4404c) {
+TEST_F(GenEmitterTest, testae4e2fa09d6a34077b6e) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2452,7 +2520,7 @@ TEST_F(GenEmitterTest, test1c24a291665d1cc4404c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcb331bf2e56388df2f1a) {
+TEST_F(GenEmitterTest, testb181b63559d96d5f848c) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2465,7 +2533,7 @@ TEST_F(GenEmitterTest, testcb331bf2e56388df2f1a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test122fe9269df7f8cb80f7) {
+TEST_F(GenEmitterTest, test817661fec7d3730f4fa6) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2478,7 +2546,7 @@ TEST_F(GenEmitterTest, test122fe9269df7f8cb80f7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6a09300420248adaddd4) {
+TEST_F(GenEmitterTest, test34bb2700e9688718fa5a) {
   Emitter out;
   out << BeginSeq;
   out << EndSeq;
@@ -2491,7 +2559,7 @@ TEST_F(GenEmitterTest, test6a09300420248adaddd4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf3bd03889c1e8dceb798) {
+TEST_F(GenEmitterTest, test84e3c1999b6888d2e897) {
   Emitter out;
   out << BeginSeq;
   out << EndSeq;
@@ -2504,7 +2572,7 @@ TEST_F(GenEmitterTest, testf3bd03889c1e8dceb798) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testce882fb9271babb66dc6) {
+TEST_F(GenEmitterTest, testa9d113656780031a99f5) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2520,7 +2588,7 @@ TEST_F(GenEmitterTest, testce882fb9271babb66dc6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9c237cf40d8848a18afd) {
+TEST_F(GenEmitterTest, test1cd1ead50aaa7b827068) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2536,7 +2604,7 @@ TEST_F(GenEmitterTest, test9c237cf40d8848a18afd) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcadbaf942d41242c21fc) {
+TEST_F(GenEmitterTest, test1389f95066b07eac89ef) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2552,7 +2620,7 @@ TEST_F(GenEmitterTest, testcadbaf942d41242c21fc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfc6e5fb862b4ce920622) {
+TEST_F(GenEmitterTest, test709f3a5c294f47f62c1e) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -2568,7 +2636,7 @@ TEST_F(GenEmitterTest, testfc6e5fb862b4ce920622) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4ecc85dc0cb57f446540) {
+TEST_F(GenEmitterTest, test8a238d7fdee02a368203) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -2584,7 +2652,7 @@ TEST_F(GenEmitterTest, test4ecc85dc0cb57f446540) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4e844b231f7985238b21) {
+TEST_F(GenEmitterTest, test0d13534e2949ea35ca96) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -2600,7 +2668,7 @@ TEST_F(GenEmitterTest, test4e844b231f7985238b21) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8ec201c2f040093428a7) {
+TEST_F(GenEmitterTest, test10fe6827ed46e0e063a7) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2615,7 +2683,7 @@ TEST_F(GenEmitterTest, test8ec201c2f040093428a7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test92469ed608395adc2620) {
+TEST_F(GenEmitterTest, testc7eb6d9da57005534c1c) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2630,7 +2698,7 @@ TEST_F(GenEmitterTest, test92469ed608395adc2620) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8a9d541f2dc9c468cbaa) {
+TEST_F(GenEmitterTest, test3f424efd76e1d32727eb) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2645,7 +2713,7 @@ TEST_F(GenEmitterTest, test8a9d541f2dc9c468cbaa) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6a9392e1353590d282e2) {
+TEST_F(GenEmitterTest, test2bdc361bc6b056f02465) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -2660,7 +2728,7 @@ TEST_F(GenEmitterTest, test6a9392e1353590d282e2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test87d8b037171651caa126) {
+TEST_F(GenEmitterTest, test0cc1936afe5637ba1376) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -2675,7 +2743,7 @@ TEST_F(GenEmitterTest, test87d8b037171651caa126) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1b1bc972209abdacc529) {
+TEST_F(GenEmitterTest, test7d3e2f793963d3480545) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -2690,7 +2758,7 @@ TEST_F(GenEmitterTest, test1b1bc972209abdacc529) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test552483e6a5fe7eee1cc5) {
+TEST_F(GenEmitterTest, testf3f50e76d7ef6e2b2bff) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2707,7 +2775,7 @@ TEST_F(GenEmitterTest, test552483e6a5fe7eee1cc5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test43d39704b3b5e188182a) {
+TEST_F(GenEmitterTest, testcbf1cff67fec9148df1c) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2724,7 +2792,7 @@ TEST_F(GenEmitterTest, test43d39704b3b5e188182a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7318d9b71ec1a8f05621) {
+TEST_F(GenEmitterTest, test168bd4b8dc78b4d524ee) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2741,7 +2809,7 @@ TEST_F(GenEmitterTest, test7318d9b71ec1a8f05621) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test77302e5c536183072945) {
+TEST_F(GenEmitterTest, testb616ef26030304bca6ef) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -2758,7 +2826,7 @@ TEST_F(GenEmitterTest, test77302e5c536183072945) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5b740c51d614c5cedf1c) {
+TEST_F(GenEmitterTest, test9fda976f36ddb23b38ee) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -2775,7 +2843,7 @@ TEST_F(GenEmitterTest, test5b740c51d614c5cedf1c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb66838e46cf76ce30c95) {
+TEST_F(GenEmitterTest, test48e8c45c081edc86deb2) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -2792,7 +2860,7 @@ TEST_F(GenEmitterTest, testb66838e46cf76ce30c95) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test592cabeb320cc3d6a4a6) {
+TEST_F(GenEmitterTest, test30f5136e817ddd8158de) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2808,7 +2876,7 @@ TEST_F(GenEmitterTest, test592cabeb320cc3d6a4a6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdcc6e5388f6c2058954f) {
+TEST_F(GenEmitterTest, testeb51d66281f593566172) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2824,7 +2892,7 @@ TEST_F(GenEmitterTest, testdcc6e5388f6c2058954f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1ebbb7521464e6cc5da7) {
+TEST_F(GenEmitterTest, testef6ffa5fa4658785ef00) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2840,7 +2908,7 @@ TEST_F(GenEmitterTest, test1ebbb7521464e6cc5da7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8ccc7ae170ad81b12996) {
+TEST_F(GenEmitterTest, test6db34efc6b59e8a7ba18) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -2856,7 +2924,7 @@ TEST_F(GenEmitterTest, test8ccc7ae170ad81b12996) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6421c3c3ed7a65699e0b) {
+TEST_F(GenEmitterTest, test537b9ecc9d9a5b546a9c) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -2872,7 +2940,7 @@ TEST_F(GenEmitterTest, test6421c3c3ed7a65699e0b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test096939c5c407fed2178a) {
+TEST_F(GenEmitterTest, testfadd6ee259c13382f5ce) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -2888,7 +2956,7 @@ TEST_F(GenEmitterTest, test096939c5c407fed2178a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1e79c736bdaf36bcc331) {
+TEST_F(GenEmitterTest, test974ae82483391d01787b) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2899,13 +2967,14 @@ TEST_F(GenEmitterTest, test1e79c736bdaf36bcc331) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa932875b266f62a32a15) {
+TEST_F(GenEmitterTest, test7fc68b49cfe198b30eeb) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -2916,13 +2985,14 @@ TEST_F(GenEmitterTest, testa932875b266f62a32a15) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7211a0d0a7d7b8957fbd) {
+TEST_F(GenEmitterTest, test41644c59ff95f8ec5ec2) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -2933,13 +3003,14 @@ TEST_F(GenEmitterTest, test7211a0d0a7d7b8957fbd) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfe2ed84c5a19bea4324a) {
+TEST_F(GenEmitterTest, testa3a24413b537aece4834) {
   Emitter out;
   out << BeginSeq;
   out << Anchor("anchor");
@@ -2950,13 +3021,14 @@ TEST_F(GenEmitterTest, testfe2ed84c5a19bea4324a) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test05fe79e124bcadf04952) {
+TEST_F(GenEmitterTest, testc4516128af938868b120) {
   Emitter out;
   out << BeginSeq;
   out << Anchor("anchor");
@@ -2967,13 +3039,14 @@ TEST_F(GenEmitterTest, test05fe79e124bcadf04952) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6deaaa4620537aec93bb) {
+TEST_F(GenEmitterTest, testef3c20a56c8a3993cc2d) {
   Emitter out;
   out << BeginSeq;
   out << Anchor("anchor");
@@ -2984,13 +3057,14 @@ TEST_F(GenEmitterTest, test6deaaa4620537aec93bb) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd8f4b7fd570238af0ac6) {
+TEST_F(GenEmitterTest, test83aceee2ee6446347fba) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3000,13 +3074,14 @@ TEST_F(GenEmitterTest, testd8f4b7fd570238af0ac6) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6aa495401fa882fd6ef0) {
+TEST_F(GenEmitterTest, test5a054d76c67b6de340e2) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3016,13 +3091,14 @@ TEST_F(GenEmitterTest, test6aa495401fa882fd6ef0) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3388236bb529c50f5341) {
+TEST_F(GenEmitterTest, testc6706e6b6fc94d1e4752) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3032,13 +3108,14 @@ TEST_F(GenEmitterTest, test3388236bb529c50f5341) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test79f4266262dffb3f8346) {
+TEST_F(GenEmitterTest, test72f3ded341d6b5d21803) {
   Emitter out;
   out << BeginSeq;
   out << Anchor("anchor");
@@ -3048,13 +3125,14 @@ TEST_F(GenEmitterTest, test79f4266262dffb3f8346) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste858dd76c42bbd281706) {
+TEST_F(GenEmitterTest, test7dc830828b604b5d1839) {
   Emitter out;
   out << BeginSeq;
   out << Anchor("anchor");
@@ -3064,13 +3142,14 @@ TEST_F(GenEmitterTest, teste858dd76c42bbd281706) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7487786b0131b1337e71) {
+TEST_F(GenEmitterTest, test3a5baef0d6a62e5880ef) {
   Emitter out;
   out << BeginSeq;
   out << Anchor("anchor");
@@ -3080,13 +3159,14 @@ TEST_F(GenEmitterTest, test7487786b0131b1337e71) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa9b9110a8d2175a57e7c) {
+TEST_F(GenEmitterTest, testfe7bf25b7a5525cab12a) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3098,13 +3178,14 @@ TEST_F(GenEmitterTest, testa9b9110a8d2175a57e7c) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste99a7f40fb4d939e2da7) {
+TEST_F(GenEmitterTest, test817bf3d583230e503f8e) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3116,13 +3197,14 @@ TEST_F(GenEmitterTest, teste99a7f40fb4d939e2da7) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0e253895bd9cff694f9a) {
+TEST_F(GenEmitterTest, testab122e386b3e30ea59e2) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3134,13 +3216,14 @@ TEST_F(GenEmitterTest, test0e253895bd9cff694f9a) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf0a8ffd3a895826b093c) {
+TEST_F(GenEmitterTest, test466c3e0dbec8e9660837) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3152,13 +3235,14 @@ TEST_F(GenEmitterTest, testf0a8ffd3a895826b093c) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdae2c374518234f70e9f) {
+TEST_F(GenEmitterTest, test9fc49f92e554cd85e349) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3170,13 +3254,14 @@ TEST_F(GenEmitterTest, testdae2c374518234f70e9f) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc0dae4cd70b3f409cbb4) {
+TEST_F(GenEmitterTest, testf9d2f39bdbd217d70868) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3188,13 +3273,14 @@ TEST_F(GenEmitterTest, testc0dae4cd70b3f409cbb4) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc26f714fb6f9b1ee6cf9) {
+TEST_F(GenEmitterTest, test1ce3d77707f18ec48a19) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3205,13 +3291,14 @@ TEST_F(GenEmitterTest, testc26f714fb6f9b1ee6cf9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9644620dcb35431e2969) {
+TEST_F(GenEmitterTest, test71df6ecc32e49ea961d4) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3222,13 +3309,14 @@ TEST_F(GenEmitterTest, test9644620dcb35431e2969) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1cfceae5c8e4a64a43ae) {
+TEST_F(GenEmitterTest, test8f37b0a6cc287f8c922f) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3239,13 +3327,14 @@ TEST_F(GenEmitterTest, test1cfceae5c8e4a64a43ae) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test64f296d213a7ddc7738c) {
+TEST_F(GenEmitterTest, testf992e2a1f7d737647506) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3256,13 +3345,14 @@ TEST_F(GenEmitterTest, test64f296d213a7ddc7738c) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb645b7ae7c95adc70e6f) {
+TEST_F(GenEmitterTest, testd79381f97cdd0af81ae4) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3273,13 +3363,14 @@ TEST_F(GenEmitterTest, testb645b7ae7c95adc70e6f) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3a6fb33f542118758a78) {
+TEST_F(GenEmitterTest, test74ca1feb5f0c520a8518) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3290,31 +3381,14 @@ TEST_F(GenEmitterTest, test3a6fb33f542118758a78) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test98b9868c139b816dcc00) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginSeq;
-  out << "foo";
-  out << "bar";
-  out << EndSeq;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnSequenceEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test69526d609eb86d3b7917) {
+TEST_F(GenEmitterTest, teste86e6fd56707272c091b) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3332,7 +3406,25 @@ TEST_F(GenEmitterTest, test69526d609eb86d3b7917) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb569fe86774c96603a89) {
+TEST_F(GenEmitterTest, test1e6f73bc378c184c786b) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginSeq;
+  out << "foo";
+  out << "bar";
+  out << EndSeq;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test3fbac5e1aef66dc40bf7) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3350,7 +3442,7 @@ TEST_F(GenEmitterTest, testb569fe86774c96603a89) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test03793bbef87d15c4ec74) {
+TEST_F(GenEmitterTest, test558c4bf1c9c6e4e81e98) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3368,7 +3460,7 @@ TEST_F(GenEmitterTest, test03793bbef87d15c4ec74) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test508ca3314339f0dfb5c8) {
+TEST_F(GenEmitterTest, testfa6d88b26c0072cddb26) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3386,7 +3478,7 @@ TEST_F(GenEmitterTest, test508ca3314339f0dfb5c8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7c8a731b32213075b25a) {
+TEST_F(GenEmitterTest, test40a5af3360fb3d9e79f1) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3404,7 +3496,7 @@ TEST_F(GenEmitterTest, test7c8a731b32213075b25a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb2a840af01cc1074e80f) {
+TEST_F(GenEmitterTest, test451dd95b95b7e958bb03) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3422,7 +3514,7 @@ TEST_F(GenEmitterTest, testb2a840af01cc1074e80f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8e372218ea9564c579b6) {
+TEST_F(GenEmitterTest, test1717ad2d772bafb9b573) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3439,7 +3531,7 @@ TEST_F(GenEmitterTest, test8e372218ea9564c579b6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9135f186de91cf9e7538) {
+TEST_F(GenEmitterTest, testedc6737e8b2f5b23b42e) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3456,7 +3548,7 @@ TEST_F(GenEmitterTest, test9135f186de91cf9e7538) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test81be571777fd06470d73) {
+TEST_F(GenEmitterTest, test771c7d28c0b8c184e2c7) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3473,7 +3565,7 @@ TEST_F(GenEmitterTest, test81be571777fd06470d73) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7614d4928827481a2d8e) {
+TEST_F(GenEmitterTest, test469a446f0b22e9b6d269) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3490,7 +3582,7 @@ TEST_F(GenEmitterTest, test7614d4928827481a2d8e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste21f9902a4a5e3c73628) {
+TEST_F(GenEmitterTest, testec45b0503f312be47336) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3507,7 +3599,7 @@ TEST_F(GenEmitterTest, teste21f9902a4a5e3c73628) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test879d7957916fb5526b7e) {
+TEST_F(GenEmitterTest, test1bfc4f39d6730acb6a12) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3524,7 +3616,7 @@ TEST_F(GenEmitterTest, test879d7957916fb5526b7e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8e4e2b3618c7fe67384b) {
+TEST_F(GenEmitterTest, test9bc9a72ad06084dc8cf8) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -3541,7 +3633,7 @@ TEST_F(GenEmitterTest, test8e4e2b3618c7fe67384b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5e8672f96ce5a11b846a) {
+TEST_F(GenEmitterTest, test62c996cdfc1d3b77b7ec) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3556,14 +3648,16 @@ TEST_F(GenEmitterTest, test5e8672f96ce5a11b846a) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test26c021c876f1ef91cff4) {
+TEST_F(GenEmitterTest, test1d038936a340d5bef490) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3578,14 +3672,16 @@ TEST_F(GenEmitterTest, test26c021c876f1ef91cff4) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test04da690e5c32b7bf1dc3) {
+TEST_F(GenEmitterTest, test7057f64ac570dbe3c1ca) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3600,14 +3696,16 @@ TEST_F(GenEmitterTest, test04da690e5c32b7bf1dc3) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4bf435d6bad0ca7f8016) {
+TEST_F(GenEmitterTest, testbfe0890de3ffc73f0f9d) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3622,14 +3720,16 @@ TEST_F(GenEmitterTest, test4bf435d6bad0ca7f8016) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test38a40c04ceadf66cb77a) {
+TEST_F(GenEmitterTest, test5faa7320a493247b4f8b) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3644,14 +3744,16 @@ TEST_F(GenEmitterTest, test38a40c04ceadf66cb77a) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test73f543da75154971fa58) {
+TEST_F(GenEmitterTest, test929fbc93b3d6d98b1f0a) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3666,14 +3768,16 @@ TEST_F(GenEmitterTest, test73f543da75154971fa58) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9c2a6b8e53a71cc271f1) {
+TEST_F(GenEmitterTest, testcc7d1ad7797581b37549) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3688,14 +3792,16 @@ TEST_F(GenEmitterTest, test9c2a6b8e53a71cc271f1) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test76e7370aa293790ca0b6) {
+TEST_F(GenEmitterTest, test1115ba981ba8f739ddf2) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3709,14 +3815,16 @@ TEST_F(GenEmitterTest, test76e7370aa293790ca0b6) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test530430c212524fd2d917) {
+TEST_F(GenEmitterTest, testf7ca743a82040e1313a8) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -3730,14 +3838,16 @@ TEST_F(GenEmitterTest, test530430c212524fd2d917) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdc001467ce9060c3e34f) {
+TEST_F(GenEmitterTest, testa4e0257ad6c987178ca4) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -3751,14 +3861,16 @@ TEST_F(GenEmitterTest, testdc001467ce9060c3e34f) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste650915c87ea88e85b7d) {
+TEST_F(GenEmitterTest, testb65ceea0d4080b44180e) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3772,14 +3884,16 @@ TEST_F(GenEmitterTest, teste650915c87ea88e85b7d) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc288c80940cbb3539620) {
+TEST_F(GenEmitterTest, test4fcd60d48dbd7b07e289) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3793,14 +3907,16 @@ TEST_F(GenEmitterTest, testc288c80940cbb3539620) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test18256634c494bbf715ac) {
+TEST_F(GenEmitterTest, test92704937d4e130b43390) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3814,14 +3930,16 @@ TEST_F(GenEmitterTest, test18256634c494bbf715ac) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfaecbb520871c68e74c2) {
+TEST_F(GenEmitterTest, test029a31902f93dfa9ea7b) {
   Emitter out;
   out << BeginSeq;
   out << VerbatimTag("tag");
@@ -3835,14 +3953,16 @@ TEST_F(GenEmitterTest, testfaecbb520871c68e74c2) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd3b1e7d0410f03b69666) {
+TEST_F(GenEmitterTest, test40b4e7494e5b850d26f4) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -3857,7 +3977,7 @@ TEST_F(GenEmitterTest, testd3b1e7d0410f03b69666) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2654cfdffd9be4c24917) {
+TEST_F(GenEmitterTest, test64d2ab5993b67281212b) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -3872,7 +3992,7 @@ TEST_F(GenEmitterTest, test2654cfdffd9be4c24917) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testad5fd5e6d524dd2c4907) {
+TEST_F(GenEmitterTest, teste71b9b975d71c18a2897) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -3887,7 +4007,7 @@ TEST_F(GenEmitterTest, testad5fd5e6d524dd2c4907) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb1b59e0e48f25bf90045) {
+TEST_F(GenEmitterTest, test138039761e432a5ba11e) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -3902,7 +4022,7 @@ TEST_F(GenEmitterTest, testb1b59e0e48f25bf90045) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6a1cd91064a302335507) {
+TEST_F(GenEmitterTest, test6684d2eacb3f094bfc84) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -3917,7 +4037,7 @@ TEST_F(GenEmitterTest, test6a1cd91064a302335507) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7542cfaba20c029d74d2) {
+TEST_F(GenEmitterTest, test8624a705f2167d4db358) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -3931,7 +4051,7 @@ TEST_F(GenEmitterTest, test7542cfaba20c029d74d2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7c64ec9fde647f95ae64) {
+TEST_F(GenEmitterTest, test90877a1ec609edb69bce) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -3945,7 +4065,7 @@ TEST_F(GenEmitterTest, test7c64ec9fde647f95ae64) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testbba41212c116596476f3) {
+TEST_F(GenEmitterTest, test5f925d3c910a7e32bb99) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -3959,7 +4079,7 @@ TEST_F(GenEmitterTest, testbba41212c116596476f3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test66a3e0c8ba0580adcce7) {
+TEST_F(GenEmitterTest, testffeb4955bf4ee9510a88) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -3973,7 +4093,7 @@ TEST_F(GenEmitterTest, test66a3e0c8ba0580adcce7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test201f78790b978c826f38) {
+TEST_F(GenEmitterTest, test769ee82c3bfc52d7a85d) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -3987,29 +4107,10 @@ TEST_F(GenEmitterTest, test201f78790b978c826f38) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test85630834239ca1a21b5f) {
+TEST_F(GenEmitterTest, testdc4e16b5a48fe16102b4) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test6e4aaceae87fea59c777) {
-  Emitter out;
-  out << BeginDoc;
-  out << Comment("comment");
   out << BeginMap;
   out << "foo";
   out << "bar";
@@ -4025,7 +4126,26 @@ TEST_F(GenEmitterTest, test6e4aaceae87fea59c777) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test430815076958c69dc3ae) {
+TEST_F(GenEmitterTest, testd3c578e5b5a6813a73c7) {
+  Emitter out;
+  out << BeginDoc;
+  out << Comment("comment");
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test0034b2c9905b34f7f22e) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4044,7 +4164,7 @@ TEST_F(GenEmitterTest, test430815076958c69dc3ae) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test699eb267a6012eb16178) {
+TEST_F(GenEmitterTest, teste911e620becf080a4d96) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4063,7 +4183,7 @@ TEST_F(GenEmitterTest, test699eb267a6012eb16178) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf51a095fb67ab6d7a2c9) {
+TEST_F(GenEmitterTest, test7f8bbf619609651a2e55) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4082,7 +4202,7 @@ TEST_F(GenEmitterTest, testf51a095fb67ab6d7a2c9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9c926b68cb956ee2c349) {
+TEST_F(GenEmitterTest, test2974bda177bed72619f4) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4101,7 +4221,7 @@ TEST_F(GenEmitterTest, test9c926b68cb956ee2c349) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testeafd3facc48783e0e3a5) {
+TEST_F(GenEmitterTest, testbc7a1599883ed8c27262) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4120,7 +4240,7 @@ TEST_F(GenEmitterTest, testeafd3facc48783e0e3a5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd702fb9ab5607d2ac819) {
+TEST_F(GenEmitterTest, test323e14a02e02b94939fb) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -4138,7 +4258,7 @@ TEST_F(GenEmitterTest, testd702fb9ab5607d2ac819) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste442f82a0e6799f2610c) {
+TEST_F(GenEmitterTest, test705ff113324bf0b4897c) {
   Emitter out;
   out << BeginDoc;
   out << Comment("comment");
@@ -4156,7 +4276,7 @@ TEST_F(GenEmitterTest, teste442f82a0e6799f2610c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test60c91197fb0bb0c6abc3) {
+TEST_F(GenEmitterTest, test587f5739ba58f0e21e0e) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4174,7 +4294,7 @@ TEST_F(GenEmitterTest, test60c91197fb0bb0c6abc3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb51cf53880c7efae7f00) {
+TEST_F(GenEmitterTest, test31a8c7da96ebe3da3f6e) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4192,7 +4312,7 @@ TEST_F(GenEmitterTest, testb51cf53880c7efae7f00) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test015d48eead15f53dda15) {
+TEST_F(GenEmitterTest, test0b6fe270e4cf9fc21181) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4210,7 +4330,7 @@ TEST_F(GenEmitterTest, test015d48eead15f53dda15) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa6ef6e851b7c9bb8695a) {
+TEST_F(GenEmitterTest, testaf5869c722ea0dfb3394) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4228,7 +4348,7 @@ TEST_F(GenEmitterTest, testa6ef6e851b7c9bb8695a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test77f35be9920c06becdb3) {
+TEST_F(GenEmitterTest, testc348837f92793a778246) {
   Emitter out;
   out << BeginDoc;
   out << BeginMap;
@@ -4246,7 +4366,7 @@ TEST_F(GenEmitterTest, test77f35be9920c06becdb3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdabd5e4aaaf01a76ac53) {
+TEST_F(GenEmitterTest, test9d26ae9ec8db76a06a6f) {
   Emitter out;
   out << Comment("comment");
   out << BeginDoc;
@@ -4262,687 +4382,18 @@ TEST_F(GenEmitterTest, testdabd5e4aaaf01a76ac53) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfdfbe118771b6de1e966) {
+TEST_F(GenEmitterTest, test28691969bbaa41191640) {
   Emitter out;
   out << BeginDoc;
-  out << Comment("comment");
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test4153b34f6f6392539a57) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << Comment("comment");
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test73cfd1e2fec4af9bcd24) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << Comment("comment");
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test9a25bda309eadfbe8323) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << Comment("comment");
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test7600d72d8bd5c481b7d2) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << Comment("comment");
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, teste03fdb7c4a58b419523d) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testcfc06e7baf582f834f85) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test355c684d237adcf5d852) {
-  Emitter out;
-  out << BeginDoc;
-  out << Comment("comment");
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testbc2e12df3c174bd6b7e3) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << Comment("comment");
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test47220f053e2788618f28) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << Comment("comment");
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testa71dd9a65f4e9563d114) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << Comment("comment");
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test188c5ac5c1d6e2174110) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testdc89b13ed8a4694f0296) {
-  Emitter out;
-  out << BeginDoc;
-  out << BeginMap;
-  out << VerbatimTag("tag");
-  out << Anchor("anchor");
-  out << "foo";
-  out << VerbatimTag("tag");
-  out << Anchor("other");
-  out << "bar";
-  out << EndMap;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test91fe618a569a60fa75d0) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test1f18c55487cda597929f) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testa74f5aa5747c1ec09ac2) {
-  Emitter out;
-  out << BeginMap;
-  out << Comment("comment");
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testda71284d14e9f5902fe5) {
-  Emitter out;
-  out << BeginMap;
-  out << EndMap;
-  out << Comment("comment");
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testb041a1dda939d84dd6ed) {
-  Emitter out;
-  out << BeginMap;
-  out << EndMap;
-  out << EndDoc;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test0f39f734136f83edaab4) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, teste8eed1f3ab25f5395d7b) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test3c7e3bbca86317884080) {
-  Emitter out;
-  out << BeginMap;
-  out << Comment("comment");
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testdc6b30ad8f00369e0597) {
-  Emitter out;
-  out << BeginMap;
-  out << EndMap;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testa905ff4b380f9fbbb630) {
-  Emitter out;
-  out << BeginMap;
-  out << EndMap;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test7143b34a608a3c7dc4bf) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test3f56e373d59464d85912) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test8790906cd88c45aba794) {
-  Emitter out;
-  out << BeginMap;
-  out << Comment("comment");
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test7eef04e795fe3d520c6f) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << Comment("comment");
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test3378c3dc3604de62c507) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << Comment("comment");
-  out << EndMap;
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, teste9742c9cbd88de777d38) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << Comment("comment");
-  out << EndDoc;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testb74cac7a45f30159f880) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << EndDoc;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testa4475a6e0ca5a46213db) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test7aa5535404499fd9e6fe) {
-  Emitter out;
-  out << Comment("comment");
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test75a57ca05218b76d7aa1) {
-  Emitter out;
-  out << BeginMap;
-  out << Comment("comment");
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test973f12b1e7cdd047a330) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << Comment("comment");
-  out << "bar";
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, test75086003fa734ba2e64c) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << Comment("comment");
-  out << EndMap;
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testef9ab805717a642f5d50) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testbbe1014c67cbcd9bff8f) {
-  Emitter out;
-  out << BeginMap;
-  out << "foo";
-  out << "bar";
-  out << EndMap;
-  out << Comment("comment");
-
-  EXPECT_CALL(handler, OnDocumentStart(_));
-  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
-  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
-  EXPECT_CALL(handler, OnMapEnd());
-  EXPECT_CALL(handler, OnDocumentEnd());
-  Parse(out.c_str());
-}
-
-TEST_F(GenEmitterTest, testa0fae19726738031a50d) {
-  Emitter out;
   out << Comment("comment");
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -4956,14 +4407,689 @@ TEST_F(GenEmitterTest, testa0fae19726738031a50d) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8cf4c10b22758615f5dc) {
+TEST_F(GenEmitterTest, testb38c27cd2556a14bb479) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << Comment("comment");
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test1103d3c99e3525075da6) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << Comment("comment");
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testeb7edb5d1dfd039c72c3) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << Comment("comment");
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testa9862d708fcb755db479) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << Comment("comment");
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testae3e98286336f0c5d2af) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test8bd970000ae21619e864) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test0a960fe3efeeb1b4fafe) {
+  Emitter out;
+  out << BeginDoc;
+  out << Comment("comment");
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testffec1dcba9a2622b57a3) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << Comment("comment");
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test9a181b6042027e7977bf) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << Comment("comment");
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test5b42728bff7e0dd63ae8) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << Comment("comment");
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testa17514c4db3a70fe5084) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test2ac903a52c526db4b34b) {
+  Emitter out;
+  out << BeginDoc;
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testbebc6bc66d04a91bfa9c) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test0918e247384bfc94d831) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testf8512b2ebdaad8ae4cae) {
+  Emitter out;
+  out << BeginMap;
+  out << Comment("comment");
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test01a1d249079c380030ca) {
+  Emitter out;
+  out << BeginMap;
+  out << EndMap;
+  out << Comment("comment");
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testcb48737e9c352108dc56) {
+  Emitter out;
+  out << BeginMap;
+  out << EndMap;
+  out << EndDoc;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testdea8106f3dce46929197) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test2b91aa87abdaa0fc0b20) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test9c8b1fe0c5bbbf6a787e) {
+  Emitter out;
+  out << BeginMap;
+  out << Comment("comment");
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test8808d4be9571f365f79a) {
+  Emitter out;
+  out << BeginMap;
+  out << EndMap;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, teste77c95c5163513fa25c5) {
+  Emitter out;
+  out << BeginMap;
+  out << EndMap;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testa3ed6e26dac366240579) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test136adbd0ad47d74cfa22) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test77f384e8387e39b54691) {
+  Emitter out;
+  out << BeginMap;
+  out << Comment("comment");
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testf8f016177cf9e428fcd4) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << Comment("comment");
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test1cec69d3c95937f4137a) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << Comment("comment");
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testb1fe1a5c5c064bdfe505) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << Comment("comment");
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test14200fdf4de8797d8dfb) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testde7595a96199f66d7ac0) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testb1434e1f508509c0ade4) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test0d3bd788298201abbe67) {
+  Emitter out;
+  out << BeginMap;
+  out << Comment("comment");
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test3c716f5c232001f04805) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << Comment("comment");
+  out << "bar";
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, testa55ef29eecbda5bc5b69) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << Comment("comment");
+  out << EndMap;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test55ddd593defa5ee8da90) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test7326f87fd5c3adff317b) {
+  Emitter out;
+  out << BeginMap;
+  out << "foo";
+  out << "bar";
+  out << EndMap;
+  out << Comment("comment");
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "foo"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test5ebc413d376f3b965879) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -4978,14 +5104,40 @@ TEST_F(GenEmitterTest, test8cf4c10b22758615f5dc) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test777130969e538d6086d6) {
+TEST_F(GenEmitterTest, test4c7159334e528e2cfff8) {
+  Emitter out;
+  out << Comment("comment");
+  out << BeginMap;
+  out << VerbatimTag("tag");
+  out << Anchor("anchor");
+  out << "foo";
+  out << VerbatimTag("tag");
+  out << Anchor("other");
+  out << "bar";
+  out << EndMap;
+  out << EndDoc;
+
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
+  EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(out.c_str());
+}
+
+TEST_F(GenEmitterTest, test6a6bc06cdfee9f58a094) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -5000,14 +5152,16 @@ TEST_F(GenEmitterTest, test777130969e538d6086d6) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5ab6ba08277cd6a6a349) {
+TEST_F(GenEmitterTest, test0beedfaace1b1e71d0c6) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5022,14 +5176,16 @@ TEST_F(GenEmitterTest, test5ab6ba08277cd6a6a349) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4e6b76c47d712e10f181) {
+TEST_F(GenEmitterTest, test9f65fafc369193908b7b) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5044,14 +5200,16 @@ TEST_F(GenEmitterTest, test4e6b76c47d712e10f181) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0ccc3ac76a8810b05ab3) {
+TEST_F(GenEmitterTest, test3a5c3ac504d7a58a08ca) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5066,14 +5224,16 @@ TEST_F(GenEmitterTest, test0ccc3ac76a8810b05ab3) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3def4b737140116db9f9) {
+TEST_F(GenEmitterTest, testc007513c868038dd3a68) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5088,14 +5248,16 @@ TEST_F(GenEmitterTest, test3def4b737140116db9f9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9ca096634f9d9cec9b36) {
+TEST_F(GenEmitterTest, test89f3ba065cbd341381ec) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5109,14 +5271,16 @@ TEST_F(GenEmitterTest, test9ca096634f9d9cec9b36) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testbf2b7d7182dae8038726) {
+TEST_F(GenEmitterTest, test692c2652cee84e90c096) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5130,14 +5294,16 @@ TEST_F(GenEmitterTest, testbf2b7d7182dae8038726) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa3528cc9ec7b90fc1d8d) {
+TEST_F(GenEmitterTest, test761fba62f7617a03fbf0) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -5151,14 +5317,16 @@ TEST_F(GenEmitterTest, testa3528cc9ec7b90fc1d8d) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf5be0253b15048a37e3a) {
+TEST_F(GenEmitterTest, teste960a69bc06912eb8c76) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5172,14 +5340,16 @@ TEST_F(GenEmitterTest, testf5be0253b15048a37e3a) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste338a8f7f7aa9b63cddb) {
+TEST_F(GenEmitterTest, test8f6187c6c2419dbf1770) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5193,14 +5363,16 @@ TEST_F(GenEmitterTest, teste338a8f7f7aa9b63cddb) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3628377ede539d44f975) {
+TEST_F(GenEmitterTest, testba6cb3810a074fabc55e) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5214,14 +5386,16 @@ TEST_F(GenEmitterTest, test3628377ede539d44f975) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6eb2c2967a88d82d83d9) {
+TEST_F(GenEmitterTest, testac695c3621ec3f104672) {
   Emitter out;
   out << BeginMap;
   out << VerbatimTag("tag");
@@ -5235,14 +5409,16 @@ TEST_F(GenEmitterTest, test6eb2c2967a88d82d83d9) {
 
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, _));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 1, "foo"));
+  EXPECT_CALL(handler, OnAnchor(_, "other"));
   EXPECT_CALL(handler, OnScalar(_, "tag", 2, "bar"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test03515aba5b291049c262) {
+TEST_F(GenEmitterTest, test86494a6bcb6a65e7029e) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5259,7 +5435,7 @@ TEST_F(GenEmitterTest, test03515aba5b291049c262) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test20eea0df7f54b919cb92) {
+TEST_F(GenEmitterTest, testb406fb13323c199d709c) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5276,7 +5452,7 @@ TEST_F(GenEmitterTest, test20eea0df7f54b919cb92) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6c6ab6f66ce2828d26cd) {
+TEST_F(GenEmitterTest, test4409f685a3e80b9ab415) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -5293,7 +5469,7 @@ TEST_F(GenEmitterTest, test6c6ab6f66ce2828d26cd) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7f415ecadae422f7b0f5) {
+TEST_F(GenEmitterTest, testa74ace9c1f5e18cf3f2a) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5310,7 +5486,7 @@ TEST_F(GenEmitterTest, test7f415ecadae422f7b0f5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0797d220a5428528ec87) {
+TEST_F(GenEmitterTest, testabfc8ce2ca4c3dafa013) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5327,7 +5503,7 @@ TEST_F(GenEmitterTest, test0797d220a5428528ec87) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6e29f19c88864559a43e) {
+TEST_F(GenEmitterTest, test07ff4bbae6104c4e30c1) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5344,7 +5520,7 @@ TEST_F(GenEmitterTest, test6e29f19c88864559a43e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0fe24accf63e33a71494) {
+TEST_F(GenEmitterTest, test1e3559cacab6d46c98fe) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5361,7 +5537,7 @@ TEST_F(GenEmitterTest, test0fe24accf63e33a71494) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6cc44b957e440b365fbc) {
+TEST_F(GenEmitterTest, test795830e12e5a20213a7e) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5382,7 +5558,7 @@ TEST_F(GenEmitterTest, test6cc44b957e440b365fbc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5de19a26e7af5459141b) {
+TEST_F(GenEmitterTest, test849f2c88c71734fcf3f3) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5403,7 +5579,7 @@ TEST_F(GenEmitterTest, test5de19a26e7af5459141b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testea71fb07f12c70473a81) {
+TEST_F(GenEmitterTest, test7bb139ac1f14e8ae04e2) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -5424,7 +5600,7 @@ TEST_F(GenEmitterTest, testea71fb07f12c70473a81) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa70d56c89e5219a106b6) {
+TEST_F(GenEmitterTest, test58655e359c60bf73986f) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5445,7 +5621,7 @@ TEST_F(GenEmitterTest, testa70d56c89e5219a106b6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9eac2d394b9528ccd982) {
+TEST_F(GenEmitterTest, testde9f70648448cbd37245) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5466,7 +5642,7 @@ TEST_F(GenEmitterTest, test9eac2d394b9528ccd982) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test25b8b26feb1a8e5e50f9) {
+TEST_F(GenEmitterTest, testfff25037c90a64db8771) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5487,7 +5663,7 @@ TEST_F(GenEmitterTest, test25b8b26feb1a8e5e50f9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc9498e8d4545fb7ba842) {
+TEST_F(GenEmitterTest, test94b24a286074cac9b881) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5508,7 +5684,7 @@ TEST_F(GenEmitterTest, testc9498e8d4545fb7ba842) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testaf3f79c8ce6b65a71427) {
+TEST_F(GenEmitterTest, test0c678fe6c6dbd3ccf4eb) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5529,7 +5705,7 @@ TEST_F(GenEmitterTest, testaf3f79c8ce6b65a71427) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test921c297e990d295cd067) {
+TEST_F(GenEmitterTest, test15f6ce577f139b9f1b61) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5550,7 +5726,7 @@ TEST_F(GenEmitterTest, test921c297e990d295cd067) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd61d8ef3753e51e671a8) {
+TEST_F(GenEmitterTest, test5e927c8865f44b5c1abe) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5573,7 +5749,7 @@ TEST_F(GenEmitterTest, testd61d8ef3753e51e671a8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8fa800a208cdaa3e20d7) {
+TEST_F(GenEmitterTest, test235aebc60786962899f1) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5596,7 +5772,7 @@ TEST_F(GenEmitterTest, test8fa800a208cdaa3e20d7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdf78d6aa9976557adf35) {
+TEST_F(GenEmitterTest, test45e109e1bc3ca312091d) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -5619,7 +5795,7 @@ TEST_F(GenEmitterTest, testdf78d6aa9976557adf35) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf13bfc9be619d52da2b9) {
+TEST_F(GenEmitterTest, test9a58086d44719b21c6b3) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5642,7 +5818,7 @@ TEST_F(GenEmitterTest, testf13bfc9be619d52da2b9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd69830b6ed705995e364) {
+TEST_F(GenEmitterTest, testa3ac3fa06ae69e9f5c9d) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5665,7 +5841,7 @@ TEST_F(GenEmitterTest, testd69830b6ed705995e364) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste41087bf41e163aa315d) {
+TEST_F(GenEmitterTest, test9ccaf628d78cc8f27857) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5688,7 +5864,7 @@ TEST_F(GenEmitterTest, teste41087bf41e163aa315d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf46aa6778b48f4a04e21) {
+TEST_F(GenEmitterTest, test6b8483101720027fd945) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5711,7 +5887,7 @@ TEST_F(GenEmitterTest, testf46aa6778b48f4a04e21) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste017eaffcd10bfedf757) {
+TEST_F(GenEmitterTest, test1549a08694b053f8a2cb) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5734,7 +5910,7 @@ TEST_F(GenEmitterTest, teste017eaffcd10bfedf757) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1cd2c3e073dac695dfdb) {
+TEST_F(GenEmitterTest, test0417f66daae22676ad66) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5757,7 +5933,7 @@ TEST_F(GenEmitterTest, test1cd2c3e073dac695dfdb) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd2eb393135a7a84aea37) {
+TEST_F(GenEmitterTest, test6b3d4384d27d0ac90b01) {
   Emitter out;
   out << BeginMap;
   out << "foo";
@@ -5780,7 +5956,7 @@ TEST_F(GenEmitterTest, testd2eb393135a7a84aea37) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test79b4dcb868412729afed) {
+TEST_F(GenEmitterTest, testbf166fa245c204799ea8) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5801,7 +5977,7 @@ TEST_F(GenEmitterTest, test79b4dcb868412729afed) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test379fd004b428ddfbabe2) {
+TEST_F(GenEmitterTest, testdf279b50896e8f084ed3) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5822,7 +5998,7 @@ TEST_F(GenEmitterTest, test379fd004b428ddfbabe2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5c13b45235bb1b7e36a9) {
+TEST_F(GenEmitterTest, test7d9b55fe33dfdc6cf930) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -5843,7 +6019,7 @@ TEST_F(GenEmitterTest, test5c13b45235bb1b7e36a9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test95b9c0c89b4cd2841446) {
+TEST_F(GenEmitterTest, test2b0f0825ac5d9ac3baf7) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -5864,7 +6040,7 @@ TEST_F(GenEmitterTest, test95b9c0c89b4cd2841446) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test14810a0d0234bee070a2) {
+TEST_F(GenEmitterTest, teste4865b227f48a727aafe) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -5885,7 +6061,7 @@ TEST_F(GenEmitterTest, test14810a0d0234bee070a2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8447a364c30880a42ca1) {
+TEST_F(GenEmitterTest, testb02fb812ae14499cc30e) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -5906,7 +6082,7 @@ TEST_F(GenEmitterTest, test8447a364c30880a42ca1) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test09fbd11d82a3777ac376) {
+TEST_F(GenEmitterTest, testa395515c1bce39e737b7) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -5927,7 +6103,7 @@ TEST_F(GenEmitterTest, test09fbd11d82a3777ac376) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcbb2d4bd62f1ef2f66ad) {
+TEST_F(GenEmitterTest, test813be458848be1ba3bf1) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -5948,7 +6124,7 @@ TEST_F(GenEmitterTest, testcbb2d4bd62f1ef2f66ad) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa0ecef367a1f54e08d00) {
+TEST_F(GenEmitterTest, test23ab6af7b3fc7957a03d) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -5969,7 +6145,7 @@ TEST_F(GenEmitterTest, testa0ecef367a1f54e08d00) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test89c1ba14891887445d1a) {
+TEST_F(GenEmitterTest, testc5fb40e239029d9efa58) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -5994,7 +6170,7 @@ TEST_F(GenEmitterTest, test89c1ba14891887445d1a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test68436e821e03f93754e6) {
+TEST_F(GenEmitterTest, test88b5c599a4f9ac52f951) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6019,7 +6195,7 @@ TEST_F(GenEmitterTest, test68436e821e03f93754e6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9d56b9e336a032014977) {
+TEST_F(GenEmitterTest, test3995578993108fa25f88) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -6044,7 +6220,7 @@ TEST_F(GenEmitterTest, test9d56b9e336a032014977) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test38701040630c71bff30d) {
+TEST_F(GenEmitterTest, test61a24036be6f8cd49a28) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6069,7 +6245,7 @@ TEST_F(GenEmitterTest, test38701040630c71bff30d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa5ee191882708767d03a) {
+TEST_F(GenEmitterTest, testc13e02ab3c1bd1db6e55) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6094,7 +6270,7 @@ TEST_F(GenEmitterTest, testa5ee191882708767d03a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7f055e278180eb0f8c0d) {
+TEST_F(GenEmitterTest, testb3ca69f6d7a888644064) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6119,7 +6295,7 @@ TEST_F(GenEmitterTest, test7f055e278180eb0f8c0d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb17a6726041573ad5d90) {
+TEST_F(GenEmitterTest, test4e6337821c858c2f7cfa) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6144,7 +6320,7 @@ TEST_F(GenEmitterTest, testb17a6726041573ad5d90) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0fe7dcb77bf033a58a7d) {
+TEST_F(GenEmitterTest, test8dc4a01d956c779dd8b0) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6169,7 +6345,7 @@ TEST_F(GenEmitterTest, test0fe7dcb77bf033a58a7d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4df73e774cb1a7044859) {
+TEST_F(GenEmitterTest, test1dae9c6350559f6b9f89) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6194,7 +6370,7 @@ TEST_F(GenEmitterTest, test4df73e774cb1a7044859) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test519ee9f4db0c2cc3cb22) {
+TEST_F(GenEmitterTest, test9f891b1cdde286863956) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6219,7 +6395,7 @@ TEST_F(GenEmitterTest, test519ee9f4db0c2cc3cb22) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test86fdfe330b8b39c502e3) {
+TEST_F(GenEmitterTest, test0704315052c50c54b17a) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6244,7 +6420,7 @@ TEST_F(GenEmitterTest, test86fdfe330b8b39c502e3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf1f415e2941ace087ef1) {
+TEST_F(GenEmitterTest, test7f5b47cf1d2571afc033) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6271,7 +6447,7 @@ TEST_F(GenEmitterTest, testf1f415e2941ace087ef1) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test61947172d8a42f6daa33) {
+TEST_F(GenEmitterTest, test5040c19e850e3046d32d) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6298,7 +6474,7 @@ TEST_F(GenEmitterTest, test61947172d8a42f6daa33) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testad7ddc91f2603dcd8af4) {
+TEST_F(GenEmitterTest, test110665e2f3409ef307ff) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -6325,7 +6501,7 @@ TEST_F(GenEmitterTest, testad7ddc91f2603dcd8af4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3ded81db555ef0e2dd4c) {
+TEST_F(GenEmitterTest, teste9e1549f96267f93651c) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6352,7 +6528,7 @@ TEST_F(GenEmitterTest, test3ded81db555ef0e2dd4c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb1da8147f5442f38a0af) {
+TEST_F(GenEmitterTest, test6a5b6a20fdb6f7c3279e) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6379,7 +6555,7 @@ TEST_F(GenEmitterTest, testb1da8147f5442f38a0af) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testdb0f2d85399318eb7957) {
+TEST_F(GenEmitterTest, test7c568c68f77e34d5c714) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6406,7 +6582,7 @@ TEST_F(GenEmitterTest, testdb0f2d85399318eb7957) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test456b6f61fd4fb5b4b516) {
+TEST_F(GenEmitterTest, testfd8fe783b5297c92d17f) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6433,7 +6609,7 @@ TEST_F(GenEmitterTest, test456b6f61fd4fb5b4b516) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test016098295ec6d033a470) {
+TEST_F(GenEmitterTest, test418b1426e630825a7c85) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6460,7 +6636,7 @@ TEST_F(GenEmitterTest, test016098295ec6d033a470) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1cbee1bf6ca60fa72aa5) {
+TEST_F(GenEmitterTest, test8161c5e486d317e7864e) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6487,7 +6663,7 @@ TEST_F(GenEmitterTest, test1cbee1bf6ca60fa72aa5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testaf9b292d92d4ec50429c) {
+TEST_F(GenEmitterTest, testa48e1915ca7c919db445) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6514,7 +6690,7 @@ TEST_F(GenEmitterTest, testaf9b292d92d4ec50429c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3aded59e694359fa222e) {
+TEST_F(GenEmitterTest, test27124815aea27c053aab) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6541,7 +6717,7 @@ TEST_F(GenEmitterTest, test3aded59e694359fa222e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6a79d05b97bf18ab27e9) {
+TEST_F(GenEmitterTest, teste751377e4a74306bc555) {
   Emitter out;
   out << BeginMap;
   out << BeginSeq;
@@ -6568,7 +6744,7 @@ TEST_F(GenEmitterTest, test6a79d05b97bf18ab27e9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test96727e93c95d3dcb5a2b) {
+TEST_F(GenEmitterTest, test36a4cc298255efdd1ef5) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6591,7 +6767,7 @@ TEST_F(GenEmitterTest, test96727e93c95d3dcb5a2b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test19387cf6dcd0618b416f) {
+TEST_F(GenEmitterTest, test43471dee97b0506909b2) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6614,7 +6790,7 @@ TEST_F(GenEmitterTest, test19387cf6dcd0618b416f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test755733f3c3c00263610c) {
+TEST_F(GenEmitterTest, test959c85b4e833f72173a6) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -6637,7 +6813,7 @@ TEST_F(GenEmitterTest, test755733f3c3c00263610c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test426a9d79d3e0421c9a57) {
+TEST_F(GenEmitterTest, test3a09723dce29399bc865) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6660,7 +6836,7 @@ TEST_F(GenEmitterTest, test426a9d79d3e0421c9a57) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testefad231fdbf0147b5a46) {
+TEST_F(GenEmitterTest, test958e404277a1c55139af) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6683,7 +6859,7 @@ TEST_F(GenEmitterTest, testefad231fdbf0147b5a46) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test03772c261806afb7c9cc) {
+TEST_F(GenEmitterTest, testb1823407ab0601edc9cb) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6706,7 +6882,7 @@ TEST_F(GenEmitterTest, test03772c261806afb7c9cc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test65734300dcf959922c18) {
+TEST_F(GenEmitterTest, test9993e9dad983b28960aa) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6729,7 +6905,7 @@ TEST_F(GenEmitterTest, test65734300dcf959922c18) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test815ef14ef8792dc2de1d) {
+TEST_F(GenEmitterTest, test8e87f559b25a9a20e11c) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6752,7 +6928,7 @@ TEST_F(GenEmitterTest, test815ef14ef8792dc2de1d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5266cf3b9eb70be75944) {
+TEST_F(GenEmitterTest, testeb431be8504451636efe) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6775,7 +6951,7 @@ TEST_F(GenEmitterTest, test5266cf3b9eb70be75944) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test199b993f2f9302c1c0c8) {
+TEST_F(GenEmitterTest, testf876965882befc7355df) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6798,7 +6974,7 @@ TEST_F(GenEmitterTest, test199b993f2f9302c1c0c8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test448f8a30d377c0c01b26) {
+TEST_F(GenEmitterTest, testf7e1d47f266f0b940fed) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6825,7 +7001,7 @@ TEST_F(GenEmitterTest, test448f8a30d377c0c01b26) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa4a3cfe5a74aa90708a5) {
+TEST_F(GenEmitterTest, teste5a4bc646f2182b78cc1) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -6852,7 +7028,7 @@ TEST_F(GenEmitterTest, testa4a3cfe5a74aa90708a5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6de6ac6c26a8d098b529) {
+TEST_F(GenEmitterTest, test6cbedca25c9a8a6bb42e) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -6879,7 +7055,7 @@ TEST_F(GenEmitterTest, test6de6ac6c26a8d098b529) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc9e7f10371f284e94d20) {
+TEST_F(GenEmitterTest, test07613cc34874a5b47577) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6906,7 +7082,7 @@ TEST_F(GenEmitterTest, testc9e7f10371f284e94d20) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test382360950d64ced8a0cc) {
+TEST_F(GenEmitterTest, testa55b7ac19580aeb82d32) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6933,7 +7109,7 @@ TEST_F(GenEmitterTest, test382360950d64ced8a0cc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test52b289c54900ca0a098e) {
+TEST_F(GenEmitterTest, test458f9af92dfb9f64a488) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6960,7 +7136,7 @@ TEST_F(GenEmitterTest, test52b289c54900ca0a098e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7266716f412852506771) {
+TEST_F(GenEmitterTest, testc4a9c3769e95770bb455) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -6987,7 +7163,7 @@ TEST_F(GenEmitterTest, test7266716f412852506771) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd2ac7d6f40cc75a3c695) {
+TEST_F(GenEmitterTest, testae56654f89fa2416f3db) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7014,7 +7190,7 @@ TEST_F(GenEmitterTest, testd2ac7d6f40cc75a3c695) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test368597fd8bcc0d3aaff0) {
+TEST_F(GenEmitterTest, test1635f71f27e7303c730e) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7041,7 +7217,7 @@ TEST_F(GenEmitterTest, test368597fd8bcc0d3aaff0) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9201309cd67ab579b883) {
+TEST_F(GenEmitterTest, testcd9d835a8d8b8622c63b) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7068,7 +7244,7 @@ TEST_F(GenEmitterTest, test9201309cd67ab579b883) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test30e18cbdd5d04a552625) {
+TEST_F(GenEmitterTest, test3c2d1f91e57040cb8fdd) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7095,7 +7271,7 @@ TEST_F(GenEmitterTest, test30e18cbdd5d04a552625) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa659d36137a8f34911a6) {
+TEST_F(GenEmitterTest, test9bd5b4c002b3b637747f) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7122,7 +7298,7 @@ TEST_F(GenEmitterTest, testa659d36137a8f34911a6) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste0b8302185ee814d6552) {
+TEST_F(GenEmitterTest, testf6c71199cd45b5b8e7e0) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -7151,7 +7327,7 @@ TEST_F(GenEmitterTest, teste0b8302185ee814d6552) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test66793e09aa910bd924ca) {
+TEST_F(GenEmitterTest, test865b02b69742e5513963) {
   Emitter out;
   out << Comment("comment");
   out << BeginMap;
@@ -7180,7 +7356,7 @@ TEST_F(GenEmitterTest, test66793e09aa910bd924ca) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9beaa5ceb1fcfef2a897) {
+TEST_F(GenEmitterTest, test86eb8783dc4367cda931) {
   Emitter out;
   out << BeginMap;
   out << Comment("comment");
@@ -7209,7 +7385,7 @@ TEST_F(GenEmitterTest, test9beaa5ceb1fcfef2a897) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8ccc36c941ec6aa59536) {
+TEST_F(GenEmitterTest, test7f6604058a9d8e2e1219) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7238,7 +7414,7 @@ TEST_F(GenEmitterTest, test8ccc36c941ec6aa59536) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3c8ea05243d098395929) {
+TEST_F(GenEmitterTest, test676b4abcb3cf0530e4da) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7267,7 +7443,7 @@ TEST_F(GenEmitterTest, test3c8ea05243d098395929) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd819abb35a3ff74e764a) {
+TEST_F(GenEmitterTest, teste7e52980e73d442a602b) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7296,7 +7472,7 @@ TEST_F(GenEmitterTest, testd819abb35a3ff74e764a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test416c49d00378b626ad21) {
+TEST_F(GenEmitterTest, testc3d6f480087db4bcd3a1) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7325,7 +7501,7 @@ TEST_F(GenEmitterTest, test416c49d00378b626ad21) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5cd5ecef5b2a297afe21) {
+TEST_F(GenEmitterTest, test6943516ed43da6944e96) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7354,7 +7530,7 @@ TEST_F(GenEmitterTest, test5cd5ecef5b2a297afe21) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9d8ea78df40a20f07e96) {
+TEST_F(GenEmitterTest, testb7e880522d0778ae6e6f) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7383,7 +7559,7 @@ TEST_F(GenEmitterTest, test9d8ea78df40a20f07e96) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste7bdb2f35bec40c207ee) {
+TEST_F(GenEmitterTest, testec39ee51992618c7b154) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7412,7 +7588,7 @@ TEST_F(GenEmitterTest, teste7bdb2f35bec40c207ee) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste6d6da3a612849d32b79) {
+TEST_F(GenEmitterTest, test39f768713a9b3aaffe0d) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7441,7 +7617,7 @@ TEST_F(GenEmitterTest, teste6d6da3a612849d32b79) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test9af66f2efca487828902) {
+TEST_F(GenEmitterTest, testf287a68abc5b8ff7784d) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7470,7 +7646,7 @@ TEST_F(GenEmitterTest, test9af66f2efca487828902) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb05b2fc716f368b6bdfc) {
+TEST_F(GenEmitterTest, testc36154aa87842ba9699f) {
   Emitter out;
   out << BeginMap;
   out << BeginMap;
@@ -7499,7 +7675,7 @@ TEST_F(GenEmitterTest, testb05b2fc716f368b6bdfc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd0713381b33b72abdb58) {
+TEST_F(GenEmitterTest, testa75da84dfc8ee5507157) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -7516,7 +7692,7 @@ TEST_F(GenEmitterTest, testd0713381b33b72abdb58) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc6739cb3a9de4a5c41a7) {
+TEST_F(GenEmitterTest, testc54a03d1735615f7bd60) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -7533,7 +7709,7 @@ TEST_F(GenEmitterTest, testc6739cb3a9de4a5c41a7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2b4fa669c6b56cd6a117) {
+TEST_F(GenEmitterTest, testf5d72aba828875527d6f) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -7550,7 +7726,7 @@ TEST_F(GenEmitterTest, test2b4fa669c6b56cd6a117) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test29ae2ef656132c069d22) {
+TEST_F(GenEmitterTest, test9e8681a1b27a8524ec5e) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7567,7 +7743,7 @@ TEST_F(GenEmitterTest, test29ae2ef656132c069d22) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd3e2ad21ab7d0890c412) {
+TEST_F(GenEmitterTest, test34678928e79e6eb160f4) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7584,7 +7760,7 @@ TEST_F(GenEmitterTest, testd3e2ad21ab7d0890c412) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test632b0fb6570fa3b1b682) {
+TEST_F(GenEmitterTest, test07c6d6b9e133553d4532) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7601,7 +7777,7 @@ TEST_F(GenEmitterTest, test632b0fb6570fa3b1b682) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc9bcfd496ae3382d546b) {
+TEST_F(GenEmitterTest, test1531642db71e1aa8dd1c) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7618,7 +7794,7 @@ TEST_F(GenEmitterTest, testc9bcfd496ae3382d546b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test43fd860d560c9137add4) {
+TEST_F(GenEmitterTest, test22fde02c0bd0ecb8a527) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -7639,7 +7815,7 @@ TEST_F(GenEmitterTest, test43fd860d560c9137add4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0e47183ab4a56c3a6d36) {
+TEST_F(GenEmitterTest, test72430574ba42559cf917) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -7660,7 +7836,7 @@ TEST_F(GenEmitterTest, test0e47183ab4a56c3a6d36) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf165d91c1dce024c9774) {
+TEST_F(GenEmitterTest, test067bce5d8aa6281a3e6f) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -7681,7 +7857,7 @@ TEST_F(GenEmitterTest, testf165d91c1dce024c9774) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7592a1f019ddb2b9c3f4) {
+TEST_F(GenEmitterTest, testb1839ee8ced911bb1ed1) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7702,7 +7878,7 @@ TEST_F(GenEmitterTest, test7592a1f019ddb2b9c3f4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test758d285e89a9de8070a7) {
+TEST_F(GenEmitterTest, test5899c9cd7e5a40077178) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7723,7 +7899,7 @@ TEST_F(GenEmitterTest, test758d285e89a9de8070a7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5888499c52285a1b61de) {
+TEST_F(GenEmitterTest, test834f4e4a74c0ac6cd011) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7744,7 +7920,7 @@ TEST_F(GenEmitterTest, test5888499c52285a1b61de) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0115edbe7dd05e84f108) {
+TEST_F(GenEmitterTest, testd3aeee7524918cf227e7) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7765,7 +7941,7 @@ TEST_F(GenEmitterTest, test0115edbe7dd05e84f108) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcbbbde92f35597a9e476) {
+TEST_F(GenEmitterTest, test7c587549aa0bbd6e2d53) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7786,7 +7962,7 @@ TEST_F(GenEmitterTest, testcbbbde92f35597a9e476) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa74ec451d449e2a89442) {
+TEST_F(GenEmitterTest, testc684ba00d512b6009b02) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7807,7 +7983,7 @@ TEST_F(GenEmitterTest, testa74ec451d449e2a89442) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test60faf9f5ac584b2d5a5f) {
+TEST_F(GenEmitterTest, testbe39189b638b9e0214dd) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -7830,7 +8006,7 @@ TEST_F(GenEmitterTest, test60faf9f5ac584b2d5a5f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa34103141c1aec5e8fa8) {
+TEST_F(GenEmitterTest, test80326240018ececfa606) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -7853,7 +8029,7 @@ TEST_F(GenEmitterTest, testa34103141c1aec5e8fa8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa2a2b83cb72c22fc4ac2) {
+TEST_F(GenEmitterTest, test8a74653a376d02a2b6db) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -7876,7 +8052,7 @@ TEST_F(GenEmitterTest, testa2a2b83cb72c22fc4ac2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1f7ddcc3e5263ec983c5) {
+TEST_F(GenEmitterTest, testaa82cace20492eb66f60) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7899,7 +8075,7 @@ TEST_F(GenEmitterTest, test1f7ddcc3e5263ec983c5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test638672d9ee378d2b59ec) {
+TEST_F(GenEmitterTest, testcd4a1cdb4e2a24cae5c1) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7922,7 +8098,7 @@ TEST_F(GenEmitterTest, test638672d9ee378d2b59ec) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testffa1014d27bcb4821993) {
+TEST_F(GenEmitterTest, testa9ef5ab0eada79175f6a) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7945,7 +8121,7 @@ TEST_F(GenEmitterTest, testffa1014d27bcb4821993) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, tested2f908c978d8908cde2) {
+TEST_F(GenEmitterTest, test4060ba4b4f9b8193dcc4) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7968,7 +8144,7 @@ TEST_F(GenEmitterTest, tested2f908c978d8908cde2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test75c9a342b4ff9dcddd76) {
+TEST_F(GenEmitterTest, test6cd2fc4be08857654fa0) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -7991,7 +8167,7 @@ TEST_F(GenEmitterTest, test75c9a342b4ff9dcddd76) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb3cf7afef788a5168172) {
+TEST_F(GenEmitterTest, testadb892f6183cde28d9cc) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -8014,7 +8190,7 @@ TEST_F(GenEmitterTest, testb3cf7afef788a5168172) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test32c5731914c4f623f8cb) {
+TEST_F(GenEmitterTest, test5e830445d6cafe856b09) {
   Emitter out;
   out << BeginSeq;
   out << "foo";
@@ -8037,7 +8213,7 @@ TEST_F(GenEmitterTest, test32c5731914c4f623f8cb) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc4e4b895f5a3615e6c92) {
+TEST_F(GenEmitterTest, test16a7d875f6358bdd36ee) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8058,7 +8234,7 @@ TEST_F(GenEmitterTest, testc4e4b895f5a3615e6c92) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test024f81ab1e1f375d06c8) {
+TEST_F(GenEmitterTest, test75b4342605739c88bc3f) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8079,7 +8255,7 @@ TEST_F(GenEmitterTest, test024f81ab1e1f375d06c8) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf73efa1189e8e9bab50c) {
+TEST_F(GenEmitterTest, test7d42488f1a02d045d278) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -8100,7 +8276,7 @@ TEST_F(GenEmitterTest, testf73efa1189e8e9bab50c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test074882061d59e9381988) {
+TEST_F(GenEmitterTest, test9ce404764c03c6644c98) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8121,7 +8297,7 @@ TEST_F(GenEmitterTest, test074882061d59e9381988) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb81b19396e93a0e29157) {
+TEST_F(GenEmitterTest, testf9e413cd5405efcbd432) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8142,7 +8318,7 @@ TEST_F(GenEmitterTest, testb81b19396e93a0e29157) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testd4776155c00bb794aec9) {
+TEST_F(GenEmitterTest, test757c82faa95e2e507ee9) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8163,7 +8339,7 @@ TEST_F(GenEmitterTest, testd4776155c00bb794aec9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0d3813f2674c45d54be7) {
+TEST_F(GenEmitterTest, testb73d72bf5de11964969f) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8184,7 +8360,7 @@ TEST_F(GenEmitterTest, test0d3813f2674c45d54be7) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testaee95b4f9b1161f6fd14) {
+TEST_F(GenEmitterTest, test3926f169b9dce6db913f) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8205,7 +8381,7 @@ TEST_F(GenEmitterTest, testaee95b4f9b1161f6fd14) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3f7b4338eae92e7a575f) {
+TEST_F(GenEmitterTest, test77b0cc7e618a09e0556d) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8226,7 +8402,7 @@ TEST_F(GenEmitterTest, test3f7b4338eae92e7a575f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test13a3de779d0756db2635) {
+TEST_F(GenEmitterTest, test6817f3e5da2ad8823025) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8251,7 +8427,7 @@ TEST_F(GenEmitterTest, test13a3de779d0756db2635) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6cc39fc73a32cb816c15) {
+TEST_F(GenEmitterTest, test817ae48b78359d60888b) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8276,7 +8452,7 @@ TEST_F(GenEmitterTest, test6cc39fc73a32cb816c15) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test33c4f4a8854d92180427) {
+TEST_F(GenEmitterTest, test9db1bf6278dd7de937e6) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -8301,7 +8477,7 @@ TEST_F(GenEmitterTest, test33c4f4a8854d92180427) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1e5612a63642939843fc) {
+TEST_F(GenEmitterTest, test4d5ca5c891442ddf7e84) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8326,7 +8502,7 @@ TEST_F(GenEmitterTest, test1e5612a63642939843fc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test774fccdfa9e9ea982df2) {
+TEST_F(GenEmitterTest, testfb6eb22f4bf080b9ac8b) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8351,7 +8527,7 @@ TEST_F(GenEmitterTest, test774fccdfa9e9ea982df2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testecdd8159ca0150ac9084) {
+TEST_F(GenEmitterTest, test3ce4b4ec89282d701502) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8376,7 +8552,7 @@ TEST_F(GenEmitterTest, testecdd8159ca0150ac9084) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8081bb348b980caf237e) {
+TEST_F(GenEmitterTest, testaf53ae415739a8812200) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8401,7 +8577,7 @@ TEST_F(GenEmitterTest, test8081bb348b980caf237e) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5dd9e7d23a6868f8da14) {
+TEST_F(GenEmitterTest, test72d3de78c6508500cb00) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8426,7 +8602,7 @@ TEST_F(GenEmitterTest, test5dd9e7d23a6868f8da14) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5cfe1848cf1771ee5a62) {
+TEST_F(GenEmitterTest, test6dd3d3703718b37fa2a4) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8451,7 +8627,7 @@ TEST_F(GenEmitterTest, test5cfe1848cf1771ee5a62) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test1a78787fd377fecaa98a) {
+TEST_F(GenEmitterTest, testc0beca9064d8081d45c1) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8476,7 +8652,7 @@ TEST_F(GenEmitterTest, test1a78787fd377fecaa98a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3659c5e006def41d781a) {
+TEST_F(GenEmitterTest, test14c55f7cd295d89763ca) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8501,7 +8677,7 @@ TEST_F(GenEmitterTest, test3659c5e006def41d781a) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testcffd2b80f823bc7b88bc) {
+TEST_F(GenEmitterTest, test72a93f054d9296607dff) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8528,7 +8704,7 @@ TEST_F(GenEmitterTest, testcffd2b80f823bc7b88bc) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3646d0fd40876cdc7d90) {
+TEST_F(GenEmitterTest, testf0ac164fe5c38cc36922) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8555,7 +8731,7 @@ TEST_F(GenEmitterTest, test3646d0fd40876cdc7d90) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testce3c9ef9e0c642d65146) {
+TEST_F(GenEmitterTest, test74efb7c560fd057d25ba) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -8582,7 +8758,7 @@ TEST_F(GenEmitterTest, testce3c9ef9e0c642d65146) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test666f93032b0297bd6f81) {
+TEST_F(GenEmitterTest, test43adceaba606a7f5013f) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8609,7 +8785,7 @@ TEST_F(GenEmitterTest, test666f93032b0297bd6f81) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7939e2697c6f4d8b91e9) {
+TEST_F(GenEmitterTest, test94160894abf5f0650ec9) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8636,7 +8812,7 @@ TEST_F(GenEmitterTest, test7939e2697c6f4d8b91e9) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3c153927514f7330e37d) {
+TEST_F(GenEmitterTest, testb77f1131af63dae91031) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8663,7 +8839,7 @@ TEST_F(GenEmitterTest, test3c153927514f7330e37d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test59b085e35e59562026da) {
+TEST_F(GenEmitterTest, test296aa575c385013e91f0) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8690,7 +8866,7 @@ TEST_F(GenEmitterTest, test59b085e35e59562026da) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test367f38cb15951f58f294) {
+TEST_F(GenEmitterTest, test339bddce4b70064141c4) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8717,7 +8893,7 @@ TEST_F(GenEmitterTest, test367f38cb15951f58f294) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testbb3feccd2d65d126c9e4) {
+TEST_F(GenEmitterTest, test991a70285cf143adb7fe) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8744,7 +8920,7 @@ TEST_F(GenEmitterTest, testbb3feccd2d65d126c9e4) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test4c5079959ae8b908aee3) {
+TEST_F(GenEmitterTest, test1b1ae70c1b5e7a1a2502) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8771,7 +8947,7 @@ TEST_F(GenEmitterTest, test4c5079959ae8b908aee3) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testfa82743c73819854df98) {
+TEST_F(GenEmitterTest, test02e58fb30f5a5b3616ec) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8798,7 +8974,7 @@ TEST_F(GenEmitterTest, testfa82743c73819854df98) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste354627da20a33a0ec48) {
+TEST_F(GenEmitterTest, testbdc3952445cad78094e2) {
   Emitter out;
   out << BeginSeq;
   out << BeginSeq;
@@ -8825,7 +9001,7 @@ TEST_F(GenEmitterTest, teste354627da20a33a0ec48) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test202a2c088ee50d08f182) {
+TEST_F(GenEmitterTest, test5d24f2ab8e24cb71d6c9) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8848,7 +9024,7 @@ TEST_F(GenEmitterTest, test202a2c088ee50d08f182) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc7277e5979e7eaf4d016) {
+TEST_F(GenEmitterTest, test1ca2c58583cb7dd8a765) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -8871,7 +9047,7 @@ TEST_F(GenEmitterTest, testc7277e5979e7eaf4d016) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, teste2b7015fc02e6a5cb416) {
+TEST_F(GenEmitterTest, test6086aee45faab48750ad) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -8894,7 +9070,7 @@ TEST_F(GenEmitterTest, teste2b7015fc02e6a5cb416) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test30e30b89df20ef693d7b) {
+TEST_F(GenEmitterTest, testdac42de03b96b1207ec4) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -8917,7 +9093,7 @@ TEST_F(GenEmitterTest, test30e30b89df20ef693d7b) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5cab866f8818d65f5cfe) {
+TEST_F(GenEmitterTest, test10d18ea5e198359e218b) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -8940,7 +9116,7 @@ TEST_F(GenEmitterTest, test5cab866f8818d65f5cfe) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6c2133597d99c14720d0) {
+TEST_F(GenEmitterTest, test56218e461d6be3a18500) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -8963,7 +9139,7 @@ TEST_F(GenEmitterTest, test6c2133597d99c14720d0) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test243b3bb00a830d4d7c5c) {
+TEST_F(GenEmitterTest, test9acfd124b72471e34bbd) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -8986,7 +9162,7 @@ TEST_F(GenEmitterTest, test243b3bb00a830d4d7c5c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7fcdb9d71a9717069b9f) {
+TEST_F(GenEmitterTest, test2a1c3780a4dfaa43646e) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9009,7 +9185,7 @@ TEST_F(GenEmitterTest, test7fcdb9d71a9717069b9f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0ce9909c470ae5b1d3ae) {
+TEST_F(GenEmitterTest, test91e4c547fdab9e8b1c67) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9032,7 +9208,7 @@ TEST_F(GenEmitterTest, test0ce9909c470ae5b1d3ae) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testc077fd929177c75e3072) {
+TEST_F(GenEmitterTest, test3d7e8318208742fe4358) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9055,7 +9231,7 @@ TEST_F(GenEmitterTest, testc077fd929177c75e3072) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3b500af23a2b660e0330) {
+TEST_F(GenEmitterTest, test2e4a92f93d5f9d8c5fed) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -9082,7 +9258,7 @@ TEST_F(GenEmitterTest, test3b500af23a2b660e0330) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6d037fb77412a7b06f24) {
+TEST_F(GenEmitterTest, test9abf5d48ef7c6f2ed8a0) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -9109,7 +9285,7 @@ TEST_F(GenEmitterTest, test6d037fb77412a7b06f24) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testa153abd07d892e352889) {
+TEST_F(GenEmitterTest, testc3428819fe7cfe88cf10) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -9136,7 +9312,7 @@ TEST_F(GenEmitterTest, testa153abd07d892e352889) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf328e682c5d872fbb7fa) {
+TEST_F(GenEmitterTest, test8007ba3728b0fdbb0cb8) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9163,7 +9339,7 @@ TEST_F(GenEmitterTest, testf328e682c5d872fbb7fa) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb59b29e1f0612f8333bf) {
+TEST_F(GenEmitterTest, test6eedc1e3db4ceee9caf6) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9190,7 +9366,7 @@ TEST_F(GenEmitterTest, testb59b29e1f0612f8333bf) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test0d2de653c36fff7e875f) {
+TEST_F(GenEmitterTest, testd892f2048c7066c74b7e) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9217,7 +9393,7 @@ TEST_F(GenEmitterTest, test0d2de653c36fff7e875f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test18454002edb2d8ce5dff) {
+TEST_F(GenEmitterTest, test736430339c2a221b6d89) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9244,7 +9420,7 @@ TEST_F(GenEmitterTest, test18454002edb2d8ce5dff) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test3869b95fb927574c1cfa) {
+TEST_F(GenEmitterTest, test6d51f33adb9324f438d1) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9271,7 +9447,7 @@ TEST_F(GenEmitterTest, test3869b95fb927574c1cfa) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test5f9d2836779171944bd5) {
+TEST_F(GenEmitterTest, test00d50067643ed73a3f7f) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9298,7 +9474,7 @@ TEST_F(GenEmitterTest, test5f9d2836779171944bd5) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test00ca741ed5db71e7197c) {
+TEST_F(GenEmitterTest, test5fc029e9d46151d31a80) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9325,7 +9501,7 @@ TEST_F(GenEmitterTest, test00ca741ed5db71e7197c) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test63b2dee62c4656039c0d) {
+TEST_F(GenEmitterTest, test328542a5a4b65371d2c6) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9352,7 +9528,7 @@ TEST_F(GenEmitterTest, test63b2dee62c4656039c0d) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test6fca12b5bf897f3b933f) {
+TEST_F(GenEmitterTest, testf791a97db1c96e9f16c7) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9379,7 +9555,7 @@ TEST_F(GenEmitterTest, test6fca12b5bf897f3b933f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf047a3a7cd147dc69553) {
+TEST_F(GenEmitterTest, test44ac18a00d604391a169) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -9408,7 +9584,7 @@ TEST_F(GenEmitterTest, testf047a3a7cd147dc69553) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testf191f92a0c15e5624272) {
+TEST_F(GenEmitterTest, teste7ff269f6d95faa06abe) {
   Emitter out;
   out << Comment("comment");
   out << BeginSeq;
@@ -9437,7 +9613,7 @@ TEST_F(GenEmitterTest, testf191f92a0c15e5624272) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test874f18e2970f54d92f34) {
+TEST_F(GenEmitterTest, test8d056d159803415c2c85) {
   Emitter out;
   out << BeginSeq;
   out << Comment("comment");
@@ -9466,7 +9642,7 @@ TEST_F(GenEmitterTest, test874f18e2970f54d92f34) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7e94b62bc08fb63b7062) {
+TEST_F(GenEmitterTest, test47ef0ff3da945fda8680) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9495,7 +9671,7 @@ TEST_F(GenEmitterTest, test7e94b62bc08fb63b7062) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test50d40871122b935a2937) {
+TEST_F(GenEmitterTest, test1f981851e5a72a91614b) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9524,7 +9700,7 @@ TEST_F(GenEmitterTest, test50d40871122b935a2937) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb6a8d9eb931455caa603) {
+TEST_F(GenEmitterTest, test783be6c196784ca7ff30) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9553,7 +9729,7 @@ TEST_F(GenEmitterTest, testb6a8d9eb931455caa603) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test2f23bfff4a1d201b1f37) {
+TEST_F(GenEmitterTest, test217dcab50ef45ac6d344) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9582,7 +9758,7 @@ TEST_F(GenEmitterTest, test2f23bfff4a1d201b1f37) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test41ef23e040f0db2c06c2) {
+TEST_F(GenEmitterTest, testec71f98bc646a34c9327) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9611,7 +9787,7 @@ TEST_F(GenEmitterTest, test41ef23e040f0db2c06c2) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, testb8c7b55b5607df008fbe) {
+TEST_F(GenEmitterTest, test04595ac13c58c0740048) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9640,7 +9816,7 @@ TEST_F(GenEmitterTest, testb8c7b55b5607df008fbe) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test21daf188179c0c0c7bef) {
+TEST_F(GenEmitterTest, test18d724e2ff0f869e9947) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9669,7 +9845,7 @@ TEST_F(GenEmitterTest, test21daf188179c0c0c7bef) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8ca560e6b97325079e8f) {
+TEST_F(GenEmitterTest, test9f80798acafd4cfec0aa) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9698,7 +9874,7 @@ TEST_F(GenEmitterTest, test8ca560e6b97325079e8f) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test7fe0ce86b72c7c1ed7de) {
+TEST_F(GenEmitterTest, testeabc051f6366e0275232) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9727,7 +9903,7 @@ TEST_F(GenEmitterTest, test7fe0ce86b72c7c1ed7de) {
   Parse(out.c_str());
 }
 
-TEST_F(GenEmitterTest, test8cc25a6c1aea65ad7de1) {
+TEST_F(GenEmitterTest, teste33a98fb01ea45cc91dc) {
   Emitter out;
   out << BeginSeq;
   out << BeginMap;
@@ -9755,5 +9931,6 @@ TEST_F(GenEmitterTest, test8cc25a6c1aea65ad7de1) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
-}
-}
+
+}  // namespace
+}  // namespace YAML
