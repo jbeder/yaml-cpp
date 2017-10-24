@@ -3,7 +3,7 @@
 ###
 ## Due to Mac OSX we need to keep compatibility with CMake 2.6
 # see http://www.cmake.org/Wiki/CMake_Policies
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 # see http://www.cmake.org/cmake/help/cmake-2-8-docs.html#policy:CMP0012
 if(POLICY CMP0012)
 	cmake_policy(SET CMP0012 OLD)
@@ -12,24 +12,19 @@ endif()
 if(POLICY CMP0015)
 	cmake_policy(SET CMP0015 OLD)
 endif()
-# see https://cmake.org/cmake/help/latest/policy/CMP0042.html
-if(POLICY CMP0042)
-	# Enable MACOSX_RPATH by default.
-	cmake_policy(SET CMP0042 NEW)
-endif()
 
-include(CheckCXXCompilerFlag)
-
+include(CMakePackageConfigHelpers)
 
 ###
 ### Project settings
 ###
-project(YAML_CPP)
+project(yaml-cpp)
 
-set(YAML_CPP_VERSION_MAJOR "0")
-set(YAML_CPP_VERSION_MINOR "5")
-set(YAML_CPP_VERSION_PATCH "3")
-set(YAML_CPP_VERSION "${YAML_CPP_VERSION_MAJOR}.${YAML_CPP_VERSION_MINOR}.${YAML_CPP_VERSION_PATCH}")
+include(CheckCXXCompilerFlag) 
+set(yaml-cpp_VERSION_MAJOR "0")
+set(yaml-cpp_VERSION_MINOR "5")
+set(yaml-cpp_VERSION_PATCH "3")
+set(yaml-cpp_VERSION "${yaml-cpp_VERSION_MAJOR}.${yaml-cpp_VERSION_MINOR}.${yaml-cpp_VERSION_PATCH}")
 
 enable_testing()
 
@@ -115,8 +110,8 @@ if(VERBOSE)
 	message(STATUS "contrib_private_headers: ${contrib_private_headers}")
 endif()
 
-include_directories(${YAML_CPP_SOURCE_DIR}/src)
-include_directories(${YAML_CPP_SOURCE_DIR}/include)
+include_directories(${yaml-cpp_SOURCE_DIR}/src)
+include_directories(${yaml-cpp_SOURCE_DIR}/include)
 
 
 
@@ -153,9 +148,9 @@ if(WIN32)
 endif()
 
 # GCC or Clang or Intel Compiler specialities
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
-   CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
-   CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR
+   "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" OR
+   "${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
 
 	### General stuff
 	if(WIN32)
@@ -176,17 +171,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 	#
 	set(GCC_EXTRA_OPTIONS "")
 	#
-	if(BUILD_SHARED_LIBS)
-		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} -fPIC")
-	endif()
-	#
 	set(FLAG_TESTED "-Wextra")
 	check_cxx_compiler_flag(${FLAG_TESTED} FLAG_WEXTRA)
 	if(FLAG_WEXTRA)
 		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} ${FLAG_TESTED}")
 	endif()
 	#
-	set(yaml_cxx_flags "-Wall ${GCC_EXTRA_OPTIONS} -pedantic -Wno-long-long -std=c++11 ${yaml_cxx_flags}")
+	set(yaml_cxx_flags "-Wall ${GCC_EXTRA_OPTIONS} -pedantic -Wno-long-long ${yaml_cxx_flags}")
 
 	### Make specific
 	if(${CMAKE_BUILD_TOOL} MATCHES make OR ${CMAKE_BUILD_TOOL} MATCHES gmake)
@@ -224,14 +215,13 @@ if(MSVC)
 		endif()
 
 		# correct linker options
-		foreach(flag_var  CMAKE_C_FLAGS  CMAKE_CXX_FLAGS)
+		foreach(flag_var  yaml_c_flags  yaml_cxx_flags)
 			foreach(config_name  ""  DEBUG  RELEASE  MINSIZEREL  RELWITHDEBINFO)
 				set(var_name "${flag_var}")
 				if(NOT "${config_name}" STREQUAL "")
 					set(var_name "${var_name}_${config_name}")
 				endif()
 				string(REPLACE "/MD" "${LIB_RT_OPTION}" ${var_name} "${${var_name}}")
-				set(${var_name} "${${var_name}}" CACHE STRING "" FORCE)
 			endforeach()
 		endforeach()
 	endif()
@@ -264,15 +254,15 @@ else()
 	set(_library_dir lib)
 endif()
 
-set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/include)
+set(INCLUDE_INSTALL_ROOT_DIR include)
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${_library_dir}${LIB_SUFFIX}")
+set(LIB_INSTALL_DIR "${_library_dir}${LIB_SUFFIX}")
 
 set(_INSTALL_DESTINATIONS
-	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-	ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}"
+	ARCHIVE DESTINATION "lib${LIB_SUFFIX}"
 )
 
 
@@ -285,8 +275,8 @@ set_target_properties(yaml-cpp PROPERTIES
 )
 
 set_target_properties(yaml-cpp PROPERTIES
-	VERSION "${YAML_CPP_VERSION}"
-	SOVERSION "${YAML_CPP_VERSION_MAJOR}.${YAML_CPP_VERSION_MINOR}"
+	VERSION "${yaml-cpp_VERSION}"
+	SOVERSION "${yaml-cpp_VERSION_MAJOR}.${yaml-cpp_VERSION_MINOR}"
 	PROJECT_LABEL "yaml-cpp ${LABEL_SUFFIX}"
 )
 
@@ -308,49 +298,58 @@ if(MSVC)
 	endif()
 endif()
 
-install(TARGETS yaml-cpp EXPORT yaml-cpp-targets ${_INSTALL_DESTINATIONS})
-install(
-	DIRECTORY ${header_directory}
-	DESTINATION ${INCLUDE_INSTALL_DIR}
-	FILES_MATCHING PATTERN "*.h"
+set(include_install_dir "include")
+set(lib_install_dir "lib")
+set(config_install_dir "lib/cmake/${PROJECT_NAME}")
+set(config_export_name "${PROJECT_NAME}Config")
+set(targets_export_name "${PROJECT_NAME}Targets")
+set(project_config "${CMAKE_CURRENT_BINARY_DIR}/${config_export_name}.cmake")
+set(version_config "${CMAKE_CURRENT_BINARY_DIR}/${config_export_name}Version.cmake")
+set(namespace "${PROJECT_NAME}::")
+
+
+configure_package_config_file( # Uses target_exports_name
+    "yaml-cpp-config.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${config_install_dir}"
 )
 
-export(
-    TARGETS yaml-cpp
-    FILE "${PROJECT_BINARY_DIR}/yaml-cpp-targets.cmake")
-export(PACKAGE yaml-cpp)
-set(EXPORT_TARGETS yaml-cpp CACHE INTERNAL "export targets")
+write_basic_package_version_file(
+      "${version_config}"
+      VERSION ${yaml-cpp_VERSION}
+      COMPATIBILITY SameMajorVersion
+      )
 
-set(CONFIG_INCLUDE_DIRS "${YAML_CPP_SOURCE_DIR}/include")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake" @ONLY)
 
-if(WIN32 AND NOT CYGWIN)
-	set(INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/CMake)
-else()
-	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/yaml-cpp)
-endif()
 
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
-set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake" @ONLY)
+install(TARGETS yaml-cpp 
+    EXPORT "${targets_export_name}"
+    INCLUDES DESTINATION "${include_install_dir}"
+    LIBRARY DESTINATION ${lib_install_dir}
+    ARCHIVE DESTINATION ${lib_install_dir}
+    PUBLIC_HEADER DESTINATION ${include_install_dir}
+    )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config-version.cmake.in
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake" @ONLY)
+install(
+    EXPORT "${targets_export_name}"
+    NAMESPACE "${namespace}"
+    DESTINATION "${config_install_dir}"
+    )
+install(
+    FILES "${project_config}" "${version_config}"
+    DESTINATION "${config_install_dir}"
+    )
 
-install(FILES
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake"
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
-	DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
-install(EXPORT yaml-cpp-targets DESTINATION ${INSTALL_CMAKE_DIR})
+install(
+    DIRECTORY include/yaml-cpp
+    DESTINATION include
+    )
 
 if(UNIX)
-	set(PC_FILE ${CMAKE_BINARY_DIR}/yaml-cpp.pc)
-	configure_file("yaml-cpp.pc.cmake" ${PC_FILE} @ONLY)
-	install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    set(PC_FILE ${CMAKE_BINARY_DIR}/yaml-cpp.pc)
+    configure_file("yaml-cpp.pc.cmake" ${PC_FILE} @ONLY)
+    install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif()
-
 
 ###
 ### Extras
