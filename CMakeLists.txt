@@ -258,16 +258,10 @@ endif()
 ###
 ### General install settings
 ###
-if(WIN32)
-	set(_library_dir bin)	# .dll are in PATH, like executables
-else()
-	set(_library_dir lib)
-endif()
-
 set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/include)
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${_library_dir}${LIB_SUFFIX}")
+set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
 
 set(_INSTALL_DESTINATIONS
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
