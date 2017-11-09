@@ -264,15 +264,15 @@ else()
 	set(_library_dir lib)
 endif()
 
-set(INCLUDE_INSTALL_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/include)
+set(INCLUDE_INSTALL_ROOT_DIR include)
 
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_ROOT_DIR}/yaml-cpp)
-set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${_library_dir}${LIB_SUFFIX}")
+set(LIB_INSTALL_DIR ${_library_dir}${LIB_SUFFIX})
 
 set(_INSTALL_DESTINATIONS
-	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-	ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}"
+	ARCHIVE DESTINATION "lib${LIB_SUFFIX}"
 )
 
 
@@ -321,18 +321,22 @@ export(
 export(PACKAGE yaml-cpp)
 set(EXPORT_TARGETS yaml-cpp CACHE INTERNAL "export targets")
 
+if(NOT CMAKE_VERSION VERSION_LESS 2.8.11)
+  # Make yaml-cpp-config.cmake usable from the build tree and relocatable. CMake
+  # users below version 2.8.11 are out of luck.
+  target_include_directories(yaml-cpp PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+endif(NOT CMAKE_VERSION VERSION_LESS 2.8.11)
+
 set(CONFIG_INCLUDE_DIRS "${YAML_CPP_SOURCE_DIR}/include")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
 	"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake" @ONLY)
 
-if(WIN32 AND NOT CYGWIN)
-	set(INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/CMake)
-else()
-	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/yaml-cpp)
-endif()
+set(INSTALL_CMAKE_DIR lib${LIB_SUFFIX}/cmake/yaml-cpp)
 
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INCLUDE_INSTALL_ROOT_DIR}")
-set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/../../../include")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
 	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake" @ONLY)
 
