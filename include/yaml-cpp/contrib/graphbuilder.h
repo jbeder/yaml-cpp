@@ -19,6 +19,8 @@ class Parser;
 //   functions.
 class GraphBuilderInterface {
  public:
+  virtual ~GraphBuilderInterface() = 0;
+
   // Create and return a new node with a null value.
   virtual void *NewNull(const Mark &mark, void *pParentNode) = 0;
 
