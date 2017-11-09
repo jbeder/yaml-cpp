@@ -38,7 +38,8 @@ enable_testing()
 ### Project options
 ###
 ## Project stuff
-option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" ON)
+option(YAML_CPP_BUILD_TESTS "Enable testing" ON)
+option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
 
 ## Build options
@@ -355,8 +356,10 @@ endif()
 ###
 ### Extras
 ###
-if(YAML_CPP_BUILD_TOOLS)
+if(YAML_CPP_BUILD_TESTS)
 	add_subdirectory(test)
+endif()
+if(YAML_CPP_BUILD_TOOLS)
 	add_subdirectory(util)
 endif()
 
