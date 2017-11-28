@@ -103,7 +103,7 @@ struct AssertTypeEq<T, T> {
 // template Types.  This allows us to simulate variadic templates
 // (e.g. Types<int>, Type<int, double>, and etc), which C++ doesn't
 // support directly.
-struct None {};
+struct NoneType {};
 
 // The following family of struct and struct templates are used to
 // represent type lists.  In particular, TypesN<T1, T2, ..., TN>
@@ -144,7 +144,7 @@ struct Types$i {
 // easier to write, but generates horrible messages when there is a
 // compiler error, as gcc insists on printing out each template
 // argument, even if it has the default value (this means Types<int>
-// will appear as Types<int, None, None, ..., None> in the compiler
+// will appear as Types<int, NoneType, None, ..., NoneType> in the compiler
 // errors).
 //
 // Our solution is to combine the best part of the two approaches: a
@@ -154,13 +154,13 @@ struct Types$i {
 // Types template.
 
 $range i 1..n
-template <$for i, [[typename T$i = internal::None]]>
+template <$for i, [[typename T$i = internal::NoneType]]>
 struct Types {
   typedef internal::Types$n<$for i, [[T$i]]> type;
 };
 
 template <>
-struct Types<$for i, [[internal::None]]> {
+struct Types<$for i, [[internal::NoneType]]> {
   typedef internal::Types0 type;
 };
 
@@ -169,7 +169,7 @@ $for i [[
 $range j 1..i
 $range k i+1..n
 template <$for j, [[typename T$j]]>
-struct Types<$for j, [[T$j]]$for k[[, internal::None]]> {
+struct Types<$for j, [[T$j]]$for k[[, internal::NoneType]]> {
   typedef internal::Types$i<$for j, [[T$j]]> type;
 };
 
