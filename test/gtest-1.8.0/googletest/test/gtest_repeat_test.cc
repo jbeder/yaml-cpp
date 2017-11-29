@@ -181,7 +181,7 @@ void TestRepeat(int repeat) {
 // set of tests.
 void TestRepeatWithEmptyFilter(int repeat) {
   GTEST_FLAG(repeat) = repeat;
-  GTEST_FLAG(filter) = "NoneType";
+  GTEST_FLAG(filter) = "None";
 
   ResetCounts();
   GTEST_CHECK_INT_EQ_(0, RUN_ALL_TESTS());
