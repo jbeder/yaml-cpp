@@ -20,9 +20,8 @@ Product {
         "-Wextra",
         "-Wno-unused-parameter",
     ]
-    cpp.systemIncludePaths: [
-        "include",
-    ]
+    cpp.includePaths: ["include"]
+
     files: [
         "include/yaml-cpp/*.h",
         "include/yaml-cpp/contrib/*.h",
@@ -33,6 +32,6 @@ Product {
     ]
     Export {
         Depends { name: "cpp" }
-        cpp.systemIncludePaths: product.cpp.systemIncludePaths
+        cpp.systemIncludePaths: ["include"]
     }
 }
