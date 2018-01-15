@@ -16,9 +16,11 @@ yaml-cpp uses [CMake](http://www.cmake.org) to support cross-platform building. 
 
 **Note:** If you don't use the provided installer for your platform, make sure that you add CMake's bin folder to your path.
 
-2. Navigate into the source directory, and type:
+2. clone this repository, navigate into the source directory, and make a `build` directory and navigate into it:
 
 ```
+git clone git@github.com:jbeder/yaml-cpp.git
+cd yaml-cpp
 mkdir build
 cd build
 ```
