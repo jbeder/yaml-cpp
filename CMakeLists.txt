@@ -46,8 +46,8 @@ option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
 # --> General
 # see http://www.cmake.org/cmake/help/cmake2.6docs.html#variable:BUILD_SHARED_LIBS
 #     http://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library
-option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
-option(BUILD_STATIC_LIBS "Build Static Libraries" ON)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+option(BUILD_STATIC_LIBS "Build Static Libraries" OFF)
 
 if(NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
     message(FATAL_ERROR "At least one library must be built.")
