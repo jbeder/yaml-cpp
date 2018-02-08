@@ -8,9 +8,11 @@
 #endif
 
 #include <array>
+#include <cmath>
 #include <limits>
 #include <list>
 #include <map>
+#include <regex>
 #include <sstream>
 #include <vector>
 
@@ -24,24 +26,32 @@
 namespace YAML {
 class Binary;
 struct _Null;
-template <typename T>
+template <typename T, typename Enable>
 struct convert;
+
 }  // namespace YAML
 
 namespace YAML {
 namespace conversion {
-inline bool IsInfinity(const std::string& input) {
-  return input == ".inf" || input == ".Inf" || input == ".INF" ||
-         input == "+.inf" || input == "+.Inf" || input == "+.INF";
-}
 
-inline bool IsNegativeInfinity(const std::string& input) {
-  return input == "-.inf" || input == "-.Inf" || input == "-.INF";
-}
+static const std::regex re_true("true|True|TRUE");
+static const std::regex re_false("false|False|FALSE");
+static const std::regex re_decimal("[-+]?[0-9]+");
+static const std::regex re_octal("0o[0-7]+");
+static const std::regex re_hex("0x[0-9a-fA-F]+");
+static const std::regex re_float(
+    "[-+]?(\\.[0-9]+|[0-9]+(\\.[0-9]*)?)([eE][-+]?[0-9]+)?");
+static const std::regex re_inf("[-+]?(\\.inf|\\.Inf|\\.INF)");
+static const std::regex re_nan("\\.nan|\\.NaN|\\.NAN");
 
-inline bool IsNaN(const std::string& input) {
-  return input == ".nan" || input == ".NaN" || input == ".NAN";
-}
+template <typename T>
+struct is_character {
+  using value_type = bool;
+  static constexpr bool value =
+      (std::is_same<T, char>::value || std::is_same<T, wchar_t>::value ||
+       std::is_same<T, char16_t>::value || std::is_same<T, char32_t>::value);
+  using type = std::integral_constant<bool, value>;
+};
 }
 
 // Node
@@ -76,7 +86,7 @@ struct convert<const char*> {
 
 template <std::size_t N>
 struct convert<const char[N]> {
-  static Node encode(const char(&rhs)[N]) { return Node(rhs); }
+  static Node encode(const char (&rhs)[N]) { return Node(rhs); }
 };
 
 template <>
@@ -88,70 +98,160 @@ struct convert<_Null> {
   }
 };
 
-#define YAML_DEFINE_CONVERT_STREAMABLE(type, negative_op)                \
-  template <>                                                            \
-  struct convert<type> {                                                 \
-    static Node encode(const type& rhs) {                                \
-      std::stringstream stream;                                          \
-      stream.precision(std::numeric_limits<type>::digits10 + 1);         \
-      stream << rhs;                                                     \
-      return Node(stream.str());                                         \
-    }                                                                    \
-                                                                         \
-    static bool decode(const Node& node, type& rhs) {                    \
-      if (node.Type() != NodeType::Scalar)                               \
-        return false;                                                    \
-      const std::string& input = node.Scalar();                          \
-      std::stringstream stream(input);                                   \
-      stream.unsetf(std::ios::dec);                                      \
-      if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) \
-        return true;                                                     \
-      if (std::numeric_limits<type>::has_infinity) {                     \
-        if (conversion::IsInfinity(input)) {                             \
-          rhs = std::numeric_limits<type>::infinity();                   \
-          return true;                                                   \
-        } else if (conversion::IsNegativeInfinity(input)) {              \
-          rhs = negative_op std::numeric_limits<type>::infinity();       \
-          return true;                                                   \
-        }                                                                \
-      }                                                                  \
-                                                                         \
-      if (std::numeric_limits<type>::has_quiet_NaN &&                    \
-          conversion::IsNaN(input)) {                                    \
-        rhs = std::numeric_limits<type>::quiet_NaN();                    \
-        return true;                                                     \
-      }                                                                  \
-                                                                         \
-      return false;                                                      \
-    }                                                                    \
+// character types
+template <typename type>
+struct convert<type, typename std::enable_if<
+                         conversion::is_character<type>::value>::type> {
+  static Node encode(const type& rhs) { return Node(std::string(1,rhs)); }
+
+  static bool decode(const Node& node, type& rhs) {
+    if (node.Type() != NodeType::Scalar)
+      return false;
+    const std::string& input = node.Scalar();
+    if (input.length() != 1) {
+      return false;
+    }
+    rhs = input[0];
+    return true;
+  }
+};
+
+// signed integral (sans char)
+template <typename type>
+struct convert<
+    type, typename std::enable_if<
+              std::is_integral<type>::value && std::is_signed<type>::value &&
+              !conversion::is_character<type>::value>::type> {
+  static Node encode(const type& rhs) { return Node(std::to_string(rhs)); }
+
+  static bool decode(const Node& node, type& rhs) {
+    if (node.Type() != NodeType::Scalar)
+      return false;
+    const std::string& input = node.Scalar();
+    long long num;
+    if (std::regex_match(input, conversion::re_decimal)) {
+      try {
+        num = std::stoll(input);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else if (std::regex_match(input, conversion::re_octal)) {
+      try {
+        num = std::stoll(input.substr(2), nullptr, 8);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else if (std::regex_match(input, conversion::re_hex)) {
+      try {
+        num = std::stoll(input.substr(2), nullptr, 16);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    if (num > std::numeric_limits<type>::max() ||
+        num < std::numeric_limits<type>::min()) {
+      return false;
+    }
+    rhs = num;
+    return true;
+  }
+};
+
+// unsigned integral (sans char)
+template <typename type>
+struct convert<
+    type, typename std::enable_if<
+              std::is_integral<type>::value && std::is_unsigned<type>::value &&
+              !conversion::is_character<type>::value>::type> {
+  static Node encode(const type& rhs) { return Node(std::to_string(rhs)); }
+
+  static bool decode(const Node& node, type& rhs) {
+    if (node.Type() != NodeType::Scalar)
+      return false;
+    const std::string& input = node.Scalar();
+    unsigned long long num;
+    if (std::regex_match(input, conversion::re_decimal)) {
+      try {
+        num = std::stoull(input);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else if (std::regex_match(input, conversion::re_octal)) {
+      try {
+        num = std::stoull(input.substr(2), nullptr, 8);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else if (std::regex_match(input, conversion::re_hex)) {
+      try {
+        num = std::stoull(input.substr(2), nullptr, 16);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    if (num > std::numeric_limits<type>::max() ||
+        num < std::numeric_limits<type>::min()) {
+      return false;
+    }
+    rhs = num;
+    return true;
+  }
+};
+
+// floating point
+template <typename type>
+struct convert<
+    type, typename std::enable_if<std::is_floating_point<type>::value>::type> {
+  static Node encode(const type& rhs) {
+    if (std::isnan(rhs)) {
+      return Node(".nan");
+    }
+    if (std::isinf(rhs)) {
+      if (std::signbit(rhs)) {
+        return Node("-.inf");
+      }
+      return Node(".inf");
+    }
+    std::stringstream stream;
+    stream.precision(std::numeric_limits<type>::max_digits10);
+    stream << rhs;
+    auto str = stream.str();
+    if (std::regex_match(str, conversion::re_decimal)) {
+      return Node(str + ".");  // Disambiguate float from int
+    }
+    return Node(str);
   }
 
-#define YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(type) \
-  YAML_DEFINE_CONVERT_STREAMABLE(type, -)
-
-#define YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(type) \
-  YAML_DEFINE_CONVERT_STREAMABLE(type, +)
-
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(int);
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(short);
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(long);
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(long long);
-YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned);
-YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned short);
-YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned long);
-YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned long long);
-
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(char);
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(signed char);
-YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned char);
-
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(float);
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(double);
-YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(long double);
-
-#undef YAML_DEFINE_CONVERT_STREAMABLE_SIGNED
-#undef YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED
-#undef YAML_DEFINE_CONVERT_STREAMABLE
+  static bool decode(const Node& node, type& rhs) {
+    if (node.Type() != NodeType::Scalar)
+      return false;
+    const std::string& input = node.Scalar();
+    long double num;
+    if (std::regex_match(input, conversion::re_float)) {
+      try {
+        num = std::stold(input);
+      } catch (const std::out_of_range&) {
+        return false;
+      }
+    } else if (std::regex_match(input, conversion::re_inf)) {
+      if (input[0] == '-') {
+        num = -std::numeric_limits<long double>::infinity();
+      } else {
+        num = std::numeric_limits<long double>::infinity();
+      }
+    } else if (std::regex_match(input, conversion::re_nan)) {
+      num = std::numeric_limits<long double>::quiet_NaN();
+    } else {
+      return false;
+    }
+    rhs = num;
+    return true;
+  }
+};
 
 // bool
 template <>

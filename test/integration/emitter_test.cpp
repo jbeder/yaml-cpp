@@ -904,7 +904,7 @@ TEST_F(EmitterTest, DefaultPrecision) {
   out << 1.234f;
   out << 3.14159265358979;
   out << EndSeq;
-  ExpectEmit("- 1.234\n- 3.14159265358979");
+  ExpectEmit("- 1.23399997\n- 3.14159265358979");
 }
 
 TEST_F(EmitterTest, SetPrecision) {
