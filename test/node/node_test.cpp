@@ -1,10 +1,10 @@
 #include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/emit.h"
-#include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/convert.h"
-#include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/impl.h"
+#include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/node/node.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -211,6 +211,20 @@ TEST(NodeTest, StdVector) {
   EXPECT_EQ(primes, node["primes"].as<std::vector<int>>());
 }
 
+TEST(NodeTest, StdDeque) {
+  std::deque<int> primes;
+  primes.push_back(2);
+  primes.push_back(3);
+  primes.push_back(5);
+  primes.push_back(7);
+  primes.push_back(11);
+  primes.push_back(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<std::deque<int>>());
+}
+
 TEST(NodeTest, StdList) {
   std::list<int> primes;
   primes.push_back(2);
@@ -223,6 +237,20 @@ TEST(NodeTest, StdList) {
   Node node;
   node["primes"] = primes;
   EXPECT_EQ(primes, node["primes"].as<std::list<int>>());
+}
+
+TEST(NodeTest, StdForwardList) {
+  std::forward_list<int> primes;
+  primes.push_front(13);
+  primes.push_front(11);
+  primes.push_front(7);
+  primes.push_front(5);
+  primes.push_front(3);
+  primes.push_front(2);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<std::forward_list<int>>());
 }
 
 TEST(NodeTest, StdMap) {
@@ -239,6 +267,291 @@ TEST(NodeTest, StdMap) {
   EXPECT_EQ(squares, actualSquares);
 }
 
+TEST(NodeTest, StdUnorderedMap) {
+  std::unordered_map<int, int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  const auto actualSquares = node["squares"].as<std::unordered_map<int, int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdSet) {
+  std::set<int> primes;
+  primes.insert(2);
+  primes.insert(3);
+  primes.insert(5);
+  primes.insert(7);
+  primes.insert(11);
+  primes.insert(13);
+
+  Node node;
+  node["primes"] = primes;
+  const auto actualPrimes = node["primes"].as<std::set<int>>();
+  EXPECT_EQ(primes, actualPrimes);
+}
+
+TEST(NodeTest, StdUnorderedSet) {
+  std::unordered_set<int> primes;
+  primes.insert(0);
+  primes.insert(1);
+  primes.insert(4);
+  primes.insert(9);
+  primes.insert(16);
+
+  Node node;
+  node["primes"] = primes;
+  const auto actualPrimes = node["primes"].as<std::unordered_set<int>>();
+  EXPECT_EQ(primes, actualPrimes);
+}
+
+TEST(NodeTest, StdBitset) {
+  std::bitset<8> bits;
+  bits.set(0, true);
+  bits.set(1, true);
+  bits.set(2, false);
+  bits.set(3, true);
+  bits.set(4, true);
+  bits.set(5, false);
+  bits.set(6, false);
+  bits.set(7, false);
+
+  Node node;
+  node["bits"] = bits;
+  const auto actual = node["bits"].as<std::bitset<8>>();
+  EXPECT_EQ(bits, actual);
+}
+
+TEST(NodeTest, StdBitsetWrongSize) {
+  std::bitset<8> bits;
+  bits.set(0, true);
+  bits.set(1, true);
+  bits.set(2, false);
+  bits.set(3, true);
+  bits.set(4, true);
+  bits.set(5, false);
+  bits.set(6, false);
+  bits.set(7, false);
+
+  Node node;
+  node["bits"] = bits;
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<1>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<2>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<3>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<4>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<5>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<6>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<7>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node["bits"].as<std::bitset<9>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+}
+
+TEST(NodeTest, StdBitsetWrongRepresentation) {
+  const std::string representation =
+      "0011"
+      "1000"
+      "1101"
+      "x000";  // 16 bits, note the wrong character 'x' here
+  Node node;
+  node["not_really_bits"] = representation;
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node["not_really_bits"].as<std::bitset<16>>()),
+      ErrorMsg::BAD_CONVERSION);
+}
+
+#define TEST_FROM_TO(TESTNAME, FROM, TO)                                      \
+  TEST(NodeTest, TESTNAME) {                                                  \
+    const std::FROM primes = {{2, 3, 5, 7, 11, 13}};                          \
+    std::size_t count0 = std::distance(std::begin(primes), std::end(primes)); \
+    const Node node(primes);                                                  \
+    const auto decoded = node.as<std::TO>();                                  \
+    auto iter0 = primes.begin();                                              \
+    auto iter1 = decoded.begin();                                             \
+    std::size_t count1 = 0;                                                   \
+    while (iter0 != primes.end() && iter1 != decoded.end()) {                 \
+      EXPECT_EQ(*iter0, *iter1);                                              \
+      ++iter0;                                                                \
+      ++iter1;                                                                \
+      ++count1;                                                               \
+    }                                                                         \
+    EXPECT_EQ(count0, count1);                                                \
+    EXPECT_THROW_REPRESENTATION_EXCEPTION((node.as<std::map<int, int>>()),    \
+                                          ErrorMsg::BAD_CONVERSION);          \
+  }
+
+// needed because the comma would otherwise be seen as the start of a new macro
+// argument.
+#define ARRAY_TYPE array<int, 6>
+
+TEST_FROM_TO(StdFromVectorToDeque, vector<int>, deque<int>);
+TEST_FROM_TO(StdFromVectorToList, vector<int>, list<int>);
+TEST_FROM_TO(StdFromVectorToForwardList, vector<int>, forward_list<int>);
+TEST_FROM_TO(StdFromVectorToArray, vector<int>, ARRAY_TYPE);
+
+TEST_FROM_TO(StdFromDequeToVector, deque<int>, vector<int>);
+TEST_FROM_TO(StdFromDequeToList, deque<int>, list<int>);
+TEST_FROM_TO(StdFromDequeToForwardList, deque<int>, forward_list<int>);
+TEST_FROM_TO(StdFromDequeToArray, deque<int>, ARRAY_TYPE);
+
+TEST_FROM_TO(StdFromListToVector, list<int>, vector<int>);
+TEST_FROM_TO(StdFromListToDeque, list<int>, deque<int>);
+TEST_FROM_TO(StdFromListToForwardList, list<int>, forward_list<int>);
+TEST_FROM_TO(StdFromListToArray, list<int>, ARRAY_TYPE);
+
+TEST_FROM_TO(StdFromForwardListToVector, forward_list<int>, vector<int>);
+TEST_FROM_TO(StdFromForwardListToDeque, forward_list<int>, deque<int>);
+TEST_FROM_TO(StdFromForwardListToList, forward_list<int>, list<int>);
+TEST_FROM_TO(StdFromForwardListToArray, forward_list<int>, ARRAY_TYPE);
+
+TEST_FROM_TO(StdFromArrayToVector, ARRAY_TYPE, vector<int>);
+TEST_FROM_TO(StdFromArrayToDeque, ARRAY_TYPE, deque<int>);
+TEST_FROM_TO(StdFromArrayToList, ARRAY_TYPE, list<int>);
+TEST_FROM_TO(StdFromArrayToForwardList, ARRAY_TYPE, forward_list<int>);
+
+#undef ARRAY_TYPE
+#undef TEST_FROM_TO
+
+TEST(NodeTest, SequenceWithDuplicatesCanBeParsedAsSet) {
+
+  const std::vector<int> withDuplicates{1, 5, 3, 6, 4, 7, 5, 3, 3, 4, 5,
+                                        5, 3, 2, 7, 8, 9, 9, 9, 5, 2, 0};
+
+  const auto node = Node(withDuplicates);
+
+  // should succeed -- an std::set is considered a yaml sequence
+  const auto withoutDuplicatesAndSorted = node.as<std::set<int>>();
+  EXPECT_EQ(withoutDuplicatesAndSorted.size(), 10);
+  std::size_t i = 0;
+  for (const auto digit : withoutDuplicatesAndSorted) {
+    EXPECT_EQ(digit, i);
+    ++i;
+  }
+  EXPECT_EQ(i, 10);
+}
+
+TEST(NodeTest, SequenceWithDuplicatesCanBeParsedAsUnorderedSet) {
+
+  const std::vector<int> withDuplicates{1, 5, 3, 6, 4, 7, 5, 3, 3, 4, 5,
+                                        5, 3, 2, 7, 8, 9, 9, 9, 5, 2, 0};
+
+  const auto node = Node(withDuplicates);
+
+  // should succeed -- an std::unordered_set is considered a yaml sequence
+  const auto withoutDuplicates = node.as<std::unordered_set<int>>();
+  EXPECT_EQ(withoutDuplicates.size(), 10);
+  int occurences[10];
+  std::fill(std::begin(occurences), std::end(occurences), 0);
+  for (const auto digit : withoutDuplicates) {
+    ++occurences[digit];
+  }
+  for (std::size_t i = 0; i < 10; ++i)
+    EXPECT_EQ(1, occurences[i]);
+}
+
+TEST(NodeTest, StdFromMapToUnorderedMap) {
+  std::map<std::string, std::vector<std::string>> typeSafeTravisFile{
+      {"language", {"c++"}},
+      {"os", {"linux", "osx"}},
+      {"compiler", {"clang", "gcc"}},
+      {"before_install", {"do some stuff", "do some more stuff"}},
+      {"before_script", {"mkdir build", "cd build", "cmake .."}},
+      {"script", {"make", "test/run-tests"}}};
+
+  const auto node = Node(typeSafeTravisFile);
+
+  // should succeed -- precisely two values in the sequence
+  const auto os = node["os"].as<std::pair<std::string, std::string>>();
+  EXPECT_EQ(os.first, "linux");
+  EXPECT_EQ(os.second, "osx");
+
+  // should succeed -- yaml doesn't know the difference between ordered and
+  // unordered.
+  using T = std::unordered_map<std::string, std::vector<std::string>>;
+  EXPECT_THAT(node.as<T>(),
+              testing::UnorderedElementsAreArray(typeSafeTravisFile.begin(),
+                                                 typeSafeTravisFile.end()));
+
+  // should fail -- a yaml map is not a yaml sequence
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::vector<std::pair<std::string, std::vector<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::deque<std::pair<std::string, std::deque<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::list<std::pair<std::string, std::list<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::forward_list<
+              std::pair<std::string, std::forward_list<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+}
+
+TEST(NodeTest, StdFromUnorderedMapToMap) {
+  std::unordered_map<std::string, std::vector<std::string>> typeSafeTravisFile{
+      {"language", {"c++"}},
+      {"os", {"linux", "osx"}},
+      {"compiler", {"clang", "gcc"}},
+      {"before_install", {"do some stuff", "do some more stuff"}},
+      {"before_script", {"mkdir build", "cd build", "cmake .."}},
+      {"script", {"make", "test/run-tests"}}};
+
+  const auto node = Node(typeSafeTravisFile);
+
+  // should succeed -- precisely two values in the sequence
+  const auto os = node["os"].as<std::pair<std::string, std::string>>();
+  EXPECT_EQ(os.first, "linux");
+  EXPECT_EQ(os.second, "osx");
+
+  // should succeed -- yaml doesn't know the difference between ordered and
+  // unordered.
+  using T = std::map<std::string, std::vector<std::string>>;
+  EXPECT_THAT(node.as<T>(),
+              testing::UnorderedElementsAreArray(typeSafeTravisFile.begin(),
+                                                 typeSafeTravisFile.end()));
+
+  // should fail -- a yaml map is not a yaml sequence
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::vector<std::pair<std::string, std::vector<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::deque<std::pair<std::string, std::deque<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::list<std::pair<std::string, std::list<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+
+  EXPECT_THROW_REPRESENTATION_EXCEPTION(
+      (node.as<  // looks structurally somewhat like a map
+          std::forward_list<
+              std::pair<std::string, std::forward_list<std::string>>>>()),
+      ErrorMsg::BAD_CONVERSION);
+}
+
 TEST(NodeTest, StdPair) {
   std::pair<int, std::string> p;
   p.first = 5;
@@ -249,6 +562,86 @@ TEST(NodeTest, StdPair) {
   std::pair<int, std::string> actualP =
       node["pair"].as<std::pair<int, std::string>>();
   EXPECT_EQ(p, actualP);
+}
+
+TEST(NodeTest, StdPairFailure) {
+  std::vector<int> triple{1, 2, 3};
+  const auto node = Node(triple);
+
+  // should fail -- an std::pair needs a sequence of length exactly 2, while
+  // the Node holds a sequence of length exactly 3.
+  EXPECT_THROW_REPRESENTATION_EXCEPTION((node.as<std::pair<int, int>>()),
+                                        ErrorMsg::BAD_CONVERSION);
+}
+
+TEST(NodeTest, StdTupleSize0) {
+  const auto expected = std::tuple<>();
+  const auto node = Node(expected);
+  const auto actual = node.as<std::tuple<>>();
+  EXPECT_EQ(expected, actual);
+  EXPECT_EQ(true, node.IsNull());
+}
+
+TEST(NodeTest, StdTupleSize1) {
+  const auto expected = std::make_tuple(42);
+  const auto node = Node(expected);
+  const auto actual = node.as<std::remove_cv<decltype(expected)>::type>();
+  EXPECT_EQ(expected, actual);
+
+  // should succeed -- tuple is realized as a yaml sequence
+  const auto vec = node.as<std::vector<int>>();
+  EXPECT_EQ(std::get<0>(expected), vec[0]);
+}
+
+TEST(NodeTest, StdTupleSize2) {
+  const auto expected = std::make_tuple(42, 3.141592f);
+  const auto node = Node(expected);
+  const auto actual = node.as<std::remove_cv<decltype(expected)>::type>();
+  EXPECT_EQ(expected, actual);
+
+  // should succeed -- tuple is realized as a yaml sequence
+  const auto vec = node.as<std::vector<float>>();
+  EXPECT_EQ(std::get<0>(expected), vec[0]);
+  EXPECT_EQ(std::get<1>(expected), vec[1]);
+
+  // should succeed -- can also be a pair in this case
+  const auto pair = node.as<std::pair<int, float>>();
+  EXPECT_EQ(std::get<0>(expected), pair.first);
+  EXPECT_EQ(std::get<1>(expected), pair.second);
+}
+
+TEST(NodeTest, StdTupleSize3) {
+  const auto expected = std::make_tuple(42, 3.141592f, std::string("hello"));
+  const auto node = Node(expected);
+  const auto actual = node.as<std::remove_cv<decltype(expected)>::type>();
+  EXPECT_EQ(expected, actual);
+}
+
+TEST(NodeTest, StdTupleSize4) {
+  const auto expected = std::make_tuple(42, 3.141592f, std::string("hello"),
+                                        std::string("world"));
+  const auto node = Node(expected);
+  const auto actual = node.as<std::remove_cv<decltype(expected)>::type>();
+  EXPECT_EQ(expected, actual);
+}
+
+TEST(NodeTest, StdTupleSize5) {
+  const auto expected =
+      std::make_tuple(42, 3.141592f, std::string("hello"), std::string("world"),
+                      std::vector<int>{2, 3, 5, 7});
+  const auto node = Node(expected);
+  const auto actual = node.as<std::remove_cv<decltype(expected)>::type>();
+  EXPECT_EQ(expected, actual);
+}
+
+TEST(NodeTest, StdTupleSize6) {
+  const auto expected =
+      std::make_tuple(42, 3.141592f, std::string("hello"), std::string("world"),
+                      std::vector<int>{2, 3, 5, 7},
+                      std::map<int, int>{{1, 1}, {2, 4}, {3, 9}, {4, 16}});
+  const auto node = Node(expected);
+  const auto actual = node.as<std::remove_cv<decltype(expected)>::type>();
+  EXPECT_EQ(expected, actual);
 }
 
 TEST(NodeTest, SimpleAlias) {

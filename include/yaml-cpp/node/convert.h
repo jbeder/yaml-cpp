@@ -8,10 +8,19 @@
 #endif
 
 #include <array>
+#include <bitset>
+#include <cassert>
+#include <deque>
+#include <forward_list>
 #include <limits>
 #include <list>
 #include <map>
+#include <set>
 #include <sstream>
+#include <tuple>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 
 #include "yaml-cpp/binary.h"
@@ -76,7 +85,7 @@ struct convert<const char*> {
 
 template <std::size_t N>
 struct convert<const char[N]> {
-  static Node encode(const char(&rhs)[N]) { return Node(rhs); }
+  static Node encode(const char (&rhs)[N]) { return Node(rhs); }
 };
 
 template <>
@@ -161,83 +170,161 @@ struct convert<bool> {
   YAML_CPP_API static bool decode(const Node& node, bool& rhs);
 };
 
-// std::map
-template <typename K, typename V>
-struct convert<std::map<K, V>> {
-  static Node encode(const std::map<K, V>& rhs) {
+// Helper class for converting something which is "sequence-like" to and from a
+// Node.
+template <class T>
+struct convert_as_sequence {
+  static Node encode(const T& sequence) {
+    Node node(NodeType::Sequence);
+    for (const auto& item : sequence) {
+      node.push_back(item);
+    }
+    return node;
+  }
+  static bool decode(const Node& node, T& sequence) {
+    if (!node.IsSequence())
+      return false;
+    sequence.clear();
+    for (const auto& item : node) {
+      sequence.push_back(item.template as<typename T::value_type>());
+    }
+    return true;
+  }
+};
+
+// Helper class for converting something which is "map-like" to and from a Node.
+template <class T, class Key = typename T::key_type,
+          class Value = typename T::mapped_type>
+struct convert_as_map {
+  static Node encode(const T& map) {
     Node node(NodeType::Map);
-    for (typename std::map<K, V>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.force_insert(it->first, it->second);
+    for (const auto& kv : map) {
+      node.force_insert(kv.first, kv.second);
+    }
     return node;
   }
 
-  static bool decode(const Node& node, std::map<K, V>& rhs) {
+  static bool decode(const Node& node, T& map) {
     if (!node.IsMap())
       return false;
+    map.clear();
+    for (const auto& kv : node) {
+// if we're dealing with GCC (note: clang also defines __GNUC__)
+#if defined(__GNUC__)
+#if __GNUC__ < 4
+      // gcc version < 4
+      map.insert(std::make_pair(kv.first.template as<Key>(),
+                                kv.second.template as<Value>()));
+#elif __GNUC__ == 4 && __GNUC_MINOR__ < 8
+      // 4.0 <= gcc version < 4.8
+      map.insert(std::make_pair(kv.first.as<Key>(), kv.second.as<Value>()));
+#else
+      // 4.8 <= gcc version
+      map.emplace(kv.first.as<Key>(), kv.second.as<Value>());
+#endif  // __GNUC__ < 4
+#else
+      // for anything not GCC or clang...
+      // probably some more #ifdef guards are needed for MSVC.
+      map.emplace(kv.first.as<Key>(), kv.second.as<Value>());
+#endif  // defined(__GNUC__)
+    }
+    return true;
+  }
+};
 
-    rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+// Helper class for converting something which is "set-like" to and from a Node.
+// A set is realized as a yaml sequence.
+template <class T>
+struct convert_as_set {
+  static Node encode(const T& set) {
+    Node node(NodeType::Sequence);
+    for (const auto& item : set) {
+      node.push_back(item);
+    }
+    return node;
+  }
+
+  static bool decode(const Node& node, T& set) {
+    if (!node.IsSequence())
+      return false;
+
+    set.clear();
+    for (const auto& item : node) {
+
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs[it->first.template as<K>()] = it->second.template as<V>();
-#else
-      rhs[it->first.as<K>()] = it->second.as<V>();
+      set.insert(item.template as<typename T::value_type>());
+#else  // __GNUC__ is not defined or __GNUC__ >= 4
+      set.insert(item.as<typename T::value_type>());
 #endif
+    }
     return true;
   }
 };
 
 // std::vector
-template <typename T>
-struct convert<std::vector<T>> {
-  static Node encode(const std::vector<T>& rhs) {
-    Node node(NodeType::Sequence);
-    for (typename std::vector<T>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.push_back(*it);
-    return node;
-  }
+template <typename T, class Alloc>
+struct convert<std::vector<T, Alloc>>
+    : public convert_as_sequence<std::vector<T, Alloc>> {};
 
-  static bool decode(const Node& node, std::vector<T>& rhs) {
-    if (!node.IsSequence())
-      return false;
-
-    rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
-#if defined(__GNUC__) && __GNUC__ < 4
-      // workaround for GCC 3:
-      rhs.push_back(it->template as<T>());
-#else
-      rhs.push_back(it->as<T>());
-#endif
-    return true;
-  }
-};
+// std::deque
+template <class T, class Alloc>
+struct convert<std::deque<T, Alloc>>
+    : public convert_as_sequence<std::deque<T, Alloc>> {};
 
 // std::list
-template <typename T>
-struct convert<std::list<T>> {
-  static Node encode(const std::list<T>& rhs) {
+template <typename T, class Alloc>
+struct convert<std::list<T, Alloc>>
+    : public convert_as_sequence<std::list<T, Alloc>> {};
+
+// std::map
+template <class Key, class T, class Compare, class Alloc>
+struct convert<std::map<Key, T, Compare, Alloc>>
+    : public convert_as_map<std::map<Key, T, Compare, Alloc>> {};
+
+// std::unordered_map
+template <class Key, class T, class Hash, class KeyEqual, class Alloc>
+struct convert<std::unordered_map<Key, T, Hash, KeyEqual, Alloc>>
+    : public convert_as_map<std::unordered_map<Key, T, Hash, KeyEqual, Alloc>> {
+};
+
+// std::set
+template <class Key, class Compare, class Alloc>
+struct convert<std::set<Key, Compare, Alloc>>
+    : public convert_as_set<std::set<Key, Compare, Alloc>> {};
+
+// std::unordered_set
+template <class Key, class Hash, class KeyEqual, class Alloc>
+struct convert<std::unordered_set<Key, Hash, KeyEqual, Alloc>>
+    : public convert_as_set<std::unordered_set<Key, Hash, KeyEqual, Alloc>> {};
+
+// std::forward_list
+template <class T, class Alloc>
+struct convert<std::forward_list<T, Alloc>> {
+  static Node encode(const std::forward_list<T, Alloc>& sequence) {
     Node node(NodeType::Sequence);
-    for (typename std::list<T>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.push_back(*it);
+    for (const auto& item : sequence) {
+      node.push_back(item);
+    }
     return node;
   }
 
-  static bool decode(const Node& node, std::list<T>& rhs) {
+  static bool decode(const Node& node, std::forward_list<T, Alloc>& sequence) {
     if (!node.IsSequence())
       return false;
 
-    rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    sequence.clear();
+
+    // Walk the node backwards, because std::forward_list does not have
+    // push_back, only push_front.
+    for (std::size_t i = node.size() - 1; i != (std::size_t)-1; --i) {
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs.push_back(it->template as<T>());
+      sequence.push_front(node[i].template as<T>());
 #else
-      rhs.push_back(it->as<T>());
+      sequence.push_front(node[i].as<T>());
 #endif
+    }
     return true;
   }
 };
@@ -245,15 +332,15 @@ struct convert<std::list<T>> {
 // std::array
 template <typename T, std::size_t N>
 struct convert<std::array<T, N>> {
-  static Node encode(const std::array<T, N>& rhs) {
+  static Node encode(const std::array<T, N>& sequence) {
     Node node(NodeType::Sequence);
-    for (const auto& element : rhs) {
-      node.push_back(element);
+    for (const auto& item : sequence) {
+      node.push_back(item);
     }
     return node;
   }
 
-  static bool decode(const Node& node, std::array<T, N>& rhs) {
+  static bool decode(const Node& node, std::array<T, N>& sequence) {
     if (!isNodeValid(node)) {
       return false;
     }
@@ -261,9 +348,9 @@ struct convert<std::array<T, N>> {
     for (auto i = 0u; i < node.size(); ++i) {
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs[i] = node[i].template as<T>();
+      sequence[i] = node[i].template as<T>();
 #else
-      rhs[i] = node[i].as<T>();
+      sequence[i] = node[i].as<T>();
 #endif
     }
     return true;
@@ -275,34 +362,109 @@ struct convert<std::array<T, N>> {
   }
 };
 
-// std::pair
-template <typename T, typename U>
-struct convert<std::pair<T, U>> {
-  static Node encode(const std::pair<T, U>& rhs) {
+// std::bitset
+template <std::size_t N>
+struct convert<std::bitset<N>> {
+  using value_type = std::bitset<N>;
+
+  static Node encode(const value_type& rhs) {
+    return convert<std::string>::encode(rhs.to_string());
+  }
+
+  static bool decode(const Node& node, value_type& rhs) {
+    std::string representation;
+
+    if (!convert<std::string>::decode(node, representation))
+      return false;
+    if (representation.size() != N)
+      return false;
+    try {
+      // bitset constructor will throw std:invalid_argument if the decoded
+      // string contains characters other than 0 and 1.
+      rhs = value_type(representation);
+    } catch (const std::invalid_argument& /*error*/) {
+      return false;
+    }
+    return true;
+  }
+};
+
+namespace detail {
+
+template <std::size_t Index = 0, typename... Args>
+inline typename std::enable_if<Index == sizeof...(Args), void>::type
+    encode_tuple(Node& /*node*/, const std::tuple<Args...>& /*tup*/) {}
+
+template <std::size_t Index = 0, typename... Args>
+inline typename std::enable_if<Index != sizeof...(Args), void>::type
+    encode_tuple(Node& node, const std::tuple<Args...>& tup) {
+  node.push_back(std::get<Index>(tup));
+  encode_tuple<Index + 1, Args...>(node, tup);
+}
+
+template <std::size_t Index = 0, typename... Args>
+inline typename std::enable_if<Index == sizeof...(Args), void>::type
+    decode_tuple(const Node& /*node*/, std::tuple<Args...>& /*tup*/) {}
+
+template <std::size_t Index = 0, typename... Args>
+inline typename std::enable_if<Index != sizeof...(Args), void>::type
+    decode_tuple(const Node& node, std::tuple<Args...>& tup) {
+  std::get<Index>(tup) =
+      node[Index]
+          .template as<
+              typename std::tuple_element<Index, std::tuple<Args...>>::type>();
+  decode_tuple<Index + 1, Args...>(node, tup);
+}
+
+}  // namespace detail
+
+// std::tuple
+template <typename... Args>
+struct convert<std::tuple<Args...>> {
+  static Node encode(const std::tuple<Args...>& tup) {
+    static_assert(sizeof...(Args) > 0,
+                  "wrong template specialization selected");
     Node node(NodeType::Sequence);
-    node.push_back(rhs.first);
-    node.push_back(rhs.second);
+    detail::encode_tuple(node, tup);
     return node;
   }
 
-  static bool decode(const Node& node, std::pair<T, U>& rhs) {
-    if (!node.IsSequence())
+  static bool decode(const Node& node, std::tuple<Args...>& tup) {
+    static_assert(sizeof...(Args) > 0,
+                  "wrong template specialization selected");
+    if (!node.IsSequence() || node.size() != sizeof...(Args))
       return false;
-    if (node.size() != 2)
-      return false;
+    detail::decode_tuple(node, tup);
+    return true;
+  }
+};
 
-#if defined(__GNUC__) && __GNUC__ < 4
-    // workaround for GCC 3:
-    rhs.first = node[0].template as<T>();
-#else
-    rhs.first = node[0].as<T>();
-#endif
-#if defined(__GNUC__) && __GNUC__ < 4
-    // workaround for GCC 3:
-    rhs.second = node[1].template as<U>();
-#else
-    rhs.second = node[1].as<U>();
-#endif
+// std::tuple -- empty
+template <>
+struct convert<std::tuple<>> {
+  static Node encode(const std::tuple<>& /*tup*/) {
+    return convert<_Null>::encode(Null);
+  }
+  static bool decode(const Node& node, std::tuple<>& /*tup*/) {
+    return convert<_Null>::decode(node, Null);
+  }
+};
+
+// std::pair -- special case of std::tuple
+template <class First, class Second>
+struct convert<std::pair<First, Second>> {
+  static Node encode(const std::pair<First, Second>& tup) {
+    Node node(NodeType::Sequence);
+    node.push_back(std::get<0>(tup));
+    node.push_back(std::get<1>(tup));
+    return node;
+  }
+
+  static bool decode(const Node& node, std::pair<First, Second>& tup) {
+    if (!node.IsSequence() || node.size() != 2)
+      return false;
+    std::get<0>(tup) = node[0].template as<First>();
+    std::get<1>(tup) = node[1].template as<Second>();
     return true;
   }
 };
