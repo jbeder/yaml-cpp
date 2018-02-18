@@ -3,6 +3,24 @@
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 #include "gtest/gtest.h"
 
+// user-defined type for emitter
+struct Foo {
+  Foo() : x(0) {}
+  Foo(int x_, const std::string& bar_) : x(x_), bar(bar_) {}
+
+  int x;
+  std::string bar;
+};
+
+// Provide overload for user-defined type.
+YAML::Emitter& operator<<(YAML::Emitter& out, const Foo& foo) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "x" << YAML::Value << foo.x;
+  out << YAML::Key << "bar" << YAML::Value << foo.bar;
+  out << YAML::EndMap;
+  return out;
+}
+
 namespace YAML {
 namespace {
 
@@ -497,7 +515,6 @@ TEST_F(EmitterTest, ComplexDoc) {
 }
 
 TEST_F(EmitterTest, STLContainers) {
-  out << BeginSeq;
   std::vector<int> primes;
   primes.push_back(2);
   primes.push_back(3);
@@ -505,14 +522,267 @@ TEST_F(EmitterTest, STLContainers) {
   primes.push_back(7);
   primes.push_back(11);
   primes.push_back(13);
-  out << Flow << primes;
+
   std::map<std::string, int> ages;
   ages["Daniel"] = 26;
   ages["Jesse"] = 24;
-  out << ages;
-  out << EndSeq;
 
-  ExpectEmit("- [2, 3, 5, 7, 11, 13]\n- Daniel: 26\n  Jesse: 24");
+  // out << BeginSeq << Flow << primes << ages << EndSeq;
+  // ExpectEmit("- [2, 3, 5, 7, 11, 13]\n- Daniel: 26\n  Jesse: 24");
+
+  const auto primesAndAges = std::make_pair(primes, ages);
+  out << Flow << primesAndAges;  // <-- note recursiveness of `<<`
+  ExpectEmit("[[2, 3, 5, 7, 11, 13], {Daniel: 26, Jesse: 24}]");
+}
+
+TEST_F(EmitterTest, StdSet) {
+  std::set<int> primes;
+  primes.insert(2);
+  primes.insert(3);
+  primes.insert(5);
+  primes.insert(7);
+  primes.insert(11);
+  primes.insert(13);
+  out << Flow << primes;
+  ExpectEmit("[2, 3, 5, 7, 11, 13]");
+}
+
+TEST_F(EmitterTest, NestedSTLContainersPart1) {
+
+  std::vector<std::vector<int>> matrix;
+  matrix.push_back(std::vector<int>{1, 0, 0});
+  matrix.push_back(std::vector<int>{0, 1, 0});
+  matrix.push_back(std::vector<int>{0, 0, 1});
+  out << Block << matrix;
+
+  ExpectEmit(R"(-
+  - 1
+  - 0
+  - 0
+-
+  - 0
+  - 1
+  - 0
+-
+  - 0
+  - 0
+  - 1)");
+}
+
+TEST_F(EmitterTest, NestedSTLContainersPart2) {
+
+  std::map<std::string, std::map<std::string, int>> data;
+  data["zero"] = std::map<std::string, int>{{"john", 0}, {"doe", 1}};
+  data["one"] = std::map<std::string, int>{{"hello", 2}, {"world", 3}};
+  out << data;
+
+  // when we iterate over a map we iterate over the sorted keys.
+  ExpectEmit("one:\n  hello: 2\n  world: 3\nzero:\n  doe: 1\n  john: 0");
+}
+
+TEST_F(EmitterTest, NestedSTLContainersPart3) {
+
+  std::map<std::string, std::pair<std::forward_list<std::bitset<2>>,
+                                  std::vector<std::deque<Foo>>>>
+      data;
+
+  std::bitset<2> bits;
+  bits.set(0, true);
+  bits.set(1, false);
+
+  std::forward_list<std::bitset<2>> thelist;
+  thelist.push_front(bits);
+
+  std::deque<Foo> thedeque;
+  thedeque.push_back(Foo(0, "hello"));
+  thedeque.push_back(Foo(1, "world"));
+
+  std::vector<std::deque<Foo>> thevector;
+  thevector.push_back(thedeque);
+  thedeque[1] = Foo(2, "john");
+  thedeque.push_back(Foo(3, "kate"));
+  thevector.push_back(thedeque);
+
+  data["one"] = std::make_pair(thelist, thevector);
+
+  thelist.clear();
+  bits.set(1, false);
+  thelist.push_front(bits);
+  bits.set(1, true);
+  thelist.push_front(bits);
+
+  thedeque.push_front(Foo(4, "mary"));
+  thedeque.push_front(Foo(5, "bob"));
+  thedeque.push_back(Foo(6, "ellis"));
+
+  thevector.push_back(thedeque);
+
+  data["two"] = std::make_pair(thelist, thevector);
+
+  out << data;
+
+  // something crazy that hopefully nobody will ever use in practise but at
+  // least this works.
+  // NOTE: output seems overly verbose (what with the redundant newlines)
+  ExpectEmit(R"(one:
+  -
+    - 01
+  -
+    -
+      - x: 0
+        bar: hello
+      - x: 1
+        bar: world
+    -
+      - x: 0
+        bar: hello
+      - x: 2
+        bar: john
+      - x: 3
+        bar: kate
+two:
+  -
+    - 11
+    - 01
+  -
+    -
+      - x: 0
+        bar: hello
+      - x: 1
+        bar: world
+    -
+      - x: 0
+        bar: hello
+      - x: 2
+        bar: john
+      - x: 3
+        bar: kate
+    -
+      - x: 5
+        bar: bob
+      - x: 4
+        bar: mary
+      - x: 0
+        bar: hello
+      - x: 2
+        bar: john
+      - x: 3
+        bar: kate
+      - x: 6
+        bar: ellis)");
+}
+
+template <class T>
+class CustomAllocator : public std::allocator<T> {};
+
+TEST_F(EmitterTest, StdVectorCustomAllocator) {
+  std::vector<int, CustomAllocator<int>> primes;
+  primes.push_back(2);
+  primes.push_back(3);
+  primes.push_back(5);
+  primes.push_back(7);
+  primes.push_back(11);
+  primes.push_back(13);
+  out << primes;
+  ExpectEmit("- 2\n- 3\n- 5\n- 7\n- 11\n- 13");
+}
+
+TEST_F(EmitterTest, StdMapCustomAllocator) {
+  std::map<std::string, int, std::less<std::string>,
+           CustomAllocator<std::pair<const std::string, int>>>
+      primes;
+  primes["two"] = 2;
+  primes["three"] = 3;
+  primes["five"] = 5;
+  primes["seven"] = 7;
+  primes["eleven"] = 11;
+  primes["thirteen"] = 13;
+  out << primes;
+
+  // NOTE: map runs through its element sorted.
+  ExpectEmit("eleven: 11\nfive: 5\nseven: 7\nthirteen: 13\nthree: 3\ntwo: 2");
+}
+
+TEST_F(EmitterTest, StdTupleSize0) {
+  out << std::tuple<>();
+  ExpectEmit("~");
+}
+
+TEST_F(EmitterTest, StdTupleSize1) {
+  out << std::make_tuple(42);
+  ExpectEmit("- 42");
+}
+
+TEST_F(EmitterTest, StdTupleSize2) {
+  out << std::make_tuple(42, 3.141592f);
+  ExpectEmit("- 42\n- 3.141592");
+}
+
+TEST_F(EmitterTest, StdTupleSize3) {
+  out << std::make_tuple(42, 3.141592f, "hello");
+  ExpectEmit("- 42\n- 3.141592\n- hello");
+}
+
+TEST_F(EmitterTest, StdTupleSize4) {
+  out << std::make_tuple(42, 3.141592f, "hello", "world");
+  ExpectEmit("- 42\n- 3.141592\n- hello\n- world");
+}
+
+TEST_F(EmitterTest, StdTupleSize5) {
+  out << std::make_tuple(42, 3.141592f, "hello", "world",
+                         std::vector<int>{2, 3, 5, 7});
+  ExpectEmit(
+      R"(- 42
+- 3.141592
+- hello
+- world
+-
+  - 2
+  - 3
+  - 5
+  - 7)");
+}
+
+TEST_F(EmitterTest, StdTupleSize6) {
+  out << std::make_tuple(42, 3.141592f, "hello", "world",
+                         std::vector<int>{2, 3, 5, 7},
+                         std::map<int, int>{{1, 1}, {2, 4}, {3, 9}, {4, 16}});
+
+  ExpectEmit(R"(- 42
+- 3.141592
+- hello
+- world
+-
+  - 2
+  - 3
+  - 5
+  - 7
+- 1: 1
+  2: 4
+  3: 9
+  4: 16)");
+}
+
+TEST_F(EmitterTest, StdTupleSize7) {
+  out << std::make_tuple(
+      42, 3.141592f, "hello", "world", std::vector<int>{2, 3, 5, 7},
+      std::map<int, int>{{1, 1}, {2, 4}, {3, 9}, {4, 16}}, Foo(10, "foo"));
+
+  ExpectEmit(R"(- 42
+- 3.141592
+- hello
+- world
+-
+  - 2
+  - 3
+  - 5
+  - 7
+- 1: 1
+  2: 4
+  3: 9
+  4: 16
+- x: 10
+  bar: foo)");
 }
 
 TEST_F(EmitterTest, SimpleComment) {
@@ -656,22 +926,6 @@ TEST_F(EmitterTest, Unicode) {
 TEST_F(EmitterTest, DoubleQuotedUnicode) {
   out << DoubleQuoted << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
   ExpectEmit("\"\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2\"");
-}
-
-struct Foo {
-  Foo() : x(0) {}
-  Foo(int x_, const std::string& bar_) : x(x_), bar(bar_) {}
-
-  int x;
-  std::string bar;
-};
-
-Emitter& operator<<(Emitter& out, const Foo& foo) {
-  out << BeginMap;
-  out << Key << "x" << Value << foo.x;
-  out << Key << "bar" << Value << foo.bar;
-  out << EndMap;
-  return out;
 }
 
 TEST_F(EmitterTest, UserType) {
