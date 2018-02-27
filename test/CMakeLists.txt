@@ -15,12 +15,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(yaml_test_flags "${yaml_test_flags} -Wno-c99-extensions")
   endif()
-
-  if(CMAKE_COMPILER_IS_GNUCXX)
-    set(yaml_test_flags "${yaml_test_flags} -std=gnu++11")
-  else()
-    set(yaml_test_flags "${yaml_test_flags} -std=c++11")
-  endif()
 endif()
 
 file(GLOB test_headers [a-z_]*.h)
