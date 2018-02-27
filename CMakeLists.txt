@@ -31,8 +31,6 @@ set(YAML_CPP_VERSION_MINOR "6")
 set(YAML_CPP_VERSION_PATCH "0")
 set(YAML_CPP_VERSION "${YAML_CPP_VERSION_MAJOR}.${YAML_CPP_VERSION_MINOR}.${YAML_CPP_VERSION_PATCH}")
 
-enable_testing()
-
 
 ###
 ### Project options
@@ -351,6 +349,7 @@ endif()
 ### Extras
 ###
 if(YAML_CPP_BUILD_TESTS)
+	enable_testing()
 	add_subdirectory(test)
 endif()
 if(YAML_CPP_BUILD_TOOLS)
