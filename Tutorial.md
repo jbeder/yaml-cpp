@@ -1,26 +1,122 @@
 # Introduction #
 
-_The following describes the new API. For the old API, see [HowToParseADocument](HowToParseADocument.md) or [HowToEmitYAML](HowToEmitYAML.md)._
+This is obviously nowhere near a production-grade project setup, but should get you started quickly. This example was tested under macOS 10.12 and Ubuntu 16.04.
 
-A typical example, loading a configuration file, might look like this:
+## Verify Tools are available ##
+
+[cmake](https://cmake.org) must be at least version 2.6.
 
 ```
-YAML::Node config = YAML::LoadFile("config.yaml");
+$ cmake --version
+cmake version 3.10.2
+  ...
+```
 
-if (config["lastLogin"]) {
-  std::cout << "Last logged in: " << config["lastLogin"].as<DateTime>() << "\n";
+## Get the Code ##
+
+```
+$ mkdir -p ~/Temp/yaml-cpp-sample-app && cd ~/Temp/yaml-cpp-sample-app
+$ git clone https://github.com/jbeder/yaml-cpp.git
+  ...
+```
+
+## Create a Sample Project ##
+
+Create a build directory and, using using your favorite editor, create a sample data file in it, e.g.:
+
+```
+$ mkdir build && nano build/sample_data.yaml
+```
+
+`sample_data.yaml`
+
+```
+---
+key_01: some value
+key_02: another value
+```
+
+Create some sample code in the current folder:
+
+`main.cpp`
+
+```
+#include "yaml-cpp/yaml.h"
+#include <fstream>
+#include <iostream>
+
+int main()
+{
+    YAML::Node sample_data = YAML::LoadFile("sample_data.yaml");
+
+    const std::string key_01 = sample_data["key_01"].as<std::string>();
+    const std::string key_02 = sample_data["key_02"].as<std::string>();
+
+    std::cout << "key_01 value: " << key_01 << std::endl;
+    std::cout << "key_02 value: " << key_02 << std::endl;
+
+    sample_data["key_03"] = "yet another value";
+
+    std::ofstream out_file_stream("sample_data.yaml");
+    out_file_stream << sample_data << std::endl;
+
+    return 0;
 }
+```
 
-const std::string username = config["username"].as<std::string>();
-const std::string password = config["password"].as<std::string>();
-login(username, password);
-config["lastLogin"] = getCurrentDateTime();
+`CMakeLists.txt`
 
-std::ofstream fout("config.yaml");
-fout << config;
+```
+cmake_minimum_required(VERSION 2.6)
+set (CMAKE_CXX_STANDARD 11)
+
+project(yaml-cpp-sample-app)
+add_executable(${PROJECT_NAME} "main.cpp")
+
+add_subdirectory(yaml-cpp)
+include_directories(${CMAKE_SOURCE_DIR}/yaml-cpp/include)
+target_link_libraries(${PROJECT_NAME} yaml-cpp)
+```
+
+## Build the Project ##
+
+```
+$ cd build
+$ cmake ..
+    ... (displays two "CMake Deprecation Warnings" about CMP0012 and CMP0015) ...
+$ make
+    ... (builds yaml-cpp, yaml-cpp-test-app, gmock, gtest and a few more targets) ...
+    ... (takes a moment, please be patient) ...
+```
+
+## Run the Application ##
+
+```
+$ ./yaml-cpp-sample-app
+key_01 value: some value
+key_02 value: another value
+```
+
+## Verify Result ##
+
+```
+$ cat sample_data.yaml
+key_01: some value
+key_02: another value
+key_03: yet another value
+```
+
+## Optionally, run the Test Suite ##
+
+```
+$ ./yaml-cpp/test/run-tests
+[==========] Running 900 tests from 12 test cases.
+  ... (loads of test output) ...
 ```
 
 # Basic Parsing and Node Editing #
+
+_The following describes the new API. For the old API, see [HowToParseADocument](HowToParseADocument.md) or [HowToEmitYAML](HowToEmitYAML.md)._
 
 All nodes in a YAML document (including the root) are represented by `YAML::Node`. You can check what kind it is:
 
