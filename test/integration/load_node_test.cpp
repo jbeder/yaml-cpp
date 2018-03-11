@@ -78,6 +78,22 @@ TEST(LoadNodeTest, IterateMap) {
   EXPECT_EQ(3, i);
 }
 
+TEST(LoadNodeTest, AliasMultipleAssign) {
+  Node doc = Load("{A: &DEFAULT {str: string, int: 42, float: 3.1415}, B: *DEFAULT}");
+
+  for (YAML::const_iterator it = doc.begin(); it != doc.end(); ++it) {
+    SCOPED_TRACE("group " + it->first.as<std::string>());
+    Node value;
+
+    value = it->second["str"];
+    EXPECT_STREQ(value.as<std::string>().c_str(), "string");
+    value = it->second["float"];
+    EXPECT_EQ(value.as<float>(), 3.1415f);
+    value = it->second["int"];
+    EXPECT_EQ(value.as<int>(), 42);
+  }
+}
+
 #ifdef BOOST_FOREACH
 TEST(LoadNodeTest, ForEach) {
   Node node = Load("[1, 3, 5, 7]");
