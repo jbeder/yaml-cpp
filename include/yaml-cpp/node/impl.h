@@ -239,11 +239,12 @@ inline void Node::Assign(char* rhs) {
 }
 
 inline Node& Node::operator=(const Node& rhs) {
-  if (!m_isValid || !rhs.m_isValid)
-    throw InvalidNode();
-  if (is(rhs))
-    return *this;
-  AssignNode(rhs);
+  AssignData(rhs);
+  return *this;
+}
+
+inline Node& Node::operator=(const NodeAlias& rhs) {
+  AssignNode(rhs.m_node);
   return *this;
 }
 

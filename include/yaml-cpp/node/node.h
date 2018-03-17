@@ -26,6 +26,7 @@ struct iterator_value;
 }  // namespace YAML
 
 namespace YAML {
+class YAML_CPP_API NodeAlias;
 class YAML_CPP_API Node {
  public:
   friend class NodeBuilder;
@@ -81,6 +82,7 @@ class YAML_CPP_API Node {
   template <typename T>
   Node& operator=(const T& rhs);
   Node& operator=(const Node& rhs);
+  Node& operator=(const NodeAlias& rhs);
   void reset(const Node& rhs = Node());
 
   // size/iterator
@@ -132,6 +134,14 @@ class YAML_CPP_API Node {
   bool m_isValid;
   mutable detail::shared_memory_holder m_pMemory;
   mutable detail::node* m_pNode;
+};
+
+class NodeAlias {
+  friend class Node;
+public:
+  NodeAlias(const Node& node) : m_node(node) {}
+private:
+  const Node& m_node;
 };
 
 YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);
