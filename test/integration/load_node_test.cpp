@@ -78,6 +78,36 @@ TEST(LoadNodeTest, IterateMap) {
   EXPECT_EQ(3, i);
 }
 
+TEST(LoadNodeTest, AliasAccess) {
+  const Node doc = Load("{A: &DEFAULT {str: string, int: 42, float: 3.1415}, B: *DEFAULT}");
+  const Node& A = doc["A"];
+  const Node& B = doc["B"];
+
+  // A and B have the same content
+  ASSERT_TRUE(A);
+  ASSERT_TRUE(A.IsMap());
+  ASSERT_TRUE(B);
+  ASSERT_TRUE(B.IsMap());
+
+  // A and B have the same content
+  std::map<std::string, std::string> values = {{"str", "string"}, {"float", "3.1415"}, {"int", "42"}};
+  for (YAML::const_iterator it = A.begin(); it != A.end(); ++it) {
+    const std::string& key = it->first.as<std::string>();
+    SCOPED_TRACE("key " + key);
+    const Node& a = A[key];
+    const Node& b = B[key];
+    EXPECT_TRUE(a);
+    EXPECT_TRUE(b);
+    EXPECT_TRUE(a.IsScalar());
+    EXPECT_TRUE(b.IsScalar());
+
+    // a and b should be identical
+    EXPECT_EQ(a.as<std::string>(), b.as<std::string>());
+    // ... and have the values given in the map
+    EXPECT_EQ(a.as<std::string>(), values[key]);
+  }
+}
+
 #ifdef BOOST_FOREACH
 TEST(LoadNodeTest, ForEach) {
   Node node = Load("[1, 3, 5, 7]");
