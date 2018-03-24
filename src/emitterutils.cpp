@@ -134,12 +134,12 @@ void WriteCodePoint(ostream_wrapper& out, int codePoint) {
   if (codePoint < 0 || codePoint > 0x10FFFF) {
     codePoint = REPLACEMENT_CHARACTER;
   }
-  if (codePoint < 0x7F) {
+  if (codePoint <= 0x7F) {
     out << static_cast<char>(codePoint);
-  } else if (codePoint < 0x7FF) {
+  } else if (codePoint <= 0x7FF) {
     out << static_cast<char>(0xC0 | (codePoint >> 6))
         << static_cast<char>(0x80 | (codePoint & 0x3F));
-  } else if (codePoint < 0xFFFF) {
+  } else if (codePoint <= 0xFFFF) {
     out << static_cast<char>(0xE0 | (codePoint >> 12))
         << static_cast<char>(0x80 | ((codePoint >> 6) & 0x3F))
         << static_cast<char>(0x80 | (codePoint & 0x3F));
