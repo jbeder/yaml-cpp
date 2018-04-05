@@ -19,8 +19,7 @@ namespace detail {
 struct iterator_value;
 
 template <typename V>
-class iterator_base : public std::iterator<std::forward_iterator_tag, V,
-                                           std::ptrdiff_t, V*, V> {
+class iterator_base {
 
  private:
   template <typename>
@@ -37,8 +36,11 @@ class iterator_base : public std::iterator<std::forward_iterator_tag, V,
   };
 
  public:
-  typedef typename iterator_base::value_type value_type;
-
+  using iterator_category = std::forward_iterator_tag;
+  using value_type = V;
+  using difference_type = std::ptrdiff_t;
+  using pointer = V * ;
+  using reference = V;
  public:
   iterator_base() : m_iterator(), m_pMemory() {}
   explicit iterator_base(base_type rhs, shared_memory_holder pMemory)
