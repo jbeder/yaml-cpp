@@ -46,7 +46,12 @@ option(YAML_CPP_BUILD_CONTRIB "Enable contrib stuff in library" ON)
 # --> General
 # see http://www.cmake.org/cmake/help/cmake2.6docs.html#variable:BUILD_SHARED_LIBS
 #     http://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library
-option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+option(BUILD_STATIC_LIBS "Build Static Libraries" OFF)
+
+if(NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
+    message(FATAL_ERROR "At least one library must be built.")
+endif()
 
 # --> Apple
 option(APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
@@ -274,16 +279,24 @@ set(_INSTALL_DESTINATIONS
 ###
 ### Library
 ###
-add_library(yaml-cpp ${library_sources})
-set_target_properties(yaml-cpp PROPERTIES
-  COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
-)
+if(BUILD_SHARED_LIBS)
+    add_library(yaml-cpp SHARED ${library_sources})
+    set_target_properties(yaml-cpp PROPERTIES
+      COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
+    )
 
-set_target_properties(yaml-cpp PROPERTIES
+    set_target_properties(yaml-cpp PROPERTIES
 	VERSION "${YAML_CPP_VERSION}"
 	SOVERSION "${YAML_CPP_VERSION_MAJOR}.${YAML_CPP_VERSION_MINOR}"
 	PROJECT_LABEL "yaml-cpp ${LABEL_SUFFIX}"
-)
+    )
+endif()
+if(BUILD_STATIC_LIBS)
+    add_library(yaml-cpp-static STATIC ${library_sources})
+    set_target_properties(yaml-cpp-static PROPERTIES
+        COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
+        OUTPUT_NAME yaml-cpp)
+endif()
 
 if(IPHONE)
 	set_target_properties(yaml-cpp PROPERTIES
@@ -303,48 +316,70 @@ if(MSVC)
 	endif()
 endif()
 
-install(TARGETS yaml-cpp EXPORT yaml-cpp-targets ${_INSTALL_DESTINATIONS})
 install(
 	DIRECTORY ${header_directory}
 	DESTINATION ${INCLUDE_INSTALL_DIR}
 	FILES_MATCHING PATTERN "*.h"
 )
 
-export(
-    TARGETS yaml-cpp
-    FILE "${PROJECT_BINARY_DIR}/yaml-cpp-targets.cmake")
-export(PACKAGE yaml-cpp)
-set(EXPORT_TARGETS yaml-cpp CACHE INTERNAL "export targets")
+if(BUILD_SHARED_LIBS)
+    install(TARGETS yaml-cpp EXPORT yaml-cpp-targets ${_INSTALL_DESTINATIONS})
+    list(APPEND YAML_TARGETS "yaml-cpp")
+    list(APPEND EXPORT_TARGETS "yaml-cpp-targets")
+endif()
+if(BUILD_STATIC_LIBS)
+    install(TARGETS yaml-cpp-static EXPORT yaml-cpp-static-targets ${_INSTALL_DESTINATIONS})
+    list(APPEND YAML_TARGETS "yaml-cpp-static")
+    list(APPEND EXPORT_TARGETS "yaml-cpp-static-targets")
+endif()
 
-set(CONFIG_INCLUDE_DIRS "${YAML_CPP_SOURCE_DIR}/include")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake" @ONLY)
+foreach(YAML_TARGET ${YAML_TARGETS})
+    export(TARGETS ${YAML_TARGET}
+        FILE "${PROJECT_BINARY_DIR}/${YAML_TARGET}-targets.cmake")
+    export(PACKAGE yaml-cpp)
+    set(EXPORT_TARGETS ${YAML_TARGET} CACHE INTERNAL "export targets")
+    set(CONFIG_INCLUDE_DIRS "${YAML_CPP_SOURCE_DIR}/include")
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
+        "${PROJECT_BINARY_DIR}/${YAML_TARGET}-config.cmake" @ONLY)
+endforeach()
 
+if(NOT INSTALL_CMAKE_DIR)
 if(WIN32 AND NOT CYGWIN)
 	set(INSTALL_CMAKE_DIR CMake)
 else()
-	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/yaml-cpp)
+	set(INSTALL_CMAKE_DIR ${LIB_INSTALL_DIR}/cmake/)
+endif()
 endif()
 
 file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKE_DIR}" "${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_ROOT_DIR}")
 set(CONFIG_INCLUDE_DIRS "\${YAML_CPP_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake" @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config-version.cmake.in
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake" @ONLY)
+foreach(YAML_TARGET ${YAML_TARGETS})
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config.cmake.in
+            "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${YAML_TARGET}-config.cmake" @ONLY)
 
-install(FILES
-	"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/yaml-cpp-config.cmake"
-	"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
-	DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
-install(EXPORT yaml-cpp-targets DESTINATION ${INSTALL_CMAKE_DIR})
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-config-version.cmake.in
+            "${PROJECT_BINARY_DIR}/${YAML_TARGET}-config-version.cmake" @ONLY)
+
+    install(FILES
+            "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${YAML_TARGET}-config.cmake"
+            "${PROJECT_BINARY_DIR}/${YAML_TARGET}-config-version.cmake"
+            DESTINATION "${INSTALL_CMAKE_DIR}${YAML_TARGET}" COMPONENT dev)
+    install(EXPORT ${YAML_TARGET}-targets DESTINATION ${INSTALL_CMAKE_DIR}${YAML_TARGET})
+endforeach()
 
 if(UNIX)
-	set(PC_FILE ${CMAKE_BINARY_DIR}/yaml-cpp.pc)
+if(BUILD_SHARED_LIBS)
+	list(APPEND PC_FILES ${CMAKE_BINARY_DIR}/yaml-cpp.pc)
+endif()
+if(BUILD_STATIC_LIBS)
+	list(APPEND PC_FILES ${CMAKE_BINARY_DIR}/yaml-cpp-static.pc)
+endif()
+foreach(PC_FILE ${PC_FILES})
 	configure_file("yaml-cpp.pc.cmake" ${PC_FILE} @ONLY)
 	install(FILES ${PC_FILE} DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-endif()
+endforeach()
+endif(UNIX)
 
 
 ###
