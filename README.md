@@ -26,7 +26,7 @@ cd build
 3. Run CMake. The basic syntax is:
 
 ```
-cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
+cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ../..
 ```
 
   * The `generator` is whatever type of build system you'd like to use. To see a full list of generators on your platform, just run `cmake` (with no arguments). For example:
