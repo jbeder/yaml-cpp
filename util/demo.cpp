@@ -16,10 +16,10 @@ int main(){
 	//root[3] = 324;
 
 
-	root[0] = 'f';
-	root[1] = 'u';
-	root[2] = 'c';
-	root[3] = 'k';
+	root[0] = 'h';
+	root[1] = 'e';
+	root[2] = 'l';
+	root[3] = 'o';
 
 
 	if(root.IsSequence()){
