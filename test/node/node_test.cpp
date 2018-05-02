@@ -56,7 +56,7 @@ TEST(NodeTest, SequenceElementRemoval) {
   EXPECT_TRUE(node.IsSequence());
   EXPECT_EQ(2, node.size());
   EXPECT_EQ("a", node[0].as<std::string>());
-  EXPECT_EQ("c", node[2].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
 }
 
 TEST(NodeTest, SequenceLastElementRemoval) {
