@@ -235,6 +235,14 @@ bool node_data::remove(node& key, shared_memory_holder /* pMemory */) {
   if (m_type != NodeType::Map)
     return false;
 
+  kv_pairs::iterator it = m_undefinedPairs.begin();
+  while (it != m_undefinedPairs.end()) {
+    kv_pairs::iterator jt = std::next(it);
+    if (it->first->is(key))
+      m_undefinedPairs.erase(it);
+    it = jt;
+  }
+
   for (node_map::iterator it = m_map.begin(); it != m_map.end(); ++it) {
     if (it->first->is(key)) {
       m_map.erase(it);

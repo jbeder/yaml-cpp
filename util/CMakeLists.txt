@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.5)
+
 add_sources(parse.cpp)
 add_executable(parse parse.cpp)
 target_link_libraries(parse yaml-cpp)
@@ -12,3 +14,8 @@ add_sources(read.cpp)
 add_executable(read read.cpp)
 target_link_libraries(read yaml-cpp)
 set_target_properties(read PROPERTIES COMPILE_FLAGS "-std=c++11")
+
+add_sources(demo.cpp)
+add_executable(demo demo.cpp)
+target_link_libraries(demo yaml-cpp)
+set_target_properties(demo PROPERTIES COMPILE_FLAGS "-std=c++11")
