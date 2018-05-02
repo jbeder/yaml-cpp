@@ -59,7 +59,6 @@ struct get_idx<Key, typename std::enable_if<std::is_signed<Key>::value>::type> {
 template <typename Key, typename Enable = void>
 struct remove_idx {
   static char remove(std::vector<node*>& /* sequence */, const Key& /* key */) {
-	  std::cout << __FILE__ <<  __LINE__ << std::endl;
     return 0;
   }
 };
