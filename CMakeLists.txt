@@ -116,9 +116,10 @@ if(VERBOSE)
 	message(STATUS "contrib_private_headers: ${contrib_private_headers}")
 endif()
 
-include_directories(${YAML_CPP_SOURCE_DIR}/src)
-include_directories(${YAML_CPP_SOURCE_DIR}/include)
-
+if (CMAKE_VERSION VERSION_LESS 2.8.12)
+    include_directories(${YAML_CPP_SOURCE_DIR}/src)
+    include_directories(${YAML_CPP_SOURCE_DIR}/include)
+endif()
 
 
 ###
@@ -275,6 +276,14 @@ set(_INSTALL_DESTINATIONS
 ### Library
 ###
 add_library(yaml-cpp ${library_sources})
+
+if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
+    target_include_directories(yaml-cpp
+        PUBLIC $<BUILD_INTERFACE:${YAML_CPP_SOURCE_DIR}/include>
+               $<INSTALL_INTERFACE:${INCLUDE_INSTALL_ROOT_DIR}>
+        PRIVATE $<BUILD_INTERFACE:${YAML_CPP_SOURCE_DIR}/src>)
+endif()
+
 set_target_properties(yaml-cpp PROPERTIES
   COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
 )
