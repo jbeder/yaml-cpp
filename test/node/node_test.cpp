@@ -1,10 +1,10 @@
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/convert.h"
-#include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/impl.h"
+#include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/node/iterator.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -76,6 +76,16 @@ TEST(NodeTest, MapElementRemoval) {
   node["foo"] = "bar";
   node.remove("foo");
   EXPECT_TRUE(!node["foo"]);
+}
+
+TEST(NodeTest, MapIntegerElementRemoval) {
+  Node node;
+  node[1] = "hello";
+  node[2] = 'c';
+  node["foo"] = "bar";
+  EXPECT_TRUE(node.IsMap());
+  node.remove(1);
+  EXPECT_TRUE(node.IsMap());
 }
 
 TEST(NodeTest, SimpleAssignSequence) {
