@@ -113,7 +113,7 @@ class YAML_CPP_API Node {
   template <typename Key, typename Value>
   void force_insert(const Key& key, const Value& value);
 
- private:
+ protected:
   enum Zombie { ZombieNode };
   explicit Node(Zombie);
   explicit Node(detail::node& node, detail::shared_memory_holder pMemory);
@@ -128,7 +128,7 @@ class YAML_CPP_API Node {
   void AssignData(const Node& rhs);
   void AssignNode(const Node& rhs);
 
- private:
+ protected:
   bool m_isValid;
   mutable detail::shared_memory_holder m_pMemory;
   mutable detail::node* m_pNode;
