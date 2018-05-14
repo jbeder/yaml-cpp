@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.5)
+
 add_sources(parse.cpp)
 add_executable(parse parse.cpp)
 target_link_libraries(parse yaml-cpp)
