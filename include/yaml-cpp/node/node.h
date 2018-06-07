@@ -38,6 +38,7 @@ class YAML_CPP_API Node {
   friend class detail::iterator_base;
   template <typename T, typename S>
   friend struct as_if;
+  friend struct std::hash<Node>;
 
   typedef YAML::iterator iterator;
   typedef YAML::const_iterator const_iterator;
