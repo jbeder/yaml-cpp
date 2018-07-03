@@ -11,7 +11,7 @@ void* BuildGraphOfNextDocument(Parser& parser,
   if (parser.HandleNextDocument(eventHandler)) {
     return eventHandler.RootNode();
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 }
