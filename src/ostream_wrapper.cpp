@@ -7,7 +7,7 @@
 namespace YAML {
 ostream_wrapper::ostream_wrapper()
     : m_buffer(1, '\0'),
-      m_pStream(0),
+      m_pStream(nullptr),
       m_pos(0),
       m_row(0),
       m_col(0),
