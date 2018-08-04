@@ -28,6 +28,7 @@ class CollectionStack {
   }
   void PopCollectionType(CollectionType::value type) {
     assert(type == GetCurCollectionType());
+    (void)type;
     collectionStack.pop();
   }
 
