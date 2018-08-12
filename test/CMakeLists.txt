@@ -9,8 +9,8 @@ endif()
 
 ExternalProject_Add(
 	googletest_project
-	SOURCE_DIR "${CMAKE_SOURCE_DIR}/test/gtest-1.8.0"
-	INSTALL_DIR "${CMAKE_BINARY_DIR}/prefix"
+	SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0"
+	INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/prefix"
 	CMAKE_ARGS
 		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 		-DBUILD_GMOCK=ON
@@ -20,12 +20,12 @@ ExternalProject_Add(
 add_library(gmock UNKNOWN IMPORTED)
 set_target_properties(gmock PROPERTIES
     IMPORTED_LOCATION
-    ${PROJECT_BINARY_DIR}/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gmock${CMAKE_STATIC_LIBRARY_SUFFIX}
+    ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gmock${CMAKE_STATIC_LIBRARY_SUFFIX}
 )
 
 find_package(Threads)
 
-include_directories(SYSTEM "${PROJECT_BINARY_DIR}/prefix/include")
+include_directories(SYSTEM "${PROJECT_BINARY_DIR}/test/prefix/include")
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 	CMAKE_CXX_COMPILER_ID MATCHES "Clang")
