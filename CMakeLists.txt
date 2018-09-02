@@ -140,7 +140,7 @@ endif()
 
 if(WIN32)
 	if(BUILD_SHARED_LIBS)
-		add_definitions(-D${PROJECT_NAME}_DLL)	# use or build Windows DLL
+		add_definitions(-DYAML_CPP_DLL)	# use or build Windows DLL
 	endif()
 	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 		set(CMAKE_INSTALL_PREFIX "C:/")
