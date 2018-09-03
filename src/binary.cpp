@@ -75,7 +75,10 @@ std::vector<unsigned char> DecodeBase64(const std::string &input) {
 
   unsigned value = 0;
   for (std::size_t i = 0, cnt = 0; i < input.size(); i++) {
-    if (isspace(input[i])) continue; // skip newlines
+    if (std::isspace(input[i])) {
+      // skip newlines
+      continue;
+    }
     unsigned char d = decoding[static_cast<unsigned>(input[i])];
     if (d == 255)
       return ret_type();
