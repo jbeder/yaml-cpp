@@ -211,6 +211,24 @@ TEST(NodeTest, NestedMergeKeys) {
   ASSERT_FALSE(!node["a"]);
   EXPECT_EQ(1, node["a"].as<int>());
 }
+
+TEST(NodeTest, AnchorAndMergeKey) {
+  Node node = YAML::Load(R"(
+    a_root: &root_anchor
+      key1: value1
+      key2: value2
+    b_child:
+      <<: *root_anchor
+      key2: value2_override
+  )");
+
+  ASSERT_FALSE(!node["a_root"]);
+  ASSERT_FALSE(!node["b_child"]);
+  EXPECT_EQ("value1", node["a_root"]["key1"].as<std::string>());
+  EXPECT_EQ("value2", node["a_root"]["key2"].as<std::string>());
+  EXPECT_EQ("value1", node["b_child"]["key1"].as<std::string>());
+  EXPECT_EQ("value2_override", node["b_child"]["key2"].as<std::string>());
+}
 #else
 TEST(NodeTest, MergeKeySupport) {
   Node node = Load("{<<: {a: 1}}");
