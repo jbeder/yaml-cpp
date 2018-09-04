@@ -1,6 +1,6 @@
 #include "yaml-cpp/binary.h"
 
-#include <ctype.h>
+#include <cctype>
 
 namespace YAML {
 static const char encoding[] =
