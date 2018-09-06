@@ -47,13 +47,13 @@ class NodeBuilder : public EventHandler {
                           anchor_t anchor, EmitterStyle::value style);
   virtual void OnMapEnd();
 
- private:
+ protected:
   detail::node& Push(const Mark& mark, anchor_t anchor);
   void Push(detail::node& node);
   void Pop();
   void RegisterAnchor(anchor_t anchor, detail::node& node);
 
- private:
+ protected:
   detail::shared_memory_holder m_pMemory;
   detail::node* m_pRoot;
 

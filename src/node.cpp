@@ -1,5 +1,5 @@
 #include "yaml-cpp/node/node.h"
-#include "nodebuilder.h"
+#include "yaml-cpp/nodebuilder.h"
 #include "nodeevents.h"
 
 namespace YAML {
