@@ -13,9 +13,9 @@
 namespace YAML {
 namespace detail {
 
-std::string& node_data::empty_scalar(){
-    static std::string _es;
-    return _es ;
+const std::string& node_data::empty_scalar() {
+    static const std::string svalue;
+    return svalue ;
 }
 
 node_data::node_data()
