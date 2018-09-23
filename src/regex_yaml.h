@@ -77,10 +77,11 @@ class YAML_CPP_API RegEx {
 
  private:
   REGEX_OP m_op;
-  char m_a, m_z;
+  char m_a{};
+  char m_z{};
   std::vector<RegEx> m_params;
 };
-}
+}  // namespace YAML
 
 #include "regeximpl.h"
 
