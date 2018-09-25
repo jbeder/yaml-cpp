@@ -15,7 +15,7 @@ namespace detail {
 
 const std::string& node_data::empty_scalar() {
     static const std::string svalue;
-    return svalue ;
+    return svalue;
 }
 
 node_data::node_data()
