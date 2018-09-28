@@ -16,7 +16,7 @@ yaml-cpp uses [CMake](http://www.cmake.org) to support cross-platform building. 
 
 **Note:** If you don't use the provided installer for your platform, make sure that you add CMake's bin folder to your path.
 
-2. Navigate into the source directory, and type:
+2. Navigate into the yaml-cpp-master directory, and type:
 
 ```
 mkdir build
