@@ -142,6 +142,14 @@ if(WIN32)
 	endif()
 endif()
 
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+	set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+	if (POLICY CMP0063)
+		cmake_policy(SET CMP0063 NEW)
+	endif()
+	add_definitions(-DYAML_CPP_USE_VISIBILITY)
+endif()
+
 # GCC or Clang or Intel Compiler specialities
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
    CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
