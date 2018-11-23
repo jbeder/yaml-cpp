@@ -285,10 +285,8 @@ void Emitter::PrepareTopNode(EmitterNodeType::value child) {
   if (child == EmitterNodeType::NoType)
     return;
 
-  if (m_pState->CurGroupChildCount() > 0 && m_stream.col() > 0) {
-    if (child != EmitterNodeType::NoType)
-      EmitBeginDoc();
-  }
+  if (m_pState->CurGroupChildCount() > 0 && m_stream.col() > 0)
+    EmitBeginDoc();
 
   switch (child) {
     case EmitterNodeType::NoType:
