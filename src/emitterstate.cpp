@@ -24,8 +24,8 @@ EmitterState::EmitterState()
   m_seqFmt.set(Block);
   m_mapFmt.set(Block);
   m_mapKeyFmt.set(Auto);
-  m_floatPrecision.set(std::numeric_limits<float>::digits10 + 1);
-  m_doublePrecision.set(std::numeric_limits<double>::digits10 + 1);
+  m_floatPrecision.set(std::numeric_limits<float>::max_digits10);
+  m_doublePrecision.set(std::numeric_limits<double>::max_digits10);
 }
 
 EmitterState::~EmitterState() {}
@@ -349,7 +349,7 @@ bool EmitterState::SetMapKeyFormat(EMITTER_MANIP value, FmtScope::value scope) {
 }
 
 bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope::value scope) {
-  if (value > std::numeric_limits<float>::digits10 + 1)
+  if (value > std::numeric_limits<float>::max_digits10)
     return false;
   _Set(m_floatPrecision, value, scope);
   return true;
@@ -357,7 +357,7 @@ bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope::value scope) {
 
 bool EmitterState::SetDoublePrecision(std::size_t value,
                                       FmtScope::value scope) {
-  if (value > std::numeric_limits<double>::digits10 + 1)
+  if (value > std::numeric_limits<double>::max_digits10)
     return false;
   _Set(m_doublePrecision, value, scope);
   return true;

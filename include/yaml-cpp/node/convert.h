@@ -93,7 +93,7 @@ struct convert<_Null> {
   struct convert<type> {                                                 \
     static Node encode(const type& rhs) {                                \
       std::stringstream stream;                                          \
-      stream.precision(std::numeric_limits<type>::digits10 + 1);         \
+      stream.precision(std::numeric_limits<type>::max_digits10);         \
       stream << rhs;                                                     \
       return Node(stream.str());                                         \
     }                                                                    \
