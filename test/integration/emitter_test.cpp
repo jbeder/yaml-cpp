@@ -901,18 +901,18 @@ TEST_F(EmitterTest, SingleChar) {
 
 TEST_F(EmitterTest, DefaultPrecision) {
   out << BeginSeq;
-  out << 1.234f;
-  out << 3.14159265358979;
+  out << 1.3125f;
+  out << 1.23455810546875;
   out << EndSeq;
-  ExpectEmit("- 1.234\n- 3.14159265358979");
+  ExpectEmit("- 1.3125\n- 1.23455810546875");
 }
 
 TEST_F(EmitterTest, SetPrecision) {
   out << BeginSeq;
-  out << FloatPrecision(3) << 1.234f;
-  out << DoublePrecision(6) << 3.14159265358979;
+  out << FloatPrecision(3) << 1.3125f;
+  out << DoublePrecision(6) << 1.23455810546875;
   out << EndSeq;
-  ExpectEmit("- 1.23\n- 3.14159");
+  ExpectEmit("- 1.31\n- 1.23456");
 }
 
 TEST_F(EmitterTest, DashInBlockContext) {
