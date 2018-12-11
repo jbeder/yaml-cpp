@@ -391,7 +391,13 @@ TEST(NodeTest, AutoBoolConversion) {
   EXPECT_TRUE(!!node["foo"]);
 }
 
-TEST(NodeTest, FloatingPrecision) {
+TEST(NodeTest, FloatingPrecisionFloat) {
+  const float x = 0.123456789;
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionDouble) {
   const double x = 0.123456789;
   Node node = Node(x);
   EXPECT_EQ(x, node.as<double>());
