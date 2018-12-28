@@ -191,7 +191,7 @@ void node_data::insert(node& key, node& value, shared_memory_holder pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadSubscript();
+      throw BadSubscript(key);
   }
 
   insert_map_pair(key, value);
@@ -221,7 +221,7 @@ node& node_data::get(node& key, shared_memory_holder pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadSubscript();
+      throw BadSubscript(key);
   }
 
   for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {

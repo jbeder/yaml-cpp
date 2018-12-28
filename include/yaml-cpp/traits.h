@@ -7,6 +7,9 @@
 #pragma once
 #endif
 
+#include <type_traits>
+#include <utility>
+
 namespace YAML {
 template <typename>
 struct is_numeric {
@@ -99,5 +102,18 @@ struct disable_if_c<true, T> {};
 template <class Cond, class T = void>
 struct disable_if : public disable_if_c<Cond::value, T> {};
 }
+
+template <typename S, typename T>
+class is_streamable {
+  template <typename SS, typename TT>
+  static auto test(int)
+      -> decltype(std::declval<SS&>() << std::declval<TT>(), std::true_type());
+
+  template <typename, typename>
+  static auto test(...) -> std::false_type;
+
+ public:
+  static const bool value = decltype(test<S, T>(0))::value;
+};
 
 #endif  // TRAITS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

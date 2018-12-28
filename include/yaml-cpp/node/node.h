@@ -116,6 +116,7 @@ class YAML_CPP_API Node {
  private:
   enum Zombie { ZombieNode };
   explicit Node(Zombie);
+  explicit Node(Zombie, std::string);
   explicit Node(detail::node& node, detail::shared_memory_holder pMemory);
 
   void EnsureNodeExists() const;
@@ -130,6 +131,7 @@ class YAML_CPP_API Node {
 
  private:
   bool m_isValid;
+  std::string m_invalidKey;
   mutable detail::shared_memory_holder m_pMemory;
   mutable detail::node* m_pNode;
 };
