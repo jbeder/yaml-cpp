@@ -144,7 +144,7 @@ endif()
 
 # GCC or Clang or Intel Compiler specialities
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
-   CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
+   (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT "x${CMAKE_CXX_SIMULATE_ID}" STREQUAL "xMSVC") OR
    CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
 	### General stuff
