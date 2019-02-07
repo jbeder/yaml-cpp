@@ -8,6 +8,7 @@
 #endif
 
 #include <stdexcept>
+#include <string>
 
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/emitterstyle.h"
