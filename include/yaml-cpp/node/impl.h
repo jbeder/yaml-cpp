@@ -47,7 +47,7 @@ inline Node::Node(const Node& rhs)
 
 inline Node::Node(Zombie) : m_isValid(false), m_pNode(NULL) {}
 
-inline Node::Node(Zombie, std::string key)
+inline Node::Node(Zombie, const std::string& key)
     : m_isValid(false), m_invalidKey(key), m_pNode(NULL) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
@@ -374,15 +374,25 @@ inline typename to_value_t<T>::return_type to_value(const T& t) {
 }
 }
 
-template<typename Key>
-std::string key_to_string(const Key& key) {
-  std::stringstream ss;
-  if (is_streamable<std::stringstream, Key>::value) {
+template<typename Key, bool Streamable>
+struct key_to_string_impl {
+  static std::string impl(const Key& key) {
+    std::stringstream ss;
     ss << key;
     return ss.str();
-  } else {
+  }
+};
+
+template<typename Key>
+struct key_to_string_impl<Key, false> {
+  static std::string impl(const Key&) {
     return std::string();
   }
+};
+
+template<typename Key>
+std::string key_to_string(const Key& key) {
+  return key_to_string_impl<Key, is_streamable<std::stringstream, Key>::value>().impl(key);
 }
 
 // indexing
