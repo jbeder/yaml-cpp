@@ -132,6 +132,12 @@ struct convert<_Null> {
 #define YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(type) \
   YAML_DEFINE_CONVERT_STREAMABLE(type, +)
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+// Visual Studio: warning C4127: conditional expression is constant
+#pragma warning(disable: 4127)
+#endif
+
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(int);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(short);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(long);
@@ -144,6 +150,10 @@ YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned long long);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(char);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(signed char);
 YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned char);
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(float);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(double);
