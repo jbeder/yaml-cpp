@@ -116,10 +116,11 @@ struct convert<_Null> {
         }                                                                \
       }                                                                  \
                                                                          \
-      if (std::numeric_limits<type>::has_quiet_NaN &&                    \
-          conversion::IsNaN(input)) {                                    \
-        rhs = std::numeric_limits<type>::quiet_NaN();                    \
-        return true;                                                     \
+      if (std::numeric_limits<type>::has_quiet_NaN) {                    \
+        if (conversion::IsNaN(input)) {                                  \
+          rhs = std::numeric_limits<type>::quiet_NaN();                  \
+          return true;                                                   \
+        }                                                                \
       }                                                                  \
                                                                          \
       return false;                                                      \
