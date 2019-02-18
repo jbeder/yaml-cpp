@@ -9,6 +9,8 @@
 
 #include <type_traits>
 #include <utility>
+#include <string>
+#include <sstream>
 
 namespace YAML {
 template <typename>
@@ -104,7 +106,7 @@ struct disable_if : public disable_if_c<Cond::value, T> {};
 }
 
 template <typename S, typename T>
-class is_streamable {
+struct is_streamable {
   template <typename SS, typename TT>
   static auto test(int)
       -> decltype(std::declval<SS&>() << std::declval<TT>(), std::true_type());
@@ -112,8 +114,22 @@ class is_streamable {
   template <typename, typename>
   static auto test(...) -> std::false_type;
 
- public:
   static const bool value = decltype(test<S, T>(0))::value;
 };
 
+template<typename Key, bool Streamable>
+struct streamable_to_string {
+  static std::string impl(const Key& key) {
+    std::stringstream ss;
+    ss << key;
+    return ss.str();
+  }
+};
+
+template<typename Key>
+struct streamable_to_string<Key, false> {
+  static std::string impl(const Key&) {
+    return std::string();
+  }
+};
 #endif  // TRAITS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

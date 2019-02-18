@@ -374,25 +374,9 @@ inline typename to_value_t<T>::return_type to_value(const T& t) {
 }
 }
 
-template<typename Key, bool Streamable>
-struct key_to_string_impl {
-  static std::string impl(const Key& key) {
-    std::stringstream ss;
-    ss << key;
-    return ss.str();
-  }
-};
-
-template<typename Key>
-struct key_to_string_impl<Key, false> {
-  static std::string impl(const Key&) {
-    return std::string();
-  }
-};
-
 template<typename Key>
 std::string key_to_string(const Key& key) {
-  return key_to_string_impl<Key, is_streamable<std::stringstream, Key>::value>().impl(key);
+  return streamable_to_string<Key, is_streamable<std::stringstream, Key>::value>().impl(key);
 }
 
 // indexing

@@ -843,9 +843,4 @@ const char *ex8_22 =
     " - nested\n"
     "mapping: !!map\n"
     " foo: bar\n";
-
-const char *ex9_1 =
-    "first:\n"
-    "   second: 1\n"
-    "   third: 2\n";
 }
