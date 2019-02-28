@@ -8,7 +8,7 @@
 #endif
 
 #include <stdexcept>
-
+#include <cassert>
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/emitterstyle.h"
 #include "yaml-cpp/mark.h"
@@ -21,11 +21,14 @@ namespace YAML {
 namespace detail {
 class node;
 class node_data;
+class node_ref;
 struct iterator_value;
 }  // namespace detail
 }  // namespace YAML
 
 namespace YAML {
+
+
 class YAML_CPP_API Node {
  public:
   friend class NodeBuilder;
@@ -76,8 +79,34 @@ class YAML_CPP_API Node {
   EmitterStyle::value Style() const;
   void SetStyle(EmitterStyle::value style);
 
-  // assignment
+  /// for defined nodes, a.id() == b.id() iff a.is(b)
+  /// (not part of standard yaml-cpp-0.5 api yet
+  void const* id() const {
+    assert(IsDefined());
+    // node_ref_id is first base of detail::node
+    return ref_id(m_pNode)->id();
+  }
+
+  /// requires IsDefined for this and rhs (unlike 'is')
+  bool operator==(const Node& rhs) const {
+    assert(IsDefined());
+    assert(rhs.IsDefined());
+    return id() == rhs.id();
+  }
+
+  /// (not part of standard yaml-cpp-0.5 api yet
+  friend inline std::size_t hash_value(Node const& self) {
+    return self.hash();
+  }
+  /// (not part of standard yaml-cpp-0.5 api yet
+  std::size_t hash() const {
+    assert(m_isValid);
+    return (std::size_t)id() >> (sizeof(std::shared_ptr<void>) >= 8 ? 3 : 2);
+  }
+
   bool is(const Node& rhs) const;
+
+  // assignment
   template <typename T>
   Node& operator=(const T& rhs);
   Node& operator=(const Node& rhs);
@@ -133,8 +162,6 @@ class YAML_CPP_API Node {
   mutable detail::shared_memory_holder m_pMemory;
   mutable detail::node* m_pNode;
 };
-
-YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);
 
 YAML_CPP_API Node Clone(const Node& node);
 
