@@ -27,6 +27,10 @@ class Node;
 class NodeBuilder : public EventHandler {
  public:
   NodeBuilder();
+  NodeBuilder(const NodeBuilder&) = delete;
+  NodeBuilder(NodeBuilder&&) = delete;
+  NodeBuilder& operator=(const NodeBuilder&) = delete;
+  NodeBuilder& operator=(NodeBuilder&&) = delete;
   virtual ~NodeBuilder();
 
   Node Root();

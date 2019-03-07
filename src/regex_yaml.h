@@ -37,8 +37,8 @@ class YAML_CPP_API RegEx {
   ~RegEx() {}
 
   friend YAML_CPP_API RegEx operator!(const RegEx& ex);
-  friend YAML_CPP_API RegEx operator||(const RegEx& ex1, const RegEx& ex2);
-  friend YAML_CPP_API RegEx operator&&(const RegEx& ex1, const RegEx& ex2);
+  friend YAML_CPP_API RegEx operator|(const RegEx& ex1, const RegEx& ex2);
+  friend YAML_CPP_API RegEx operator&(const RegEx& ex1, const RegEx& ex2);
   friend YAML_CPP_API RegEx operator+(const RegEx& ex1, const RegEx& ex2);
 
   bool Matches(char ch) const;

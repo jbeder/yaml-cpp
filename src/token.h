@@ -48,7 +48,7 @@ struct Token {
 
   // data
   Token(TYPE type_, const Mark& mark_)
-      : status(VALID), type(type_), mark(mark_), data(0) {}
+      : status(VALID), type(type_), mark(mark_), value{}, params{}, data(0) {}
 
   friend std::ostream& operator<<(std::ostream& out, const Token& token) {
     out << TokenNames[token.type] << std::string(": ") << token.value;

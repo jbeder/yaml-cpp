@@ -19,7 +19,7 @@ std::string ToString(YAML::anchor_t anchor) {
 }
 
 namespace YAML {
-EmitFromEvents::EmitFromEvents(Emitter& emitter) : m_emitter(emitter) {}
+EmitFromEvents::EmitFromEvents(Emitter& emitter) : m_emitter(emitter), m_stateStack{} {}
 
 void EmitFromEvents::OnDocumentStart(const Mark&) {}
 

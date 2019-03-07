@@ -20,7 +20,7 @@ anchor_t NodeEvents::AliasManager::LookupAnchor(
 }
 
 NodeEvents::NodeEvents(const Node& node)
-    : m_pMemory(node.m_pMemory), m_root(node.m_pNode) {
+    : m_pMemory(node.m_pMemory), m_root(node.m_pNode), m_refCount{} {
   if (m_root)
     Setup(*m_root);
 }

@@ -18,6 +18,9 @@ template <typename T>
 class Setting {
  public:
   Setting() : m_value() {}
+  Setting(const T& value) : m_value() {
+      set(value);
+  }
 
   const T get() const { return m_value; }
   std::unique_ptr<SettingChangeBase> set(const T& value);
@@ -34,12 +37,16 @@ class SettingChangeBase {
 };
 
 template <typename T>
-class SettingChange : public SettingChangeBase {
+class SettingChange : public SettingChangeBase, private noncopyable {
  public:
-  SettingChange(Setting<T>* pSetting) : m_pCurSetting(pSetting) {
-    // copy old setting to save its state
-    m_oldSetting = *pSetting;
-  }
+  SettingChange(Setting<T>* pSetting) :
+      m_pCurSetting(pSetting),
+      m_oldSetting(*pSetting) // copy old setting to save its state
+  {}
+  SettingChange(const SettingChange&) = delete;
+  SettingChange(SettingChange&&) = delete;
+  SettingChange& operator=(const SettingChange&) = delete;
+  SettingChange& operator=(SettingChange&&) = delete;
 
   virtual void pop() { m_pCurSetting->restore(m_oldSetting); }
 
@@ -57,7 +64,7 @@ inline std::unique_ptr<SettingChangeBase> Setting<T>::set(const T& value) {
 
 class SettingChanges : private noncopyable {
  public:
-  SettingChanges() {}
+  SettingChanges() : m_settingChanges{} {}
   ~SettingChanges() { clear(); }
 
   void clear() {

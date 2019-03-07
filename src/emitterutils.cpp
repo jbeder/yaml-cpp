@@ -173,12 +173,12 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
 
   // then check until something is disallowed
   static const RegEx& disallowed_flow =
-      Exp::EndScalarInFlow() || (Exp::BlankOrBreak() + Exp::Comment()) ||
-      Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||
+      Exp::EndScalarInFlow() | (Exp::BlankOrBreak() + Exp::Comment()) |
+      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
       Exp::Tab();
   static const RegEx& disallowed_block =
-      Exp::EndScalar() || (Exp::BlankOrBreak() + Exp::Comment()) ||
-      Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||
+      Exp::EndScalar() | (Exp::BlankOrBreak() + Exp::Comment()) |
+      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
       Exp::Tab();
   const RegEx& disallowed =
       flowType == FlowType::Flow ? disallowed_flow : disallowed_block;

@@ -20,7 +20,7 @@ namespace YAML {
 template <typename T>
 class ptr_vector : private YAML::noncopyable {
  public:
-  ptr_vector() {}
+  ptr_vector() : m_data{} {}
 
   void clear() { m_data.clear(); }
 

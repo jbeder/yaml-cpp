@@ -6,7 +6,7 @@
 #include "token.h"
 
 namespace YAML {
-Tag::Tag(const Token& token) : type(static_cast<TYPE>(token.data)) {
+Tag::Tag(const Token& token) : type(static_cast<TYPE>(token.data)), handle{}, value{} {
   switch (type) {
     case VERBATIM:
       value = token.value;

@@ -192,9 +192,13 @@ inline void QueueUnicodeCodepoint(std::deque<char>& q, unsigned long ch) {
 
 Stream::Stream(std::istream& input)
     : m_input(input),
+      m_mark{},
+      m_charSet{},
+      m_readahead{},
       m_pPrefetched(new unsigned char[YAML_PREFETCH_SIZE]),
       m_nPrefetchedAvailable(0),
-      m_nPrefetchedUsed(0) {
+      m_nPrefetchedUsed(0)
+{
   typedef std::istream::traits_type char_traits;
 
   if (!input)

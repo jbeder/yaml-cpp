@@ -26,7 +26,11 @@ namespace YAML {
 class GraphBuilderAdapter : public EventHandler {
  public:
   GraphBuilderAdapter(GraphBuilderInterface& builder)
-      : m_builder(builder), m_pRootNode(nullptr), m_pKeyNode(nullptr) {}
+      : m_builder(builder), m_containers{}, m_anchors{}, m_pRootNode(nullptr), m_pKeyNode(nullptr) {}
+  GraphBuilderAdapter(const GraphBuilderAdapter&) = delete;
+  GraphBuilderAdapter(GraphBuilderAdapter&&) = delete;
+  GraphBuilderAdapter& operator=(const GraphBuilderAdapter&) = delete;
+  GraphBuilderAdapter& operator=(GraphBuilderAdapter&&) = delete;
 
   virtual void OnDocumentStart(const Mark& mark) { (void)mark; }
   virtual void OnDocumentEnd() {}
@@ -50,8 +54,8 @@ class GraphBuilderAdapter : public EventHandler {
   struct ContainerFrame {
     ContainerFrame(void* pSequence)
         : pContainer(pSequence), pPrevKeyNode(&sequenceMarker) {}
-    ContainerFrame(void* pMap, void* pPrevKeyNode)
-        : pContainer(pMap), pPrevKeyNode(pPrevKeyNode) {}
+    ContainerFrame(void* pMap, void* PrevKeyNode)
+        : pContainer(pMap), pPrevKeyNode(PrevKeyNode) {}
 
     void* pContainer;
     void* pPrevKeyNode;

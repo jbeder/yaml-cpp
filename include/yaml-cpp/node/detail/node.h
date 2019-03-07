@@ -18,7 +18,7 @@ namespace YAML {
 namespace detail {
 class node {
  public:
-  node() : m_pRef(new node_ref) {}
+  node() : m_pRef(new node_ref), m_dependencies{} {}
   node(const node&) = delete;
   node& operator=(const node&) = delete;
 

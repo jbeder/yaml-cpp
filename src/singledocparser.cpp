@@ -18,7 +18,9 @@ SingleDocParser::SingleDocParser(Scanner& scanner, const Directives& directives)
     : m_scanner(scanner),
       m_directives(directives),
       m_pCollectionStack(new CollectionStack),
-      m_curAnchor(0) {}
+      m_anchors{},
+      m_curAnchor(0)
+{}
 
 SingleDocParser::~SingleDocParser() {}
 
@@ -166,10 +168,10 @@ void SingleDocParser::HandleBlockSequence(EventHandler& eventHandler) {
 
     // check for null
     if (!m_scanner.empty()) {
-      const Token& token = m_scanner.peek();
-      if (token.type == Token::BLOCK_ENTRY ||
-          token.type == Token::BLOCK_SEQ_END) {
-        eventHandler.OnNull(token.mark, NullAnchor);
+      const Token& tnullcheck = m_scanner.peek();
+      if (tnullcheck.type == Token::BLOCK_ENTRY ||
+          tnullcheck.type == Token::BLOCK_SEQ_END) {
+        eventHandler.OnNull(tnullcheck.mark, NullAnchor);
         continue;
       }
     }

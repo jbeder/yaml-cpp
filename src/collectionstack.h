@@ -33,7 +33,7 @@ class CollectionStack {
   }
 
  private:
-  std::stack<CollectionType::value> collectionStack;
+  std::stack<CollectionType::value> collectionStack{};
 };
 }
 

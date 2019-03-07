@@ -32,7 +32,7 @@ class AnchorDict {
   T Get(anchor_t anchor) const { return m_data[anchor - 1]; }
 
  private:
-  std::vector<T> m_data;
+  std::vector<T> m_data{};
 };
 }
 

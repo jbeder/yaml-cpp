@@ -22,6 +22,10 @@ class Stream : private noncopyable {
   friend class StreamCharSource;
 
   Stream(std::istream& input);
+  Stream(const Stream&) = delete;
+  Stream(Stream&&) = delete;
+  Stream& operator=(const Stream&) = delete;
+  Stream& operator=(Stream&&) = delete;
   ~Stream();
 
   operator bool() const;

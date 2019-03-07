@@ -27,7 +27,7 @@ class YAML_CPP_API memory {
 
  private:
   typedef std::set<shared_node> Nodes;
-  Nodes m_nodes;
+  Nodes m_nodes{};
 };
 
 class YAML_CPP_API memory_holder {

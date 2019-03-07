@@ -145,7 +145,7 @@ class EmitterState {
 
   struct Group {
     explicit Group(GroupType::value type_)
-        : type(type_), indent(0), childCount(0), longKey(false) {}
+        : type(type_), flowType{}, indent(0), childCount(0), longKey(false), modifiedSettings{} {}
 
     GroupType::value type;
     FlowType::value flowType;
