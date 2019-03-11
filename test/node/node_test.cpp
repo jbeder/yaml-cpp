@@ -296,7 +296,7 @@ TEST(NodeTest, StdPair) {
 TEST(NodeTest, SimpleAlias) {
   Node node;
   node["foo"] = "value";
-  node["bar"] = node["foo"];
+  node["bar"] = NodeAlias(node["foo"]);
   EXPECT_EQ("value", node["foo"].as<std::string>());
   EXPECT_EQ("value", node["bar"].as<std::string>());
   EXPECT_EQ(node["bar"], node["foo"]);
@@ -316,7 +316,7 @@ TEST(NodeTest, AliasAsKey) {
 
 TEST(NodeTest, SelfReferenceSequence) {
   Node node;
-  node[0] = node;
+  node[0] = NodeAlias(node);
   EXPECT_TRUE(node.IsSequence());
   EXPECT_EQ(1, node.size());
   EXPECT_EQ(node, node[0]);
@@ -326,7 +326,7 @@ TEST(NodeTest, SelfReferenceSequence) {
 
 TEST(NodeTest, ValueSelfReferenceMap) {
   Node node;
-  node["key"] = node;
+  node["key"] = NodeAlias(node);
   EXPECT_TRUE(node.IsMap());
   EXPECT_EQ(1, node.size());
   EXPECT_EQ(node, node["key"]);
@@ -344,7 +344,7 @@ TEST(NodeTest, KeySelfReferenceMap) {
 
 TEST(NodeTest, SelfReferenceMap) {
   Node node;
-  node[node] = node;
+  node[node] = NodeAlias(node);
   EXPECT_TRUE(node.IsMap());
   EXPECT_EQ(1, node.size());
   EXPECT_EQ(node, node[node]);
@@ -364,7 +364,7 @@ TEST(NodeTest, TempMapVariable) {
 TEST(NodeTest, TempMapVariableAlias) {
   Node node;
   Node tmp = node["key"];
-  tmp = node["other"];
+  tmp = NodeAlias(node["other"]);
   node["other"] = "value";
   EXPECT_TRUE(node.IsMap());
   EXPECT_EQ(2, node.size());
