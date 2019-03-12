@@ -43,9 +43,10 @@ class SingleDocParser : private noncopyable {
   void HandleCompactMap(EventHandler& eventHandler);
   void HandleCompactMapWithNoKey(EventHandler& eventHandler);
 
-  void ParseProperties(std::string& tag, anchor_t& anchor);
+  void ParseProperties(std::string& tag, anchor_t& anchor,
+                       std::string& anchor_name);
   void ParseTag(std::string& tag);
-  void ParseAnchor(anchor_t& anchor);
+  void ParseAnchor(anchor_t& anchor, std::string& anchor_name);
 
   anchor_t RegisterAnchor(const std::string& name);
   anchor_t LookupAnchor(const Mark& mark, const std::string& name) const;
@@ -60,6 +61,6 @@ class SingleDocParser : private noncopyable {
 
   anchor_t m_curAnchor;
 };
-}
+}  // namespace YAML
 
 #endif  // SINGLEDOCPARSER_H_62B23520_7C8E_11DE_8A39_0800200C9A66
