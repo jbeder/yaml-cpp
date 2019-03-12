@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <vector>
-#include "yaml-cpp/noncopyable.h"
+#include <utility>
 
 namespace YAML {
 class SettingChangeBase;
@@ -37,7 +37,7 @@ class SettingChangeBase {
 };
 
 template <typename T>
-class SettingChange : public SettingChangeBase, private noncopyable {
+class SettingChange : public SettingChangeBase {
  public:
   SettingChange(Setting<T>* pSetting) :
       m_pCurSetting(pSetting),
@@ -62,9 +62,12 @@ inline std::unique_ptr<SettingChangeBase> Setting<T>::set(const T& value) {
   return pChange;
 }
 
-class SettingChanges : private noncopyable {
+class SettingChanges {
  public:
   SettingChanges() : m_settingChanges{} {}
+  SettingChanges(const SettingChanges&) = delete;
+  SettingChanges(SettingChanges&& rhs) : m_settingChanges(std::move(rhs.m_settingChanges)) {}
+  SettingChanges& operator=(const SettingChanges&) = delete;
   ~SettingChanges() { clear(); }
 
   void clear() {

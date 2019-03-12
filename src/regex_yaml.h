@@ -31,7 +31,7 @@ enum REGEX_OP {
 class YAML_CPP_API RegEx {
  public:
   RegEx();
-  RegEx(char ch);
+  explicit RegEx(char ch);
   RegEx(char a, char z);
   RegEx(const std::string& str, REGEX_OP op = REGEX_SEQ);
   ~RegEx() {}
@@ -53,7 +53,7 @@ class YAML_CPP_API RegEx {
   int Match(const Source& source) const;
 
  private:
-  RegEx(REGEX_OP op);
+  explicit RegEx(REGEX_OP op);
 
   template <typename Source>
   bool IsValidSource(const Source& source) const;

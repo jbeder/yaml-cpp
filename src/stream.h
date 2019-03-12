@@ -7,7 +7,6 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/noncopyable.h"
 #include "yaml-cpp/mark.h"
 #include <cstddef>
 #include <deque>
@@ -17,7 +16,7 @@
 #include <string>
 
 namespace YAML {
-class Stream : private noncopyable {
+class Stream {
  public:
   friend class StreamCharSource;
 

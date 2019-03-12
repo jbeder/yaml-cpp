@@ -22,6 +22,7 @@ namespace YAML {
 template <class T>
 class AnchorDict {
  public:
+  AnchorDict() : m_data{} {}
   void Register(anchor_t anchor, T value) {
     if (anchor > m_data.size()) {
       m_data.resize(anchor);
@@ -32,7 +33,7 @@ class AnchorDict {
   T Get(anchor_t anchor) const { return m_data[anchor - 1]; }
 
  private:
-  std::vector<T> m_data{};
+  std::vector<T> m_data;
 };
 }
 

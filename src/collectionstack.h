@@ -17,6 +17,7 @@ struct CollectionType {
 
 class CollectionStack {
  public:
+  CollectionStack() : collectionStack{} {}
   CollectionType::value GetCurCollectionType() const {
     if (collectionStack.empty())
       return CollectionType::NoCollection;
@@ -33,7 +34,7 @@ class CollectionStack {
   }
 
  private:
-  std::stack<CollectionType::value> collectionStack{};
+  std::stack<CollectionType::value> collectionStack;
 };
 }
 

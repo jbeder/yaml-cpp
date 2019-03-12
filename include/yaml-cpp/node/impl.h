@@ -15,7 +15,7 @@
 #include <string>
 
 namespace YAML {
-inline Node::Node() : m_isValid(true), m_pMemory(nullptr), m_pNode(NULL) {}
+inline Node::Node() : m_isValid(true), m_pMemory(nullptr), m_pNode(nullptr) {}
 
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
@@ -42,7 +42,7 @@ inline Node::Node(const Node& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(Zombie) : m_isValid(false), m_pMemory{}, m_pNode(NULL) {}
+inline Node::Node(Zombie) : m_isValid(false), m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
     : m_isValid(true), m_pMemory(pMemory), m_pNode(&node) {}

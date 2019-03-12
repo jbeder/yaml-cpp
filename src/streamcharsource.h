@@ -7,7 +7,6 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/noncopyable.h"
 #include <cstddef>
 
 namespace YAML {
@@ -16,6 +15,9 @@ class StreamCharSource {
   StreamCharSource(const Stream& stream) : m_offset(0), m_stream(stream) {}
   StreamCharSource(const StreamCharSource& source)
       : m_offset(source.m_offset), m_stream(source.m_stream) {}
+  StreamCharSource(StreamCharSource&&) = delete;
+  StreamCharSource& operator=(const StreamCharSource&) = delete;
+  StreamCharSource& operator=(StreamCharSource&&) = delete;
   ~StreamCharSource() {}
 
   operator bool() const;
@@ -27,8 +29,6 @@ class StreamCharSource {
  private:
   std::size_t m_offset;
   const Stream& m_stream;
-
-  StreamCharSource& operator=(const StreamCharSource&);  // non-assignable
 };
 
 inline StreamCharSource::operator bool() const {

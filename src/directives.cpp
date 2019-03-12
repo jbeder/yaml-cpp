@@ -1,12 +1,7 @@
 #include "directives.h"
 
 namespace YAML {
-Directives::Directives() : version{true, 1, 2}, tags{} {
-  /* Version:
-  **  bool isDefault;
-  **  int major, minor;
-  */
-}
+Directives::Directives() : version{true, 1, 2}, tags{} {}
 
 const std::string Directives::TranslateTagHandle(
     const std::string& handle) const {
