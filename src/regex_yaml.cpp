@@ -10,8 +10,7 @@ RegEx::RegEx(char ch) : m_op(REGEX_MATCH), m_a(ch), m_z(0), m_params{} {}
 
 RegEx::RegEx(char a, char z) : m_op(REGEX_RANGE), m_a(a), m_z(z), m_params{} {}
 
-RegEx::RegEx(const std::string& str, REGEX_OP op)
-    : m_op(op), m_a(0), m_z(0), m_params(str.begin(), str.end()) {}
+RegEx::RegEx(const std::string& str, REGEX_OP op) : m_op(op), m_a(0), m_z(0), m_params(str.begin(), str.end()) {}
 
 // combination constructors
 RegEx operator!(const RegEx& ex) {
@@ -40,4 +39,4 @@ RegEx operator+(const RegEx& ex1, const RegEx& ex2) {
   ret.m_params.push_back(ex2);
   return ret;
 }
-}  // namespace YAML
+}

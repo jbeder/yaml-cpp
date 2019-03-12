@@ -424,8 +424,8 @@ TEST(NodeSpecTest, Ex5_5_CommentIndicator) {
 TEST(NodeSpecTest, Ex5_6_NodePropertyIndicators) {
   Node doc = Load(ex5_6);
   EXPECT_EQ(2, doc.size());
-  EXPECT_TRUE(doc["anchored"].as<std::string>() == "value");  // TODO: assert
-                                                              // tag
+  EXPECT_TRUE(doc["anchored"].as<std::string>() ==
+              "value");  // TODO: assert tag
   EXPECT_EQ("value", doc["alias"].as<std::string>());
 }
 
@@ -1127,5 +1127,5 @@ TEST(NodeSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_EQ(1, doc["mapping"].size());
   EXPECT_EQ("bar", doc["mapping"]["foo"].as<std::string>());
 }
-}  // namespace
-}  // namespace YAML
+}
+}

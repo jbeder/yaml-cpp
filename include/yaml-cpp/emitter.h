@@ -250,6 +250,6 @@ inline Emitter& operator<<(Emitter& emitter, _Indent indent) {
 inline Emitter& operator<<(Emitter& emitter, _Precision precision) {
   return emitter.SetLocalPrecision(precision);
 }
-}  // namespace YAML
+}
 
 #endif  // EMITTER_H_62B23520_7C8E_11DE_8A39_0800200C9A66

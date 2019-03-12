@@ -14,4 +14,4 @@ const std::string Directives::TranslateTagHandle(
 
   return it->second;
 }
-}  // namespace YAML
+}

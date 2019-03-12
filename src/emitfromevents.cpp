@@ -16,11 +16,10 @@ std::string ToString(YAML::anchor_t anchor) {
   stream << anchor;
   return stream.str();
 }
-}  // namespace
+}
 
 namespace YAML {
-EmitFromEvents::EmitFromEvents(Emitter& emitter)
-    : m_emitter(emitter), m_stateStack{} {}
+EmitFromEvents::EmitFromEvents(Emitter& emitter) : m_emitter(emitter), m_stateStack{} {}
 
 void EmitFromEvents::OnDocumentStart(const Mark&) {}
 
@@ -117,4 +116,4 @@ void EmitFromEvents::EmitProps(const std::string& tag, anchor_t anchor) {
   if (anchor)
     m_emitter << Anchor(ToString(anchor));
 }
-}  // namespace YAML
+}

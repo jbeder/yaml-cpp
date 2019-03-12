@@ -7,10 +7,10 @@
 #pragma once
 #endif
 
-#include <list>
-#include <map>
-#include <set>
 #include <vector>
+#include <list>
+#include <set>
+#include <map>
 
 namespace YAML {
 template <typename Seq>
@@ -46,6 +46,6 @@ inline Emitter& operator<<(Emitter& emitter, const std::map<K, V>& m) {
   emitter << EndMap;
   return emitter;
 }
-}  // namespace YAML
+}
 
 #endif  // STLEMITTER_H_62B23520_7C8E_11DE_8A39_0800200C9A66

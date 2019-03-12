@@ -8,8 +8,8 @@
 #include "regeximpl.h"
 #include "stringsource.h"
 #include "yaml-cpp/binary.h"  // IWYU pragma: keep
-#include "yaml-cpp/null.h"
 #include "yaml-cpp/ostream_wrapper.h"
+#include "yaml-cpp/null.h"
 
 namespace YAML {
 namespace Utils {
@@ -258,7 +258,7 @@ bool WriteAliasName(ostream_wrapper& out, const std::string& str) {
   }
   return true;
 }
-}  // namespace
+}
 
 StringFormat::value ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
@@ -401,8 +401,8 @@ bool WriteComment(ostream_wrapper& out, const std::string& str,
   for (std::string::const_iterator i = str.begin();
        GetNextCodePointAndAdvance(codePoint, i, str.end());) {
     if (codePoint == '\n') {
-      out << "\n"
-          << IndentTo(curIndent) << "#" << Indentation(postCommentIndent);
+      out << "\n" << IndentTo(curIndent) << "#"
+          << Indentation(postCommentIndent);
       out.set_comment();
     } else {
       WriteCodePoint(out, codePoint);
@@ -479,5 +479,5 @@ bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
                           false);
   return true;
 }
-}  // namespace Utils
-}  // namespace YAML
+}
+}

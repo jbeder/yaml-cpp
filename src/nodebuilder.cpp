@@ -16,7 +16,8 @@ NodeBuilder::NodeBuilder()
       m_stack{},
       m_anchors{},
       m_keys{},
-      m_mapDepth(0) {
+      m_mapDepth(0)
+{
   m_anchors.push_back(nullptr);  // since the anchors start at 1
 }
 
@@ -132,4 +133,4 @@ void NodeBuilder::RegisterAnchor(anchor_t anchor, detail::node& node) {
     m_anchors.push_back(&node);
   }
 }
-}  // namespace YAML
+}

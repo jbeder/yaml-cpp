@@ -44,10 +44,10 @@
 // scripts/fuse_gtest.py depends on gtest's own header being #included
 // *unconditionally*.  Therefore these #includes cannot be moved
 // inside #if GTEST_HAS_PARAM_TEST.
-#include "gtest/gtest-printers.h"
 #include "gtest/internal/gtest-internal.h"
 #include "gtest/internal/gtest-linked_ptr.h"
 #include "gtest/internal/gtest-port.h"
+#include "gtest/gtest-printers.h"
 
 #if GTEST_HAS_PARAM_TEST
 
@@ -57,8 +57,9 @@ namespace testing {
 // Consists of the parameter value and the integer parameter index.
 template <class ParamType>
 struct TestParamInfo {
-  TestParamInfo(const ParamType& a_param, size_t an_index)
-      : param(a_param), index(an_index) {}
+  TestParamInfo(const ParamType& a_param, size_t an_index) :
+    param(a_param),
+    index(an_index) {}
   ParamType param;
   size_t index;
 };
@@ -83,10 +84,8 @@ namespace internal {
 GTEST_API_ void ReportInvalidTestCaseType(const char* test_case_name,
                                           CodeLocation code_location);
 
-template <typename>
-class ParamGeneratorInterface;
-template <typename>
-class ParamGenerator;
+template <typename> class ParamGeneratorInterface;
+template <typename> class ParamGenerator;
 
 // Interface for iterating over elements provided by an implementation
 // of ParamGeneratorInterface<T>.
@@ -158,7 +157,7 @@ class ParamIterator {
  private:
   friend class ParamGenerator<T>;
   explicit ParamIterator(ParamIteratorInterface<T>* impl) : impl_(impl) {}
-  scoped_ptr<ParamIteratorInterface<T>> impl_;
+  scoped_ptr<ParamIteratorInterface<T> > impl_;
 };
 
 // ParamGeneratorInterface<T> is the binary interface to access generators
@@ -180,7 +179,7 @@ class ParamGeneratorInterface {
 // This class implements copy initialization semantics and the contained
 // ParamGeneratorInterface<T> instance is shared among all copies
 // of the original object. This is possible because that instance is immutable.
-template <typename T>
+template<typename T>
 class ParamGenerator {
  public:
   typedef ParamIterator<T> iterator;
@@ -197,7 +196,7 @@ class ParamGenerator {
   iterator end() const { return iterator(impl_->End()); }
 
  private:
-  linked_ptr<const ParamGeneratorInterface<T>> impl_;
+  linked_ptr<const ParamGeneratorInterface<T> > impl_;
 };
 
 // Generates values from a range of two comparable values. Can be used to
@@ -208,10 +207,8 @@ template <typename T, typename IncrementT>
 class RangeGenerator : public ParamGeneratorInterface<T> {
  public:
   RangeGenerator(T begin, T end, IncrementT step)
-      : begin_(begin),
-        end_(end),
-        step_(step),
-        end_index_(CalculateEndIndex(begin, end, step)) {}
+      : begin_(begin), end_(end),
+        step_(step), end_index_(CalculateEndIndex(begin, end, step)) {}
   virtual ~RangeGenerator() {}
 
   virtual ParamIteratorInterface<T>* Begin() const {
@@ -254,9 +251,7 @@ class RangeGenerator : public ParamGeneratorInterface<T> {
    private:
     Iterator(const Iterator& other)
         : ParamIteratorInterface<T>(),
-          base_(other.base_),
-          value_(other.value_),
-          index_(other.index_),
+          base_(other.base_), value_(other.value_), index_(other.index_),
           step_(other.step_) {}
 
     // No implementation - assignment is unsupported.
@@ -268,7 +263,8 @@ class RangeGenerator : public ParamGeneratorInterface<T> {
     const IncrementT step_;
   };  // class RangeGenerator::Iterator
 
-  static int CalculateEndIndex(const T& begin, const T& end,
+  static int CalculateEndIndex(const T& begin,
+                               const T& end,
                                const IncrementT& step) {
     int end_index = 0;
     for (T i = begin; i < end; i = static_cast<T>(i + step))
@@ -286,6 +282,7 @@ class RangeGenerator : public ParamGeneratorInterface<T> {
   // sequence are indexed (0-based) to aid iterator comparison.
   const int end_index_;
 };  // class RangeGenerator
+
 
 // Generates values from a pair of STL-style iterators. Used in the
 // ValuesIn() function. The elements are copied from the source range
@@ -345,13 +342,13 @@ class ValuesInIteratorRangeGenerator : public ParamGeneratorInterface<T> {
           << "The program attempted to compare iterators "
           << "from different generators." << std::endl;
       return iterator_ ==
-             CheckedDowncastToActualType<const Iterator>(&other)->iterator_;
+          CheckedDowncastToActualType<const Iterator>(&other)->iterator_;
     }
 
    private:
     Iterator(const Iterator& other)
-        // The explicit constructor call suppresses a false warning
-        // emitted by gcc when supplied with the -Wextra option.
+          // The explicit constructor call suppresses a false warning
+          // emitted by gcc when supplied with the -Wextra option.
         : ParamIteratorInterface<T>(),
           base_(other.base_),
           iterator_(other.iterator_) {}
@@ -399,7 +396,7 @@ struct ParamNameGenFunc {
 };
 
 template <class ParamType>
-typename ParamNameGenFunc<ParamType>::Type* GetParamNameGen() {
+typename ParamNameGenFunc<ParamType>::Type *GetParamNameGen() {
   return DefaultParamName;
 }
 
@@ -411,8 +408,8 @@ template <class TestClass>
 class ParameterizedTestFactory : public TestFactoryBase {
  public:
   typedef typename TestClass::ParamType ParamType;
-  explicit ParameterizedTestFactory(ParamType parameter)
-      : parameter_(parameter) {}
+  explicit ParameterizedTestFactory(ParamType parameter) :
+      parameter_(parameter) {}
   virtual Test* CreateTest() {
     TestClass::SetParam(&parameter_);
     return new TestClass();
@@ -509,8 +506,8 @@ class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
   typedef ParamGenerator<ParamType>(GeneratorCreationFunc)();
   typedef typename ParamNameGenFunc<ParamType>::Type ParamNameGeneratorFunc;
 
-  explicit ParameterizedTestCaseInfo(const char* name,
-                                     CodeLocation code_location)
+  explicit ParameterizedTestCaseInfo(
+      const char* name, CodeLocation code_location)
       : test_case_name_(name), code_location_(code_location) {}
 
   // Test case base name for display purposes.
@@ -523,17 +520,20 @@ class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
   // prefix). test_base_name is the name of an individual test without
   // parameter index. For the test SequenceA/FooTest.DoBar/1 FooTest is
   // test case base name and DoBar is test base name.
-  void AddTestPattern(const char* test_case_name, const char* test_base_name,
+  void AddTestPattern(const char* test_case_name,
+                      const char* test_base_name,
                       TestMetaFactoryBase<ParamType>* meta_factory) {
-    tests_.push_back(linked_ptr<TestInfo>(
-        new TestInfo(test_case_name, test_base_name, meta_factory)));
+    tests_.push_back(linked_ptr<TestInfo>(new TestInfo(test_case_name,
+                                                       test_base_name,
+                                                       meta_factory)));
   }
   // INSTANTIATE_TEST_CASE_P macro uses AddGenerator() to record information
   // about a generator.
   int AddTestCaseInstantiation(const string& instantiation_name,
                                GeneratorCreationFunc* func,
                                ParamNameGeneratorFunc* name_func,
-                               const char* file, int line) {
+                               const char* file,
+                               int line) {
     instantiations_.push_back(
         InstantiationInfo(instantiation_name, func, name_func, file, line));
     return 0;  // Return value used only to run this method in namespace scope.
@@ -548,8 +548,8 @@ class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
          test_it != tests_.end(); ++test_it) {
       linked_ptr<TestInfo> test_info = *test_it;
       for (typename InstantiationContainer::iterator gen_it =
-               instantiations_.begin();
-           gen_it != instantiations_.end(); ++gen_it) {
+               instantiations_.begin(); gen_it != instantiations_.end();
+               ++gen_it) {
         const string& instantiation_name = gen_it->name;
         ParamGenerator<ParamType> generator((*gen_it->generator)());
         ParamNameGeneratorFunc* name_func = gen_it->name_func;
@@ -557,7 +557,7 @@ class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
         int line = gen_it->line;
 
         string test_case_name;
-        if (!instantiation_name.empty())
+        if ( !instantiation_name.empty() )
           test_case_name = instantiation_name + "/";
         test_case_name += test_info->test_case_base_name;
 
@@ -568,66 +568,72 @@ class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
              param_it != generator.end(); ++param_it, ++i) {
           Message test_name_stream;
 
-          std::string param_name =
-              name_func(TestParamInfo<ParamType>(*param_it, i));
+          std::string param_name = name_func(
+              TestParamInfo<ParamType>(*param_it, i));
 
           GTEST_CHECK_(IsValidParamName(param_name))
               << "Parameterized test name '" << param_name
-              << "' is invalid, in " << file << " line " << line << std::endl;
+              << "' is invalid, in " << file
+              << " line " << line << std::endl;
 
           GTEST_CHECK_(test_param_names.count(param_name) == 0)
-              << "Duplicate parameterized test name '" << param_name << "', in "
-              << file << " line " << line << std::endl;
+              << "Duplicate parameterized test name '" << param_name
+              << "', in " << file << " line " << line << std::endl;
 
           test_param_names.insert(param_name);
 
           test_name_stream << test_info->test_base_name << "/" << param_name;
           MakeAndRegisterTestInfo(
-              test_case_name.c_str(), test_name_stream.GetString().c_str(),
+              test_case_name.c_str(),
+              test_name_stream.GetString().c_str(),
               NULL,  // No type parameter.
-              PrintToString(*param_it).c_str(), code_location_,
-              GetTestCaseTypeId(), TestCase::SetUpTestCase,
+              PrintToString(*param_it).c_str(),
+              code_location_,
+              GetTestCaseTypeId(),
+              TestCase::SetUpTestCase,
               TestCase::TearDownTestCase,
               test_info->test_meta_factory->CreateTestFactory(*param_it));
         }  // for param_it
-      }    // for gen_it
-    }      // for test_it
-  }        // RegisterTests
+      }  // for gen_it
+    }  // for test_it
+  }  // RegisterTests
 
  private:
   // LocalTestInfo structure keeps information about a single test registered
   // with TEST_P macro.
   struct TestInfo {
-    TestInfo(const char* a_test_case_base_name, const char* a_test_base_name,
-             TestMetaFactoryBase<ParamType>* a_test_meta_factory)
-        : test_case_base_name(a_test_case_base_name),
-          test_base_name(a_test_base_name),
-          test_meta_factory(a_test_meta_factory) {}
+    TestInfo(const char* a_test_case_base_name,
+             const char* a_test_base_name,
+             TestMetaFactoryBase<ParamType>* a_test_meta_factory) :
+        test_case_base_name(a_test_case_base_name),
+        test_base_name(a_test_base_name),
+        test_meta_factory(a_test_meta_factory) {}
 
     const string test_case_base_name;
     const string test_base_name;
-    const scoped_ptr<TestMetaFactoryBase<ParamType>> test_meta_factory;
+    const scoped_ptr<TestMetaFactoryBase<ParamType> > test_meta_factory;
   };
-  typedef ::std::vector<linked_ptr<TestInfo>> TestInfoContainer;
+  typedef ::std::vector<linked_ptr<TestInfo> > TestInfoContainer;
   // Records data received from INSTANTIATE_TEST_CASE_P macros:
   //  <Instantiation name, Sequence generator creation function,
   //     Name generator function, Source file, Source line>
   struct InstantiationInfo {
-    InstantiationInfo(const std::string& name_in,
-                      GeneratorCreationFunc* generator_in,
-                      ParamNameGeneratorFunc* name_func_in, const char* file_in,
-                      int line_in)
-        : name(name_in),
-          generator(generator_in),
-          name_func(name_func_in),
-          file(file_in),
-          line(line_in) {}
+      InstantiationInfo(const std::string &name_in,
+                        GeneratorCreationFunc* generator_in,
+                        ParamNameGeneratorFunc* name_func_in,
+                        const char* file_in,
+                        int line_in)
+          : name(name_in),
+            generator(generator_in),
+            name_func(name_func_in),
+            file(file_in),
+            line(line_in) {}
 
-    std::string name;
-    GeneratorCreationFunc* generator;
-    ParamNameGeneratorFunc* name_func;
-    const char* file;
-    int line;
+      std::string name;
+      GeneratorCreationFunc* generator;
+      ParamNameGeneratorFunc* name_func;
+      const char* file;
+      int line;
   };
   typedef ::std::vector<InstantiationInfo> InstantiationContainer;
 
@@ -673,7 +679,8 @@ class ParameterizedTestCaseRegistry {
   // tests and instantiations of a particular test case.
   template <class TestCase>
   ParameterizedTestCaseInfo<TestCase>* GetTestCasePatternHolder(
-      const char* test_case_name, CodeLocation code_location) {
+      const char* test_case_name,
+      CodeLocation code_location) {
     ParameterizedTestCaseInfo<TestCase>* typed_test_info = NULL;
     for (TestCaseInfoContainer::iterator it = test_case_infos_.begin();
          it != test_case_infos_.end(); ++it) {
@@ -688,16 +695,15 @@ class ParameterizedTestCaseRegistry {
           // At this point we are sure that the object we found is of the same
           // type we are looking for, so we downcast it to that type
           // without further checks.
-          typed_test_info =
-              CheckedDowncastToActualType<ParameterizedTestCaseInfo<TestCase>>(
-                  *it);
+          typed_test_info = CheckedDowncastToActualType<
+              ParameterizedTestCaseInfo<TestCase> >(*it);
         }
         break;
       }
     }
     if (typed_test_info == NULL) {
-      typed_test_info = new ParameterizedTestCaseInfo<TestCase>(test_case_name,
-                                                                code_location);
+      typed_test_info = new ParameterizedTestCaseInfo<TestCase>(
+          test_case_name, code_location);
       test_case_infos_.push_back(typed_test_info);
     }
     return typed_test_info;

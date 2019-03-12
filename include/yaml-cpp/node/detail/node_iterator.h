@@ -11,8 +11,8 @@
 #include "yaml-cpp/node/ptr.h"
 #include <cstddef>
 #include <iterator>
-#include <map>
 #include <memory>
+#include <map>
 #include <utility>
 #include <vector>
 
@@ -174,7 +174,7 @@ class node_iterator_base
 
 typedef node_iterator_base<node> node_iterator;
 typedef node_iterator_base<const node> const_node_iterator;
-}  // namespace detail
-}  // namespace YAML
+}
+}
 
 #endif  // VALUE_DETAIL_NODE_ITERATOR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

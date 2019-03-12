@@ -7,11 +7,11 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/dll.h"
 #include "yaml-cpp/emitterstyle.h"
-#include "yaml-cpp/node/detail/node_ref.h"
-#include "yaml-cpp/node/ptr.h"
+#include "yaml-cpp/dll.h"
 #include "yaml-cpp/node/type.h"
+#include "yaml-cpp/node/ptr.h"
+#include "yaml-cpp/node/detail/node_ref.h"
 #include <set>
 
 namespace YAML {
@@ -163,7 +163,7 @@ class node {
   typedef std::set<node*> nodes;
   nodes m_dependencies;
 };
-}  // namespace detail
-}  // namespace YAML
+}
+}
 
 #endif  // NODE_DETAIL_NODE_H_62B23520_7C8E_11DE_8A39_0800200C9A66

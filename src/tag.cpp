@@ -6,8 +6,7 @@
 #include "token.h"
 
 namespace YAML {
-Tag::Tag(const Token& token)
-    : type(static_cast<TYPE>(token.data)), handle{}, value{} {
+Tag::Tag(const Token& token) : type(static_cast<TYPE>(token.data)), handle{}, value{} {
   switch (type) {
     case VERBATIM:
       value = token.value;
@@ -47,4 +46,4 @@ const std::string Tag::Translate(const Directives& directives) {
   }
   throw std::runtime_error("yaml-cpp: internal error, bad tag type");
 }
-}  // namespace YAML
+}

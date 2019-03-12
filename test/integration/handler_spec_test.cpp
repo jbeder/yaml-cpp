@@ -1607,5 +1607,5 @@ TEST_F(HandlerSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(ex8_22);
 }
-}  // namespace
-}  // namespace YAML
+}
+}

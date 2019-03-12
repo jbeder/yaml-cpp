@@ -117,7 +117,7 @@
 #include "gmock/gmock.h"
 
 #if !GTEST_OS_WINDOWS_MOBILE
-#include <errno.h>
+# include <errno.h>
 #endif
 
 #include "gmock/internal/gmock-port.h"
@@ -195,14 +195,14 @@ class Interface {
   virtual char* StringFromString(char* str) = 0;
   virtual int IntFromString(char* str) = 0;
   virtual int& IntRefFromString(char* str) = 0;
-  virtual void VoidFromFunc(void (*func)(char* str)) = 0;
+  virtual void VoidFromFunc(void(*func)(char* str)) = 0;
   virtual void VoidFromIntRef(int& n) = 0;  // NOLINT
   virtual void VoidFromFloat(float n) = 0;
   virtual void VoidFromDouble(double n) = 0;
   virtual void VoidFromVector(const std::vector<int>& v) = 0;
 };
 
-class Mock : public Interface {
+class Mock: public Interface {
  public:
   Mock() {}
 
@@ -210,7 +210,7 @@ class Mock : public Interface {
   MOCK_METHOD1(StringFromString, char*(char* str));
   MOCK_METHOD1(IntFromString, int(char* str));
   MOCK_METHOD1(IntRefFromString, int&(char* str));
-  MOCK_METHOD1(VoidFromFunc, void(void (*func)(char* str)));
+  MOCK_METHOD1(VoidFromFunc, void(void(*func)(char* str)));
   MOCK_METHOD1(VoidFromIntRef, void(int& n));  // NOLINT
   MOCK_METHOD1(VoidFromFloat, void(float n));
   MOCK_METHOD1(VoidFromDouble, void(double n));
@@ -296,8 +296,8 @@ TEST(LinkTest, TestSetArrayArgument) {
   char ch = 'x';
   char ch2 = 'y';
 
-  EXPECT_CALL(mock, VoidFromString(_))
-      .WillOnce(SetArrayArgument<0>(&ch2, &ch2 + 1));
+  EXPECT_CALL(mock, VoidFromString(_)).WillOnce(SetArrayArgument<0>(&ch2,
+                                                                    &ch2 + 1));
   mock.VoidFromString(&ch);
 }
 
@@ -334,8 +334,8 @@ TEST(LinkTest, TestInvokeWithoutArgs) {
 
   EXPECT_CALL(mock, VoidFromString(_))
       .WillOnce(InvokeWithoutArgs(&InvokeHelper::StaticVoidFromVoid))
-      .WillOnce(
-          InvokeWithoutArgs(&test_invoke_helper, &InvokeHelper::VoidFromVoid));
+      .WillOnce(InvokeWithoutArgs(&test_invoke_helper,
+                                  &InvokeHelper::VoidFromVoid));
   mock.VoidFromString(NULL);
   mock.VoidFromString(NULL);
 }
@@ -419,14 +419,14 @@ TEST(LinkTest, TestThrow) {
 // is expanded and macro expansion cannot contain #pragma.  Therefore
 // we suppress them here.
 #ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4100)
+# pragma warning(push)
+# pragma warning(disable:4100)
 #endif
 
 // Tests the linkage of actions created using ACTION macro.
 namespace {
 ACTION(Return1) { return 1; }
-}  // namespace
+}
 
 TEST(LinkTest, TestActionMacro) {
   Mock mock;
@@ -438,7 +438,7 @@ TEST(LinkTest, TestActionMacro) {
 // Tests the linkage of actions created using ACTION_P macro.
 namespace {
 ACTION_P(ReturnArgument, ret_value) { return ret_value; }
-}  // namespace
+}
 
 TEST(LinkTest, TestActionPMacro) {
   Mock mock;
@@ -452,10 +452,10 @@ namespace {
 ACTION_P2(ReturnEqualsEitherOf, first, second) {
   return arg0 == first || arg0 == second;
 }
-}  // namespace
+}
 
 #ifdef _MSC_VER
-#pragma warning(pop)
+# pragma warning(pop)
 #endif
 
 TEST(LinkTest, TestActionP2Macro) {
@@ -487,7 +487,8 @@ TEST(LinkTest, TestMatchersEq) {
   const char* p = "x";
 
   ON_CALL(mock, VoidFromString(Eq(p))).WillByDefault(Return());
-  ON_CALL(mock, VoidFromString(const_cast<char*>("y"))).WillByDefault(Return());
+  ON_CALL(mock, VoidFromString(const_cast<char*>("y")))
+      .WillByDefault(Return());
 }
 
 // Tests the linkage of the Lt, Gt, Le, Ge, and Ne matchers.
@@ -586,7 +587,7 @@ TEST(LinkTest, TestMatcherElementsAre) {
 // Tests the linkage of the ElementsAreArray matcher.
 TEST(LinkTest, TestMatcherElementsAreArray) {
   Mock mock;
-  char arr[] = {'a', 'b'};
+  char arr[] = { 'a', 'b' };
 
   ON_CALL(mock, VoidFromVector(ElementsAreArray(arr))).WillByDefault(Return());
 }

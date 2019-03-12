@@ -7,8 +7,8 @@
 #pragma once
 #endif
 
-#include <iosfwd>
 #include <string>
+#include <iosfwd>
 
 #include "yaml-cpp/dll.h"
 

@@ -23,4 +23,4 @@ class MockEventHandler : public EventHandler {
                                 EmitterStyle::value));
   MOCK_METHOD0(OnMapEnd, void());
 };
-}  // namespace YAML
+}

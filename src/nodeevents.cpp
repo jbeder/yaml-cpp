@@ -98,4 +98,4 @@ bool NodeEvents::IsAliased(const detail::node& node) const {
   RefCount::const_iterator it = m_refCount.find(node.ref());
   return it != m_refCount.end() && it->second > 1;
 }
-}  // namespace YAML
+}

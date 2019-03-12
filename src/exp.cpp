@@ -132,5 +132,5 @@ std::string Escape(Stream& in) {
   std::stringstream msg;
   throw ParserException(in.mark(), std::string(ErrorMsg::INVALID_ESCAPE) + ch);
 }
-}  // namespace Exp
-}  // namespace YAML
+}
+}

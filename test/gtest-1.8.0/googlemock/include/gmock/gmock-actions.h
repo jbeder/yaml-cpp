@@ -37,7 +37,7 @@
 #define GMOCK_INCLUDE_GMOCK_GMOCK_ACTIONS_H_
 
 #ifndef _WIN32_WCE
-#include <errno.h>
+# include <errno.h>
 #endif
 
 #include <algorithm>
@@ -98,7 +98,9 @@ class BuiltInDefaultValue {
  public:
 #if GTEST_HAS_STD_TYPE_TRAITS_
   // This function returns true iff type T has a built-in default value.
-  static bool Exists() { return ::std::is_default_constructible<T>::value; }
+  static bool Exists() {
+    return ::std::is_default_constructible<T>::value;
+  }
 
   static T Get() {
     return BuiltInDefaultValueGetter<
@@ -107,9 +109,13 @@ class BuiltInDefaultValue {
 
 #else  // GTEST_HAS_STD_TYPE_TRAITS_
   // This function returns true iff type T has a built-in default value.
-  static bool Exists() { return false; }
+  static bool Exists() {
+    return false;
+  }
 
-  static T Get() { return BuiltInDefaultValueGetter<T, false>::Get(); }
+  static T Get() {
+    return BuiltInDefaultValueGetter<T, false>::Get();
+  }
 
 #endif  // GTEST_HAS_STD_TYPE_TRAITS_
 };
@@ -135,11 +141,11 @@ class BuiltInDefaultValue<T*> {
 // The following specializations define the default values for
 // specific types we care about.
 #define GMOCK_DEFINE_DEFAULT_ACTION_FOR_RETURN_TYPE_(type, value) \
-  template <>                                                     \
-  class BuiltInDefaultValue<type> {                               \
-   public:                                                        \
-    static bool Exists() { return true; }                         \
-    static type Get() { return value; }                           \
+  template <> \
+  class BuiltInDefaultValue<type> { \
+   public: \
+    static bool Exists() { return true; } \
+    static type Get() { return value; } \
   }
 
 GMOCK_DEFINE_DEFAULT_ACTION_FOR_RETURN_TYPE_(void, );  // NOLINT
@@ -228,8 +234,8 @@ class DefaultValue {
   // otherwise returns the built-in default value. Requires that Exists()
   // is true, which ensures that the return value is well-defined.
   static T Get() {
-    return producer_ == NULL ? internal::BuiltInDefaultValue<T>::Get()
-                             : producer_->Produce();
+    return producer_ == NULL ?
+        internal::BuiltInDefaultValue<T>::Get() : producer_->Produce();
   }
 
  private:
@@ -274,7 +280,9 @@ class DefaultValue<T&> {
   }
 
   // Unsets the default value for type T&.
-  static void Clear() { address_ = NULL; }
+  static void Clear() {
+    address_ = NULL;
+  }
 
   // Returns true iff the user has set the default value for type T&.
   static bool IsSet() { return address_ != NULL; }
@@ -289,8 +297,8 @@ class DefaultValue<T&> {
   // otherwise returns the built-in default value if there is one;
   // otherwise aborts the process.
   static T& Get() {
-    return address_ == NULL ? internal::BuiltInDefaultValue<T&>::Get()
-                            : *address_;
+    return address_ == NULL ?
+        internal::BuiltInDefaultValue<T&>::Get() : *address_;
   }
 
  private:
@@ -391,7 +399,7 @@ class Action {
   template <typename F1, typename F2>
   friend class internal::ActionAdaptor;
 
-  internal::linked_ptr<ActionInterface<F>> impl_;
+  internal::linked_ptr<ActionInterface<F> > impl_;
 };
 
 // The PolymorphicAction class template makes it easy to implement a
@@ -485,7 +493,7 @@ class ActionAdaptor : public ActionInterface<F1> {
   }
 
  private:
-  const internal::linked_ptr<ActionInterface<F2>> impl_;
+  const internal::linked_ptr<ActionInterface<F2> > impl_;
 
   GTEST_DISALLOW_ASSIGN_(ActionAdaptor);
 };
@@ -671,7 +679,9 @@ class ReturnRefAction {
 
     explicit Impl(T& ref) : ref_(ref) {}  // NOLINT
 
-    virtual Result Perform(const ArgumentTuple&) { return ref_; }
+    virtual Result Perform(const ArgumentTuple&) {
+      return ref_;
+    }
 
    private:
     T& ref_;
@@ -718,7 +728,9 @@ class ReturnRefOfCopyAction {
 
     explicit Impl(const T& value) : value_(value) {}  // NOLINT
 
-    virtual Result Perform(const ArgumentTuple&) { return value_; }
+    virtual Result Perform(const ArgumentTuple&) {
+      return value_;
+    }
 
    private:
     T value_;
@@ -737,9 +749,7 @@ class DoDefaultAction {
   // This template type conversion operator allows DoDefault() to be
   // used in any function.
   template <typename F>
-  operator Action<F>() const {
-    return Action<F>(NULL);
-  }
+  operator Action<F>() const { return Action<F>(NULL); }
 };
 
 // Implements the Assign action to set a given pointer referent to a
@@ -769,7 +779,8 @@ template <typename T>
 class SetErrnoAndReturnAction {
  public:
   SetErrnoAndReturnAction(int errno_value, T result)
-      : errno_(errno_value), result_(result) {}
+      : errno_(errno_value),
+        result_(result) {}
   template <typename Result, typename ArgumentTuple>
   Result Perform(const ArgumentTuple& /* args */) const {
     errno = errno_;
@@ -847,9 +858,7 @@ class InvokeWithoutArgsAction {
   // Allows InvokeWithoutArgs(f) to be used as any action whose type is
   // compatible with f.
   template <typename Result, typename ArgumentTuple>
-  Result Perform(const ArgumentTuple&) {
-    return function_impl_();
-  }
+  Result Perform(const ArgumentTuple&) { return function_impl_(); }
 
  private:
   FunctionImpl function_impl_;
@@ -917,8 +926,8 @@ class IgnoreResultAction {
    private:
     // Type OriginalFunction is the same as F except that its return
     // type is IgnoredValue.
-    typedef
-        typename internal::Function<F>::MakeResultIgnoredValue OriginalFunction;
+    typedef typename internal::Function<F>::MakeResultIgnoredValue
+        OriginalFunction;
 
     const Action<OriginalFunction> action_;
 
@@ -946,7 +955,6 @@ class ReferenceWrapper {
   // Allows a ReferenceWrapper<T> object to be implicitly converted to
   // a T&.
   operator T&() const { return *pointer_; }
-
  private:
   T* pointer_;
 };
@@ -1095,12 +1103,12 @@ inline internal::DoDefaultAction DoDefault() {
 // Creates an action that sets the variable pointed by the N-th
 // (0-based) function argument to 'value'.
 template <size_t N, typename T>
-PolymorphicAction<internal::SetArgumentPointeeAction<
-    N, T, internal::IsAProtocolMessage<T>::value>>
-    SetArgPointee(const T& x) {
-  return MakePolymorphicAction(
-      internal::SetArgumentPointeeAction<
-          N, T, internal::IsAProtocolMessage<T>::value>(x));
+PolymorphicAction<
+  internal::SetArgumentPointeeAction<
+    N, T, internal::IsAProtocolMessage<T>::value> >
+SetArgPointee(const T& x) {
+  return MakePolymorphicAction(internal::SetArgumentPointeeAction<
+      N, T, internal::IsAProtocolMessage<T>::value>(x));
 }
 
 #if !((GTEST_GCC_VER_ && GTEST_GCC_VER_ < 40000) || GTEST_OS_SYMBIAN)
@@ -1108,33 +1116,35 @@ PolymorphicAction<internal::SetArgumentPointeeAction<
 // GCC prior to the version 4.0 and Symbian C++ compiler cannot distinguish
 // this overload from the templated version and emit a compile error.
 template <size_t N>
-PolymorphicAction<internal::SetArgumentPointeeAction<N, const char*, false>>
-    SetArgPointee(const char* p) {
-  return MakePolymorphicAction(
-      internal::SetArgumentPointeeAction<N, const char*, false>(p));
+PolymorphicAction<
+  internal::SetArgumentPointeeAction<N, const char*, false> >
+SetArgPointee(const char* p) {
+  return MakePolymorphicAction(internal::SetArgumentPointeeAction<
+      N, const char*, false>(p));
 }
 
 template <size_t N>
-PolymorphicAction<internal::SetArgumentPointeeAction<N, const wchar_t*, false>>
-    SetArgPointee(const wchar_t* p) {
-  return MakePolymorphicAction(
-      internal::SetArgumentPointeeAction<N, const wchar_t*, false>(p));
+PolymorphicAction<
+  internal::SetArgumentPointeeAction<N, const wchar_t*, false> >
+SetArgPointee(const wchar_t* p) {
+  return MakePolymorphicAction(internal::SetArgumentPointeeAction<
+      N, const wchar_t*, false>(p));
 }
 #endif
 
 // The following version is DEPRECATED.
 template <size_t N, typename T>
-PolymorphicAction<internal::SetArgumentPointeeAction<
-    N, T, internal::IsAProtocolMessage<T>::value>>
-    SetArgumentPointee(const T& x) {
-  return MakePolymorphicAction(
-      internal::SetArgumentPointeeAction<
-          N, T, internal::IsAProtocolMessage<T>::value>(x));
+PolymorphicAction<
+  internal::SetArgumentPointeeAction<
+    N, T, internal::IsAProtocolMessage<T>::value> >
+SetArgumentPointee(const T& x) {
+  return MakePolymorphicAction(internal::SetArgumentPointeeAction<
+      N, T, internal::IsAProtocolMessage<T>::value>(x));
 }
 
 // Creates an action that sets a pointer referent to a given value.
 template <typename T1, typename T2>
-PolymorphicAction<internal::AssignAction<T1, T2>> Assign(T1* ptr, T2 val) {
+PolymorphicAction<internal::AssignAction<T1, T2> > Assign(T1* ptr, T2 val) {
   return MakePolymorphicAction(internal::AssignAction<T1, T2>(ptr, val));
 }
 
@@ -1142,8 +1152,8 @@ PolymorphicAction<internal::AssignAction<T1, T2>> Assign(T1* ptr, T2 val) {
 
 // Creates an action that sets errno and returns the appropriate error.
 template <typename T>
-PolymorphicAction<internal::SetErrnoAndReturnAction<T>> SetErrnoAndReturn(
-    int errval, T result) {
+PolymorphicAction<internal::SetErrnoAndReturnAction<T> >
+SetErrnoAndReturn(int errval, T result) {
   return MakePolymorphicAction(
       internal::SetErrnoAndReturnAction<T>(errval, result));
 }
@@ -1154,8 +1164,8 @@ PolymorphicAction<internal::SetErrnoAndReturnAction<T>> SetErrnoAndReturn(
 
 // Creates an action that invokes 'function_impl' with no argument.
 template <typename FunctionImpl>
-PolymorphicAction<internal::InvokeWithoutArgsAction<FunctionImpl>>
-    InvokeWithoutArgs(FunctionImpl function_impl) {
+PolymorphicAction<internal::InvokeWithoutArgsAction<FunctionImpl> >
+InvokeWithoutArgs(FunctionImpl function_impl) {
   return MakePolymorphicAction(
       internal::InvokeWithoutArgsAction<FunctionImpl>(function_impl));
 }
@@ -1163,11 +1173,11 @@ PolymorphicAction<internal::InvokeWithoutArgsAction<FunctionImpl>>
 // Creates an action that invokes the given method on the given object
 // with no argument.
 template <class Class, typename MethodPtr>
-PolymorphicAction<internal::InvokeMethodWithoutArgsAction<Class, MethodPtr>>
-    InvokeWithoutArgs(Class* obj_ptr, MethodPtr method_ptr) {
+PolymorphicAction<internal::InvokeMethodWithoutArgsAction<Class, MethodPtr> >
+InvokeWithoutArgs(Class* obj_ptr, MethodPtr method_ptr) {
   return MakePolymorphicAction(
-      internal::InvokeMethodWithoutArgsAction<Class, MethodPtr>(obj_ptr,
-                                                                method_ptr));
+      internal::InvokeMethodWithoutArgsAction<Class, MethodPtr>(
+          obj_ptr, method_ptr));
 }
 
 // Creates an action that performs an_action and throws away its

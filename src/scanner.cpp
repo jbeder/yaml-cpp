@@ -17,7 +17,8 @@ Scanner::Scanner(std::istream& in)
       m_simpleKeys{},
       m_indents{},
       m_indentRefs{},
-      m_flows{} {}
+      m_flows{}
+{}
 
 Scanner::~Scanner() {}
 

@@ -1,8 +1,8 @@
-#include <sstream>
 #include <stddef.h>
+#include <sstream>
 
-#include "yaml-cpp/ostream_wrapper.h"
 #include "gtest/gtest.h"
+#include "yaml-cpp/ostream_wrapper.h"
 
 namespace {
 TEST(OstreamWrapperTest, BufferNoWrite) {
@@ -63,4 +63,4 @@ TEST(OstreamWrapperTest, Comment) {
   wrapper.write("\n");
   EXPECT_FALSE(wrapper.comment());
 }
-}  // namespace
+}

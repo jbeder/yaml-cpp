@@ -253,9 +253,8 @@ TEST_F(EmitterTest, ScalarFormat) {
   out << DoubleQuoted << "explicit double-quoted scalar";
   out << "auto-detected\ndouble-quoted scalar";
   out << "a non-\"auto-detected\" double-quoted scalar";
-  out << Literal
-      << "literal scalar\nthat may span\nmany, many\nlines "
-         "and have \"whatever\" crazy\tsymbols that we like";
+  out << Literal << "literal scalar\nthat may span\nmany, many\nlines "
+                    "and have \"whatever\" crazy\tsymbols that we like";
   out << EndSeq;
 
   ExpectEmit(
@@ -527,10 +526,9 @@ TEST_F(EmitterTest, SimpleComment) {
 
 TEST_F(EmitterTest, MultiLineComment) {
   out << BeginSeq;
-  out << "item 1"
-      << Comment(
-             "really really long\ncomment that couldn't "
-             "possibly\nfit on one line");
+  out << "item 1" << Comment(
+                         "really really long\ncomment that couldn't "
+                         "possibly\nfit on one line");
   out << "item 2";
   out << EndSeq;
 
@@ -1036,5 +1034,5 @@ TEST_F(EmitterErrorTest, InvalidAlias) {
 
   ExpectEmitError(ErrorMsg::INVALID_ALIAS);
 }
-}  // namespace
-}  // namespace YAML
+}
+}

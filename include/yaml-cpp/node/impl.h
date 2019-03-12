@@ -7,11 +7,11 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/exceptions.h"
+#include "yaml-cpp/node/node.h"
+#include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/memory.h"
 #include "yaml-cpp/node/detail/node.h"
-#include "yaml-cpp/node/iterator.h"
-#include "yaml-cpp/node/node.h"
+#include "yaml-cpp/exceptions.h"
 #include <string>
 
 namespace YAML {
@@ -366,7 +366,7 @@ template <typename T>
 inline typename to_value_t<T>::return_type to_value(const T& t) {
   return to_value_t<T>(t)();
 }
-}  // namespace detail
+}
 
 // indexing
 template <typename Key>
@@ -374,8 +374,8 @@ inline const Node Node::operator[](const Key& key) const {
   if (!m_isValid)
     throw InvalidNode();
   EnsureNodeExists();
-  detail::node* value = static_cast<const detail::node&>(*m_pNode).get(
-      detail::to_value(key), m_pMemory);
+  detail::node* value = static_cast<const detail::node&>(*m_pNode)
+                            .get(detail::to_value(key), m_pMemory);
   if (!value) {
     return Node(ZombieNode);
   }
@@ -443,6 +443,6 @@ inline void Node::force_insert(const Key& key, const Value& value) {
 
 // free functions
 inline bool operator==(const Node& lhs, const Node& rhs) { return lhs.is(rhs); }
-}  // namespace YAML
+}
 
 #endif  // NODE_IMPL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
