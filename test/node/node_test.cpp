@@ -1,10 +1,10 @@
-#include "yaml-cpp/node/node.h"
 #include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/convert.h"
 #include "yaml-cpp/node/detail/impl.h"
 #include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/node/node.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -561,5 +561,5 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
 
   ExpectOutput("{position: [1.5, 2.25, 3.125]}", mapNode);
 }
-}
-}
+}  // namespace
+}  // namespace YAML

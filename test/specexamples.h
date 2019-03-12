@@ -843,4 +843,4 @@ const char *ex8_22 =
     " - nested\n"
     "mapping: !!map\n"
     " foo: bar\n";
-}
+}  // namespace

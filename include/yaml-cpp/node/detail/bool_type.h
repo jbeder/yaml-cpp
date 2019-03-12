@@ -14,8 +14,8 @@ struct unspecified_bool {
   static void true_value(NOT_ALLOWED*) {}
 };
 typedef void (*unspecified_bool_type)(unspecified_bool::NOT_ALLOWED*);
-}
-}
+}  // namespace detail
+}  // namespace YAML
 
 #define YAML_CPP_OPERATOR_BOOL()                                            \
   operator YAML::detail::unspecified_bool_type() const {                    \

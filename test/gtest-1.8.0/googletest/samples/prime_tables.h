@@ -56,11 +56,13 @@ class PrimeTable {
 class OnTheFlyPrimeTable : public PrimeTable {
  public:
   virtual bool IsPrime(int n) const {
-    if (n <= 1) return false;
+    if (n <= 1)
+      return false;
 
-    for (int i = 2; i*i <= n; i++) {
+    for (int i = 2; i * i <= n; i++) {
       // n is divisible by an integer other than 1 and itself.
-      if ((n % i) == 0) return false;
+      if ((n % i) == 0)
+        return false;
     }
 
     return true;
@@ -68,7 +70,8 @@ class OnTheFlyPrimeTable : public PrimeTable {
 
   virtual int GetNextPrime(int p) const {
     for (int n = p + 1; n > 0; n++) {
-      if (IsPrime(n)) return n;
+      if (IsPrime(n))
+        return n;
     }
 
     return -1;
@@ -92,7 +95,8 @@ class PreCalculatedPrimeTable : public PrimeTable {
 
   virtual int GetNextPrime(int p) const {
     for (int n = p + 1; n < is_prime_size_; n++) {
-      if (is_prime_[n]) return n;
+      if (is_prime_[n])
+        return n;
     }
 
     return -1;
@@ -104,10 +108,11 @@ class PreCalculatedPrimeTable : public PrimeTable {
     is_prime_[0] = is_prime_[1] = false;
 
     for (int i = 2; i <= max; i++) {
-      if (!is_prime_[i]) continue;
+      if (!is_prime_[i])
+        continue;
 
       // Marks all multiples of i (except i itself) as non-prime.
-      for (int j = 2*i; j <= max; j += i) {
+      for (int j = 2 * i; j <= max; j += i) {
         is_prime_[j] = false;
       }
     }

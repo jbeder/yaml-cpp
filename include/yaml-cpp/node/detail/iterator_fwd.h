@@ -18,10 +18,10 @@ namespace detail {
 struct iterator_value;
 template <typename V>
 class iterator_base;
-}
+}  // namespace detail
 
 typedef detail::iterator_base<detail::iterator_value> iterator;
 typedef detail::iterator_base<const detail::iterator_value> const_iterator;
-}
+}  // namespace YAML
 
 #endif  // VALUE_DETAIL_ITERATOR_FWD_H_62B23520_7C8E_11DE_8A39_0800200C9A66

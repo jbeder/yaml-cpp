@@ -16,9 +16,9 @@
 // This is here for compatibility with older versions of Visual Studio
 // which don't support noexcept
 #if defined(_MSC_VER) && _MSC_VER < 1900
-    #define YAML_CPP_NOEXCEPT _NOEXCEPT
+#define YAML_CPP_NOEXCEPT _NOEXCEPT
 #else
-    #define YAML_CPP_NOEXCEPT noexcept
+#define YAML_CPP_NOEXCEPT noexcept
 #endif
 
 namespace YAML {
@@ -114,7 +114,7 @@ inline const std::string KEY_NOT_FOUND_WITH_KEY(
   stream << KEY_NOT_FOUND << ": " << key;
   return stream.str();
 }
-}
+}  // namespace ErrorMsg
 
 class YAML_CPP_API Exception : public std::runtime_error {
  public:
@@ -260,7 +260,7 @@ class YAML_CPP_API BadFile : public Exception {
   BadFile(const BadFile&) = default;
   virtual ~BadFile() YAML_CPP_NOEXCEPT;
 };
-}
+}  // namespace YAML
 
 #undef YAML_CPP_NOEXCEPT
 

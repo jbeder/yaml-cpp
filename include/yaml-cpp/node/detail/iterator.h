@@ -14,7 +14,6 @@
 #include <cstddef>
 #include <iterator>
 
-
 namespace YAML {
 namespace detail {
 struct iterator_value;

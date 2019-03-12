@@ -39,7 +39,7 @@ bool IsFlexibleCase(const std::string& str) {
   std::string rest = str.substr(1);
   return firstcaps && (IsEntirely(rest, IsLower) || IsEntirely(rest, IsUpper));
 }
-}
+}  // namespace
 
 namespace YAML {
 bool convert<bool>::decode(const Node& node, bool& rhs) {
@@ -52,7 +52,10 @@ bool convert<bool>::decode(const Node& node, bool& rhs) {
   static const struct {
     std::string truename, falsename;
   } names[] = {
-      {"y", "n"}, {"yes", "no"}, {"true", "false"}, {"on", "off"},
+      {"y", "n"},
+      {"yes", "no"},
+      {"true", "false"},
+      {"on", "off"},
   };
 
   if (!IsFlexibleCase(node.Scalar()))
@@ -72,4 +75,4 @@ bool convert<bool>::decode(const Node& node, bool& rhs) {
 
   return false;
 }
-}
+}  // namespace YAML

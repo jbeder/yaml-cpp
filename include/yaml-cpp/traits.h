@@ -98,6 +98,6 @@ struct disable_if_c<true, T> {};
 
 template <class Cond, class T = void>
 struct disable_if : public disable_if_c<Cond::value, T> {};
-}
+}  // namespace YAML
 
 #endif  // TRAITS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -58,11 +58,20 @@ TEST(LoadNodeTest, Binary) {
 TEST(LoadNodeTest, BinaryWithWhitespaces) {
   Node node = Load(
       "binaryText: !binary |-\n"
-      "  TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieS\n"
-      "  B0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIG\n"
-      "  x1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbi\n"
-      "  B0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZG\n"
-      "  dlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS\n"
+      "  "
+      "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieS\n"
+      "  "
+      "B0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIG"
+      "\n"
+      "  "
+      "x1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbi"
+      "\n"
+      "  "
+      "B0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZG"
+      "\n"
+      "  "
+      "dlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS"
+      "\n"
       "  4K");
   EXPECT_EQ(Binary(reinterpret_cast<const unsigned char*>(
                        "Man is distinguished, not only by his reason, "
@@ -228,8 +237,8 @@ struct ParserExceptionTestCase {
 TEST(NodeTest, IncompleteJson) {
   std::vector<ParserExceptionTestCase> tests = {
       {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
-      {"JSON map with colon but no value", "{\"access\":",
-       ErrorMsg::END_OF_MAP_FLOW},
+      {"JSON map with colon but no value",
+       "{\"access\":", ErrorMsg::END_OF_MAP_FLOW},
       {"JSON map with unclosed value quote", "{\"access\":\"",
        ErrorMsg::END_OF_MAP_FLOW},
       {"JSON map without end brace", "{\"access\":\"abc\"",
@@ -250,11 +259,11 @@ TEST(NodeTest, LoadTildeAsNull) {
   Node node = Load("~");
   ASSERT_TRUE(node.IsNull());
 }
-    
+
 TEST(NodeTest, LoadTagWithParenthesis) {
-    Node node = Load("!Complex(Tag) foo");
-    EXPECT_EQ(node.Tag(), "!Complex(Tag)");
-    EXPECT_EQ(node.as<std::string>(), "foo");
+  Node node = Load("!Complex(Tag) foo");
+  EXPECT_EQ(node.Tag(), "!Complex(Tag)");
+  EXPECT_EQ(node.as<std::string>(), "foo");
 }
 
 }  // namespace

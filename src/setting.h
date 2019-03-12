@@ -8,8 +8,8 @@
 #endif
 
 #include <memory>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace YAML {
 class SettingChangeBase;
@@ -18,9 +18,7 @@ template <typename T>
 class Setting {
  public:
   Setting() : m_value() {}
-  Setting(const T& value) : m_value() {
-      set(value);
-  }
+  Setting(const T& value) : m_value() { set(value); }
 
   const T get() const { return m_value; }
   std::unique_ptr<SettingChangeBase> set(const T& value);
@@ -39,9 +37,9 @@ class SettingChangeBase {
 template <typename T>
 class SettingChange : public SettingChangeBase {
  public:
-  SettingChange(Setting<T>* pSetting) :
-      m_pCurSetting(pSetting),
-      m_oldSetting(*pSetting) // copy old setting to save its state
+  SettingChange(Setting<T>* pSetting)
+      : m_pCurSetting(pSetting),
+        m_oldSetting(*pSetting)  // copy old setting to save its state
   {}
   SettingChange(const SettingChange&) = delete;
   SettingChange(SettingChange&&) = delete;
@@ -66,7 +64,8 @@ class SettingChanges {
  public:
   SettingChanges() : m_settingChanges{} {}
   SettingChanges(const SettingChanges&) = delete;
-  SettingChanges(SettingChanges&& rhs) : m_settingChanges(std::move(rhs.m_settingChanges)) {}
+  SettingChanges(SettingChanges&& rhs)
+      : m_settingChanges(std::move(rhs.m_settingChanges)) {}
   SettingChanges& operator=(const SettingChanges&) = delete;
   ~SettingChanges() { clear(); }
 
@@ -100,6 +99,6 @@ class SettingChanges {
   typedef std::vector<std::unique_ptr<SettingChangeBase>> setting_changes;
   setting_changes m_settingChanges;
 };
-}
+}  // namespace YAML
 
 #endif  // SETTING_H_62B23520_7C8E_11DE_8A39_0800200C9A66

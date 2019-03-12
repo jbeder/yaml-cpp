@@ -8,8 +8,8 @@
 #endif
 
 #include "stream.h"
-#include "stringsource.h"
 #include "streamcharsource.h"
+#include "stringsource.h"
 
 namespace YAML {
 // query matches
@@ -106,9 +106,8 @@ inline int RegEx::MatchOpEmpty(const Source& source) const {
 template <>
 inline int RegEx::MatchOpEmpty<StringCharSource>(
     const StringCharSource& source) const {
-  return !source
-             ? 0
-             : -1;  // the empty regex only is successful on the empty string
+  return !source ? 0 : -1;  // the empty regex only is successful on the empty
+                            // string
 }
 
 // MatchOperator
@@ -181,6 +180,6 @@ inline int RegEx::MatchOpSeq(const Source& source) const {
 
   return offset;
 }
-}
+}  // namespace YAML
 
 #endif  // REGEXIMPL_H_62B23520_7C8E_11DE_8A39_0800200C9A66

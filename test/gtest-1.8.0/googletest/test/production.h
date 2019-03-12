@@ -47,6 +47,7 @@ class PrivateCode {
   PrivateCode();
 
   int x() const { return x_; }
+
  private:
   void set_x(int an_x) { x_ = an_x; }
   int x_;

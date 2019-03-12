@@ -42,7 +42,7 @@ inline bool IsNegativeInfinity(const std::string& input) {
 inline bool IsNaN(const std::string& input) {
   return input == ".nan" || input == ".NaN" || input == ".NAN";
 }
-}
+}  // namespace conversion
 
 // Node
 template <>
@@ -76,7 +76,7 @@ struct convert<const char*> {
 
 template <std::size_t N>
 struct convert<const char[N]> {
-  static Node encode(const char(&rhs)[N]) { return Node(rhs); }
+  static Node encode(const char (&rhs)[N]) { return Node(rhs); }
 };
 
 template <>
@@ -327,6 +327,6 @@ struct convert<Binary> {
     return true;
   }
 };
-}
+}  // namespace YAML
 
 #endif  // NODE_CONVERT_H_62B23520_7C8E_11DE_8A39_0800200C9A66

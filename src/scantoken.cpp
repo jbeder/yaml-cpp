@@ -434,4 +434,4 @@ void Scanner::ScanBlockScalar() {
   token.value = scalar;
   m_tokens.push(token);
 }
-}
+}  // namespace YAML

@@ -23,7 +23,7 @@ typedef std::shared_ptr<node_ref> shared_node_ref;
 typedef std::shared_ptr<node_data> shared_node_data;
 typedef std::shared_ptr<memory_holder> shared_memory_holder;
 typedef std::shared_ptr<memory> shared_memory;
-}
-}
+}  // namespace detail
+}  // namespace YAML
 
 #endif  // VALUE_PTR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

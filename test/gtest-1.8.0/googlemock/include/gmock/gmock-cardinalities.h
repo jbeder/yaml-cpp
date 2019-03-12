@@ -38,10 +38,10 @@
 #ifndef GMOCK_INCLUDE_GMOCK_GMOCK_CARDINALITIES_H_
 #define GMOCK_INCLUDE_GMOCK_GMOCK_CARDINALITIES_H_
 
-#include <limits.h>
-#include <ostream>  // NOLINT
 #include "gmock/internal/gmock-port.h"
 #include "gtest/gtest.h"
+#include <limits.h>
+#include <ostream>  // NOLINT
 
 namespace testing {
 
@@ -108,7 +108,7 @@ class GTEST_API_ Cardinality {
   // cardinality, i.e. exceed the maximum number of allowed calls.
   bool IsOverSaturatedByCallCount(int call_count) const {
     return impl_->IsSaturatedByCallCount(call_count) &&
-        !impl_->IsSatisfiedByCallCount(call_count);
+           !impl_->IsSatisfiedByCallCount(call_count);
   }
 
   // Describes self to an ostream

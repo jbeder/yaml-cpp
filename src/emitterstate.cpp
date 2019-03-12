@@ -30,8 +30,7 @@ EmitterState::EmitterState()
       m_hasAnchor(false),
       m_hasTag(false),
       m_hasNonContent(false),
-      m_docCount(0)
-{}
+      m_docCount(0) {}
 
 EmitterState::~EmitterState() {}
 
@@ -367,4 +366,4 @@ bool EmitterState::SetDoublePrecision(std::size_t value,
   _Set(m_doublePrecision, value, scope);
   return true;
 }
-}
+}  // namespace YAML

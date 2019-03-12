@@ -7,8 +7,8 @@
 #pragma once
 #endif
 
-#include <iostream>
 #include <cstddef>
+#include <iostream>
 
 #include "yaml-cpp/ostream_wrapper.h"
 
@@ -36,6 +36,6 @@ inline ostream_wrapper& operator<<(ostream_wrapper& out,
     out << ' ';
   return out;
 }
-}
+}  // namespace YAML
 
 #endif  // INDENTATION_H_62B23520_7C8E_11DE_8A39_0800200C9A66

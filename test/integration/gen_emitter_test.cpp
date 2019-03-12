@@ -9755,5 +9755,5 @@ TEST_F(GenEmitterTest, test8cc25a6c1aea65ad7de1) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(out.c_str());
 }
-}
-}
+}  // namespace
+}  // namespace YAML

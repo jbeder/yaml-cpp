@@ -44,22 +44,19 @@ using testing::Test;
 // and gtest-typed-test2_test.cc.
 
 template <typename T>
-class ContainerTest : public Test {
-};
+class ContainerTest : public Test {};
 
 TYPED_TEST_CASE_P(ContainerTest);
 
-TYPED_TEST_P(ContainerTest, CanBeDefaultConstructed) {
-  TypeParam container;
-}
+TYPED_TEST_P(ContainerTest, CanBeDefaultConstructed) { TypeParam container; }
 
 TYPED_TEST_P(ContainerTest, InitialSizeIsZero) {
   TypeParam container;
   EXPECT_EQ(0U, container.size());
 }
 
-REGISTER_TYPED_TEST_CASE_P(ContainerTest,
-                           CanBeDefaultConstructed, InitialSizeIsZero);
+REGISTER_TYPED_TEST_CASE_P(ContainerTest, CanBeDefaultConstructed,
+                           InitialSizeIsZero);
 
 #endif  // GTEST_HAS_TYPED_TEST_P
 

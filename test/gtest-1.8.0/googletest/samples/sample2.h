@@ -36,7 +36,6 @@
 
 #include <string.h>
 
-
 // A simple string class.
 class MyString {
  private:
@@ -60,9 +59,7 @@ class MyString {
   }
 
   // Copy c'tor
-  MyString(const MyString& string) : c_string_(NULL) {
-    Set(string.c_string_);
-  }
+  MyString(const MyString& string) : c_string_(NULL) { Set(string.c_string_); }
 
   ////////////////////////////////////////////////////////////
   //
@@ -73,13 +70,10 @@ class MyString {
   // Gets the 0-terminated C string this MyString object represents.
   const char* c_string() const { return c_string_; }
 
-  size_t Length() const {
-    return c_string_ == NULL ? 0 : strlen(c_string_);
-  }
+  size_t Length() const { return c_string_ == NULL ? 0 : strlen(c_string_); }
 
   // Sets the 0-terminated C string this MyString object represents.
   void Set(const char* c_string);
 };
-
 
 #endif  // GTEST_SAMPLES_SAMPLE2_H_

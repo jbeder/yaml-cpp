@@ -43,6 +43,6 @@ class StringCharSource {
   std::size_t m_size;
   std::size_t m_offset;
 };
-}
+}  // namespace YAML
 
 #endif  // STRINGSOURCE_H_62B23520_7C8E_11DE_8A39_0800200C9A66
