@@ -19,8 +19,7 @@ SingleDocParser::SingleDocParser(Scanner& scanner, const Directives& directives)
       m_directives(directives),
       m_pCollectionStack(new CollectionStack),
       m_anchors{},
-      m_curAnchor(0)
-{}
+      m_curAnchor(0) {}
 
 SingleDocParser::~SingleDocParser() {}
 
@@ -413,4 +412,4 @@ anchor_t SingleDocParser::LookupAnchor(const Mark& mark,
 
   return it->second;
 }
-}
+}  // namespace YAML

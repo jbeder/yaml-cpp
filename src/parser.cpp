@@ -126,4 +126,4 @@ void Parser::PrintTokens(std::ostream& out) {
     m_pScanner->pop();
   }
 }
-}
+}  // namespace YAML

@@ -69,6 +69,6 @@ class NodeBuilder : public EventHandler {
   std::vector<PushedKey> m_keys;
   std::size_t m_mapDepth;
 };
-}
+}  // namespace YAML
 
 #endif  // NODE_NODEBUILDER_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -86,6 +86,6 @@ class YAML_CPP_API Parser {
   std::unique_ptr<Scanner> m_pScanner;
   std::unique_ptr<Directives> m_pDirectives;
 };
-}
+}  // namespace YAML
 
 #endif  // PARSER_H_62B23520_7C8E_11DE_8A39_0800200C9A66
