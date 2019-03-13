@@ -1,6 +1,6 @@
-#include "gtest/gtest.h"
 #include "regex_yaml.h"
 #include "stream.h"
+#include "gtest/gtest.h"
 
 using YAML::RegEx;
 using YAML::Stream;
@@ -106,8 +106,8 @@ TEST(RegExTest, OperatorOr) {
     for (int j = i + 1; j < 128; ++j) {
       auto iStr = std::string(1, char(i));
       auto jStr = std::string(1, char(j));
-      RegEx ex1 = RegEx(iStr) || RegEx(jStr);
-      RegEx ex2 = RegEx(jStr) || RegEx(iStr);
+      RegEx ex1 = RegEx(iStr) | RegEx(jStr);
+      RegEx ex2 = RegEx(jStr) | RegEx(iStr);
 
       for (int k = MIN_CHAR; k < 128; ++k) {
         auto str = std::string(1, char(k));
@@ -128,8 +128,8 @@ TEST(RegExTest, OperatorOr) {
 }
 
 TEST(RegExTest, OperatorOrShortCircuits) {
-  RegEx ex1 = RegEx(std::string("aaaa")) || RegEx(std::string("aa"));
-  RegEx ex2 = RegEx(std::string("aa")) || RegEx(std::string("aaaa"));
+  RegEx ex1 = RegEx(std::string("aaaa")) | RegEx(std::string("aa"));
+  RegEx ex2 = RegEx(std::string("aa")) | RegEx(std::string("aaaa"));
 
   EXPECT_TRUE(ex1.Matches(std::string("aaaaa")));
   EXPECT_EQ(4, ex1.Match(std::string("aaaaa")));
@@ -139,13 +139,13 @@ TEST(RegExTest, OperatorOrShortCircuits) {
 }
 
 TEST(RegExTest, OperatorAnd) {
-  RegEx emptySet = RegEx('a') && RegEx();
+  RegEx emptySet = RegEx('a') & RegEx();
   EXPECT_FALSE(emptySet.Matches(std::string("a")));
 }
 
 TEST(RegExTest, OperatorAndShortCircuits) {
-  RegEx ex1 = RegEx(std::string("aaaa")) && RegEx(std::string("aa"));
-  RegEx ex2 = RegEx(std::string("aa")) && RegEx(std::string("aaaa"));
+  RegEx ex1 = RegEx(std::string("aaaa")) & RegEx(std::string("aa"));
+  RegEx ex2 = RegEx(std::string("aa")) & RegEx(std::string("aaaa"));
 
   EXPECT_TRUE(ex1.Matches(std::string("aaaaa")));
   EXPECT_EQ(4, ex1.Match(std::string("aaaaa")));
@@ -174,4 +174,4 @@ TEST(RegExTest, StringOr) {
 
   EXPECT_EQ(1, ex.Match(str));
 }
-}
+}  // namespace

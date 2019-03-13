@@ -12,7 +12,6 @@
 #include <string>
 
 #include "yaml-cpp/anchor.h"
-#include "yaml-cpp/noncopyable.h"
 
 namespace YAML {
 class CollectionStack;
@@ -23,9 +22,13 @@ struct Directives;
 struct Mark;
 struct Token;
 
-class SingleDocParser : private noncopyable {
+class SingleDocParser {
  public:
   SingleDocParser(Scanner& scanner, const Directives& directives);
+  SingleDocParser(const SingleDocParser&) = delete;
+  SingleDocParser(SingleDocParser&&) = delete;
+  SingleDocParser& operator=(const SingleDocParser&) = delete;
+  SingleDocParser& operator=(SingleDocParser&&) = delete;
   ~SingleDocParser();
 
   void HandleDocument(EventHandler& eventHandler);

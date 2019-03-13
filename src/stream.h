@@ -7,7 +7,6 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/noncopyable.h"
 #include "yaml-cpp/mark.h"
 #include <cstddef>
 #include <deque>
@@ -17,11 +16,15 @@
 #include <string>
 
 namespace YAML {
-class Stream : private noncopyable {
+class Stream {
  public:
   friend class StreamCharSource;
 
   Stream(std::istream& input);
+  Stream(const Stream&) = delete;
+  Stream(Stream&&) = delete;
+  Stream& operator=(const Stream&) = delete;
+  Stream& operator=(Stream&&) = delete;
   ~Stream();
 
   operator bool() const;
@@ -71,6 +74,6 @@ inline bool Stream::ReadAheadTo(size_t i) const {
     return true;
   return _ReadAheadTo(i);
 }
-}
+}  // namespace YAML
 
 #endif  // STREAM_H_62B23520_7C8E_11DE_8A39_0800200C9A66

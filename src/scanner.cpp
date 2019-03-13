@@ -9,10 +9,15 @@
 namespace YAML {
 Scanner::Scanner(std::istream& in)
     : INPUT(in),
+      m_tokens{},
       m_startedStream(false),
       m_endedStream(false),
       m_simpleKeyAllowed(false),
-      m_canBeJSONFlow(false) {}
+      m_canBeJSONFlow(false),
+      m_simpleKeys{},
+      m_indents{},
+      m_indentRefs{},
+      m_flows{} {}
 
 Scanner::~Scanner() {}
 

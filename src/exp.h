@@ -33,15 +33,15 @@ inline const RegEx& Tab() {
   return e;
 }
 inline const RegEx& Blank() {
-  static const RegEx e = Space() || Tab();
+  static const RegEx e = Space() | Tab();
   return e;
 }
 inline const RegEx& Break() {
-  static const RegEx e = RegEx('\n') || RegEx("\r\n");
+  static const RegEx e = RegEx('\n') | RegEx("\r\n");
   return e;
 }
 inline const RegEx& BlankOrBreak() {
-  static const RegEx e = Blank() || Break();
+  static const RegEx e = Blank() | Break();
   return e;
 }
 inline const RegEx& Digit() {
@@ -49,29 +49,29 @@ inline const RegEx& Digit() {
   return e;
 }
 inline const RegEx& Alpha() {
-  static const RegEx e = RegEx('a', 'z') || RegEx('A', 'Z');
+  static const RegEx e = RegEx('a', 'z') | RegEx('A', 'Z');
   return e;
 }
 inline const RegEx& AlphaNumeric() {
-  static const RegEx e = Alpha() || Digit();
+  static const RegEx e = Alpha() | Digit();
   return e;
 }
 inline const RegEx& Word() {
-  static const RegEx e = AlphaNumeric() || RegEx('-');
+  static const RegEx e = AlphaNumeric() | RegEx('-');
   return e;
 }
 inline const RegEx& Hex() {
-  static const RegEx e = Digit() || RegEx('A', 'F') || RegEx('a', 'f');
+  static const RegEx e = Digit() | RegEx('A', 'F') | RegEx('a', 'f');
   return e;
 }
 // Valid Unicode code points that are not part of c-printable (YAML 1.2, sec.
 // 5.1)
 inline const RegEx& NotPrintable() {
   static const RegEx e =
-      RegEx(0) ||
-      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OR) ||
-      RegEx(0x0E, 0x1F) ||
-      (RegEx('\xC2') + (RegEx('\x80', '\x84') || RegEx('\x86', '\x9F')));
+      RegEx(0) |
+      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OR) |
+      RegEx(0x0E, 0x1F) |
+      (RegEx('\xC2') + (RegEx('\x80', '\x84') | RegEx('\x86', '\x9F')));
   return e;
 }
 inline const RegEx& Utf8_ByteOrderMark() {
@@ -82,19 +82,19 @@ inline const RegEx& Utf8_ByteOrderMark() {
 // actual tags
 
 inline const RegEx& DocStart() {
-  static const RegEx e = RegEx("---") + (BlankOrBreak() || RegEx());
+  static const RegEx e = RegEx("---") + (BlankOrBreak() | RegEx());
   return e;
 }
 inline const RegEx& DocEnd() {
-  static const RegEx e = RegEx("...") + (BlankOrBreak() || RegEx());
+  static const RegEx e = RegEx("...") + (BlankOrBreak() | RegEx());
   return e;
 }
 inline const RegEx& DocIndicator() {
-  static const RegEx e = DocStart() || DocEnd();
+  static const RegEx e = DocStart() | DocEnd();
   return e;
 }
 inline const RegEx& BlockEntry() {
-  static const RegEx e = RegEx('-') + (BlankOrBreak() || RegEx());
+  static const RegEx e = RegEx('-') + (BlankOrBreak() | RegEx());
   return e;
 }
 inline const RegEx& Key() {
@@ -106,11 +106,11 @@ inline const RegEx& KeyInFlow() {
   return e;
 }
 inline const RegEx& Value() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx());
+  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx());
   return e;
 }
 inline const RegEx& ValueInFlow() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx(",}", REGEX_OR));
+  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",}", REGEX_OR));
   return e;
 }
 inline const RegEx& ValueInJSONFlow() {
@@ -122,20 +122,20 @@ inline const RegEx Comment() {
   return e;
 }
 inline const RegEx& Anchor() {
-  static const RegEx e = !(RegEx("[]{},", REGEX_OR) || BlankOrBreak());
+  static const RegEx e = !(RegEx("[]{},", REGEX_OR) | BlankOrBreak());
   return e;
 }
 inline const RegEx& AnchorEnd() {
-  static const RegEx e = RegEx("?:,]}%@`", REGEX_OR) || BlankOrBreak();
+  static const RegEx e = RegEx("?:,]}%@`", REGEX_OR) | BlankOrBreak();
   return e;
 }
 inline const RegEx& URI() {
-  static const RegEx e = Word() || RegEx("#;/?:@&=+$,_.!~*'()[]", REGEX_OR) ||
+  static const RegEx e = Word() | RegEx("#;/?:@&=+$,_.!~*'()[]", REGEX_OR) |
                          (RegEx('%') + Hex() + Hex());
   return e;
 }
 inline const RegEx& Tag() {
-  static const RegEx e = Word() || RegEx("#;/?:@&=+$_.~*'()", REGEX_OR) ||
+  static const RegEx e = Word() | RegEx("#;/?:@&=+$_.~*'()", REGEX_OR) |
                          (RegEx('%') + Hex() + Hex());
   return e;
 }
@@ -148,34 +148,34 @@ inline const RegEx& Tag() {
 // space.
 inline const RegEx& PlainScalar() {
   static const RegEx e =
-      !(BlankOrBreak() || RegEx(",[]{}#&*!|>\'\"%@`", REGEX_OR) ||
-        (RegEx("-?:", REGEX_OR) + (BlankOrBreak() || RegEx())));
+      !(BlankOrBreak() | RegEx(",[]{}#&*!|>\'\"%@`", REGEX_OR) |
+        (RegEx("-?:", REGEX_OR) + (BlankOrBreak() | RegEx())));
   return e;
 }
 inline const RegEx& PlainScalarInFlow() {
   static const RegEx e =
-      !(BlankOrBreak() || RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OR) ||
+      !(BlankOrBreak() | RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OR) |
         (RegEx("-:", REGEX_OR) + Blank()));
   return e;
 }
 inline const RegEx& EndScalar() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx());
+  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx());
   return e;
 }
 inline const RegEx& EndScalarInFlow() {
   static const RegEx e =
-      (RegEx(':') + (BlankOrBreak() || RegEx() || RegEx(",]}", REGEX_OR))) ||
+      (RegEx(':') + (BlankOrBreak() | RegEx() | RegEx(",]}", REGEX_OR))) |
       RegEx(",?[]{}", REGEX_OR);
   return e;
 }
 
 inline const RegEx& ScanScalarEndInFlow() {
-  static const RegEx e = (EndScalarInFlow() || (BlankOrBreak() + Comment()));
+  static const RegEx e = (EndScalarInFlow() | (BlankOrBreak() + Comment()));
   return e;
 }
 
 inline const RegEx& ScanScalarEnd() {
-  static const RegEx e = EndScalar() || (BlankOrBreak() + Comment());
+  static const RegEx e = EndScalar() | (BlankOrBreak() + Comment());
   return e;
 }
 inline const RegEx& EscSingleQuote() {
@@ -192,8 +192,8 @@ inline const RegEx& ChompIndicator() {
   return e;
 }
 inline const RegEx& Chomp() {
-  static const RegEx e = (ChompIndicator() + Digit()) ||
-                         (Digit() + ChompIndicator()) || ChompIndicator() ||
+  static const RegEx e = (ChompIndicator() + Digit()) |
+                         (Digit() + ChompIndicator()) | ChompIndicator() |
                          Digit();
   return e;
 }

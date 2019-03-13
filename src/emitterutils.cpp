@@ -8,8 +8,8 @@
 #include "regeximpl.h"
 #include "stringsource.h"
 #include "yaml-cpp/binary.h"  // IWYU pragma: keep
-#include "yaml-cpp/ostream_wrapper.h"
 #include "yaml-cpp/null.h"
+#include "yaml-cpp/ostream_wrapper.h"
 
 namespace YAML {
 namespace Utils {
@@ -173,12 +173,12 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
 
   // then check until something is disallowed
   static const RegEx& disallowed_flow =
-      Exp::EndScalarInFlow() || (Exp::BlankOrBreak() + Exp::Comment()) ||
-      Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||
+      Exp::EndScalarInFlow() | (Exp::BlankOrBreak() + Exp::Comment()) |
+      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
       Exp::Tab();
   static const RegEx& disallowed_block =
-      Exp::EndScalar() || (Exp::BlankOrBreak() + Exp::Comment()) ||
-      Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||
+      Exp::EndScalar() | (Exp::BlankOrBreak() + Exp::Comment()) |
+      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
       Exp::Tab();
   const RegEx& disallowed =
       flowType == FlowType::Flow ? disallowed_flow : disallowed_block;
@@ -258,7 +258,7 @@ bool WriteAliasName(ostream_wrapper& out, const std::string& str) {
   }
   return true;
 }
-}
+}  // namespace
 
 StringFormat::value ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
@@ -401,8 +401,8 @@ bool WriteComment(ostream_wrapper& out, const std::string& str,
   for (std::string::const_iterator i = str.begin();
        GetNextCodePointAndAdvance(codePoint, i, str.end());) {
     if (codePoint == '\n') {
-      out << "\n" << IndentTo(curIndent) << "#"
-          << Indentation(postCommentIndent);
+      out << "\n"
+          << IndentTo(curIndent) << "#" << Indentation(postCommentIndent);
       out.set_comment();
     } else {
       WriteCodePoint(out, codePoint);
@@ -479,5 +479,5 @@ bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
                           false);
   return true;
 }
-}
-}
+}  // namespace Utils
+}  // namespace YAML

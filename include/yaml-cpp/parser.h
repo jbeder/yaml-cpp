@@ -11,7 +11,6 @@
 #include <memory>
 
 #include "yaml-cpp/dll.h"
-#include "yaml-cpp/noncopyable.h"
 
 namespace YAML {
 class EventHandler;
@@ -24,10 +23,16 @@ struct Token;
  * A parser turns a stream of bytes into one stream of "events" per YAML
  * document in the input stream.
  */
-class YAML_CPP_API Parser : private noncopyable {
+class YAML_CPP_API Parser {
  public:
   /** Constructs an empty parser (with no input. */
   Parser();
+
+  /** non copyable but movable */
+  Parser(const Parser&) = delete;
+  Parser(Parser&&) = default;
+  Parser& operator=(const Parser&) = delete;
+  Parser& operator=(Parser&&) = default;
 
   /**
    * Constructs a parser from the given input stream. The input stream must
@@ -81,6 +86,6 @@ class YAML_CPP_API Parser : private noncopyable {
   std::unique_ptr<Scanner> m_pScanner;
   std::unique_ptr<Directives> m_pDirectives;
 };
-}
+}  // namespace YAML
 
 #endif  // PARSER_H_62B23520_7C8E_11DE_8A39_0800200C9A66
