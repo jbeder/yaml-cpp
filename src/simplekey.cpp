@@ -1,5 +1,5 @@
-#include "scanner.h"
-#include "token.h"
+#include "yaml-cpp/scanner.h"
+#include "yaml-cpp/token.h"
 
 namespace YAML {
 struct Mark;

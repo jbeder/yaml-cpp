@@ -11,6 +11,8 @@
 #include <memory>
 
 #include "yaml-cpp/dll.h"
+#include "yaml-cpp/directives.h"
+#include "yaml-cpp/scanner.h"
 
 namespace YAML {
 class EventHandler;

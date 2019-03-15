@@ -2,8 +2,8 @@
 #include <memory>
 
 #include "exp.h"
-#include "scanner.h"
-#include "token.h"
+#include "yaml-cpp/scanner.h"
+#include "yaml-cpp/token.h"
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 
 namespace YAML {

@@ -4,7 +4,7 @@
 
 #include "exp.h"
 #include "regeximpl.h"
-#include "stream.h"
+#include "yaml-cpp/stream.h"
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 
 namespace YAML {

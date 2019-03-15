@@ -7,7 +7,7 @@
 #pragma once
 #endif
 
-#include "stream.h"
+#include "yaml-cpp/stream.h"
 #include "stringsource.h"
 #include "streamcharsource.h"
 

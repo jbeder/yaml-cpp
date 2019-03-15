@@ -10,7 +10,7 @@
 #include <string>
 
 #include "regex_yaml.h"
-#include "stream.h"
+#include "yaml-cpp/stream.h"
 
 namespace YAML {
 enum CHOMP { STRIP = -1, CLIP, KEEP };

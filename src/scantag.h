@@ -8,7 +8,7 @@
 #endif
 
 #include <string>
-#include "stream.h"
+#include "yaml-cpp/stream.h"
 
 namespace YAML {
 const std::string ScanVerbatimTag(Stream& INPUT);

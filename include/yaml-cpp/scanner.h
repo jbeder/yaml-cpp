@@ -15,9 +15,9 @@
 #include <stack>
 #include <string>
 
-#include "ptr_vector.h"
-#include "stream.h"
-#include "token.h"
+#include "yaml-cpp/ptr_vector.h"
+#include "yaml-cpp/stream.h"
+#include "yaml-cpp/token.h"
 #include "yaml-cpp/mark.h"
 
 namespace YAML {

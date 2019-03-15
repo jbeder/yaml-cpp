@@ -1,5 +1,5 @@
 #include "regex_yaml.h"
-#include "stream.h"
+#include "yaml-cpp/stream.h"
 #include "gtest/gtest.h"
 
 using YAML::RegEx;

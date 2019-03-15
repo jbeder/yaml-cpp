@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "stream.h"
+#include "yaml-cpp/stream.h"
 
 #ifndef YAML_PREFETCH_SIZE
 #define YAML_PREFETCH_SIZE 2048
