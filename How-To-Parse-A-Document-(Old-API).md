@@ -87,7 +87,7 @@ One thing to be keep in mind: reading a map by key (as immediately above) requir
 
 ## Optional Keys ##
 
-If you try to access a key that doesn't exist, `yaml-cpp` throws an exception (see [When Something Goes Wrong](https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)#When_Something_Goes_Wrong). If you have optional keys, you it's often easier to use `FindValue` instead of `operator[]`:
+If you try to access a key that doesn't exist, `yaml-cpp` throws an exception (see [When Something Goes Wrong](https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)#When_Something_Goes_Wrong). If you have optional keys, it's often easier to use `FindValue` instead of `operator[]`:
 
 ```
 YAML::Node doc;    // already parsed
