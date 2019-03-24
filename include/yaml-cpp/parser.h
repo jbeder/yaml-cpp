@@ -28,10 +28,11 @@ class YAML_CPP_API Parser {
   /** Constructs an empty parser (with no input. */
   Parser();
 
+  /** non copyable but movable */
   Parser(const Parser&) = delete;
-  Parser(Parser&&) = delete;
   Parser& operator=(const Parser&) = delete;
-  Parser& operator=(Parser&&) = delete;
+  Parser(Parser&&); // = default // moved to cpp for MSVC
+  Parser& operator=(Parser&&); // = default // moved to cpp for MSVC
 
   /**
    * Constructs a parser from the given input stream. The input stream must
