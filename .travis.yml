@@ -1,11 +1,4 @@
 language: cpp
-os:
-  - linux
-  - osx
-  - windows
-compiler:
-  - clang
-  - gcc
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -20,10 +13,16 @@ before_script:
   - cd build
   - cmake ..
 script:
-  - make
+  - cmake --build .
   - test/run-tests
 
 matrix:
-  exclude:
+  include:
   - os: linux
+    compiler: gcc
+  - os: osx
+    compiler: clang
+  - os: osx
+    compiler: gcc
+  - os: windows
     compiler: clang
