@@ -13,7 +13,6 @@
 #include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/node.h"
 #include <string>
-#include <tuple>
 
 #ifdef __cpp_lib_optional
 #include <optional>
@@ -121,7 +120,7 @@ struct as_if<T, void> {
   const Node& node;
 
   template <typename U = T>
-  auto operator()() const -> typename std::tuple_element<1, std::tuple<decltype(&convert<U>::decode), T>>::type {
+  auto operator()() const -> typename std::pair<decltype(&convert<U>::decode), T>::second_type {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
@@ -133,7 +132,7 @@ struct as_if<T, void> {
 
 #ifdef __cpp_lib_optional
   template <typename U = T>
-  auto operator()() const -> typename std::tuple_element<1, std::tuple<decltype(&convert<U>::decode_optional), T>>::type {
+  auto operator()() const -> typename std::pair<decltype(&convert<U>::decode_optional), T>::second_type {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
