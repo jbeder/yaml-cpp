@@ -120,7 +120,7 @@ struct as_if<T, void> {
   const Node& node;
 
   template <typename U = T>
-  auto operator()() const -> typename std::pair<decltype(&convert<U>::decode), T>::second_type {
+  typename std::pair<decltype(&convert<U>::decode), T>::second_type operator()() const {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
@@ -132,7 +132,7 @@ struct as_if<T, void> {
 
 #ifdef __cpp_lib_optional
   template <typename U = T>
-  auto operator()() const -> typename std::pair<decltype(&convert<U>::decode_optional), T>::second_type {
+  typename std::pair<decltype(&convert<U>::decode_optional), T>::second_type operator()() const {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
