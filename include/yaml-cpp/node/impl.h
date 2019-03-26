@@ -13,6 +13,11 @@
 #include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/node.h"
 #include <string>
+#include <tuple>
+
+#ifdef __cpp_lib_optional
+#include <optional>
+#endif
 
 namespace YAML {
 inline Node::Node() : m_isValid(true), m_pMemory(nullptr), m_pNode(nullptr) {}
@@ -115,7 +120,8 @@ struct as_if<T, void> {
   explicit as_if(const Node& node_) : node(node_) {}
   const Node& node;
 
-  T operator()() const {
+  template <typename U = T>
+  auto operator()() const -> typename std::tuple_element<1, std::tuple<decltype(&convert<U>::decode), T>>::type {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
@@ -124,6 +130,19 @@ struct as_if<T, void> {
       return t;
     throw TypedBadConversion<T>(node.Mark());
   }
+
+#ifdef __cpp_lib_optional
+  template <typename U = T>
+  auto operator()() const -> typename std::tuple_element<1, std::tuple<decltype(&convert<U>::decode_optional), T>>::type {
+    if (!node.m_pNode)
+      throw TypedBadConversion<T>(node.Mark());
+
+    std::optional<T> t = convert<T>::decode_optional(node);
+    if (t)
+      return *t;
+    throw TypedBadConversion<T>(node.Mark());
+  }
+#endif
 };
 
 template <>
