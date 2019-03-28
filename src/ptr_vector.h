@@ -12,15 +12,17 @@
 #include <memory>
 #include <vector>
 
-#include "yaml-cpp/noncopyable.h"
-
 namespace YAML {
 
 // TODO: This class is no longer needed
 template <typename T>
-class ptr_vector : private YAML::noncopyable {
+class ptr_vector {
  public:
-  ptr_vector() {}
+  ptr_vector() : m_data{} {}
+  ptr_vector(const ptr_vector&) = delete;
+  ptr_vector(ptr_vector&&) = default;
+  ptr_vector& operator=(const ptr_vector&) = delete;
+  ptr_vector& operator=(ptr_vector&&) = default;
 
   void clear() { m_data.clear(); }
 
@@ -38,6 +40,6 @@ class ptr_vector : private YAML::noncopyable {
  private:
   std::vector<std::unique_ptr<T>> m_data;
 };
-}
+}  // namespace YAML
 
 #endif  // PTR_VECTOR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

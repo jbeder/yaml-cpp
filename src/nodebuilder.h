@@ -27,6 +27,10 @@ class Node;
 class NodeBuilder : public EventHandler {
  public:
   NodeBuilder();
+  NodeBuilder(const NodeBuilder&) = delete;
+  NodeBuilder(NodeBuilder&&) = delete;
+  NodeBuilder& operator=(const NodeBuilder&) = delete;
+  NodeBuilder& operator=(NodeBuilder&&) = delete;
   virtual ~NodeBuilder();
 
   Node Root();
@@ -65,6 +69,6 @@ class NodeBuilder : public EventHandler {
   std::vector<PushedKey> m_keys;
   std::size_t m_mapDepth;
 };
-}
+}  // namespace YAML
 
 #endif  // NODE_NODEBUILDER_H_62B23520_7C8E_11DE_8A39_0800200C9A66

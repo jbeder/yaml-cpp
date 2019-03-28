@@ -26,13 +26,17 @@ class Node;
 class NodeEvents {
  public:
   explicit NodeEvents(const Node& node);
+  NodeEvents(const NodeEvents&) = delete;
+  NodeEvents(NodeEvents&&) = delete;
+  NodeEvents& operator=(const NodeEvents&) = delete;
+  NodeEvents& operator=(NodeEvents&&) = delete;
 
   void Emit(EventHandler& handler);
 
  private:
   class AliasManager {
    public:
-    AliasManager() : m_curAnchor(0) {}
+    AliasManager() : m_anchorByIdentity{}, m_curAnchor(0) {}
 
     void RegisterReference(const detail::node& node);
     anchor_t LookupAnchor(const detail::node& node) const;
@@ -59,6 +63,6 @@ class NodeEvents {
   typedef std::map<const detail::node_ref*, int> RefCount;
   RefCount m_refCount;
 };
-}
+}  // namespace YAML
 
 #endif  // NODE_NODEEVENTS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

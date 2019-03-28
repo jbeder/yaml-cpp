@@ -338,7 +338,7 @@ void Scanner::ScanQuotedScalar() {
 
   // setup the scanning parameters
   ScanScalarParams params;
-  RegEx end = (single ? RegEx(quote) && !Exp::EscSingleQuote() : RegEx(quote));
+  RegEx end = (single ? RegEx(quote) & !Exp::EscSingleQuote() : RegEx(quote));
   params.end = &end;
   params.eatEnd = true;
   params.escape = (single ? '\'' : '\\');
@@ -434,4 +434,4 @@ void Scanner::ScanBlockScalar() {
   token.value = scalar;
   m_tokens.push(token);
 }
-}
+}  // namespace YAML

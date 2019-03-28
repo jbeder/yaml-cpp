@@ -14,16 +14,21 @@ namespace YAML {
 namespace detail {
 
 const std::string& node_data::empty_scalar() {
-    static const std::string svalue;
-    return svalue;
+  static const std::string svalue;
+  return svalue;
 }
 
 node_data::node_data()
     : m_isDefined(false),
       m_mark(Mark::null_mark()),
       m_type(NodeType::Null),
+      m_tag{},
       m_style(EmitterStyle::Default),
-      m_seqSize(0) {}
+      m_scalar{},
+      m_sequence{},
+      m_seqSize(0),
+      m_map{},
+      m_undefinedPairs{} {}
 
 void node_data::mark_defined() {
   if (m_type == NodeType::Undefined)
@@ -238,8 +243,8 @@ bool node_data::remove(node& key, shared_memory_holder /* pMemory */) {
   if (m_type != NodeType::Map)
     return false;
 
-  kv_pairs::iterator it = m_undefinedPairs.begin();
-  while (it != m_undefinedPairs.end()) {
+  for (kv_pairs::iterator it = m_undefinedPairs.begin();
+       it != m_undefinedPairs.end();) {
     kv_pairs::iterator jt = std::next(it);
     if (it->first->is(key))
       m_undefinedPairs.erase(it);
@@ -307,5 +312,5 @@ void node_data::convert_sequence_to_map(shared_memory_holder pMemory) {
   reset_sequence();
   m_type = NodeType::Map;
 }
-}
-}
+}  // namespace detail
+}  // namespace YAML

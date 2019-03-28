@@ -7,16 +7,16 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/detail/memory.h"
 #include "yaml-cpp/node/detail/node.h"
-#include "yaml-cpp/exceptions.h"
+#include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/node/node.h"
 #include <sstream>
 #include <string>
 
 namespace YAML {
-inline Node::Node() : m_isValid(true), m_pNode(NULL) {}
+inline Node::Node() : m_isValid(true), m_pMemory(nullptr), m_pNode(nullptr) {}
 
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
@@ -45,7 +45,7 @@ inline Node::Node(const Node& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(Zombie) : m_isValid(false), m_pNode(NULL) {}
+inline Node::Node(Zombie) : m_isValid(false), m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(Zombie, const std::string& key)
     : m_isValid(false), m_invalidKey(key), m_pNode(NULL) {}
@@ -208,6 +208,15 @@ inline Node& Node::operator=(const T& rhs) {
   return *this;
 }
 
+inline Node& Node::operator=(const Node& rhs) {
+  if (!m_isValid || !rhs.m_isValid)
+    throw InvalidNode();
+  if (is(rhs))
+    return *this;
+  AssignNode(rhs);
+  return *this;
+}
+
 inline void Node::reset(const YAML::Node& rhs) {
   if (!m_isValid || !rhs.m_isValid)
     throw InvalidNode(m_invalidKey);
@@ -242,15 +251,6 @@ inline void Node::Assign(char* rhs) {
     throw InvalidNode(m_invalidKey);
   EnsureNodeExists();
   m_pNode->set_scalar(rhs);
-}
-
-inline Node& Node::operator=(const Node& rhs) {
-  if (!m_isValid || !rhs.m_isValid)
-    throw InvalidNode(m_invalidKey);
-  if (is(rhs))
-    return *this;
-  AssignNode(rhs);
-  return *this;
 }
 
 inline void Node::AssignData(const Node& rhs) {
@@ -372,7 +372,7 @@ template <typename T>
 inline typename to_value_t<T>::return_type to_value(const T& t) {
   return to_value_t<T>(t)();
 }
-}
+}  // namespace detail
 
 template<typename Key>
 std::string key_to_string(const Key& key) {
@@ -385,8 +385,8 @@ inline const Node Node::operator[](const Key& key) const {
   if (!m_isValid)
     throw InvalidNode(m_invalidKey);
   EnsureNodeExists();
-  detail::node* value = static_cast<const detail::node&>(*m_pNode)
-                            .get(detail::to_value(key), m_pMemory);
+  detail::node* value = static_cast<const detail::node&>(*m_pNode).get(
+      detail::to_value(key), m_pMemory);
   if (!value) {
     return Node(ZombieNode, key_to_string(key));
   }
@@ -454,6 +454,6 @@ inline void Node::force_insert(const Key& key, const Value& value) {
 
 // free functions
 inline bool operator==(const Node& lhs, const Node& rhs) { return lhs.is(rhs); }
-}
+}  // namespace YAML
 
 #endif  // NODE_IMPL_H_62B23520_7C8E_11DE_8A39_0800200C9A66

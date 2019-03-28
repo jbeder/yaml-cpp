@@ -19,9 +19,13 @@ YAML_CPP_API std::vector<unsigned char> DecodeBase64(const std::string &input);
 
 class YAML_CPP_API Binary {
  public:
-  Binary() : m_unownedData(0), m_unownedSize(0) {}
   Binary(const unsigned char *data_, std::size_t size_)
-      : m_unownedData(data_), m_unownedSize(size_) {}
+      : m_data{}, m_unownedData(data_), m_unownedSize(size_) {}
+  Binary() : Binary(nullptr, 0) {}
+  Binary(const Binary &) = default;
+  Binary(Binary &&) = default;
+  Binary &operator=(const Binary &) = default;
+  Binary &operator=(Binary &&) = default;
 
   bool owned() const { return !m_unownedData; }
   std::size_t size() const { return owned() ? m_data.size() : m_unownedSize; }
@@ -62,6 +66,6 @@ class YAML_CPP_API Binary {
   const unsigned char *m_unownedData;
   std::size_t m_unownedSize;
 };
-}
+}  // namespace YAML
 
 #endif  // BASE64_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -22,5 +22,6 @@ class MockEventHandler : public EventHandler {
   MOCK_METHOD4(OnMapStart, void(const Mark&, const std::string&, anchor_t,
                                 EmitterStyle::value));
   MOCK_METHOD0(OnMapEnd, void());
+  MOCK_METHOD2(OnAnchor, void(const Mark&, const std::string&));
 };
-}
+}  // namespace YAML

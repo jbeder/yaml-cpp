@@ -11,7 +11,7 @@ namespace YAML {
 class Binary;
 struct _Null;
 
-Emitter::Emitter() : m_pState(new EmitterState) {}
+Emitter::Emitter() : m_pState(new EmitterState), m_stream{} {}
 
 Emitter::Emitter(std::ostream& stream)
     : m_pState(new EmitterState), m_stream(stream) {}
@@ -906,4 +906,4 @@ Emitter& Emitter::Write(const Binary& binary) {
 
   return *this;
 }
-}
+}  // namespace YAML

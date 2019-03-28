@@ -144,7 +144,7 @@ endif()
 
 # GCC or Clang or Intel Compiler specialities
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
-   CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
+   (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT "x${CMAKE_CXX_SIMULATE_ID}" STREQUAL "xMSVC") OR
    CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
 	### General stuff
@@ -165,7 +165,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} -fPIC")
 	endif()
 	#
-	set(FLAG_TESTED "-Wextra")
+	set(FLAG_TESTED "-Wextra -Wshadow -Weffc++ -pedantic -pedantic-errors")
 	check_cxx_compiler_flag(${FLAG_TESTED} FLAG_WEXTRA)
 	if(FLAG_WEXTRA)
 		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} ${FLAG_TESTED}")
@@ -175,11 +175,11 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 
 	### Make specific
 	if(${CMAKE_BUILD_TOOL} MATCHES make OR ${CMAKE_BUILD_TOOL} MATCHES gmake)
-		add_custom_target(debuggable $(MAKE) clean
+		add_custom_target(debuggable ${CMAKE_MAKE_PROGRAM} clean
 			COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Debug ${CMAKE_SOURCE_DIR}
 			COMMENT "Adjusting settings for debug compilation"
 			VERBATIM)
-		add_custom_target(releasable $(MAKE) clean
+		add_custom_target(releasable ${CMAKE_MAKE_PROGRAM} clean
 			COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release ${CMAKE_SOURCE_DIR}
 			COMMENT "Adjusting settings for release compilation"
 			VERBATIM)

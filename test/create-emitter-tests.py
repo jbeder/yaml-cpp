@@ -35,10 +35,12 @@ def doc_end(implicit=False):
 
 def scalar(value, tag='', anchor='', anchor_id=0):
     emit = []
+    handle = []
     if tag:
         emit += ['VerbatimTag("%s")' % encode(tag)]
     if anchor:
         emit += ['Anchor("%s")' % encode(anchor)]
+        handle += ['OnAnchor(_, "%s")' % encode(anchor)]
     if tag:
         out_tag = encode(tag)
     else:
@@ -47,39 +49,46 @@ def scalar(value, tag='', anchor='', anchor_id=0):
         else:
             out_tag = '!'
     emit += ['"%s"' % encode(value)]
-    return {'emit': emit, 'handle': 'OnScalar(_, "%s", %s, "%s")' % (out_tag, anchor_id, encode(value))}
+    handle += ['OnScalar(_, "%s", %s, "%s")' % (out_tag, anchor_id, encode(value))]
+    return {'emit': emit, 'handle': handle}
 
 def comment(value):
     return {'emit': 'Comment("%s")' % value, 'handle': ''}
 
 def seq_start(tag='', anchor='', anchor_id=0, style='_'):
     emit = []
+    handle = []
     if tag:
         emit += ['VerbatimTag("%s")' % encode(tag)]
     if anchor:
         emit += ['Anchor("%s")' % encode(anchor)]
+        handle += ['OnAnchor(_, "%s")' % encode(anchor)]
     if tag:
         out_tag = encode(tag)
     else:
         out_tag = '?'
     emit += ['BeginSeq']
-    return {'emit': emit, 'handle': 'OnSequenceStart(_, "%s", %s, %s)' % (out_tag, anchor_id, style)}
+    handle += ['OnSequenceStart(_, "%s", %s, %s)' % (out_tag, anchor_id, style)]
+    return {'emit': emit, 'handle': handle}
 
 def seq_end():
     return {'emit': 'EndSeq', 'handle': 'OnSequenceEnd()'}
 
 def map_start(tag='', anchor='', anchor_id=0, style='_'):
     emit = []
+    handle = []
     if tag:
         emit += ['VerbatimTag("%s")' % encode(tag)]
     if anchor:
         emit += ['Anchor("%s")' % encode(anchor)]
+        handle += ['OnAnchor(_, "%s")' % encode(anchor)]
     if tag:
         out_tag = encode(tag)
     else:
         out_tag = '?'
     emit += ['BeginMap']
-    return {'emit': emit, 'handle': 'OnMapStart(_, "%s", %s, %s)' % (out_tag, anchor_id, style)}
+    handle += ['OnMapStart(_, "%s", %s, %s)' % (out_tag, anchor_id, style)]
+    return {'emit': emit, 'handle': handle}
 
 def map_end():
     return {'emit': 'EndMap', 'handle': 'OnMapEnd()'}
@@ -202,7 +211,10 @@ def create_emitter_tests(out):
                     out.writeln('')
                     for event in test['events']:
                         handle = event['handle']
-                        if handle:
+                        if isinstance(handle, list):
+                            for e in handle:
+                                out.writeln('EXPECT_CALL(handler, %s);' % e)
+                        elif handle:
                             out.writeln('EXPECT_CALL(handler, %s);' % handle)
                     out.writeln('Parse(out.c_str());')
                 out.writeln('')
