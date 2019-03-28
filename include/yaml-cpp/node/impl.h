@@ -16,10 +16,12 @@
 #include <string>
 
 namespace YAML {
-inline Node::Node() : m_isValid(true), m_pMemory(nullptr), m_pNode(nullptr) {}
+inline Node::Node()
+    : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
 
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
+      m_invalidKey{},
       m_pMemory(new detail::memory_holder),
       m_pNode(&m_pMemory->create_node()) {
   m_pNode->set_type(type);
@@ -28,6 +30,7 @@ inline Node::Node(NodeType::value type)
 template <typename T>
 inline Node::Node(const T& rhs)
     : m_isValid(true),
+      m_invalidKey{},
       m_pMemory(new detail::memory_holder),
       m_pNode(&m_pMemory->create_node()) {
   Assign(rhs);
@@ -45,13 +48,14 @@ inline Node::Node(const Node& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(Zombie) : m_isValid(false), m_pMemory{}, m_pNode(nullptr) {}
+inline Node::Node(Zombie)
+    : m_isValid(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(Zombie, const std::string& key)
-    : m_isValid(false), m_invalidKey(key), m_pNode(NULL) {}
+    : m_isValid(false), m_invalidKey(key), m_pMemory{}, m_pNode(NULL) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
-    : m_isValid(true), m_pMemory(pMemory), m_pNode(&node) {}
+    : m_isValid(true), m_invalidKey{}, m_pMemory(pMemory), m_pNode(&node) {}
 
 inline Node::~Node() {}
 
@@ -210,7 +214,7 @@ inline Node& Node::operator=(const T& rhs) {
 
 inline Node& Node::operator=(const Node& rhs) {
   if (!m_isValid || !rhs.m_isValid)
-    throw InvalidNode();
+    throw InvalidNode(m_invalidKey);
   if (is(rhs))
     return *this;
   AssignNode(rhs);

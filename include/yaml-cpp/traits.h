@@ -129,7 +129,7 @@ struct streamable_to_string {
 template<typename Key>
 struct streamable_to_string<Key, false> {
   static std::string impl(const Key&) {
-    return std::string();
+    return "";
   }
 };
 #endif  // TRAITS_H_62B23520_7C8E_11DE_8A39_0800200C9A66
