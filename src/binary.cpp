@@ -1,5 +1,7 @@
 #include "yaml-cpp/binary.h"
 
+#include <cctype>
+
 namespace YAML {
 static const char encoding[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -72,19 +74,24 @@ std::vector<unsigned char> DecodeBase64(const std::string &input) {
   unsigned char *out = &ret[0];
 
   unsigned value = 0;
-  for (std::size_t i = 0; i < input.size(); i++) {
+  for (std::size_t i = 0, cnt = 0; i < input.size(); i++) {
+    if (std::isspace(input[i])) {
+      // skip newlines
+      continue;
+    }
     unsigned char d = decoding[static_cast<unsigned>(input[i])];
     if (d == 255)
       return ret_type();
 
     value = (value << 6) | d;
-    if (i % 4 == 3) {
+    if (cnt % 4 == 3) {
       *out++ = value >> 16;
       if (i > 0 && input[i - 1] != '=')
         *out++ = value >> 8;
       if (input[i] != '=')
         *out++ = value;
     }
+    ++cnt;
   }
 
   ret.resize(out - &ret[0]);

@@ -49,7 +49,7 @@ void GraphBuilderAdapter::OnMapStart(const Mark &mark, const std::string &tag,
                                      EmitterStyle::value /* style */) {
   void *pNode = m_builder.NewMap(mark, tag, GetCurrentParent());
   m_containers.push(ContainerFrame(pNode, m_pKeyNode));
-  m_pKeyNode = NULL;
+  m_pKeyNode = nullptr;
   RegisterAnchor(anchor, pNode);
 }
 
@@ -62,7 +62,7 @@ void GraphBuilderAdapter::OnMapEnd() {
 
 void *GraphBuilderAdapter::GetCurrentParent() const {
   if (m_containers.empty()) {
-    return NULL;
+    return nullptr;
   }
   return m_containers.top().pContainer;
 }
@@ -83,7 +83,7 @@ void GraphBuilderAdapter::DispositionNode(void *pNode) {
   if (m_containers.top().isMap()) {
     if (m_pKeyNode) {
       m_builder.AssignInMap(pContainer, m_pKeyNode, pNode);
-      m_pKeyNode = NULL;
+      m_pKeyNode = nullptr;
     } else {
       m_pKeyNode = pNode;
     }

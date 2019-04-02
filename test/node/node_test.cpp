@@ -1,10 +1,10 @@
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/convert.h"
-#include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/impl.h"
+#include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/node/iterator.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -47,11 +47,45 @@ TEST(NodeTest, SimpleAppendSequence) {
   EXPECT_TRUE(node.IsSequence());
 }
 
+TEST(NodeTest, SequenceElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(1);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
+}
+
+TEST(NodeTest, SequenceLastElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(2);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("b", node[1].as<std::string>());
+}
+
 TEST(NodeTest, MapElementRemoval) {
   Node node;
   node["foo"] = "bar";
   node.remove("foo");
   EXPECT_TRUE(!node["foo"]);
+}
+
+TEST(NodeTest, MapIntegerElementRemoval) {
+  Node node;
+  node[1] = "hello";
+  node[2] = 'c';
+  node["foo"] = "bar";
+  EXPECT_TRUE(node.IsMap());
+  node.remove(1);
+  EXPECT_TRUE(node.IsMap());
 }
 
 TEST(NodeTest, SimpleAssignSequence) {
@@ -103,6 +137,14 @@ TEST(NodeTest, RemoveUnassignedNode) {
   Node node(NodeType::Map);
   node["key"];
   node.remove("key");
+  EXPECT_EQ(0, node.size());
+}
+
+TEST(NodeTest, RemoveUnassignedNodeFromMap) {
+  Node node(NodeType::Map);
+  Node n;
+  node[n];
+  node.remove(n);
   EXPECT_EQ(0, node.size());
 }
 

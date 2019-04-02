@@ -26,7 +26,7 @@ namespace YAML {
 class GraphBuilderAdapter : public EventHandler {
  public:
   GraphBuilderAdapter(GraphBuilderInterface& builder)
-      : m_builder(builder), m_pRootNode(NULL), m_pKeyNode(NULL) {}
+      : m_builder(builder), m_pRootNode(nullptr), m_pKeyNode(nullptr) {}
 
   virtual void OnDocumentStart(const Mark& mark) { (void)mark; }
   virtual void OnDocumentEnd() {}
