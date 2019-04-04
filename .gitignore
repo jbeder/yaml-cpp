@@ -1,2 +1,4 @@
 build/
 /tags
+subprojects/
+!subprojects/*.wrap
