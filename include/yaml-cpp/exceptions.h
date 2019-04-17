@@ -114,6 +114,35 @@ inline const std::string KEY_NOT_FOUND_WITH_KEY(
   stream << KEY_NOT_FOUND << ": " << key;
   return stream.str();
 }
+
+template <typename T>
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(
+    const T&, typename disable_if<is_numeric<T>>::type* = 0) {
+  return BAD_SUBSCRIPT;
+}
+
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(const std::string& key) {
+  std::stringstream stream;
+  stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
+  return stream.str();
+}
+
+template <typename T>
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(
+    const T& key, typename enable_if<is_numeric<T>>::type* = 0) {
+  std::stringstream stream;
+  stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
+  return stream.str();
+}
+
+inline const std::string INVALID_NODE_WITH_KEY(const std::string& key) {
+  std::stringstream stream;
+  if (key.empty()) {
+    return INVALID_NODE;
+  }
+  stream << "invalid node; first invalid key: \"" << key << "\"";
+  return stream.str();
+}
 }
 
 class YAML_CPP_API Exception : public std::runtime_error {
@@ -194,8 +223,9 @@ inline TypedKeyNotFound<T> MakeTypedKeyNotFound(const Mark& mark,
 
 class YAML_CPP_API InvalidNode : public RepresentationException {
  public:
-  InvalidNode()
-      : RepresentationException(Mark::null_mark(), ErrorMsg::INVALID_NODE) {}
+  InvalidNode(std::string key)
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::INVALID_NODE_WITH_KEY(key)) {}
   InvalidNode(const InvalidNode&) = default;
   virtual ~InvalidNode() YAML_CPP_NOEXCEPT;
 };
@@ -224,8 +254,10 @@ class YAML_CPP_API BadDereference : public RepresentationException {
 
 class YAML_CPP_API BadSubscript : public RepresentationException {
  public:
-  BadSubscript()
-      : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_SUBSCRIPT) {}
+  template <typename Key>
+  BadSubscript(const Key& key)
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
   BadSubscript(const BadSubscript&) = default;
   virtual ~BadSubscript() YAML_CPP_NOEXCEPT;
 };
