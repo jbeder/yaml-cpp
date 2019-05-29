@@ -280,6 +280,10 @@ set(_INSTALL_DESTINATIONS
 ### Library
 ###
 add_library(yaml-cpp ${library_sources})
+target_include_directories(yaml-cpp INTERFACE 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
+
 set_target_properties(yaml-cpp PROPERTIES
   COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
 )
