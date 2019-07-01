@@ -26,3 +26,8 @@ matrix:
   exclude:
   - os: linux
     compiler: clang
+  include:
+  - language: python
+    before_install: pip install flake8
+    before_script: true
+    script: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
