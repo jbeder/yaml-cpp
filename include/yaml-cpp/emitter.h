@@ -161,7 +161,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   if (std::is_floating_point_v<T>) {
     if ((std::numeric_limits<T>::has_quiet_NaN ||
          std::numeric_limits<T>::has_signaling_NaN) &&
-        value != value) {
+        std::isnan(value)) {
       special = true;
       stream << ".nan";
     } else if (std::numeric_limits<T>::has_infinity) {
