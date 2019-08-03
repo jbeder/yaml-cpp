@@ -7,6 +7,7 @@
 #pragma once
 #endif
 
+#include <cmath>
 #include <cstddef>
 #include <limits>
 #include <memory>
@@ -158,10 +159,9 @@ inline Emitter& Emitter::WriteStreamable(T value) {
 
   bool special = false;
   if (std::is_floating_point_v<T>) {
-    if ((std::numeric_limits<T>::has_quiet_NaN &&
-         value == std::numeric_limits<T>::quiet_NaN()) ||
-        (std::numeric_limits<T>::has_signaling_NaN &&
-         value == std::numeric_limits<T>::signaling_NaN())) {
+    if ((std::numeric_limits<T>::has_quiet_NaN ||
+         std::numeric_limits<T>::has_signaling_NaN) &&
+        value != value) {
       special = true;
       stream << ".nan";
     } else if (std::numeric_limits<T>::has_infinity) {
