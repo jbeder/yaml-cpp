@@ -158,7 +158,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   SetStreamablePrecision<T>(stream);
 
   bool special = false;
-  if (std::is_floating_point_v<T>) {
+  if (std::is_floating_point<T>::value) {
     if ((std::numeric_limits<T>::has_quiet_NaN ||
          std::numeric_limits<T>::has_signaling_NaN) &&
         std::isnan(value)) {
