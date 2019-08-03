@@ -990,27 +990,39 @@ TEST_F(EmitterTest, Infinity) {
   out << YAML::BeginMap;
   out << YAML::Key << "foo" << YAML::Value
       << std::numeric_limits<float>::infinity();
+  out << YAML::Key << "bar" << YAML::Value
+      << std::numeric_limits<double>::infinity();
   out << YAML::EndMap;
 
-  ExpectEmit("foo: .inf");
+  ExpectEmit(
+	  "foo: .inf\n"
+	  "bar: .inf");
 }
 
 TEST_F(EmitterTest, NegInfinity) {
   out << YAML::BeginMap;
   out << YAML::Key << "foo" << YAML::Value
       << -std::numeric_limits<float>::infinity();
+  out << YAML::Key << "bar" << YAML::Value
+      << -std::numeric_limits<double>::infinity();
   out << YAML::EndMap;
 
-  ExpectEmit("foo: -.inf");
+  ExpectEmit(
+	  "foo: -.inf\n"
+	  "bar: -.inf");
 }
 
 TEST_F(EmitterTest, NaN) {
   out << YAML::BeginMap;
   out << YAML::Key << "foo" << YAML::Value
-      << -std::numeric_limits<float>::quiet_NaN();
+      << std::numeric_limits<float>::quiet_NaN();
+  out << YAML::Key << "bar" << YAML::Value
+      << std::numeric_limits<double>::quiet_NaN();
   out << YAML::EndMap;
 
-  ExpectEmit("foo: .nan");
+  ExpectEmit(
+	  "foo: .nan\n"
+	  "bar: .nan");
 }
 
 class EmitterErrorTest : public ::testing::Test {
