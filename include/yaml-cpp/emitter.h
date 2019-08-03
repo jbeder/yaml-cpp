@@ -8,9 +8,11 @@
 #endif
 
 #include <cstddef>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/dll.h"
@@ -153,7 +155,29 @@ inline Emitter& Emitter::WriteStreamable(T value) {
 
   std::stringstream stream;
   SetStreamablePrecision<T>(stream);
-  stream << value;
+
+  bool special = false;
+  if (std::is_floating_point_v<T>) {
+    if ((std::numeric_limits<T>::has_quiet_NaN &&
+         value == std::numeric_limits<T>::quiet_NaN()) ||
+        (std::numeric_limits<T>::has_signaling_NaN &&
+         value == std::numeric_limits<T>::signaling_NaN())) {
+      special = true;
+      stream << ".nan";
+    } else if (std::numeric_limits<T>::has_infinity) {
+      if (value == std::numeric_limits<T>::infinity()) {
+        special = true;
+        stream << ".inf";
+      } else if (value == -std::numeric_limits<T>::infinity()) {
+        special = true;
+        stream << "-.inf";
+      }
+    }
+  }
+
+  if (!special) {
+    stream << value;
+  }
   m_stream << stream.str();
 
   StartedScalar();
