@@ -55,6 +55,7 @@ problems to googletestframework@googlegroups.com.  You can read
 http://code.google.com/p/googletest/wiki/GoogleTestAdvancedGuide for
 more information.
 """
+from __future__ import print_function
 
 __author__ = 'wan@google.com (Zhanyong Wan)'
 
