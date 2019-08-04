@@ -253,8 +253,9 @@ TEST_F(EmitterTest, ScalarFormat) {
   out << DoubleQuoted << "explicit double-quoted scalar";
   out << "auto-detected\ndouble-quoted scalar";
   out << "a non-\"auto-detected\" double-quoted scalar";
-  out << Literal << "literal scalar\nthat may span\nmany, many\nlines "
-                    "and have \"whatever\" crazy\tsymbols that we like";
+  out << Literal
+      << "literal scalar\nthat may span\nmany, many\nlines "
+         "and have \"whatever\" crazy\tsymbols that we like";
   out << EndSeq;
 
   ExpectEmit(
@@ -526,9 +527,10 @@ TEST_F(EmitterTest, SimpleComment) {
 
 TEST_F(EmitterTest, MultiLineComment) {
   out << BeginSeq;
-  out << "item 1" << Comment(
-                         "really really long\ncomment that couldn't "
-                         "possibly\nfit on one line");
+  out << "item 1"
+      << Comment(
+             "really really long\ncomment that couldn't "
+             "possibly\nfit on one line");
   out << "item 2";
   out << EndSeq;
 
@@ -984,6 +986,45 @@ TEST_F(EmitterTest, ValueOfBackslash) {
   ExpectEmit("foo: \"\\\\\"");
 }
 
+TEST_F(EmitterTest, Infinity) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "foo" << YAML::Value
+      << std::numeric_limits<float>::infinity();
+  out << YAML::Key << "bar" << YAML::Value
+      << std::numeric_limits<double>::infinity();
+  out << YAML::EndMap;
+
+  ExpectEmit(
+	  "foo: .inf\n"
+	  "bar: .inf");
+}
+
+TEST_F(EmitterTest, NegInfinity) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "foo" << YAML::Value
+      << -std::numeric_limits<float>::infinity();
+  out << YAML::Key << "bar" << YAML::Value
+      << -std::numeric_limits<double>::infinity();
+  out << YAML::EndMap;
+
+  ExpectEmit(
+	  "foo: -.inf\n"
+	  "bar: -.inf");
+}
+
+TEST_F(EmitterTest, NaN) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "foo" << YAML::Value
+      << std::numeric_limits<float>::quiet_NaN();
+  out << YAML::Key << "bar" << YAML::Value
+      << std::numeric_limits<double>::quiet_NaN();
+  out << YAML::EndMap;
+
+  ExpectEmit(
+	  "foo: .nan\n"
+	  "bar: .nan");
+}
+
 class EmitterErrorTest : public ::testing::Test {
  protected:
   void ExpectEmitError(const std::string& expectedError) {
@@ -1034,5 +1075,5 @@ TEST_F(EmitterErrorTest, InvalidAlias) {
 
   ExpectEmitError(ErrorMsg::INVALID_ALIAS);
 }
-}
-}
+}  // namespace
+}  // namespace YAML
