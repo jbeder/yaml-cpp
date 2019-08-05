@@ -872,7 +872,12 @@ Emitter& Emitter::Write(const _Comment& comment) {
   PrepareNode(EmitterNodeType::NoType);
 
   if (m_stream.col() > 0)
-    m_stream << Indentation(m_pState->GetPreCommentIndent());
+  {
+    if(comment.indent_to && comment.indent_col > m_stream.col())
+      m_stream << IndentTo(comment.indent_col);
+    else  
+      m_stream << Indentation(m_pState->GetPreCommentIndent());
+  }
   Utils::WriteComment(m_stream, comment.content,
                       m_pState->GetPostCommentIndent());
 

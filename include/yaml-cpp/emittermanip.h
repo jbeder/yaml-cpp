@@ -113,11 +113,13 @@ inline _Tag SecondaryTag(const std::string content) {
 }
 
 struct _Comment {
-  _Comment(const std::string& content_) : content(content_) {}
+  _Comment(const std::string& content_, int col = -1) : content(content_), indent_col(col), indent_to(col > 0) {}
   std::string content;
+  size_t indent_col;
+  bool indent_to;
 };
 
-inline _Comment Comment(const std::string content) { return _Comment(content); }
+inline _Comment Comment(const std::string content, int col = -1) { return _Comment(content, col); }
 
 struct _Precision {
   _Precision(int floatPrecision_, int doublePrecision_)
