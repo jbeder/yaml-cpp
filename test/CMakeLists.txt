@@ -7,6 +7,7 @@ if(MSVC)
     set(CMAKE_STATIC_LIBRARY_PREFIX "")
 endif()
 
+if (NOT TARGET gmock)
 ExternalProject_Add(
 	googletest_project
 	SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0"
@@ -18,10 +19,12 @@ ExternalProject_Add(
 )
 
 add_library(gmock UNKNOWN IMPORTED)
+add_dependencies(gmock googletest_project)
 set_target_properties(gmock PROPERTIES
     IMPORTED_LOCATION
     ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gmock${CMAKE_STATIC_LIBRARY_SUFFIX}
 )
+endif()
 
 find_package(Threads)
 
@@ -51,7 +54,7 @@ add_executable(run-tests
     ${test_headers}
 )
 
-add_dependencies(run-tests googletest_project)
+add_dependencies(run-tests gmock)
 
 set_target_properties(run-tests PROPERTIES
     COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags} ${yaml_test_flags}"
