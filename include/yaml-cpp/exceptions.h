@@ -13,6 +13,14 @@
 #include <stdexcept>
 #include <string>
 
+// This is here for compatibility with older versions of Visual Studio
+// which don't support noexcept
+#if defined(_MSC_VER) && _MSC_VER < 1900
+    #define YAML_CPP_NOEXCEPT _NOEXCEPT
+#else
+    #define YAML_CPP_NOEXCEPT noexcept
+#endif
+
 namespace YAML {
 // error messages
 namespace ErrorMsg {
@@ -106,13 +114,42 @@ inline const std::string KEY_NOT_FOUND_WITH_KEY(
   stream << KEY_NOT_FOUND << ": " << key;
   return stream.str();
 }
+
+template <typename T>
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(
+    const T&, typename disable_if<is_numeric<T>>::type* = 0) {
+  return BAD_SUBSCRIPT;
 }
 
-class Exception : public std::runtime_error {
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(const std::string& key) {
+  std::stringstream stream;
+  stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
+  return stream.str();
+}
+
+template <typename T>
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(
+    const T& key, typename enable_if<is_numeric<T>>::type* = 0) {
+  std::stringstream stream;
+  stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
+  return stream.str();
+}
+
+inline const std::string INVALID_NODE_WITH_KEY(const std::string& key) {
+  std::stringstream stream;
+  if (key.empty()) {
+    return INVALID_NODE;
+  }
+  stream << "invalid node; first invalid key: \"" << key << "\"";
+  return stream.str();
+}
+}
+
+class YAML_CPP_API Exception : public std::runtime_error {
  public:
   Exception(const Mark& mark_, const std::string& msg_)
       : std::runtime_error(build_what(mark_, msg_)), mark(mark_), msg(msg_) {}
-  virtual ~Exception() noexcept;
+  virtual ~Exception() YAML_CPP_NOEXCEPT;
 
   Exception(const Exception&) = default;
 
@@ -133,47 +170,47 @@ class Exception : public std::runtime_error {
   }
 };
 
-class ParserException : public Exception {
+class YAML_CPP_API ParserException : public Exception {
  public:
   ParserException(const Mark& mark_, const std::string& msg_)
       : Exception(mark_, msg_) {}
   ParserException(const ParserException&) = default;
-  virtual ~ParserException() noexcept;
+  virtual ~ParserException() YAML_CPP_NOEXCEPT;
 };
 
-class RepresentationException : public Exception {
+class YAML_CPP_API RepresentationException : public Exception {
  public:
   RepresentationException(const Mark& mark_, const std::string& msg_)
       : Exception(mark_, msg_) {}
   RepresentationException(const RepresentationException&) = default;
-  virtual ~RepresentationException() noexcept;
+  virtual ~RepresentationException() YAML_CPP_NOEXCEPT;
 };
 
 // representation exceptions
-class InvalidScalar : public RepresentationException {
+class YAML_CPP_API InvalidScalar : public RepresentationException {
  public:
   InvalidScalar(const Mark& mark_)
       : RepresentationException(mark_, ErrorMsg::INVALID_SCALAR) {}
   InvalidScalar(const InvalidScalar&) = default;
-  virtual ~InvalidScalar() noexcept;
+  virtual ~InvalidScalar() YAML_CPP_NOEXCEPT;
 };
 
-class KeyNotFound : public RepresentationException {
+class YAML_CPP_API KeyNotFound : public RepresentationException {
  public:
   template <typename T>
   KeyNotFound(const Mark& mark_, const T& key_)
       : RepresentationException(mark_, ErrorMsg::KEY_NOT_FOUND_WITH_KEY(key_)) {
   }
   KeyNotFound(const KeyNotFound&) = default;
-  virtual ~KeyNotFound() noexcept;
+  virtual ~KeyNotFound() YAML_CPP_NOEXCEPT;
 };
 
 template <typename T>
-class TypedKeyNotFound : public KeyNotFound {
+class YAML_CPP_API TypedKeyNotFound : public KeyNotFound {
  public:
   TypedKeyNotFound(const Mark& mark_, const T& key_)
       : KeyNotFound(mark_, key_), key(key_) {}
-  virtual ~TypedKeyNotFound() noexcept {}
+  virtual ~TypedKeyNotFound() YAML_CPP_NOEXCEPT {}
 
   T key;
 };
@@ -184,20 +221,21 @@ inline TypedKeyNotFound<T> MakeTypedKeyNotFound(const Mark& mark,
   return TypedKeyNotFound<T>(mark, key);
 }
 
-class InvalidNode : public RepresentationException {
+class YAML_CPP_API InvalidNode : public RepresentationException {
  public:
-  InvalidNode()
-      : RepresentationException(Mark::null_mark(), ErrorMsg::INVALID_NODE) {}
+  InvalidNode(std::string key)
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::INVALID_NODE_WITH_KEY(key)) {}
   InvalidNode(const InvalidNode&) = default;
-  virtual ~InvalidNode() noexcept;
+  virtual ~InvalidNode() YAML_CPP_NOEXCEPT;
 };
 
-class BadConversion : public RepresentationException {
+class YAML_CPP_API BadConversion : public RepresentationException {
  public:
   explicit BadConversion(const Mark& mark_)
       : RepresentationException(mark_, ErrorMsg::BAD_CONVERSION) {}
   BadConversion(const BadConversion&) = default;
-  virtual ~BadConversion() noexcept;
+  virtual ~BadConversion() YAML_CPP_NOEXCEPT;
 };
 
 template <typename T>
@@ -206,52 +244,56 @@ class TypedBadConversion : public BadConversion {
   explicit TypedBadConversion(const Mark& mark_) : BadConversion(mark_) {}
 };
 
-class BadDereference : public RepresentationException {
+class YAML_CPP_API BadDereference : public RepresentationException {
  public:
   BadDereference()
       : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_DEREFERENCE) {}
   BadDereference(const BadDereference&) = default;
-  virtual ~BadDereference() noexcept;
+  virtual ~BadDereference() YAML_CPP_NOEXCEPT;
 };
 
-class BadSubscript : public RepresentationException {
+class YAML_CPP_API BadSubscript : public RepresentationException {
  public:
-  BadSubscript()
-      : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_SUBSCRIPT) {}
+  template <typename Key>
+  BadSubscript(const Key& key)
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
   BadSubscript(const BadSubscript&) = default;
-  virtual ~BadSubscript() noexcept;
+  virtual ~BadSubscript() YAML_CPP_NOEXCEPT;
 };
 
-class BadPushback : public RepresentationException {
+class YAML_CPP_API BadPushback : public RepresentationException {
  public:
   BadPushback()
       : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_PUSHBACK) {}
   BadPushback(const BadPushback&) = default;
-  virtual ~BadPushback() noexcept;
+  virtual ~BadPushback() YAML_CPP_NOEXCEPT;
 };
 
-class BadInsert : public RepresentationException {
+class YAML_CPP_API BadInsert : public RepresentationException {
  public:
   BadInsert()
       : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_INSERT) {}
   BadInsert(const BadInsert&) = default;
-  virtual ~BadInsert() noexcept;
+  virtual ~BadInsert() YAML_CPP_NOEXCEPT;
 };
 
-class EmitterException : public Exception {
+class YAML_CPP_API EmitterException : public Exception {
  public:
   EmitterException(const std::string& msg_)
       : Exception(Mark::null_mark(), msg_) {}
   EmitterException(const EmitterException&) = default;
-  virtual ~EmitterException() noexcept;
+  virtual ~EmitterException() YAML_CPP_NOEXCEPT;
 };
 
-class BadFile : public Exception {
+class YAML_CPP_API BadFile : public Exception {
  public:
   BadFile() : Exception(Mark::null_mark(), ErrorMsg::BAD_FILE) {}
   BadFile(const BadFile&) = default;
-  virtual ~BadFile() noexcept;
+  virtual ~BadFile() YAML_CPP_NOEXCEPT;
 };
 }
+
+#undef YAML_CPP_NOEXCEPT
 
 #endif  // EXCEPTIONS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

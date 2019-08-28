@@ -7,14 +7,19 @@
 namespace YAML {
 ostream_wrapper::ostream_wrapper()
     : m_buffer(1, '\0'),
-      m_pStream(0),
+      m_pStream(nullptr),
       m_pos(0),
       m_row(0),
       m_col(0),
       m_comment(false) {}
 
 ostream_wrapper::ostream_wrapper(std::ostream& stream)
-    : m_pStream(&stream), m_pos(0), m_row(0), m_col(0), m_comment(false) {}
+    : m_buffer{},
+      m_pStream(&stream),
+      m_pos(0),
+      m_row(0),
+      m_col(0),
+      m_comment(false) {}
 
 ostream_wrapper::~ostream_wrapper() {}
 
@@ -54,4 +59,4 @@ void ostream_wrapper::update_pos(char ch) {
     m_comment = false;
   }
 }
-}
+}  // namespace YAML

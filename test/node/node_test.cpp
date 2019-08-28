@@ -1,10 +1,10 @@
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/convert.h"
-#include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/detail/impl.h"
+#include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/node/impl.h"
+#include "yaml-cpp/node/iterator.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -47,11 +47,45 @@ TEST(NodeTest, SimpleAppendSequence) {
   EXPECT_TRUE(node.IsSequence());
 }
 
+TEST(NodeTest, SequenceElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(1);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
+}
+
+TEST(NodeTest, SequenceLastElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(2);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("b", node[1].as<std::string>());
+}
+
 TEST(NodeTest, MapElementRemoval) {
   Node node;
   node["foo"] = "bar";
   node.remove("foo");
   EXPECT_TRUE(!node["foo"]);
+}
+
+TEST(NodeTest, MapIntegerElementRemoval) {
+  Node node;
+  node[1] = "hello";
+  node[2] = 'c';
+  node["foo"] = "bar";
+  EXPECT_TRUE(node.IsMap());
+  node.remove(1);
+  EXPECT_TRUE(node.IsMap());
 }
 
 TEST(NodeTest, SimpleAssignSequence) {
@@ -103,6 +137,14 @@ TEST(NodeTest, RemoveUnassignedNode) {
   Node node(NodeType::Map);
   node["key"];
   node.remove("key");
+  EXPECT_EQ(0, node.size());
+}
+
+TEST(NodeTest, RemoveUnassignedNodeFromMap) {
+  Node node(NodeType::Map);
+  Node n;
+  node[n];
+  node.remove(n);
   EXPECT_EQ(0, node.size());
 }
 
@@ -349,7 +391,13 @@ TEST(NodeTest, AutoBoolConversion) {
   EXPECT_TRUE(!!node["foo"]);
 }
 
-TEST(NodeTest, FloatingPrecision) {
+TEST(NodeTest, FloatingPrecisionFloat) {
+  const float x = 0.123456789;
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionDouble) {
   const double x = 0.123456789;
   Node node = Node(x);
   EXPECT_EQ(x, node.as<double>());
@@ -410,108 +458,108 @@ class NodeEmitterTest : public ::testing::Test {
 TEST_F(NodeEmitterTest, SimpleFlowSeqNode) {
   Node node;
   node.SetStyle(EmitterStyle::Flow);
-  node.push_back(1.01);
-  node.push_back(2.01);
-  node.push_back(3.01);
+  node.push_back(1.5);
+  node.push_back(2.25);
+  node.push_back(3.125);
 
-  ExpectOutput("[1.01, 2.01, 3.01]", node);
+  ExpectOutput("[1.5, 2.25, 3.125]", node);
 }
 
 TEST_F(NodeEmitterTest, NestFlowSeqNode) {
   Node node, cell0, cell1;
 
-  cell0.push_back(1.01);
-  cell0.push_back(2.01);
-  cell0.push_back(3.01);
+  cell0.push_back(1.5);
+  cell0.push_back(2.25);
+  cell0.push_back(3.125);
 
-  cell1.push_back(4.01);
-  cell1.push_back(5.01);
-  cell1.push_back(6.01);
+  cell1.push_back(4.5);
+  cell1.push_back(5.25);
+  cell1.push_back(6.125);
 
   node.SetStyle(EmitterStyle::Flow);
   node.push_back(cell0);
   node.push_back(cell1);
 
-  ExpectOutput("[[1.01, 2.01, 3.01], [4.01, 5.01, 6.01]]", node);
+  ExpectOutput("[[1.5, 2.25, 3.125], [4.5, 5.25, 6.125]]", node);
 }
 
 TEST_F(NodeEmitterTest, MixBlockFlowSeqNode) {
   Node node, cell0, cell1;
 
   cell0.SetStyle(EmitterStyle::Flow);
-  cell0.push_back(1.01);
-  cell0.push_back(2.01);
-  cell0.push_back(3.01);
+  cell0.push_back(1.5);
+  cell0.push_back(2.25);
+  cell0.push_back(3.125);
 
-  cell1.push_back(4.01);
-  cell1.push_back(5.01);
-  cell1.push_back(6.01);
+  cell1.push_back(4.5);
+  cell1.push_back(5.25);
+  cell1.push_back(6.125);
 
   node.SetStyle(EmitterStyle::Block);
   node.push_back(cell0);
   node.push_back(cell1);
 
-  ExpectOutput("- [1.01, 2.01, 3.01]\n-\n  - 4.01\n  - 5.01\n  - 6.01", node);
+  ExpectOutput("- [1.5, 2.25, 3.125]\n-\n  - 4.5\n  - 5.25\n  - 6.125", node);
 }
 
 TEST_F(NodeEmitterTest, NestBlockFlowMapListNode) {
   Node node, mapNode, blockNode;
 
-  node.push_back(1.01);
-  node.push_back(2.01);
-  node.push_back(3.01);
+  node.push_back(1.5);
+  node.push_back(2.25);
+  node.push_back(3.125);
 
   mapNode.SetStyle(EmitterStyle::Flow);
   mapNode["position"] = node;
 
-  blockNode.push_back(1.01);
+  blockNode.push_back(1.0625);
   blockNode.push_back(mapNode);
 
-  ExpectOutput("- 1.01\n- {position: [1.01, 2.01, 3.01]}", blockNode);
+  ExpectOutput("- 1.0625\n- {position: [1.5, 2.25, 3.125]}", blockNode);
 }
 
 TEST_F(NodeEmitterTest, NestBlockMixMapListNode) {
   Node node, mapNode, blockNode;
 
-  node.push_back(1.01);
-  node.push_back(2.01);
-  node.push_back(3.01);
+  node.push_back(1.5);
+  node.push_back(2.25);
+  node.push_back(3.125);
 
   mapNode.SetStyle(EmitterStyle::Flow);
   mapNode["position"] = node;
 
-  blockNode["scalar"] = 1.01;
+  blockNode["scalar"] = 1.0625;
   blockNode["object"] = mapNode;
 
   ExpectAnyOutput(blockNode,
-                  "scalar: 1.01\nobject: {position: [1.01, 2.01, 3.01]}",
-                  "object: {position: [1.01, 2.01, 3.01]}\nscalar: 1.01");
+                  "scalar: 1.0625\nobject: {position: [1.5, 2.25, 3.125]}",
+                  "object: {position: [1.5, 2.25, 3.125]}\nscalar: 1.5");
 }
 
 TEST_F(NodeEmitterTest, NestBlockMapListNode) {
   Node node, mapNode;
 
-  node.push_back(1.01);
-  node.push_back(2.01);
-  node.push_back(3.01);
+  node.push_back(1.5);
+  node.push_back(2.25);
+  node.push_back(3.125);
 
   mapNode.SetStyle(EmitterStyle::Block);
   mapNode["position"] = node;
 
-  ExpectOutput("position:\n  - 1.01\n  - 2.01\n  - 3.01", mapNode);
+  ExpectOutput("position:\n  - 1.5\n  - 2.25\n  - 3.125", mapNode);
 }
 
 TEST_F(NodeEmitterTest, NestFlowMapListNode) {
   Node node, mapNode;
 
-  node.push_back(1.01);
-  node.push_back(2.01);
-  node.push_back(3.01);
+  node.push_back(1.5);
+  node.push_back(2.25);
+  node.push_back(3.125);
 
   mapNode.SetStyle(EmitterStyle::Flow);
   mapNode["position"] = node;
 
-  ExpectOutput("{position: [1.01, 2.01, 3.01]}", mapNode);
+  ExpectOutput("{position: [1.5, 2.25, 3.125]}", mapNode);
 }
 }
 }

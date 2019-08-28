@@ -21,3 +21,8 @@ before_script:
 script:
   - make
   - test/run-tests
+
+matrix:
+  exclude:
+  - os: linux
+    compiler: clang

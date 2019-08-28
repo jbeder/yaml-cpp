@@ -13,14 +13,22 @@
 namespace YAML {
 namespace detail {
 
-std::string node_data::empty_scalar;
+const std::string& node_data::empty_scalar() {
+  static const std::string svalue;
+  return svalue;
+}
 
 node_data::node_data()
     : m_isDefined(false),
       m_mark(Mark::null_mark()),
       m_type(NodeType::Null),
+      m_tag{},
       m_style(EmitterStyle::Default),
-      m_seqSize(0) {}
+      m_scalar{},
+      m_sequence{},
+      m_seqSize(0),
+      m_map{},
+      m_undefinedPairs{} {}
 
 void node_data::mark_defined() {
   if (m_type == NodeType::Undefined)
@@ -188,7 +196,7 @@ void node_data::insert(node& key, node& value, shared_memory_holder pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadSubscript();
+      throw BadSubscript(key);
   }
 
   insert_map_pair(key, value);
@@ -197,7 +205,7 @@ void node_data::insert(node& key, node& value, shared_memory_holder pMemory) {
 // indexing
 node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
   if (m_type != NodeType::Map) {
-    return NULL;
+    return nullptr;
   }
 
   for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
@@ -205,7 +213,7 @@ node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
       return it->second;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 node& node_data::get(node& key, shared_memory_holder pMemory) {
@@ -218,7 +226,7 @@ node& node_data::get(node& key, shared_memory_holder pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadSubscript();
+      throw BadSubscript(key);
   }
 
   for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
@@ -234,6 +242,14 @@ node& node_data::get(node& key, shared_memory_holder pMemory) {
 bool node_data::remove(node& key, shared_memory_holder /* pMemory */) {
   if (m_type != NodeType::Map)
     return false;
+
+  for (kv_pairs::iterator it = m_undefinedPairs.begin();
+       it != m_undefinedPairs.end();) {
+    kv_pairs::iterator jt = std::next(it);
+    if (it->first->is(key))
+      m_undefinedPairs.erase(it);
+    it = jt;
+  }
 
   for (node_map::iterator it = m_map.begin(); it != m_map.end(); ++it) {
     if (it->first->is(key)) {
@@ -296,5 +312,5 @@ void node_data::convert_sequence_to_map(shared_memory_holder pMemory) {
   reset_sequence();
   m_type = NodeType::Map;
 }
-}
-}
+}  // namespace detail
+}  // namespace YAML

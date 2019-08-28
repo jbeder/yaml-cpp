@@ -6,27 +6,31 @@
 namespace YAML {
 EmitterState::EmitterState()
     : m_isGood(true),
+      m_lastError{},
+      // default global manipulators
+      m_charset(EmitNonAscii),
+      m_strFmt(Auto),
+      m_boolFmt(TrueFalseBool),
+      m_boolLengthFmt(LongBool),
+      m_boolCaseFmt(LowerCase),
+      m_intFmt(Dec),
+      m_indent(2),
+      m_preCommentIndent(2),
+      m_postCommentIndent(1),
+      m_seqFmt(Block),
+      m_mapFmt(Block),
+      m_mapKeyFmt(Auto),
+      m_floatPrecision(std::numeric_limits<float>::max_digits10),
+      m_doublePrecision(std::numeric_limits<double>::max_digits10),
+      //
+      m_modifiedSettings{},
+      m_globalModifiedSettings{},
+      m_groups{},
       m_curIndent(0),
       m_hasAnchor(false),
       m_hasTag(false),
       m_hasNonContent(false),
-      m_docCount(0) {
-  // set default global manipulators
-  m_charset.set(EmitNonAscii);
-  m_strFmt.set(Auto);
-  m_boolFmt.set(TrueFalseBool);
-  m_boolLengthFmt.set(LongBool);
-  m_boolCaseFmt.set(LowerCase);
-  m_intFmt.set(Dec);
-  m_indent.set(2);
-  m_preCommentIndent.set(2);
-  m_postCommentIndent.set(1);
-  m_seqFmt.set(Block);
-  m_mapFmt.set(Block);
-  m_mapKeyFmt.set(Auto);
-  m_floatPrecision.set(std::numeric_limits<float>::digits10 + 1);
-  m_doublePrecision.set(std::numeric_limits<double>::digits10 + 1);
-}
+      m_docCount(0) {}
 
 EmitterState::~EmitterState() {}
 
@@ -349,7 +353,7 @@ bool EmitterState::SetMapKeyFormat(EMITTER_MANIP value, FmtScope::value scope) {
 }
 
 bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope::value scope) {
-  if (value > std::numeric_limits<float>::digits10 + 1)
+  if (value > std::numeric_limits<float>::max_digits10)
     return false;
   _Set(m_floatPrecision, value, scope);
   return true;
@@ -357,9 +361,9 @@ bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope::value scope) {
 
 bool EmitterState::SetDoublePrecision(std::size_t value,
                                       FmtScope::value scope) {
-  if (value > std::numeric_limits<double>::digits10 + 1)
+  if (value > std::numeric_limits<double>::max_digits10)
     return false;
   _Set(m_doublePrecision, value, scope);
   return true;
 }
-}
+}  // namespace YAML

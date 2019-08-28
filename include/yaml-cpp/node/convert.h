@@ -93,7 +93,7 @@ struct convert<_Null> {
   struct convert<type> {                                                 \
     static Node encode(const type& rhs) {                                \
       std::stringstream stream;                                          \
-      stream.precision(std::numeric_limits<type>::digits10 + 1);         \
+      stream.precision(std::numeric_limits<type>::max_digits10);         \
       stream << rhs;                                                     \
       return Node(stream.str());                                         \
     }                                                                    \
@@ -116,10 +116,11 @@ struct convert<_Null> {
         }                                                                \
       }                                                                  \
                                                                          \
-      if (std::numeric_limits<type>::has_quiet_NaN &&                    \
-          conversion::IsNaN(input)) {                                    \
-        rhs = std::numeric_limits<type>::quiet_NaN();                    \
-        return true;                                                     \
+      if (std::numeric_limits<type>::has_quiet_NaN) {                    \
+        if (conversion::IsNaN(input)) {                                  \
+          rhs = std::numeric_limits<type>::quiet_NaN();                  \
+          return true;                                                   \
+        }                                                                \
       }                                                                  \
                                                                          \
       return false;                                                      \

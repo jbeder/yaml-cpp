@@ -18,6 +18,7 @@ SingleDocParser::SingleDocParser(Scanner& scanner, const Directives& directives)
     : m_scanner(scanner),
       m_directives(directives),
       m_pCollectionStack(new CollectionStack),
+      m_anchors{},
       m_curAnchor(0) {}
 
 SingleDocParser::~SingleDocParser() {}
@@ -71,8 +72,12 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   }
 
   std::string tag;
+  std::string anchor_name;
   anchor_t anchor;
-  ParseProperties(tag, anchor);
+  ParseProperties(tag, anchor, anchor_name);
+
+  if (!anchor_name.empty())
+    eventHandler.OnAnchor(mark, anchor_name);
 
   const Token& token = m_scanner.peek();
 
@@ -166,10 +171,10 @@ void SingleDocParser::HandleBlockSequence(EventHandler& eventHandler) {
 
     // check for null
     if (!m_scanner.empty()) {
-      const Token& token = m_scanner.peek();
-      if (token.type == Token::BLOCK_ENTRY ||
-          token.type == Token::BLOCK_SEQ_END) {
-        eventHandler.OnNull(token.mark, NullAnchor);
+      const Token& nextToken = m_scanner.peek();
+      if (nextToken.type == Token::BLOCK_ENTRY ||
+          nextToken.type == Token::BLOCK_SEQ_END) {
+        eventHandler.OnNull(nextToken.mark, NullAnchor);
         continue;
       }
     }
@@ -356,8 +361,10 @@ void SingleDocParser::HandleCompactMapWithNoKey(EventHandler& eventHandler) {
 
 // ParseProperties
 // . Grabs any tag or anchor tokens and deals with them.
-void SingleDocParser::ParseProperties(std::string& tag, anchor_t& anchor) {
+void SingleDocParser::ParseProperties(std::string& tag, anchor_t& anchor,
+                                      std::string& anchor_name) {
   tag.clear();
+  anchor_name.clear();
   anchor = NullAnchor;
 
   while (1) {
@@ -369,7 +376,7 @@ void SingleDocParser::ParseProperties(std::string& tag, anchor_t& anchor) {
         ParseTag(tag);
         break;
       case Token::ANCHOR:
-        ParseAnchor(anchor);
+        ParseAnchor(anchor, anchor_name);
         break;
       default:
         return;
@@ -387,11 +394,12 @@ void SingleDocParser::ParseTag(std::string& tag) {
   m_scanner.pop();
 }
 
-void SingleDocParser::ParseAnchor(anchor_t& anchor) {
+void SingleDocParser::ParseAnchor(anchor_t& anchor, std::string& anchor_name) {
   Token& token = m_scanner.peek();
   if (anchor)
     throw ParserException(token.mark, ErrorMsg::MULTIPLE_ANCHORS);
 
+  anchor_name = token.value;
   anchor = RegisterAnchor(token.value);
   m_scanner.pop();
 }
@@ -411,4 +419,4 @@ anchor_t SingleDocParser::LookupAnchor(const Mark& mark,
 
   return it->second;
 }
-}
+}  // namespace YAML

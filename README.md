@@ -6,7 +6,7 @@ To get a feel for how it can be used, see the [Tutorial](https://github.com/jbed
 
 # Problems? #
 
-If you find a bug, post an [issue](https://github.com/jbeder/yaml-cpp/issues)! If you have questions about how to use yaml-cpp, please post it on http://stackoverflow.com and tag it `yaml-cpp`.
+If you find a bug, post an [issue](https://github.com/jbeder/yaml-cpp/issues)! If you have questions about how to use yaml-cpp, please post it on http://stackoverflow.com and tag it [`yaml-cpp`](http://stackoverflow.com/questions/tagged/yaml-cpp).
 
 # How to Build #
 
@@ -44,7 +44,7 @@ cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
 
 # Recent Release #
 
-[yaml-cpp 0.5.3](https://github.com/jbeder/yaml-cpp/releases/tag/release-0.5.3) has been released! This is a bug fix release. It also will be the last release that uses Boost; futures releases will require C++11 instead.
+[yaml-cpp 0.6.0](https://github.com/jbeder/yaml-cpp/releases/tag/yaml-cpp-0.6.0) has been released! This release requires C++11, and no longer depends on Boost.
 
 [yaml-cpp 0.3.0](https://github.com/jbeder/yaml-cpp/releases/tag/release-0.3.0) is still available if you want the old API.
 

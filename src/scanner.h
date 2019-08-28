@@ -49,7 +49,7 @@ class Scanner {
     enum INDENT_TYPE { MAP, SEQ, NONE };
     enum STATUS { VALID, INVALID, UNKNOWN };
     IndentMarker(int column_, INDENT_TYPE type_)
-        : column(column_), type(type_), status(VALID), pStartToken(0) {}
+        : column(column_), type(type_), status(VALID), pStartToken(nullptr) {}
 
     int column;
     INDENT_TYPE type;

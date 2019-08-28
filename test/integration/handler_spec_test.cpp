@@ -199,6 +199,7 @@ TEST_F(HandlerSpecTest, Ex2_10_SimpleAnchor) {
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "hr"));
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "Mark McGwire"));
+  EXPECT_CALL(handler, OnAnchor(_, "SS"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "Sammy Sosa"));
   EXPECT_CALL(handler, OnSequenceEnd());
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "rbi"));
@@ -376,6 +377,7 @@ TEST_F(HandlerSpecTest, Ex2_24_GlobalTags) {
   EXPECT_CALL(handler, OnMapStart(_, "tag:clarkevans.com,2002:circle", 0,
                                   EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "center"));
+  EXPECT_CALL(handler, OnAnchor(_, "ORIGIN"));
   EXPECT_CALL(handler, OnMapStart(_, "?", 1, EmitterStyle::Flow));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "x"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "73"));
@@ -456,6 +458,7 @@ TEST_F(HandlerSpecTest, Ex2_27_Invoice) {
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "date"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "2001-01-23"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "bill-to"));
+  EXPECT_CALL(handler, OnAnchor(_, "id001"));
   EXPECT_CALL(handler, OnMapStart(_, "?", 1, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "given"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "Chris"));
@@ -616,6 +619,7 @@ TEST_F(HandlerSpecTest, Ex5_6_NodePropertyIndicators) {
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "anchored"));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "!local", 1, "value"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "alias"));
   EXPECT_CALL(handler, OnAlias(_, 1));
@@ -909,8 +913,10 @@ TEST_F(HandlerSpecTest, Ex6_22_GlobalTagPrefix) {
 TEST_F(HandlerSpecTest, Ex6_23_NodeProperties) {
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnAnchor(_, "a1"));
   EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 1, "foo"));
   EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0, "bar"));
+  EXPECT_CALL(handler, OnAnchor(_, "a2"));
   EXPECT_CALL(handler, OnScalar(_, "?", 2, "baz"));
   EXPECT_CALL(handler, OnAlias(_, 1));
   EXPECT_CALL(handler, OnMapEnd());
@@ -972,6 +978,7 @@ TEST_F(HandlerSpecTest, Ex6_29_NodeAnchors) {
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "First occurrence"));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "Value"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "Second occurrence"));
   EXPECT_CALL(handler, OnAlias(_, 1));
@@ -984,10 +991,12 @@ TEST_F(HandlerSpecTest, Ex7_1_AliasNodes) {
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "First occurrence"));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 1, "Foo"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "Second occurrence"));
   EXPECT_CALL(handler, OnAlias(_, 1));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "Override anchor"));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "?", 2, "Bar"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "Reuse anchor"));
   EXPECT_CALL(handler, OnAlias(_, 2));
@@ -1307,6 +1316,7 @@ TEST_F(HandlerSpecTest, Ex7_24_FlowNodes) {
   EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0, "a"));
   EXPECT_CALL(handler, OnScalar(_, "!", 0, "b"));
+  EXPECT_CALL(handler, OnAnchor(_, "anchor"));
   EXPECT_CALL(handler, OnScalar(_, "!", 1, "c"));
   EXPECT_CALL(handler, OnAlias(_, 1));
   EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0, ""));
@@ -1607,5 +1617,5 @@ TEST_F(HandlerSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(ex8_22);
 }
-}
-}
+}  // namespace
+}  // namespace YAML

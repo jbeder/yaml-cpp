@@ -145,7 +145,12 @@ class EmitterState {
 
   struct Group {
     explicit Group(GroupType::value type_)
-        : type(type_), indent(0), childCount(0), longKey(false) {}
+        : type(type_),
+          flowType{},
+          indent(0),
+          childCount(0),
+          longKey(false),
+          modifiedSettings{} {}
 
     GroupType::value type;
     FlowType::value flowType;
@@ -198,6 +203,6 @@ void EmitterState::_Set(Setting<T>& fmt, T value, FmtScope::value scope) {
       assert(false);
   }
 }
-}
+}  // namespace YAML
 
 #endif  // EMITTERSTATE_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -111,24 +111,15 @@ static UtfIntroState s_introTransitions[][uictMax] = {
 
 static char s_introUngetCount[][uictMax] = {
     // uict00, uictBB, uictBF, uictEF, uictFE, uictFF, uictAscii, uictOther
-    {0, 1, 1, 0, 0, 0, 0, 1},
-    {0, 2, 2, 2, 2, 2, 2, 2},
-    {3, 3, 3, 3, 0, 3, 3, 3},
-    {4, 4, 4, 4, 4, 0, 4, 4},
-    {1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1},
-    {2, 2, 2, 2, 2, 0, 2, 2},
-    {2, 2, 2, 2, 0, 2, 2, 2},
-    {0, 1, 1, 1, 1, 1, 1, 1},
-    {0, 2, 2, 2, 2, 2, 2, 2},
-    {1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1},
-    {0, 2, 2, 2, 2, 2, 2, 2},
-    {0, 3, 3, 3, 3, 3, 3, 3},
-    {4, 4, 4, 4, 4, 4, 4, 4},
-    {2, 0, 2, 2, 2, 2, 2, 2},
-    {3, 3, 0, 3, 3, 3, 3, 3},
-    {1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 1, 1, 0, 0, 0, 0, 1}, {0, 2, 2, 2, 2, 2, 2, 2},
+    {3, 3, 3, 3, 0, 3, 3, 3}, {4, 4, 4, 4, 4, 0, 4, 4},
+    {1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1, 1},
+    {2, 2, 2, 2, 2, 0, 2, 2}, {2, 2, 2, 2, 0, 2, 2, 2},
+    {0, 1, 1, 1, 1, 1, 1, 1}, {0, 2, 2, 2, 2, 2, 2, 2},
+    {1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 2, 2, 2, 2, 2, 2, 2}, {0, 3, 3, 3, 3, 3, 3, 3},
+    {4, 4, 4, 4, 4, 4, 4, 4}, {2, 0, 2, 2, 2, 2, 2, 2},
+    {3, 3, 0, 3, 3, 3, 3, 3}, {1, 1, 1, 1, 1, 1, 1, 1},
 };
 
 inline UtfIntroCharType IntroCharTypeOf(std::istream::int_type ch) {
@@ -192,6 +183,9 @@ inline void QueueUnicodeCodepoint(std::deque<char>& q, unsigned long ch) {
 
 Stream::Stream(std::istream& input)
     : m_input(input),
+      m_mark{},
+      m_charSet{},
+      m_readahead{},
       m_pPrefetched(new unsigned char[YAML_PREFETCH_SIZE]),
       m_nPrefetchedAvailable(0),
       m_nPrefetchedUsed(0) {
@@ -445,4 +439,4 @@ void Stream::StreamInUtf32() const {
 
   QueueUnicodeCodepoint(m_readahead, ch);
 }
-}
+}  // namespace YAML
