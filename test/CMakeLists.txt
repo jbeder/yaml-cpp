@@ -18,6 +18,12 @@ ExternalProject_Add(
 		-Dgtest_force_shared_crt=ON
 )
 
+add_library(gtest UNKNOWN IMPORTED)
+add_dependencies(gtest googletest_project)
+set_target_properties(gtest PROPERTIES
+    IMPORTED_LOCATION
+    ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}
+)
 add_library(gmock UNKNOWN IMPORTED)
 add_dependencies(gmock googletest_project)
 set_target_properties(gmock PROPERTIES
@@ -54,7 +60,7 @@ add_executable(run-tests
     ${test_headers}
 )
 
-add_dependencies(run-tests gmock)
+add_dependencies(run-tests gtest gmock)
 
 set_target_properties(run-tests PROPERTIES
     COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags} ${yaml_test_flags}"
