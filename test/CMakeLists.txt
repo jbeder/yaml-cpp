@@ -7,13 +7,15 @@ if(MSVC)
     set(CMAKE_STATIC_LIBRARY_PREFIX "")
 endif()
 
-if (NOT TARGET gmock)
+if (NOT TARGET gmock OR NOT TARGET gtest)
 ExternalProject_Add(
 	googletest_project
 	SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0"
 	INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/prefix"
 	CMAKE_ARGS
+                -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
 		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+                -DBUILD_GTEST=ON
 		-DBUILD_GMOCK=ON
 		-Dgtest_force_shared_crt=ON
 )
@@ -21,15 +23,18 @@ ExternalProject_Add(
 add_library(gtest UNKNOWN IMPORTED)
 add_dependencies(gtest googletest_project)
 set_target_properties(gtest PROPERTIES
-    IMPORTED_LOCATION
-    ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}
-)
+  INTERFACE_INCLUDE_DIRECTORIES 
+  ${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0/googletest/include
+  IMPORTED_LOCATION
+  ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX})
+
 add_library(gmock UNKNOWN IMPORTED)
 add_dependencies(gmock googletest_project)
 set_target_properties(gmock PROPERTIES
-    IMPORTED_LOCATION
-    ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gmock${CMAKE_STATIC_LIBRARY_SUFFIX}
-)
+  INTERFACE_INCLUDE_DIRECTORIES
+  ${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0/googlemock/include
+  IMPORTED_LOCATION
+  ${PROJECT_BINARY_DIR}/test/prefix/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gmock${CMAKE_STATIC_LIBRARY_SUFFIX})
 endif()
 
 find_package(Threads)
