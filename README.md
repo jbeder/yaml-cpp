@@ -33,7 +33,7 @@ cmake [-G generator] [-DBUILD_SHARED_LIBS=on|OFF] ..
 
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
-#### 3. Build it!
+#### 2. Build it!
   * The command you'll need to run depends on the generator you chose earlier.
 
 **Note:** To clean up, just remove the `build` directory.
