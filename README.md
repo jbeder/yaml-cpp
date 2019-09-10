@@ -26,7 +26,7 @@ cd build
 3. Run CMake. The basic syntax is:
 
 ```
-cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
+cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=ON|OFF] ..
 ```
 
   * The `generator` is whatever type of build system you'd like to use. To see a full list of generators on your platform, just run `cmake` (with no arguments). For example:
@@ -34,7 +34,7 @@ cmake [-G generator] [-DBUILD_SHARED_LIBS=ON|OFF] ..
     * On OS X, you might use "Xcode" to generate an Xcode project
     * On a UNIX-y system, simply omit the option to generate a makefile
 
-  * yaml-cpp defaults to building a static library, but you may build a shared library by specifying `-DBUILD_SHARED_LIBS=ON`.
+  * yaml-cpp defaults to building a static library, but you may build a shared library by specifying `-DYAML_BUILD_SHARED_LIBS=ON`.
 
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
