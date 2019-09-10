@@ -51,6 +51,11 @@ add_executable(run-tests
     ${test_headers}
 )
 
+set_target_properties(run-tests PROPERTIES
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+)
+
 add_dependencies(run-tests googletest_project)
 
 set_target_properties(run-tests PROPERTIES

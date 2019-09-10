@@ -26,10 +26,6 @@ option(YAML_CPP_INSTALL "Enable generation of install target" ON)
 #     http://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library
 option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
-# Set minimum C++ to 2011 standards
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # --> Apple
 option(APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
 
@@ -260,6 +256,11 @@ if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
                $<INSTALL_INTERFACE:${INCLUDE_INSTALL_ROOT_DIR}>
         PRIVATE $<BUILD_INTERFACE:${YAML_CPP_SOURCE_DIR}/src>)
 endif()
+
+set_target_properties(yaml-cpp PROPERTIES
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+)
 
 set_target_properties(yaml-cpp PROPERTIES
   COMPILE_FLAGS "${yaml_c_flags} ${yaml_cxx_flags}"
