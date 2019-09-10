@@ -24,16 +24,20 @@ option(YAML_CPP_INSTALL "Enable generation of install target" ON)
 # --> General
 # see http://www.cmake.org/cmake/help/cmake2.6docs.html#variable:BUILD_SHARED_LIBS
 #     http://www.cmake.org/cmake/help/cmake2.6docs.html#command:add_library
-option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+option(YAML_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
 # --> Apple
-option(APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
+if(APPLE)
+    option(YAML_APPLE_UNIVERSAL_BIN "Apple: Build universal binary" OFF)
+endif()
 
 # --> Microsoft Visual C++
 # see http://msdn.microsoft.com/en-us/library/aa278396(v=VS.60).aspx
 #     http://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.71).aspx
-option(MSVC_SHARED_RT "MSVC: Build with shared runtime libs (/MD)" ON)
-option(MSVC_STHREADED_RT "MSVC: Build with single-threaded static runtime libs (/ML until VS .NET 2003)" OFF)
+if(MSVC)
+    option(YAML_MSVC_SHARED_RT "MSVC: Build with shared runtime libs (/MD)" ON)
+    option(YAML_MSVC_STHREADED_RT "MSVC: Build with single-threaded static runtime libs (/ML until VS .NET 2003)" OFF)
+endif()
 
 ###
 ### Sources, headers, directories and libs
@@ -106,14 +110,14 @@ endif()
 set(yaml_c_flags ${CMAKE_C_FLAGS})
 set(yaml_cxx_flags ${CMAKE_CXX_FLAGS})
 
-if(BUILD_SHARED_LIBS)
+if(YAML_BUILD_SHARED_LIBS)
 	set(LABEL_SUFFIX "shared")
 else()
 	set(LABEL_SUFFIX "static")
 endif()
 
 if(APPLE)
-	if(APPLE_UNIVERSAL_BIN)
+	if(YAML_APPLE_UNIVERSAL_BIN)
 		set(CMAKE_OSX_ARCHITECTURES ppc;i386)
 	endif()
 endif()
@@ -124,7 +128,7 @@ if(IPHONE)
 endif()
 
 if(WIN32)
-	if(BUILD_SHARED_LIBS)
+	if(YAML_BUILD_SHARED_LIBS)
 		add_definitions(-D${PROJECT_NAME}_DLL)	# use or build Windows DLL
 	endif()
 	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -151,7 +155,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR
 	#
 	set(GCC_EXTRA_OPTIONS "")
 	#
-	if(BUILD_SHARED_LIBS)
+	if(YAML_BUILD_SHARED_LIBS)
 		set(GCC_EXTRA_OPTIONS "${GCC_EXTRA_OPTIONS} -fPIC")
 	endif()
 	#
@@ -186,8 +190,8 @@ if(MSVC)
 	set(LIB_RT_SUFFIX "md")	# CMake defaults to /MD for MSVC
 	set(LIB_RT_OPTION "/MD")
 	#
-	if(NOT MSVC_SHARED_RT)	# User wants to have static runtime libraries (/MT, /ML)
-		if(MSVC_STHREADED_RT)	# User wants to have old single-threaded static runtime libraries
+	if(NOT YAML_MSVC_SHARED_RT)	# User wants to have static runtime libraries (/MT, /ML)
+		if(YAML_MSVC_STHREADED_RT)	# User wants to have old single-threaded static runtime libraries
 			set(LIB_RT_SUFFIX "ml")
 			set(LIB_RT_OPTION "/ML")
 			if(NOT ${MSVC_VERSION} LESS 1400)
@@ -217,7 +221,7 @@ if(MSVC)
 	set(CMAKE_STATIC_LIBRARY_PREFIX "lib")	# to distinguish static libraries from DLL import libs
 
 	# c) Correct suffixes for static libraries
-	if(NOT BUILD_SHARED_LIBS)
+	if(NOT YAML_BUILD_SHARED_LIBS)
 		### General stuff
 		set(LIB_TARGET_SUFFIX "${LIB_SUFFIX}${LIB_RT_SUFFIX}")
 	endif()
@@ -279,7 +283,7 @@ if(IPHONE)
 endif()
 
 if(MSVC)
-	if(NOT BUILD_SHARED_LIBS)
+	if(NOT YAML_BUILD_SHARED_LIBS)
 		# correct library names
 		set_target_properties(yaml-cpp PROPERTIES
 			DEBUG_POSTFIX "${LIB_TARGET_SUFFIX}d"
