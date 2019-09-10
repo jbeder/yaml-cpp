@@ -9,13 +9,7 @@ include(CheckCXXCompilerFlag)
 ###
 ### Project settings
 ###
-project(YAML_CPP)
-
-set(YAML_CPP_VERSION_MAJOR "0")
-set(YAML_CPP_VERSION_MINOR "6")
-set(YAML_CPP_VERSION_PATCH "2")
-set(YAML_CPP_VERSION "${YAML_CPP_VERSION_MAJOR}.${YAML_CPP_VERSION_MINOR}.${YAML_CPP_VERSION_PATCH}")
-
+project(YAML_CPP VERSION 0.6.2)
 
 ###
 ### Project options
