@@ -252,7 +252,11 @@ set(_INSTALL_DESTINATIONS
 ###
 ### Library
 ###
-add_library(yaml-cpp ${library_sources})
+if(YAML_BUILD_SHARED_LIBS)
+    add_library(yaml-cpp SHARED ${library_sources})
+else()
+    add_library(yaml-cpp STATIC ${library_sources})
+endif()
 
 if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
     target_include_directories(yaml-cpp
