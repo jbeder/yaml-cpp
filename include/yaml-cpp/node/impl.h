@@ -52,7 +52,7 @@ inline Node::Node(Zombie)
     : m_isValid(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(Zombie, const std::string& key)
-    : m_isValid(false), m_invalidKey(key), m_pMemory{}, m_pNode(NULL) {}
+    : m_isValid(false), m_invalidKey(key), m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
     : m_isValid(true), m_invalidKey{}, m_pMemory(pMemory), m_pNode(&node) {}
