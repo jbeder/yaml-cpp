@@ -160,7 +160,7 @@ class YAML_CPP_API Exception : public std::runtime_error {
   static const std::string build_what(const Mark& mark,
                                       const std::string& msg) {
     if (mark.is_null()) {
-      return msg.c_str();
+      return msg;
     }
 
     std::stringstream output;
