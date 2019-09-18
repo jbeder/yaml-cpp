@@ -30,7 +30,7 @@ class YAML_CPP_API ostream_wrapper {
 
   const char* str() const {
     if (m_pStream) {
-      return 0;
+      return nullptr;
     } else {
       m_buffer[m_pos] = '\0';
       return &m_buffer[0];

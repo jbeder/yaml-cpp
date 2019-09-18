@@ -117,7 +117,7 @@ inline const std::string KEY_NOT_FOUND_WITH_KEY(
 
 template <typename T>
 inline const std::string BAD_SUBSCRIPT_WITH_KEY(
-    const T&, typename disable_if<is_numeric<T>>::type* = 0) {
+    const T&, typename disable_if<is_numeric<T>>::type* = nullptr) {
   return BAD_SUBSCRIPT;
 }
 
@@ -129,7 +129,7 @@ inline const std::string BAD_SUBSCRIPT_WITH_KEY(const std::string& key) {
 
 template <typename T>
 inline const std::string BAD_SUBSCRIPT_WITH_KEY(
-    const T& key, typename enable_if<is_numeric<T>>::type* = 0) {
+    const T& key, typename enable_if<is_numeric<T>>::type* = nullptr) {
   std::stringstream stream;
   stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
   return stream.str();
@@ -160,7 +160,7 @@ class YAML_CPP_API Exception : public std::runtime_error {
   static const std::string build_what(const Mark& mark,
                                       const std::string& msg) {
     if (mark.is_null()) {
-      return msg.c_str();
+      return msg;
     }
 
     std::stringstream output;

@@ -17,7 +17,7 @@ template <typename Key, typename Enable = void>
 struct get_idx {
   static node* get(const std::vector<node*>& /* sequence */,
                    const Key& /* key */, shared_memory_holder /* pMemory */) {
-    return 0;
+    return nullptr;
   }
 };
 
@@ -27,7 +27,7 @@ struct get_idx<Key,
                                        !std::is_same<Key, bool>::value>::type> {
   static node* get(const std::vector<node*>& sequence, const Key& key,
                    shared_memory_holder /* pMemory */) {
-    return key < sequence.size() ? sequence[key] : 0;
+    return key < sequence.size() ? sequence[key] : nullptr;
   }
 
   static node* get(std::vector<node*>& sequence, const Key& key,
@@ -46,13 +46,13 @@ struct get_idx<Key, typename std::enable_if<std::is_signed<Key>::value>::type> {
                    shared_memory_holder pMemory) {
     return key >= 0 ? get_idx<std::size_t>::get(
                           sequence, static_cast<std::size_t>(key), pMemory)
-                    : 0;
+                    : nullptr;
   }
   static node* get(std::vector<node*>& sequence, const Key& key,
                    shared_memory_holder pMemory) {
     return key >= 0 ? get_idx<std::size_t>::get(
                           sequence, static_cast<std::size_t>(key), pMemory)
-                    : 0;
+                    : nullptr;
   }
 };
 
@@ -109,11 +109,11 @@ inline node* node_data::get(const Key& key,
       break;
     case NodeType::Undefined:
     case NodeType::Null:
-      return NULL;
+      return nullptr;
     case NodeType::Sequence:
       if (node* pNode = get_idx<Key>::get(m_sequence, key, pMemory))
         return pNode;
-      return NULL;
+      return nullptr;
     case NodeType::Scalar:
       throw BadSubscript(key);
   }
@@ -124,7 +124,7 @@ inline node* node_data::get(const Key& key,
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 template <typename Key>
