@@ -1,5 +1,5 @@
-#include <stddef.h>
 #include <sstream>
+#include <cstddef>
 
 #include "gtest/gtest.h"
 #include "yaml-cpp/ostream_wrapper.h"

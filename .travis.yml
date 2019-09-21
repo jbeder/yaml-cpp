@@ -18,10 +18,10 @@ before_script:
   - mkdir build
   - cd build
   - cmake ..
+  - cd ..
 script:
-  - make
-  - test/run-tests
-
+  - cmake --build build
+  - cmake --build build --target test
 matrix:
   exclude:
   - os: linux
