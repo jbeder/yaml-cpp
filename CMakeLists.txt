@@ -9,7 +9,7 @@ include(CheckCXXCompilerFlag)
 ###
 ### Project settings
 ###
-project(YAML_CPP VERSION 0.6.2)
+project(YAML_CPP VERSION 0.6.3)
 
 ###
 ### Project options
