@@ -27,7 +27,11 @@
 #define YAML_CPP_API __declspec(dllimport)
 #endif  // yaml_cpp_EXPORTS
 #else   // YAML_CPP_DLL
+#ifdef YAML_CPP_USE_VISIBILITY
+#define YAML_CPP_API __attribute__ ((visibility("default")))
+#else
 #define YAML_CPP_API
+#endif // YAML_CPP_USE_VISIBILITY
 #endif  // YAML_CPP_DLL
 
 #endif  // DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
