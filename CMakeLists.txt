@@ -54,19 +54,15 @@ endif()
 file(GLOB yaml-cpp-contrib-sources ${contrib-pattern})
 file(GLOB yaml-cpp-sources ${src-pattern})
 
-# /wd4127 = disable warning C4127 "conditional expression is constant"
-# http://msdn.microsoft.com/en-us/library/6t66728h.aspx
-# /wd4355 = disable warning C4355 "'this' : used in base member initializer list
-# http://msdn.microsoft.com/en-us/library/3c594ae3.aspx
 set(msvc-rt $<TARGET_PROPERTY:MSVC_RUNTIME_LIBRARY>)
 
-set(mtd-static $<STREQUAL:${msvc-rt},MultiThreadedDebug>)
-set(mt-static $<STREQUAL:${msvc-rt},MultiThreaded>)
+set(msvc-rt-mtd-static $<STREQUAL:${msvc-rt},MultiThreadedDebug>)
+set(msvc-rt-mt-static $<STREQUAL:${msvc-rt},MultiThreaded>)
 
-set(mtd-dll $<STREQUAL:${msvc-rt},MultiThreadedDebugDLL>)
-set(mt-dll $<STREQUAL:${msvc-rt},MultiThreadedDLL>)
+set(msvc-rt-mtd-dll $<STREQUAL:${msvc-rt},MultiThreadedDebugDLL>)
+set(msvc-rt-mt-dll $<STREQUAL:${msvc-rt},MultiThreadedDLL>)
 
-set(backport $<VERSION_LESS:${CMAKE_VERSION},3.15>)
+set(backport-msvc-runtime $<VERSION_LESS:${CMAKE_VERSION},3.15>)
 
 add_library(yaml-cpp ${yaml-cpp-type})
 add_library(yaml::yaml ALIAS yaml-cpp)
@@ -96,11 +92,15 @@ target_compile_options(yaml-cpp
     $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
     $<${not-msvc}:-pedantic -pedantic-errors>
 
-    $<$<AND:${backport},${mtd-static}>:-MTd>
-    $<$<AND:${backport},${mt-static}>:-MT>
-    $<$<AND:${backport},${mtd-dll}>:-MDd>
-    $<$<AND:${backport},${mt-dll}>:-MD>
-    
+    $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-static}>:-MTd>
+    $<$<AND:${backport-msvc-runtime},${msvc-rt-mt-static}>:-MT>
+    $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-dll}>:-MDd>
+    $<$<AND:${backport-msvc-runtime},${msvc-rt-mt-dll}>:-MD>
+
+    # /wd4127 = disable warning C4127 "conditional expression is constant"
+    # http://msdn.microsoft.com/en-us/library/6t66728h.aspx
+    # /wd4355 = disable warning C4355 "'this' : used in base member initializer list
+    # http://msdn.microsoft.com/en-us/library/3c594ae3.aspx
     $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4127 /wd4355>)
 
 target_compile_definitions(yaml-cpp
