@@ -26,9 +26,6 @@ cmake_dependent_option(YAML_BUILD_SHARED_LIBS
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "MSVC" OFF)
-cmake_dependent_option(YAML_APPLE_UNIVERSAL_BIN
-  "Apple: Build yaml-cpp universal binary" OFF
-  "APPLE" OFF)
 
 set(yaml-cpp-type STATIC)
 if (YAML_BUILD_SHARED_LIBS)
