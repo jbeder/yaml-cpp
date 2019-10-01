@@ -17,7 +17,7 @@ struct Mark;
 
 class EventHandler {
  public:
-  virtual ~EventHandler() {}
+  virtual ~EventHandler() = default;
 
   virtual void OnDocumentStart(const Mark& mark) = 0;
   virtual void OnDocumentEnd() = 0;

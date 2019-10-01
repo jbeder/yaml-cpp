@@ -32,7 +32,7 @@ EmitterState::EmitterState()
       m_hasNonContent(false),
       m_docCount(0) {}
 
-EmitterState::~EmitterState() {}
+EmitterState::~EmitterState() = default;
 
 // SetLocalValue
 // . We blindly tries to set all possible formatters to this value

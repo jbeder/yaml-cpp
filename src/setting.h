@@ -30,7 +30,7 @@ class Setting {
 
 class SettingChangeBase {
  public:
-  virtual ~SettingChangeBase() {}
+  virtual ~SettingChangeBase() = default;
   virtual void pop() = 0;
 };
 
