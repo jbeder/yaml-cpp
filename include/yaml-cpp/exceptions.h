@@ -223,7 +223,7 @@ inline TypedKeyNotFound<T> MakeTypedKeyNotFound(const Mark& mark,
 
 class YAML_CPP_API InvalidNode : public RepresentationException {
  public:
-  InvalidNode(std::string key)
+  InvalidNode(const std::string& key)
       : RepresentationException(Mark::null_mark(),
                                 ErrorMsg::INVALID_NODE_WITH_KEY(key)) {}
   InvalidNode(const InvalidNode&) = default;
