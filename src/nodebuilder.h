@@ -31,25 +31,25 @@ class NodeBuilder : public EventHandler {
   NodeBuilder(NodeBuilder&&) = delete;
   NodeBuilder& operator=(const NodeBuilder&) = delete;
   NodeBuilder& operator=(NodeBuilder&&) = delete;
-  virtual ~NodeBuilder();
+  ~NodeBuilder() override;
 
   Node Root();
 
-  virtual void OnDocumentStart(const Mark& mark);
-  virtual void OnDocumentEnd();
+  void OnDocumentStart(const Mark& mark) override;
+  void OnDocumentEnd() override;
 
-  virtual void OnNull(const Mark& mark, anchor_t anchor);
-  virtual void OnAlias(const Mark& mark, anchor_t anchor);
-  virtual void OnScalar(const Mark& mark, const std::string& tag,
-                        anchor_t anchor, const std::string& value);
+  void OnNull(const Mark& mark, anchor_t anchor) override;
+  void OnAlias(const Mark& mark, anchor_t anchor) override;
+  void OnScalar(const Mark& mark, const std::string& tag,
+                        anchor_t anchor, const std::string& value) override;
 
-  virtual void OnSequenceStart(const Mark& mark, const std::string& tag,
-                               anchor_t anchor, EmitterStyle::value style);
-  virtual void OnSequenceEnd();
+  void OnSequenceStart(const Mark& mark, const std::string& tag,
+                               anchor_t anchor, EmitterStyle::value style) override;
+  void OnSequenceEnd() override;
 
-  virtual void OnMapStart(const Mark& mark, const std::string& tag,
-                          anchor_t anchor, EmitterStyle::value style);
-  virtual void OnMapEnd();
+  void OnMapStart(const Mark& mark, const std::string& tag,
+                          anchor_t anchor, EmitterStyle::value style) override;
+  void OnMapEnd() override;
 
  private:
   detail::node& Push(const Mark& mark, anchor_t anchor);
