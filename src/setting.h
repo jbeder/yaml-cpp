@@ -46,7 +46,7 @@ class SettingChange : public SettingChangeBase {
   SettingChange& operator=(const SettingChange&) = delete;
   SettingChange& operator=(SettingChange&&) = delete;
 
-  virtual void pop() { m_pCurSetting->restore(m_oldSetting); }
+  void pop() override { m_pCurSetting->restore(m_oldSetting); }
 
  private:
   Setting<T>* m_pCurSetting;

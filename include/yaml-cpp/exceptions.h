@@ -149,7 +149,7 @@ class YAML_CPP_API Exception : public std::runtime_error {
  public:
   Exception(const Mark& mark_, const std::string& msg_)
       : std::runtime_error(build_what(mark_, msg_)), mark(mark_), msg(msg_) {}
-  virtual ~Exception() YAML_CPP_NOEXCEPT;
+  ~Exception() YAML_CPP_NOEXCEPT override;
 
   Exception(const Exception&) = default;
 
@@ -175,7 +175,7 @@ class YAML_CPP_API ParserException : public Exception {
   ParserException(const Mark& mark_, const std::string& msg_)
       : Exception(mark_, msg_) {}
   ParserException(const ParserException&) = default;
-  virtual ~ParserException() YAML_CPP_NOEXCEPT;
+  ~ParserException() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API RepresentationException : public Exception {
@@ -183,7 +183,7 @@ class YAML_CPP_API RepresentationException : public Exception {
   RepresentationException(const Mark& mark_, const std::string& msg_)
       : Exception(mark_, msg_) {}
   RepresentationException(const RepresentationException&) = default;
-  virtual ~RepresentationException() YAML_CPP_NOEXCEPT;
+  ~RepresentationException() YAML_CPP_NOEXCEPT override;
 };
 
 // representation exceptions
@@ -192,7 +192,7 @@ class YAML_CPP_API InvalidScalar : public RepresentationException {
   InvalidScalar(const Mark& mark_)
       : RepresentationException(mark_, ErrorMsg::INVALID_SCALAR) {}
   InvalidScalar(const InvalidScalar&) = default;
-  virtual ~InvalidScalar() YAML_CPP_NOEXCEPT;
+  ~InvalidScalar() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API KeyNotFound : public RepresentationException {
@@ -202,7 +202,7 @@ class YAML_CPP_API KeyNotFound : public RepresentationException {
       : RepresentationException(mark_, ErrorMsg::KEY_NOT_FOUND_WITH_KEY(key_)) {
   }
   KeyNotFound(const KeyNotFound&) = default;
-  virtual ~KeyNotFound() YAML_CPP_NOEXCEPT;
+  ~KeyNotFound() YAML_CPP_NOEXCEPT override;
 };
 
 template <typename T>
@@ -210,7 +210,7 @@ class YAML_CPP_API TypedKeyNotFound : public KeyNotFound {
  public:
   TypedKeyNotFound(const Mark& mark_, const T& key_)
       : KeyNotFound(mark_, key_), key(key_) {}
-  virtual ~TypedKeyNotFound() YAML_CPP_NOEXCEPT = default;
+  ~TypedKeyNotFound() YAML_CPP_NOEXCEPT override = default;
 
   T key;
 };
@@ -227,7 +227,7 @@ class YAML_CPP_API InvalidNode : public RepresentationException {
       : RepresentationException(Mark::null_mark(),
                                 ErrorMsg::INVALID_NODE_WITH_KEY(key)) {}
   InvalidNode(const InvalidNode&) = default;
-  virtual ~InvalidNode() YAML_CPP_NOEXCEPT;
+  ~InvalidNode() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API BadConversion : public RepresentationException {
@@ -235,7 +235,7 @@ class YAML_CPP_API BadConversion : public RepresentationException {
   explicit BadConversion(const Mark& mark_)
       : RepresentationException(mark_, ErrorMsg::BAD_CONVERSION) {}
   BadConversion(const BadConversion&) = default;
-  virtual ~BadConversion() YAML_CPP_NOEXCEPT;
+  ~BadConversion() YAML_CPP_NOEXCEPT override;
 };
 
 template <typename T>
@@ -249,7 +249,7 @@ class YAML_CPP_API BadDereference : public RepresentationException {
   BadDereference()
       : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_DEREFERENCE) {}
   BadDereference(const BadDereference&) = default;
-  virtual ~BadDereference() YAML_CPP_NOEXCEPT;
+  ~BadDereference() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API BadSubscript : public RepresentationException {
@@ -259,7 +259,7 @@ class YAML_CPP_API BadSubscript : public RepresentationException {
       : RepresentationException(Mark::null_mark(),
                                 ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
   BadSubscript(const BadSubscript&) = default;
-  virtual ~BadSubscript() YAML_CPP_NOEXCEPT;
+  ~BadSubscript() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API BadPushback : public RepresentationException {
@@ -267,7 +267,7 @@ class YAML_CPP_API BadPushback : public RepresentationException {
   BadPushback()
       : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_PUSHBACK) {}
   BadPushback(const BadPushback&) = default;
-  virtual ~BadPushback() YAML_CPP_NOEXCEPT;
+  ~BadPushback() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API BadInsert : public RepresentationException {
@@ -275,7 +275,7 @@ class YAML_CPP_API BadInsert : public RepresentationException {
   BadInsert()
       : RepresentationException(Mark::null_mark(), ErrorMsg::BAD_INSERT) {}
   BadInsert(const BadInsert&) = default;
-  virtual ~BadInsert() YAML_CPP_NOEXCEPT;
+  ~BadInsert() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API EmitterException : public Exception {
@@ -283,14 +283,14 @@ class YAML_CPP_API EmitterException : public Exception {
   EmitterException(const std::string& msg_)
       : Exception(Mark::null_mark(), msg_) {}
   EmitterException(const EmitterException&) = default;
-  virtual ~EmitterException() YAML_CPP_NOEXCEPT;
+  ~EmitterException() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API BadFile : public Exception {
  public:
   BadFile() : Exception(Mark::null_mark(), ErrorMsg::BAD_FILE) {}
   BadFile(const BadFile&) = default;
-  virtual ~BadFile() YAML_CPP_NOEXCEPT;
+  ~BadFile() YAML_CPP_NOEXCEPT override;
 };
 }
 
