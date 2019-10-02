@@ -210,7 +210,7 @@ class YAML_CPP_API TypedKeyNotFound : public KeyNotFound {
  public:
   TypedKeyNotFound(const Mark& mark_, const T& key_)
       : KeyNotFound(mark_, key_), key(key_) {}
-  virtual ~TypedKeyNotFound() YAML_CPP_NOEXCEPT {}
+  virtual ~TypedKeyNotFound() YAML_CPP_NOEXCEPT = default;
 
   T key;
 };

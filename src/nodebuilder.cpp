@@ -19,7 +19,7 @@ NodeBuilder::NodeBuilder()
   m_anchors.push_back(nullptr);  // since the anchors start at 1
 }
 
-NodeBuilder::~NodeBuilder() {}
+NodeBuilder::~NodeBuilder() = default;
 
 Node NodeBuilder::Root() {
   if (!m_pRoot)

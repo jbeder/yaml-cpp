@@ -19,7 +19,7 @@ Scanner::Scanner(std::istream& in)
       m_indentRefs{},
       m_flows{} {}
 
-Scanner::~Scanner() {}
+Scanner::~Scanner() = default;
 
 bool Scanner::empty() {
   EnsureTokensInQueue();

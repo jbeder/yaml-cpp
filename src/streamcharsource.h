@@ -13,12 +13,11 @@ namespace YAML {
 class StreamCharSource {
  public:
   StreamCharSource(const Stream& stream) : m_offset(0), m_stream(stream) {}
-  StreamCharSource(const StreamCharSource& source)
-      : m_offset(source.m_offset), m_stream(source.m_stream) {}
+  StreamCharSource(const StreamCharSource& source) = default;
   StreamCharSource(StreamCharSource&&) = default;
   StreamCharSource& operator=(const StreamCharSource&) = delete;
   StreamCharSource& operator=(StreamCharSource&&) = delete;
-  ~StreamCharSource() {}
+  ~StreamCharSource() = default;
 
   operator bool() const;
   char operator[](std::size_t i) const { return m_stream.CharAt(m_offset + i); }

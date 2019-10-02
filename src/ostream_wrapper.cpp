@@ -21,7 +21,7 @@ ostream_wrapper::ostream_wrapper(std::ostream& stream)
       m_col(0),
       m_comment(false) {}
 
-ostream_wrapper::~ostream_wrapper() {}
+ostream_wrapper::~ostream_wrapper() = default;
 
 void ostream_wrapper::write(const std::string& str) {
   if (m_pStream) {

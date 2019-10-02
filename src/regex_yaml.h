@@ -34,7 +34,7 @@ class YAML_CPP_API RegEx {
   explicit RegEx(char ch);
   RegEx(char a, char z);
   RegEx(const std::string& str, REGEX_OP op = REGEX_SEQ);
-  ~RegEx() {}
+  ~RegEx() = default;
 
   friend YAML_CPP_API RegEx operator!(const RegEx& ex);
   friend YAML_CPP_API RegEx operator|(const RegEx& ex1, const RegEx& ex2);
