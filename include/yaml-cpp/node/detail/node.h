@@ -160,7 +160,7 @@ class node {
 
  private:
   shared_node_ref m_pRef;
-  typedef std::set<node*> nodes;
+  using nodes = std::set<node *>;
   nodes m_dependencies;
 };
 }  // namespace detail

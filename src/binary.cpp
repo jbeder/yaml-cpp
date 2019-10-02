@@ -66,7 +66,7 @@ static const unsigned char decoding[] = {
 };
 
 std::vector<unsigned char> DecodeBase64(const std::string &input) {
-  typedef std::vector<unsigned char> ret_type;
+  using ret_type = std::vector<unsigned char>;
   if (input.empty())
     return ret_type();
 

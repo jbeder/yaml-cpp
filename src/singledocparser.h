@@ -59,7 +59,7 @@ class SingleDocParser {
   const Directives& m_directives;
   std::unique_ptr<CollectionStack> m_pCollectionStack;
 
-  typedef std::map<std::string, anchor_t> Anchors;
+  using Anchors = std::map<std::string, anchor_t>;
   Anchors m_anchors;
 
   anchor_t m_curAnchor;

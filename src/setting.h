@@ -95,7 +95,7 @@ class SettingChanges {
   }
 
  private:
-  typedef std::vector<std::unique_ptr<SettingChangeBase>> setting_changes;
+  using setting_changes = std::vector<std::unique_ptr<SettingChangeBase> >;
   setting_changes m_settingChanges;
 };
 }  // namespace YAML

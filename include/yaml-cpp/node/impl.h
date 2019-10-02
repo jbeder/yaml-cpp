@@ -335,7 +335,7 @@ template <typename T>
 struct to_value_t {
   explicit to_value_t(const T& t_) : t(t_) {}
   const T& t;
-  typedef const T& return_type;
+  using return_type = const T &;
 
   const T& operator()() const { return t; }
 };
@@ -344,7 +344,7 @@ template <>
 struct to_value_t<const char*> {
   explicit to_value_t(const char* t_) : t(t_) {}
   const char* t;
-  typedef std::string return_type;
+  using return_type = std::string;
 
   const std::string operator()() const { return t; }
 };
@@ -353,7 +353,7 @@ template <>
 struct to_value_t<char*> {
   explicit to_value_t(char* t_) : t(t_) {}
   const char* t;
-  typedef std::string return_type;
+  using return_type = std::string;
 
   const std::string operator()() const { return t; }
 };
@@ -362,7 +362,7 @@ template <std::size_t N>
 struct to_value_t<char[N]> {
   explicit to_value_t(const char* t_) : t(t_) {}
   const char* t;
-  typedef std::string return_type;
+  using return_type = std::string;
 
   const std::string operator()() const { return t; }
 };
