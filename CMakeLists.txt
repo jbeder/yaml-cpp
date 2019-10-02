@@ -9,6 +9,7 @@ include(GNUInstallDirs)
 include(CTest)
 
 find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
+get_directory_property(yaml-cpp-is-submodule PARENT_DIRECTORY)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
@@ -18,7 +19,7 @@ cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_CPP_INSTALL
   "Enable generation of yaml-cpp install targets" ON
-  "CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
+  "YAML_CPP_INSTALL OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_BUILD_SHARED_LIBS
   "Build yaml-cpp shared library" OFF
   "BUILD_SHARED_LIBS" OFF)
@@ -154,7 +155,7 @@ if(YAML_CPP_BUILD_TOOLS)
 	add_subdirectory(util)
 endif()
 
-if (YAML_CPP_CLANG_FORMAT_EXE)
+if (YAML_CPP_CLANG_FORMAT_EXE AND NOT yaml-cpp-is-submodule)
   add_custom_target(format
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
     COMMENT "Running clang-format"
