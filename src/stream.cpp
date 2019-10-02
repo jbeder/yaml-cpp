@@ -189,7 +189,7 @@ Stream::Stream(std::istream& input)
       m_pPrefetched(new unsigned char[YAML_PREFETCH_SIZE]),
       m_nPrefetchedAvailable(0),
       m_nPrefetchedUsed(0) {
-  typedef std::istream::traits_type char_traits;
+  using char_traits = std::istream::traits_type;
 
   if (!input)
     return;

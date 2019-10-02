@@ -61,11 +61,11 @@ class NodeBuilder : public EventHandler {
   detail::shared_memory_holder m_pMemory;
   detail::node* m_pRoot;
 
-  typedef std::vector<detail::node*> Nodes;
+  using Nodes = std::vector<detail::node *>;
   Nodes m_stack;
   Nodes m_anchors;
 
-  typedef std::pair<detail::node*, bool> PushedKey;
+  using PushedKey = std::pair<detail::node*, bool>;
   std::vector<PushedKey> m_keys;
   std::size_t m_mapDepth;
 };

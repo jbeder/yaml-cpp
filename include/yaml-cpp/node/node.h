@@ -39,8 +39,8 @@ class YAML_CPP_API Node {
   template <typename T, typename S>
   friend struct as_if;
 
-  typedef YAML::iterator iterator;
-  typedef YAML::const_iterator const_iterator;
+  using iterator = YAML::iterator;
+  using const_iterator = YAML::const_iterator;
 
   Node();
   explicit Node(NodeType::value type);
