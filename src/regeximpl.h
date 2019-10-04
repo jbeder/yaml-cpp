@@ -8,8 +8,8 @@
 #endif
 
 #include "stream.h"
-#include "stringsource.h"
 #include "streamcharsource.h"
+#include "stringsource.h"
 
 namespace YAML {
 // query matches
@@ -106,9 +106,8 @@ inline int RegEx::MatchOpEmpty(const Source& source) const {
 template <>
 inline int RegEx::MatchOpEmpty<StringCharSource>(
     const StringCharSource& source) const {
-  return !source
-             ? 0
-             : -1;  // the empty regex only is successful on the empty string
+  return !source ? 0 : -1;  // the empty regex only is successful on the empty
+                            // string
 }
 
 // MatchOperator
@@ -130,8 +129,8 @@ inline int RegEx::MatchOpRange(const Source& source) const {
 // OrOperator
 template <typename Source>
 inline int RegEx::MatchOpOr(const Source& source) const {
-  for (std::size_t i = 0; i < m_params.size(); i++) {
-    int n = m_params[i].MatchUnchecked(source);
+  for (const RegEx& param : m_params) {
+    int n = param.MatchUnchecked(source);
     if (n >= 0)
       return n;
   }
@@ -169,11 +168,11 @@ inline int RegEx::MatchOpNot(const Source& source) const {
 template <typename Source>
 inline int RegEx::MatchOpSeq(const Source& source) const {
   int offset = 0;
-  for (std::size_t i = 0; i < m_params.size(); i++) {
-    int n = m_params[i].Match(source + offset);  // note Match, not
-                                                 // MatchUnchecked because we
-                                                 // need to check validity after
-                                                 // the offset
+  for (const RegEx& param : m_params) {
+    int n = param.Match(source + offset);  // note Match, not
+                                           // MatchUnchecked because we
+                                           // need to check validity after
+                                           // the offset
     if (n == -1)
       return -1;
     offset += n;
@@ -181,6 +180,6 @@ inline int RegEx::MatchOpSeq(const Source& source) const {
 
   return offset;
 }
-}
+}  // namespace YAML
 
 #endif  // REGEXIMPL_H_62B23520_7C8E_11DE_8A39_0800200C9A66

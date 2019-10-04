@@ -53,8 +53,8 @@ struct Token {
 
   friend std::ostream& operator<<(std::ostream& out, const Token& token) {
     out << TokenNames[token.type] << std::string(": ") << token.value;
-    for (std::size_t i = 0; i < token.params.size(); i++)
-      out << std::string(" ") << token.params[i];
+    for (const std::string& param : token.params)
+      out << std::string(" ") << param;
     return out;
   }
 
