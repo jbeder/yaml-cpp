@@ -42,9 +42,8 @@ class node {
       return;
 
     m_pRef->mark_defined();
-    for (nodes::iterator it = m_dependencies.begin();
-         it != m_dependencies.end(); ++it)
-      (*it)->mark_defined();
+    for (node* dependency : m_dependencies)
+      dependency->mark_defined();
     m_dependencies.clear();
   }
 
@@ -160,7 +159,7 @@ class node {
 
  private:
   shared_node_ref m_pRef;
-  using nodes = std::set<node *>;
+  using nodes = std::set<node*>;
   nodes m_dependencies;
 };
 }  // namespace detail
