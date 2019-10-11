@@ -1,3 +1,6 @@
 build/
 /tags
 /bazel-*
+
+libs/
+obj/
