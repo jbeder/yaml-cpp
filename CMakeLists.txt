@@ -13,6 +13,21 @@ find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 
+option(BUILD_SHARED_LIBS "Build shared library" OFF)
+option(BUILD_ANDROID_LIBS "Build Android dynamic library" OFF)
+
+if (BUILD_ANDROID_LIBS)
+  set(BUILD_SHARED_LIBS ON)
+
+  if("${ANDROID_STL}" STREQUAL "c++_shared")
+      message(STATUS "Configuring STL libc++_shared.so for ${ANDROID_ABI}")
+      configure_file(
+          "${ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/${ANDROID_ABI}/libc++_shared.so"
+          "${CMAKE_BINARY_DIR}/libc++_shared.so"
+          COPYONLY)
+  endif()
+endif()
+
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
   "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
@@ -20,7 +35,7 @@ cmake_dependent_option(YAML_CPP_INSTALL
   "Enable generation of yaml-cpp install targets" ON
   "CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_BUILD_SHARED_LIBS
-  "Build yaml-cpp shared library" OFF
+  "Build yaml-cpp shared library" ON
   "BUILD_SHARED_LIBS" OFF)
 
 cmake_dependent_option(YAML_MSVC_SHARED_RT
