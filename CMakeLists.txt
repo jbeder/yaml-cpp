@@ -14,6 +14,20 @@ option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIBS})
 
+option(YAML_BUILD_ANDROID_LIBS "Build android dynamic library" OFF)
+
+if (YAML_BUILD_ANDROID_LIBS)
+  set(YAML_BUILD_SHARED_LIBS ON)
+
+  if("${ANDROID_STL}" STREQUAL "c++_shared")
+      message(STATUS "Configuring STL libc++_shared.so for ${ANDROID_ABI}")
+      configure_file(
+          "${ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/${ANDROID_ABI}/libc++_shared.so"
+          "${CMAKE_BINARY_DIR}/libc++_shared.so"
+          COPYONLY)
+  endif()
+endif()
+
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
   "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
