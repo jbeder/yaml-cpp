@@ -20,7 +20,7 @@ endif()
 file(GLOB test-new-api-sources ${test-new-api-pattern})
 file(GLOB test-sources ${test-source-pattern})
 
-add_executable(yaml-cpp-tests)
+add_executable(yaml-cpp-tests "")
 target_sources(yaml-cpp-tests
   PRIVATE
     ${test-new-api-sources}

@@ -13,7 +13,6 @@
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/emitterstyle.h"
 #include "yaml-cpp/mark.h"
-#include "yaml-cpp/node/detail/bool_type.h"
 #include "yaml-cpp/node/detail/iterator_fwd.h"
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/type.h"
@@ -59,7 +58,7 @@ class YAML_CPP_API Node {
   bool IsMap() const { return Type() == NodeType::Map; }
 
   // bool conversions
-  YAML_CPP_OPERATOR_BOOL()
+  explicit operator bool() const { return IsDefined(); }
   bool operator!() const { return !IsDefined(); }
 
   // access

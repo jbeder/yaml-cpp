@@ -13,17 +13,14 @@ get_directory_property(yaml-cpp-is-submodule PARENT_DIRECTORY)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
+option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIBS})
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
   "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_CPP_INSTALL
   "Enable generation of yaml-cpp install targets" ON
-  "YAML_CPP_INSTALL OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
-cmake_dependent_option(YAML_BUILD_SHARED_LIBS
-  "Build yaml-cpp shared library" OFF
-  "BUILD_SHARED_LIBS" OFF)
-
+  "CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "MSVC" OFF)
@@ -62,7 +59,7 @@ set(msvc-rt-mt-dll $<STREQUAL:${msvc-rt},MultiThreadedDLL>)
 
 set(backport-msvc-runtime $<VERSION_LESS:${CMAKE_VERSION},3.15>)
 
-add_library(yaml-cpp ${yaml-cpp-type})
+add_library(yaml-cpp ${yaml-cpp-type} "")
 add_library(yaml::yaml ALIAS yaml-cpp)
 
 set_property(TARGET yaml-cpp
