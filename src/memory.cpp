@@ -10,7 +10,6 @@ void memory_holder::merge(memory_holder& rhs) {
     return;
 
   m_pMemory->merge(*rhs.m_pMemory);
-  rhs.m_pMemory = m_pMemory;
 }
 
 node& memory::create_node() {
