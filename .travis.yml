@@ -21,7 +21,7 @@ before_script:
   - cd ..
 script:
   - cmake --build build
-  - cmake --build build --target test
+  - cmake --build build --target check
 matrix:
   exclude:
   - os: linux
