@@ -45,4 +45,5 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
   set_target_properties(yaml-cpp-tests PROPERTIES CXX_STANDARD 11)
 endif()
 
+
 add_test(yaml-cpp::test yaml-cpp-tests)

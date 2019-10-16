@@ -25,7 +25,7 @@ namespace {
 TEST(NodeTest, SimpleScalar) {
   Node node = Node("Hello, World!");
   EXPECT_TRUE(node.IsScalar());
-  EXPECT_EQ("Hello, World!!", node.as<std::string>());
+  EXPECT_EQ("Hello, World!", node.as<std::string>());
 }
 
 TEST(NodeTest, IntScalar) {
