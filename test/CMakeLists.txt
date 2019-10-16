@@ -46,4 +46,3 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
 endif()
 
 add_test(yaml-cpp::test yaml-cpp-tests)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)

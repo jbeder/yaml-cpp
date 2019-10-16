@@ -14,6 +14,8 @@ before_install:
         sudo apt-get install -qq g++-4.7 && export CXX="g++-4.7" CC="gcc-4.7"
       fi
     fi
+env:
+  - CTEST_OUTPUT_ON_FAILURE=1
 before_script:
   - mkdir build
   - cd build
@@ -21,7 +23,7 @@ before_script:
   - cd ..
 script:
   - cmake --build build
-  - cmake --build build --target check
+  - cmake --build build --target test
 matrix:
   exclude:
   - os: linux
