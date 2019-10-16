@@ -45,5 +45,5 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
   set_target_properties(yaml-cpp-tests PROPERTIES CXX_STANDARD 11)
 endif()
 
-
-add_custom_target(check COMMAND yaml-cpp-tests)
+add_test(yaml-cpp::test yaml-cpp-tests)
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
