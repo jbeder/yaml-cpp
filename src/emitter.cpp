@@ -198,6 +198,7 @@ void Emitter::EmitEndSeq() {
   if (!good())
     return;
 
+  bool need_left_brace = !m_pState->HasBegunNode() || m_stream.comment();
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
 
@@ -205,7 +206,7 @@ void Emitter::EmitEndSeq() {
     if (m_stream.comment())
       m_stream << "\n";
     m_stream << IndentTo(m_pState->CurIndent());
-    if (m_pState->CurGroupChildCount() == 0)
+    if (m_pState->CurGroupChildCount() == 0 && need_left_brace)
       m_stream << "[";
     m_stream << "]";
   }
@@ -228,6 +229,7 @@ void Emitter::EmitEndMap() {
   if (!good())
     return;
 
+  bool need_left_brace = !m_pState->HasBegunNode() || m_stream.comment();
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
 
@@ -235,7 +237,7 @@ void Emitter::EmitEndMap() {
     if (m_stream.comment())
       m_stream << "\n";
     m_stream << IndentTo(m_pState->CurIndent());
-    if (m_pState->CurGroupChildCount() == 0)
+    if (m_pState->CurGroupChildCount() == 0 && need_left_brace)
       m_stream << "{";
     m_stream << "}";
   }
