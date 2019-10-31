@@ -25,8 +25,10 @@ cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC" OFF)
 
 set(yaml-cpp-type STATIC)
+set(yaml-cpp-label-postfix "static")
 if (YAML_BUILD_SHARED_LIBS)
   set(yaml-cpp-type SHARED)
+  set(yaml-cpp-label-postfix "shared")
 endif()
 
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
@@ -110,7 +112,7 @@ target_sources(yaml-cpp
 set_target_properties(yaml-cpp PROPERTIES
   VERSION "${PROJECT_VERSION}"
   SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
-  PROJECT_LABEL "yaml-cpp $<IF:${build-shared},shared,static>"
+  PROJECT_LABEL "yaml-cpp ${yaml-cpp-label-postfix}"
   DEBUG_POSTFIX d)
 
 configure_package_config_file(
