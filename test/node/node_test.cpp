@@ -59,6 +59,18 @@ TEST(NodeTest, SequenceElementRemoval) {
   EXPECT_EQ("c", node[1].as<std::string>());
 }
 
+TEST(NodeTest, SequenceFirstElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(0);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("b", node[0].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
+}
+
 TEST(NodeTest, SequenceLastElementRemoval) {
   Node node;
   node[0] = "a";
@@ -69,6 +81,19 @@ TEST(NodeTest, SequenceLastElementRemoval) {
   EXPECT_EQ(2, node.size());
   EXPECT_EQ("a", node[0].as<std::string>());
   EXPECT_EQ("b", node[1].as<std::string>());
+}
+
+TEST(NodeTest, NodeAssignment) {
+  Node node1;
+  Node node2;
+  node1[1] = 1;
+  node1[2] = 2;
+  node1[3] = 3;
+  node2 = node1;
+  EXPECT_EQ(node1, node2);
+  EXPECT_EQ(node1[1], node2[1]);
+  EXPECT_EQ(node1[2], node2[2]);
+  EXPECT_EQ(node1[3], node2[3]);
 }
 
 TEST(NodeTest, MapElementRemoval) {
