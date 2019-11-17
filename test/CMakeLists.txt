@@ -6,7 +6,9 @@ set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
 
 add_subdirectory(
   "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0"
-  "${CMAKE_CURRENT_BINARY_DIR}/prefix")
+  "${CMAKE_CURRENT_BINARY_DIR}/prefix"
+  EXCLUDE_FROM_ALL
+  )
 
 include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.8.0/googletest/include")
 
