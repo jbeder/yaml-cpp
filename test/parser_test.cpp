@@ -4,13 +4,14 @@
 
 using YAML::Parser;
 using YAML::MockEventHandler;
+using ::testing::StrictMock;
 
 TEST(ParserTest, Empty) {
     Parser parser;
 
     EXPECT_FALSE(parser);
 
-    MockEventHandler handler;
+    StrictMock<MockEventHandler> handler;
     EXPECT_FALSE(parser.HandleNextDocument(handler));
     
     std::ostringstream oss;
