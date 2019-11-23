@@ -12,10 +12,5 @@ TEST(ParserTest, Empty) {
     EXPECT_FALSE(parser);
 
     StrictMock<MockEventHandler> handler;
-    parser.HandleNextDocument(handler);
-    
-    std::ostringstream oss;
-    parser.PrintTokens(oss);
-
-    EXPECT_EQ(oss.str(), "");
+    EXPECT_FALSE(parser.HandleNextDocument(handler));
 }
