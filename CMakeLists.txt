@@ -61,7 +61,7 @@ set(msvc-rt-mt-dll $<STREQUAL:${msvc-rt},MultiThreadedDLL>)
 set(backport-msvc-runtime $<VERSION_LESS:${CMAKE_VERSION},3.15>)
 
 add_library(yaml-cpp ${yaml-cpp-type} "")
-add_library(yaml::yaml ALIAS yaml-cpp)
+add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
 
 set_property(TARGET yaml-cpp
   PROPERTY
