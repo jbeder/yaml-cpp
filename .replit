@@ -1,2 +1,2 @@
 language = "cpp"
-run = "language = \"cpp\" run = \"cd build && cmake .. && cmake --build .\""
+run = "mkdir build && cd build && cmake .. && cmake --build ./"
