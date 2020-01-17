@@ -13,6 +13,7 @@
 #include <map>
 #include <sstream>
 #include <vector>
+#include <cstring>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/impl.h"
@@ -284,12 +285,15 @@ struct convert<std::array<T, N>> {
       rhs[i] = node[i].as<T>();
 #endif
     }
+    for (auto i = node.size(); i < N; i++) {
+        std::memset(&rhs[i], 0, sizeof(T));
+    }
     return true;
   }
 
  private:
   static bool isNodeValid(const Node& node) {
-    return node.IsSequence() && node.size() == N;
+    return node.IsSequence() && node.size() <= N;
   }
 };
 
