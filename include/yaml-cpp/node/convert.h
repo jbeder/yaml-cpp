@@ -68,6 +68,21 @@ struct convert<std::string> {
   }
 };
 
+template <>
+struct convert<unsigned char> {
+  static Node encode(const unsigned char& rhs) { Node n; n = rhs; return n; }
+
+  static bool decode(const Node& node, unsigned char& rhs) {
+    if (node.Type() != NodeType::Scalar) {
+        return false;
+      }
+      int t = stoi(node.Scalar());
+      if(t < 0 || t > 255) return false;
+      rhs = (unsigned char)t;
+      return true;
+  }
+};
+
 // C-strings can only be encoded
 template <>
 struct convert<const char*> {
@@ -146,7 +161,7 @@ YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned long long);
 
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(char);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(signed char);
-YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned char);
+//YAML_DEFINE_CONVERT_STREAMABLE_UNSIGNED(unsigned char);
 
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(float);
 YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(double);
