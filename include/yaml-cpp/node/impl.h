@@ -116,6 +116,7 @@ struct as_if<std::string, S> {
   }
 };
 
+
 template <typename T>
 struct as_if<T, void> {
   explicit as_if(const Node& node_) : node(node_) {}
