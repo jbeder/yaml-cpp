@@ -119,7 +119,7 @@ class node {
   template <typename Key>
   node* get(const Key& key, shared_memory_holder pMemory) const {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
-    // it, and returns a pointer so that it can be NULL (if there is no such
+    // it, and returns a pointer so that it can be nullptr (if there is no such
     // key).
     return static_cast<const node_ref&>(*m_pRef).get(key, pMemory);
   }
@@ -136,7 +136,7 @@ class node {
 
   node* get(node& key, shared_memory_holder pMemory) const {
     // NOTE: this returns a non-const node so that the top-level Node can wrap
-    // it, and returns a pointer so that it can be NULL (if there is no such
+    // it, and returns a pointer so that it can be nullptr (if there is no such
     // key).
     return static_cast<const node_ref&>(*m_pRef).get(key, pMemory);
   }
