@@ -38,3 +38,14 @@ TEST(ParserTest, CVE_2018_20573) {
     NiceMock<MockEventHandler> handler;
     EXPECT_THROW(parser.HandleNextDocument(handler), YAML::ParserException);
 }
+
+TEST(ParserTest, CVE_2018_20574) {
+    std::string excessive_recursion;
+    for (auto i = 0; i != 21989; ++i)
+        excessive_recursion.push_back('{');
+    std::istringstream input{excessive_recursion};
+    Parser parser{input};
+
+    NiceMock<MockEventHandler> handler;
+    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::ParserException);
+}
