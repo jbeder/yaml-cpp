@@ -52,6 +52,7 @@ const char* const INVALID_HEX = "bad character found while scanning hex number";
 const char* const INVALID_UNICODE = "invalid unicode: ";
 const char* const INVALID_ESCAPE = "unknown escape character: ";
 const char* const UNKNOWN_TOKEN = "unknown token";
+const char* const NO_MORE_TOKENS = "no more tokens to be read";
 const char* const DOC_IN_SCALAR = "illegal document indicator in scalar";
 const char* const EOF_IN_SCALAR = "illegal EOF in scalar";
 const char* const CHAR_IN_SCALAR = "illegal character in scalar";

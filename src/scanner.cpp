@@ -34,9 +34,10 @@ void Scanner::pop() {
 
 Token& Scanner::peek() {
   EnsureTokensInQueue();
-  assert(!m_tokens.empty());  // should we be asserting here? I mean, we really
-                              // just be checking
-                              // if it's empty before peeking.
+
+  // If there are no more tokens, we cannon fulfil our post-condition
+  if (m_tokens.empty())
+      throw ParserException(INPUT.mark(), ErrorMsg::NO_MORE_TOKENS);
 
 #if 0
 		static Token *pLast = 0;
