@@ -257,5 +257,10 @@ TEST(NodeTest, LoadTagWithParenthesis) {
     EXPECT_EQ(node.as<std::string>(), "foo");
 }
 
+TEST(NodeTest, LoadTagWithNullScalar) {
+  Node node = Load("!2");
+  EXPECT_TRUE(node.IsNull());
+}
+
 }  // namespace
 }  // namespace YAML

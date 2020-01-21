@@ -79,6 +79,12 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   if (!anchor_name.empty())
     eventHandler.OnAnchor(mark, anchor_name);
 
+  // after parsing properties, an empty node is again a possibility
+  if (m_scanner.empty()) {
+    eventHandler.OnNull(mark, anchor);
+    return;
+  }
+
   const Token& token = m_scanner.peek();
 
   if (token.type == Token::PLAIN_SCALAR && IsNullString(token.value)) {
