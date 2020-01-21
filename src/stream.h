@@ -16,6 +16,9 @@
 #include <string>
 
 namespace YAML {
+
+class StreamCharSource;
+
 class Stream {
  public:
   friend class StreamCharSource;
