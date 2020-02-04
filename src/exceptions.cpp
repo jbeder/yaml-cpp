@@ -1,12 +1,5 @@
 #include "yaml-cpp/exceptions.h"
-
-// This is here for compatibility with older versions of Visual Studio
-// which don't support noexcept
-#if defined(_MSC_VER) && _MSC_VER < 1900
-    #define YAML_CPP_NOEXCEPT _NOEXCEPT
-#else
-    #define YAML_CPP_NOEXCEPT noexcept
-#endif
+#include "yaml-cpp/noexcept.h"
 
 namespace YAML {
 
@@ -25,7 +18,3 @@ BadInsert::~BadInsert() YAML_CPP_NOEXCEPT = default;
 EmitterException::~EmitterException() YAML_CPP_NOEXCEPT = default;
 BadFile::~BadFile() YAML_CPP_NOEXCEPT = default;
 }
-
-#undef YAML_CPP_NOEXCEPT
-
-
