@@ -7,6 +7,7 @@ namespace {
 TEST(LoadNodeTest, Reassign) {
   Node node = Load("foo");
   node = Node();
+  EXPECT_TRUE(node.IsNull());
 }
 
 TEST(LoadNodeTest, FallbackValues) {
