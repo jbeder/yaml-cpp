@@ -27,7 +27,7 @@ struct StringFormat {
 namespace Utils {
 StringFormat::value ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
-                                        FlowType::value flowType,
+                                        FlowType flowType,
                                         bool escapeNonAscii);
 
 bool WriteSingleQuotedString(ostream_wrapper& out, const std::string& str);

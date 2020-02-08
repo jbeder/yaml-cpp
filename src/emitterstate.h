@@ -18,14 +18,21 @@
 #include <vector>
 
 namespace YAML {
-struct FmtScope {
-  enum value { Local, Global };
+enum class FmtScope {
+  Local,
+  Global
 };
-struct GroupType {
-  enum value { NoType, Seq, Map };
+
+enum class GroupType {
+  NoType,
+  Seq,
+  Map
 };
-struct FlowType {
-  enum value { NoType, Flow, Block };
+
+enum class FlowType {
+  NoType,
+  Flow,
+  Block
 };
 
 class EmitterState {
@@ -50,14 +57,14 @@ class EmitterState {
   void StartedDoc();
   void EndedDoc();
   void StartedScalar();
-  void StartedGroup(GroupType::value type);
-  void EndedGroup(GroupType::value type);
+  void StartedGroup(GroupType type);
+  void EndedGroup(GroupType type);
 
-  EmitterNodeType::value NextGroupType(GroupType::value type) const;
+  EmitterNodeType::value NextGroupType(GroupType type) const;
   EmitterNodeType::value CurGroupNodeType() const;
 
-  GroupType::value CurGroupType() const;
-  FlowType::value CurGroupFlowType() const;
+  GroupType CurGroupType() const;
+  FlowType CurGroupFlowType() const;
   std::size_t CurGroupIndent() const;
   std::size_t CurGroupChildCount() const;
   bool CurGroupLongKey() const;
@@ -76,47 +83,47 @@ class EmitterState {
   // formatters
   void SetLocalValue(EMITTER_MANIP value);
 
-  bool SetOutputCharset(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetOutputCharset(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetOutputCharset() const { return m_charset.get(); }
 
-  bool SetStringFormat(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetStringFormat(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetStringFormat() const { return m_strFmt.get(); }
 
-  bool SetBoolFormat(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetBoolFormat(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetBoolFormat() const { return m_boolFmt.get(); }
 
-  bool SetBoolLengthFormat(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetBoolLengthFormat(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetBoolLengthFormat() const { return m_boolLengthFmt.get(); }
 
-  bool SetBoolCaseFormat(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetBoolCaseFormat(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetBoolCaseFormat() const { return m_boolCaseFmt.get(); }
 
-  bool SetIntFormat(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetIntFormat(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetIntFormat() const { return m_intFmt.get(); }
 
-  bool SetIndent(std::size_t value, FmtScope::value scope);
+  bool SetIndent(std::size_t value, FmtScope scope);
   std::size_t GetIndent() const { return m_indent.get(); }
 
-  bool SetPreCommentIndent(std::size_t value, FmtScope::value scope);
+  bool SetPreCommentIndent(std::size_t value, FmtScope scope);
   std::size_t GetPreCommentIndent() const { return m_preCommentIndent.get(); }
-  bool SetPostCommentIndent(std::size_t value, FmtScope::value scope);
+  bool SetPostCommentIndent(std::size_t value, FmtScope scope);
   std::size_t GetPostCommentIndent() const { return m_postCommentIndent.get(); }
 
-  bool SetFlowType(GroupType::value groupType, EMITTER_MANIP value,
-                   FmtScope::value scope);
-  EMITTER_MANIP GetFlowType(GroupType::value groupType) const;
+  bool SetFlowType(GroupType groupType, EMITTER_MANIP value,
+                   FmtScope scope);
+  EMITTER_MANIP GetFlowType(GroupType groupType) const;
 
-  bool SetMapKeyFormat(EMITTER_MANIP value, FmtScope::value scope);
+  bool SetMapKeyFormat(EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetMapKeyFormat() const { return m_mapKeyFmt.get(); }
 
-  bool SetFloatPrecision(std::size_t value, FmtScope::value scope);
+  bool SetFloatPrecision(std::size_t value, FmtScope scope);
   std::size_t GetFloatPrecision() const { return m_floatPrecision.get(); }
-  bool SetDoublePrecision(std::size_t value, FmtScope::value scope);
+  bool SetDoublePrecision(std::size_t value, FmtScope scope);
   std::size_t GetDoublePrecision() const { return m_doublePrecision.get(); }
 
  private:
   template <typename T>
-  void _Set(Setting<T>& fmt, T value, FmtScope::value scope);
+  void _Set(Setting<T>& fmt, T value, FmtScope scope);
 
   void StartedNode();
 
@@ -144,7 +151,7 @@ class EmitterState {
   SettingChanges m_globalModifiedSettings;
 
   struct Group {
-    explicit Group(GroupType::value type_)
+    explicit Group(GroupType type_)
         : type(type_),
           flowType{},
           indent(0),
@@ -152,8 +159,8 @@ class EmitterState {
           longKey(false),
           modifiedSettings{} {}
 
-    GroupType::value type;
-    FlowType::value flowType;
+    GroupType type;
+    FlowType flowType;
     std::size_t indent;
     std::size_t childCount;
     bool longKey;
@@ -188,7 +195,7 @@ class EmitterState {
 };
 
 template <typename T>
-void EmitterState::_Set(Setting<T>& fmt, T value, FmtScope::value scope) {
+void EmitterState::_Set(Setting<T>& fmt, T value, FmtScope scope) {
   switch (scope) {
     case FmtScope::Local:
       m_modifiedSettings.push(fmt.set(value));
