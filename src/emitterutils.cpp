@@ -260,7 +260,7 @@ bool WriteAliasName(ostream_wrapper& out, const std::string& str) {
 }
 }  // namespace
 
-StringFormat::value ComputeStringFormat(const std::string& str,
+StringFormat ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
                                         FlowType flowType,
                                         bool escapeNonAscii) {

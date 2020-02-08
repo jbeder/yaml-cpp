@@ -677,7 +677,7 @@ Emitter& Emitter::Write(const std::string& str) {
     return *this;
 
   const bool escapeNonAscii = m_pState->GetOutputCharset() == EscapeNonAscii;
-  const StringFormat::value strFormat =
+  const StringFormat strFormat =
       Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
                                  m_pState->CurGroupFlowType(), escapeNonAscii);
 
