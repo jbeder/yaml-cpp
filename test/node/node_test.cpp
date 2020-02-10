@@ -422,10 +422,64 @@ TEST(NodeTest, FloatingPrecisionFloat) {
   EXPECT_EQ(x, node.as<float>());
 }
 
+TEST(NodeTest, FloatingPrecisionPositiveInfinityFloat) {
+  if (!std::numeric_limits<float>::has_infinity) {
+    return;
+  }
+  const float x = std::numeric_limits<float>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionNegativeInfinityFloat) {
+  if (!std::numeric_limits<float>::has_infinity) {
+    return;
+  }
+  const float x = -std::numeric_limits<float>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionNanFloat) {
+  if (!std::numeric_limits<float>::has_quiet_NaN) {
+    return;
+  }
+  const float x = std::numeric_limits<float>::quiet_NaN();
+  Node node = Node(x);
+  EXPECT_TRUE(std::isnan(node.as<float>()));
+}
+
 TEST(NodeTest, FloatingPrecisionDouble) {
   const double x = 0.123456789;
   Node node = Node(x);
   EXPECT_EQ(x, node.as<double>());
+}
+
+TEST(NodeTest, FloatingPrecisionPositiveInfinityDouble) {
+  if (!std::numeric_limits<double>::has_infinity) {
+    return;
+  }
+  const double x = std::numeric_limits<double>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionNegativeInfinityDouble) {
+  if (!std::numeric_limits<double>::has_infinity) {
+    return;
+  }
+  const double x = -std::numeric_limits<double>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<double>());
+}
+
+TEST(NodeTest, FloatingPrecisionNanDouble) {
+  if (!std::numeric_limits<double>::has_quiet_NaN) {
+    return;
+  }
+  const double x = std::numeric_limits<double>::quiet_NaN();
+  Node node = Node(x);
+  EXPECT_TRUE(std::isnan(node.as<double>()));
 }
 
 TEST(NodeTest, SpaceChar) {
