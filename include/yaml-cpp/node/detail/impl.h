@@ -58,7 +58,9 @@ struct get_idx<Key, typename std::enable_if<std::is_signed<Key>::value>::type> {
 
 template <typename Key, typename Enable = void>
 struct remove_idx {
-  static bool remove(std::vector<node*>&, const Key&) { return false; }
+  static bool remove(std::vector<node*>&, const Key&, std::size_t&) {
+    return false;
+  }
 };
 
 template <typename Key>
@@ -66,11 +68,15 @@ struct remove_idx<
     Key, typename std::enable_if<std::is_unsigned<Key>::value &&
                                  !std::is_same<Key, bool>::value>::type> {
 
-  static bool remove(std::vector<node*>& sequence, const Key& key) {
+  static bool remove(std::vector<node*>& sequence, const Key& key,
+                     std::size_t& seqSize) {
     if (key >= sequence.size()) {
       return false;
     } else {
       sequence.erase(sequence.begin() + key);
+      if (seqSize > key) {
+          --seqSize;
+      }
       return true;
     }
   }
@@ -80,9 +86,10 @@ template <typename Key>
 struct remove_idx<Key,
                   typename std::enable_if<std::is_signed<Key>::value>::type> {
 
-  static bool remove(std::vector<node*>& sequence, const Key& key) {
+  static bool remove(std::vector<node*>& sequence, const Key& key,
+                     std::size_t& seqSize) {
     return key >= 0 ? remove_idx<std::size_t>::remove(
-                          sequence, static_cast<std::size_t>(key))
+                          sequence, static_cast<std::size_t>(key), seqSize)
                     : false;
   }
 };
@@ -161,7 +168,7 @@ inline node& node_data::get(const Key& key, shared_memory_holder pMemory) {
 template <typename Key>
 inline bool node_data::remove(const Key& key, shared_memory_holder pMemory) {
   if (m_type == NodeType::Sequence) {
-    return remove_idx<Key>::remove(m_sequence, key);
+    return remove_idx<Key>::remove(m_sequence, key, m_seqSize);
   } else if (m_type == NodeType::Map) {
     kv_pairs::iterator it = m_undefinedPairs.begin();
     while (it != m_undefinedPairs.end()) {
