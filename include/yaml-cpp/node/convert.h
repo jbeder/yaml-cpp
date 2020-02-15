@@ -8,10 +8,12 @@
 #endif
 
 #include <array>
+#include <cmath>
 #include <limits>
 #include <list>
 #include <map>
 #include <sstream>
+#include <type_traits>
 #include <vector>
 
 #include "yaml-cpp/binary.h"
@@ -94,7 +96,21 @@ struct convert<_Null> {
     static Node encode(const type& rhs) {                                  \
       std::stringstream stream;                                            \
       stream.precision(std::numeric_limits<type>::max_digits10);           \
-      stream << rhs;                                                       \
+      if (std::is_floating_point<type>::value) {                           \
+        if (std::isnan(rhs)) {                                             \
+          stream << ".nan";                                                \
+        } else if (std::isinf(rhs)) {                                      \
+          if (std::signbit(rhs)) {                                         \
+            stream << "-.inf";                                             \
+          } else {                                                         \
+            stream << ".inf";                                              \
+          }                                                                \
+        } else {                                                           \
+          stream << rhs;                                                   \
+        }                                                                  \
+      } else {                                                             \
+        stream << rhs;                                                     \
+      }                                                                    \
       return Node(stream.str());                                           \
     }                                                                      \
                                                                            \
