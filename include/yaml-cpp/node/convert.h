@@ -23,6 +23,7 @@
 #include "yaml-cpp/node/type.h"
 #include "yaml-cpp/null.h"
 
+
 namespace YAML {
 class Binary;
 struct _Null;
@@ -90,27 +91,38 @@ struct convert<_Null> {
   }
 };
 
+namespace conversion {
+template <typename T>
+typename std::enable_if< std::is_floating_point<T>::value, void>::type
+inner_encode(const T& rhs, std::stringstream& stream){
+  if (std::isnan(rhs)) {
+    stream << ".nan";
+  } else if (std::isinf(rhs)) {
+    if (std::signbit(rhs)) {
+      stream << "-.inf";
+    } else {
+      stream << ".inf";
+    }
+  } else {
+    stream << rhs;
+  }
+}
+
+template <typename T>
+typename std::enable_if<!std::is_floating_point<T>::value, void>::type
+inner_encode(const T& rhs, std::stringstream& stream){
+  stream << rhs;
+}
+}
+
 #define YAML_DEFINE_CONVERT_STREAMABLE(type, negative_op)                  \
   template <>                                                              \
   struct convert<type> {                                                   \
+                                                                           \
     static Node encode(const type& rhs) {                                  \
       std::stringstream stream;                                            \
       stream.precision(std::numeric_limits<type>::max_digits10);           \
-      if (std::is_floating_point<type>::value) {                           \
-        if (std::isnan(rhs)) {                                             \
-          stream << ".nan";                                                \
-        } else if (std::isinf(rhs)) {                                      \
-          if (std::signbit(rhs)) {                                         \
-            stream << "-.inf";                                             \
-          } else {                                                         \
-            stream << ".inf";                                              \
-          }                                                                \
-        } else {                                                           \
-          stream << rhs;                                                   \
-        }                                                                  \
-      } else {                                                             \
-        stream << rhs;                                                     \
-      }                                                                    \
+      conversion::inner_encode(rhs, stream);                               \
       return Node(stream.str());                                           \
     }                                                                      \
                                                                            \
