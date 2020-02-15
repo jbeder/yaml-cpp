@@ -89,8 +89,7 @@ void EmitterState::StartedNode() {
   m_hasNonContent = false;
 }
 
-EmitterNodeType::value EmitterState::NextGroupType(
-    GroupType type) const {
+EmitterNodeType::value EmitterState::NextGroupType(GroupType type) const {
   if (type == GroupType::Seq) {
     if (GetFlowType(type) == Block)
       return EmitterNodeType::BlockSeq;
@@ -220,8 +219,7 @@ std::size_t EmitterState::LastIndent() const {
 
 void EmitterState::ClearModifiedSettings() { m_modifiedSettings.clear(); }
 
-bool EmitterState::SetOutputCharset(EMITTER_MANIP value,
-                                    FmtScope scope) {
+bool EmitterState::SetOutputCharset(EMITTER_MANIP value, FmtScope scope) {
   switch (value) {
     case EmitNonAscii:
     case EscapeNonAscii:
@@ -257,8 +255,7 @@ bool EmitterState::SetBoolFormat(EMITTER_MANIP value, FmtScope scope) {
   }
 }
 
-bool EmitterState::SetBoolLengthFormat(EMITTER_MANIP value,
-                                       FmtScope scope) {
+bool EmitterState::SetBoolLengthFormat(EMITTER_MANIP value, FmtScope scope) {
   switch (value) {
     case LongBool:
     case ShortBool:
@@ -269,8 +266,7 @@ bool EmitterState::SetBoolLengthFormat(EMITTER_MANIP value,
   }
 }
 
-bool EmitterState::SetBoolCaseFormat(EMITTER_MANIP value,
-                                     FmtScope scope) {
+bool EmitterState::SetBoolCaseFormat(EMITTER_MANIP value, FmtScope scope) {
   switch (value) {
     case UpperCase:
     case LowerCase:
@@ -302,8 +298,7 @@ bool EmitterState::SetIndent(std::size_t value, FmtScope scope) {
   return true;
 }
 
-bool EmitterState::SetPreCommentIndent(std::size_t value,
-                                       FmtScope scope) {
+bool EmitterState::SetPreCommentIndent(std::size_t value, FmtScope scope) {
   if (value == 0)
     return false;
 
@@ -311,8 +306,7 @@ bool EmitterState::SetPreCommentIndent(std::size_t value,
   return true;
 }
 
-bool EmitterState::SetPostCommentIndent(std::size_t value,
-                                        FmtScope scope) {
+bool EmitterState::SetPostCommentIndent(std::size_t value, FmtScope scope) {
   if (value == 0)
     return false;
 
@@ -359,8 +353,7 @@ bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope scope) {
   return true;
 }
 
-bool EmitterState::SetDoublePrecision(std::size_t value,
-                                      FmtScope scope) {
+bool EmitterState::SetDoublePrecision(std::size_t value, FmtScope scope) {
   if (value > std::numeric_limits<double>::max_digits10)
     return false;
   _Set(m_doublePrecision, value, scope);

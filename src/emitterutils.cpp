@@ -261,9 +261,8 @@ bool WriteAliasName(ostream_wrapper& out, const std::string& str) {
 }  // namespace
 
 StringFormat ComputeStringFormat(const std::string& str,
-                                        EMITTER_MANIP strFormat,
-                                        FlowType flowType,
-                                        bool escapeNonAscii) {
+                                 EMITTER_MANIP strFormat, FlowType flowType,
+                                 bool escapeNonAscii) {
   switch (strFormat) {
     case Auto:
       if (IsValidPlainScalar(str, flowType, escapeNonAscii)) {

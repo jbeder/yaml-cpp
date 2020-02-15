@@ -18,22 +18,11 @@
 #include <vector>
 
 namespace YAML {
-enum class FmtScope {
-  Local,
-  Global
-};
+enum class FmtScope { Local, Global };
 
-enum class GroupType {
-  NoType,
-  Seq,
-  Map
-};
+enum class GroupType { NoType, Seq, Map };
 
-enum class FlowType {
-  NoType,
-  Flow,
-  Block
-};
+enum class FlowType { NoType, Flow, Block };
 
 class EmitterState {
  public:
@@ -109,8 +98,7 @@ class EmitterState {
   bool SetPostCommentIndent(std::size_t value, FmtScope scope);
   std::size_t GetPostCommentIndent() const { return m_postCommentIndent.get(); }
 
-  bool SetFlowType(GroupType groupType, EMITTER_MANIP value,
-                   FmtScope scope);
+  bool SetFlowType(GroupType groupType, EMITTER_MANIP value, FmtScope scope);
   EMITTER_MANIP GetFlowType(GroupType groupType) const;
 
   bool SetMapKeyFormat(EMITTER_MANIP value, FmtScope scope);
