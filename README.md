@@ -8,6 +8,13 @@ To get a feel for how it can be used, see the [Tutorial](https://github.com/jbed
 
 If you find a bug, post an [issue](https://github.com/jbeder/yaml-cpp/issues)! If you have questions about how to use yaml-cpp, please post it on http://stackoverflow.com and tag it [`yaml-cpp`](http://stackoverflow.com/questions/tagged/yaml-cpp).
 
+# How to Install
+
+**Ubuntu/Debian**
+```
+sudo apt-get install libyaml-cpp-dev
+```
+
 # How to Build #
 
 yaml-cpp uses [CMake](http://www.cmake.org) to support cross-platform building. The basic steps to build are:
