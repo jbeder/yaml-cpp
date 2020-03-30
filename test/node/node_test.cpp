@@ -9,6 +9,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include <sstream>
+
 using ::testing::AnyOf;
 using ::testing::Eq;
 
@@ -133,6 +135,36 @@ TEST(NodeTest, NodeAssignment) {
   EXPECT_EQ(node1[1], node2[1]);
   EXPECT_EQ(node1[2], node2[2]);
   EXPECT_EQ(node1[3], node2[3]);
+}
+
+TEST(NodeTest, EqualRepresentationAfterMoveAssignment) {
+  Node node1;
+  Node node2;
+  std::ostringstream ss1, ss2;
+  node1["foo"] = "bar";
+  ss1 << node1;
+  node2["hello"] = "world";
+  node2 = std::move(node1);
+  ss2 << node2;
+  EXPECT_FALSE(node2["hello"]);
+  EXPECT_EQ("bar", node2["foo"].as<std::string>());
+  EXPECT_EQ(ss1.str(), ss2.str());
+}
+
+TEST(NodeTest, NodeIsNullWhenMovedFromByCtor) {
+  Node node1;
+  node1[1] = 1;
+  Node node2 = std::move(node1);
+  EXPECT_TRUE(node1.IsNull());
+}
+
+TEST(NodeTest, NodeIsNullWhenMovedFromByAssignment) {
+  Node node1;
+  Node node2;
+  node1[1] = 1;
+  node2[2] = 2;
+  node2 = std::move(node1);
+  EXPECT_TRUE(node1.IsNull());
 }
 
 TEST(NodeTest, MapElementRemoval) {
