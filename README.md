@@ -42,6 +42,17 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=ON|OFF] ..
 
 5. To clean up, just remove the `build` directory.
 
+Alternatively, you can build and install yaml-cpp using [vcpkg](https://github.com/microsoft/vcpkg/) dependency manager:
+
+    git clone https://github.com/Microsoft/vcpkg.git
+    cd vcpkg
+    ./bootstrap-vcpkg.sh
+    ./vcpkg integrate install
+    ./vcpkg install yaml-cpp
+
+The yaml-cpp port in vcpkg is kept up to date by microsoft team members and community contributors.
+If the version is out of date, please [create an issue or pull request](https://github.com/Microsoft/vcpkg) on the vcpkg repository.
+
 # Recent Release #
 
 [yaml-cpp 0.6.0](https://github.com/jbeder/yaml-cpp/releases/tag/yaml-cpp-0.6.0) has been released! This release requires C++11, and no longer depends on Boost.
