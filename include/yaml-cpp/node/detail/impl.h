@@ -122,7 +122,7 @@ inline node* node_data::get(const Key& key,
         return pNode;
       return nullptr;
     case NodeType::Scalar:
-      throw BadSubscript(key);
+      throw BadSubscript(m_mark, key);
   }
 
   for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
@@ -150,7 +150,7 @@ inline node& node_data::get(const Key& key, shared_memory_holder pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadSubscript(key);
+      throw BadSubscript(m_mark, key);
   }
 
   for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
