@@ -13,10 +13,16 @@
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/type.h"
 #include <set>
+#include <atomic>
 
 namespace YAML {
 namespace detail {
 class node {
+ private:
+  struct less {
+    bool operator ()(const node* l, const node* r) {return l->m_index < r->m_index;}
+  };
+
  public:
   node() : m_pRef(new node_ref), m_dependencies{} {}
   node(const node&) = delete;
@@ -108,6 +114,7 @@ class node {
   void push_back(node& input, shared_memory_holder pMemory) {
     m_pRef->push_back(input, pMemory);
     input.add_dependency(*this);
+    m_index = m_amount.fetch_add(1);
   }
   void insert(node& key, node& value, shared_memory_holder pMemory) {
     m_pRef->insert(key, value, pMemory);
@@ -159,8 +166,10 @@ class node {
 
  private:
   shared_node_ref m_pRef;
-  using nodes = std::set<node*>;
+  using nodes = std::set<node*, less>;
   nodes m_dependencies;
+  size_t m_index;
+  static std::atomic<size_t> m_amount;
 };
 }  // namespace detail
 }  // namespace YAML
