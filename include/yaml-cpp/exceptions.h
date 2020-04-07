@@ -248,8 +248,8 @@ class YAML_CPP_API BadDereference : public RepresentationException {
 class YAML_CPP_API BadSubscript : public RepresentationException {
  public:
   template <typename Key>
-  BadSubscript(const Key& key)
-      : RepresentationException(Mark::null_mark(),
+  BadSubscript(const Mark& mark_, const Key& key)
+      : RepresentationException(mark_,
                                 ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
   BadSubscript(const BadSubscript&) = default;
   ~BadSubscript() YAML_CPP_NOEXCEPT override;
