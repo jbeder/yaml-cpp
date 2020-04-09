@@ -20,7 +20,7 @@ namespace detail {
 class node {
  private:
   struct less {
-    bool operator ()(const node* l, const node* r) {return l->m_index < r->m_index;}
+    bool operator ()(const node* l, const node* r) const {return l->m_index < r->m_index;}
   };
 
  public:
