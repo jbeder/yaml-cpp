@@ -7,6 +7,7 @@
 #include "singledocparser.h"
 #include "tag.h"
 #include "token.h"
+#include "yaml-cpp/depthguard.h"
 #include "yaml-cpp/emitterstyle.h"
 #include "yaml-cpp/eventhandler.h"
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
@@ -47,6 +48,8 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
 }
 
 void SingleDocParser::HandleNode(EventHandler& eventHandler) {
+  DepthGuard<2000> depthguard(depth, m_scanner.mark(), ErrorMsg::BAD_FILE);
+
   // an empty node *is* a possibility
   if (m_scanner.empty()) {
     eventHandler.OnNull(m_scanner.mark(), NullAnchor);
