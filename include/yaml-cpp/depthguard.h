@@ -23,7 +23,7 @@ class DeepRecursion : public ParserException {
 public:
   virtual ~DeepRecursion() = default;
 
-  DeepRecursion(int at_depth, const Mark& mark_, const std::string& msg_);
+  DeepRecursion(int depth, const Mark& mark_, const std::string& msg_);
 
   // Returns the recursion depth when the exception was thrown
   int depth() const {
