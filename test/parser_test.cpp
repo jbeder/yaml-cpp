@@ -1,3 +1,4 @@
+#include <yaml-cpp/depthguard.h>
 #include "yaml-cpp/parser.h"
 #include "yaml-cpp/exceptions.h"
 #include "mock_event_handler.h"
@@ -25,7 +26,7 @@ TEST(ParserTest, CVE_2017_5950) {
     Parser parser{input};
 
     NiceMock<MockEventHandler> handler;
-    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::ParserException);
+    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::DeepRecursion);
 }
 
 TEST(ParserTest, CVE_2018_20573) {
@@ -36,7 +37,7 @@ TEST(ParserTest, CVE_2018_20573) {
     Parser parser{input};
 
     NiceMock<MockEventHandler> handler;
-    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::ParserException);
+    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::DeepRecursion);
 }
 
 TEST(ParserTest, CVE_2018_20574) {
@@ -47,7 +48,7 @@ TEST(ParserTest, CVE_2018_20574) {
     Parser parser{input};
 
     NiceMock<MockEventHandler> handler;
-    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::ParserException);
+    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::DeepRecursion);
 }
 
 TEST(ParserTest, CVE_2019_6285) {
@@ -59,5 +60,5 @@ TEST(ParserTest, CVE_2019_6285) {
     Parser parser{input};
 
     NiceMock<MockEventHandler> handler;
-    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::ParserException);
+    EXPECT_THROW(parser.HandleNextDocument(handler), YAML::DeepRecursion);
 }

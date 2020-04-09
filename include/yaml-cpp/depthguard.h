@@ -20,16 +20,18 @@ namespace YAML {
  * maximum depth.
  */
 class DeepRecursion : public ParserException {
-  int m_atDepth = 0;
 public:
-  // no custom dtor needed, but virtual dtor necessary to prevent slicing
   virtual ~DeepRecursion() = default;
 
-  // construct an exception explaining how deep you were
   DeepRecursion(int at_depth, const Mark& mark_, const std::string& msg_);
 
-  // query how deep you were when the exception was thrown
-  int AtDepth() const;
+  // Returns the recursion depth when the exception was thrown
+  int depth() const {
+    return m_depth;
+  }
+
+private:
+  int m_depth = 0;
 };
 
 /**
@@ -45,7 +47,6 @@ public:
  */
 template <int max_depth = 2000>
 class DepthGuard final /* final because non-virtual dtor */ {
-  int & m_depth;
 public:
   DepthGuard(int & depth_, const Mark& mark_, const std::string& msg_) : m_depth(depth_) {
     ++m_depth;
@@ -54,7 +55,6 @@ public:
     }
   }
 
-  // DepthGuard is neither copyable nor moveable.
   DepthGuard(const DepthGuard & copy_ctor) = delete;
   DepthGuard(DepthGuard && move_ctor) = delete;
   DepthGuard & operator=(const DepthGuard & copy_assign) = delete;
@@ -67,6 +67,9 @@ public:
   int current_depth() const {
     return m_depth;
   }
+
+private:
+    int & m_depth;
 };
 
 } // namespace YAML
