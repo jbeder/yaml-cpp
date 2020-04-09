@@ -46,7 +46,7 @@ private:
  *  compile-time configurable maximum depth.
  */
 template <int max_depth = 2000>
-class DepthGuard final /* final because non-virtual dtor */ {
+class DepthGuard final {
 public:
   DepthGuard(int & depth_, const Mark& mark_, const std::string& msg_) : m_depth(depth_) {
     ++m_depth;
