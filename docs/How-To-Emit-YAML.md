@@ -6,7 +6,7 @@
 
 The model for emitting YAML is `std::ostream` manipulators. A `YAML::Emitter` objects acts as an output stream, and its output can be retrieved through the `c_str()` function (as in `std::string`). For a simple example:
 
-```
+```cpp
 #include "yaml-cpp/yaml.h"
 
 int main()
@@ -23,7 +23,7 @@ int main()
 
 A `YAML::Emitter` object acts as a state machine, and we use manipulators to move it between states. Here's a simple sequence:
 
-```
+```cpp
 YAML::Emitter out;
 out << YAML::BeginSeq;
 out << "eggs";
@@ -31,15 +31,18 @@ out << "bread";
 out << "milk";
 out << YAML::EndSeq;
 ```
+
 produces
-```
+
+```yaml
 - eggs
 - bread
 - milk
 ```
 
 A simple map:
-```
+
+```cpp
 YAML::Emitter out;
 out << YAML::BeginMap;
 out << YAML::Key << "name";
@@ -48,14 +51,17 @@ out << YAML::Key << "position";
 out << YAML::Value << "LF";
 out << YAML::EndMap;
 ```
+
 produces
-```
+
+```yaml
 name: Ryan Braun
 position: LF
 ```
 
 These elements can, of course, be nested:
-```
+
+```cpp
 YAML::Emitter out;
 out << YAML::BeginMap;
 out << YAML::Key << "name";
@@ -64,8 +70,10 @@ out << YAML::Key << "children";
 out << YAML::Value << YAML::BeginSeq << "Sasha" << "Malia" << YAML::EndSeq;
 out << YAML::EndMap;
 ```
+
 produces
-```
+
+```yaml
 name: Barack Obama
 children:
   - Sasha
@@ -75,30 +83,37 @@ children:
 # Using Manipulators #
 
 To deviate from standard formatting, you can use manipulators to modify the output format. For example,
-```
+
+```cpp
 YAML::Emitter out;
 out << YAML::Literal << "A\n B\n  C";
 ```
+
 produces
-```
+
+```yaml
 |
 A
  B
   C
 ```
 and
-```
+
+```cpp
 YAML::Emitter out;
 out << YAML::Flow;
 out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 << YAML::EndSeq;
 ```
+
 produces
-```
+
+```yaml
 [2, 3, 5, 7, 11]
 ```
 
 Comments act like manipulators:
-```
+
+```cpp
 YAML::Emitter out;
 out << YAML::BeginMap;
 out << YAML::Key << "method";
@@ -106,13 +121,16 @@ out << YAML::Value << "least squares";
 out << YAML::Comment("should we change this method?");
 out << YAML::EndMap;
 ```
+
 produces
-```
+
+```yaml
 method: least squares  # should we change this method?
 ```
 
 And so do aliases/anchors:
-```
+
+```cpp
 YAML::Emitter out;
 out << YAML::BeginSeq;
 out << YAML::Anchor("fred");
@@ -123,8 +141,10 @@ out << YAML::EndMap;
 out << YAML::Alias("fred");
 out << YAML::EndSeq;
 ```
+
 produces
-```
+
+```yaml
 - &fred
   name: Fred
   age: 42
@@ -133,7 +153,8 @@ produces
 
 # STL Containers, and Other Overloads #
 We overload `operator <<` for `std::vector`, `std::list`, and `std::map`, so you can write stuff like:
-```
+
+```cpp
 std::vector <int> squares;
 squares.push_back(1);
 squares.push_back(4);
@@ -150,8 +171,10 @@ out << YAML::Flow << squares;
 out << ages;
 out << YAML::EndSeq;
 ```
-to produce
-```
+
+produces
+
+```yaml
 - [1, 4, 9, 16]
 -
   Daniel: 26
@@ -159,7 +182,8 @@ to produce
 ```
 
 Of course, you can overload `operator <<` for your own types:
-```
+
+```cpp
 struct Vec3 { int x; int y; int z; };
 YAML::Emitter& operator << (YAML::Emitter& out, const Vec3& v) {
 	out << YAML::Flow;
@@ -177,7 +201,7 @@ We also overload `operator << ` for `YAML::Node`s in both APIs, so you can outpu
 
 The output is always UTF-8. By default, yaml-cpp will output as much as it can without escaping any characters. If you want to restrict the output to ASCII, use the manipulator `YAML::EscapeNonAscii`:
 
-```
+```cpp
 emitter.SetOutputCharset(YAML::EscapeNonAscii);
 ```
 
@@ -186,7 +210,8 @@ emitter.SetOutputCharset(YAML::EscapeNonAscii);
 Manipulators affect the **next** output item in the stream. If that item is a `BeginSeq` or `BeginMap`, the manipulator lasts until the corresponding `EndSeq` or `EndMap`. (However, within that sequence or map, you can override the manipulator locally, etc.; in effect, there's a "manipulator stack" behind the scenes.)
 
 If you want to permanently change a setting, there are global setters corresponding to each manipulator, e.g.:
-```
+
+```cpp
 YAML::Emitter out;
 out.SetIndent(4);
 out.SetMapStyle(YAML::Flow);
@@ -196,10 +221,10 @@ out.SetMapStyle(YAML::Flow);
 
 If something goes wrong when you're emitting a document, it must be something like forgetting a `YAML::EndSeq`, or a misplaced `YAML::Key`. In this case, emitting silently fails (no more output is emitted) and an error flag is set. For example:
 
-```
-   YAML::Emitter out;
-   assert(out.good());
-   out << YAML::Key;
-   assert(!out.good());
-   std::cout << "Emitter error: " << out.GetLastError() << "\n";
+```cpp
+YAML::Emitter out;
+assert(out.good());
+out << YAML::Key;
+assert(!out.good());
+std::cout << "Emitter error: " << out.GetLastError() << "\n";
 ```

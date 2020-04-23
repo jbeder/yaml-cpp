@@ -2,7 +2,7 @@
 
 A typical example, loading a configuration file, might look like this:
 
-```
+```cpp
 YAML::Node config = YAML::LoadFile("config.yaml");
 
 if (config["lastLogin"]) {
@@ -22,7 +22,7 @@ fout << config;
 
 All nodes in a YAML document (including the root) are represented by `YAML::Node`. You can check what kind it is:
 
-```
+```cpp
 YAML::Node node = YAML::Load("[1, 2, 3]");
 assert(node.Type() == YAML::NodeType::Sequence);
 assert(node.IsSequence());  // a shortcut!
@@ -30,7 +30,7 @@ assert(node.IsSequence());  // a shortcut!
 
 Collection nodes (sequences and maps) act somewhat like STL vectors and maps:
 
-```
+```cpp
 YAML::Node primes = YAML::Load("[2, 3, 5, 7, 11]");
 for (std::size_t i=0;i<primes.size();i++) {
   std::cout << primes[i].as<int>() << "\n";
@@ -46,7 +46,7 @@ assert(primes.size() == 6);
 
 and
 
-```
+```cpp
 YAML::Node lineup = YAML::Load("{1B: Prince Fielder, 2B: Rickie Weeks, LF: Ryan Braun}");
 for(YAML::const_iterator it=lineup.begin();it!=lineup.end();++it) {
   std::cout << "Playing at " << it->first.as<std::string>() << " is " << it->second.as<std::string>() << "\n";
@@ -59,7 +59,7 @@ assert(lineup.size() == 5);
 
 Querying for keys does **not** create them automatically (this makes handling optional map entries very easy)
 
-```
+```cpp
 YAML::Node node = YAML::Load("{name: Brewers, city: Milwaukee}");
 if (node["name"]) {
   std::cout << node["name"].as<std::string>() << "\n";
@@ -72,7 +72,7 @@ assert(node.size() == 2); // the previous call didn't create a node
 
 If you're not sure what kind of data you're getting, you can query the type of a node:
 
-```
+```cpp
 switch (node.Type()) {
   case Null: // ...
   case Scalar: // ...
@@ -84,7 +84,7 @@ switch (node.Type()) {
 
 or ask directly whether it's a particular type, e.g.:
 
-```
+```cpp
 if (node.IsSequence()) {
   // ...
 }
@@ -94,7 +94,7 @@ if (node.IsSequence()) {
 
 You can build `YAML::Node` from scratch:
 
-```
+```cpp
 YAML::Node node;  // starts out as null
 node["key"] = "value";  // it now is a map node
 node["seq"].push_back("first element");  // node["seq"] automatically becomes a sequence
@@ -110,7 +110,7 @@ node[node["mirror"]] = node["seq"];  // and strange loops :)
 
 The above node is now:
 
-```
+```yaml
 &1
 key: value
 &2 seq: [&3 "element #1", second element]
@@ -123,7 +123,7 @@ self: *1
 
 Sequences can be turned into maps by asking for non-integer keys. For example,
 
-```
+```cpp
 YAML::Node node  = YAML::Load("[1, 2, 3]");
 node[1] = 5;  // still a sequence, [1, 5, 3]
 node.push_back(-3) // still a sequence, [1, 5, 3, -3]
@@ -132,7 +132,7 @@ node["key"] = "value"; // now it's a map! {0: 1, 1: 5, 2: 3, 3: -3, key: value}
 
 Indexing a sequence node by an index that's not in its range will _usually_ turn it into a map, but if the index is one past the end of the sequence, then the sequence will grow by one to accommodate it. (That's the **only** exception to this rule.) For example,
 
-```
+```cpp
 YAML::Node node = YAML::Load("[1, 2, 3]");
 node[3] = 4; // still a sequence, [1, 2, 3, 4]
 node[10] = 10;  // now it's a map! {0: 1, 1: 2, 2: 3, 3: 4, 10: 10}
@@ -142,7 +142,7 @@ node[10] = 10;  // now it's a map! {0: 1, 1: 2, 2: 3, 3: 4, 10: 10}
 
 Yaml-cpp has built-in conversion to and from most built-in data types, as well as `std::vector`, `std::list`, and `std::map`. The following examples demonstrate when those conversions are used:
 
-```
+```cpp
 YAML::Node node = YAML::Load("{pi: 3.14159, [0, 1]: integers}");
 
 // this needs the conversion from Node to double
@@ -160,13 +160,13 @@ std::string str = node[v].as<std::string>();
 
 To use yaml-cpp with your own data types, you need to specialize the YAML::convert<> template class. For example, suppose you had a simple `Vec3` class:
 
-```
+```cpp
 struct Vec3 { double x, y, z; /* etc - make sure you have overloaded operator== */ };
 ```
 
 You could write
 
-```
+```cpp
 namespace YAML {
 template<>
 struct convert<Vec3> {
@@ -194,7 +194,7 @@ struct convert<Vec3> {
 
 Then you could use `Vec3` wherever you could use any other type:
 
-```
+```cpp
 YAML::Node node = YAML::Load("start: [1, 3, 0]");
 Vec3 v = node["start"].as<Vec3>();
 node["end"] = Vec3(2, -1, 0);
