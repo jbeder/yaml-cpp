@@ -42,6 +42,10 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=ON|OFF] ..
 
 5. To clean up, just remove the `build` directory.
 
+# Qt wrapper
+
+You can use this [gist](https://gist.github.com/brcha/d392b2fe5f1e427cc8a6) to your project to add basic *Qt* type support.
+
 # Recent Release #
 
 [yaml-cpp 0.6.0](https://github.com/jbeder/yaml-cpp/releases/tag/yaml-cpp-0.6.0) has been released! This release requires C++11, and no longer depends on Boost.
