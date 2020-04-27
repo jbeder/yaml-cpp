@@ -156,6 +156,7 @@ endif()
 if (YAML_CPP_CLANG_FORMAT_EXE)
   add_custom_target(format
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
+    COMMAND_EXPAND_LISTS
     COMMENT "Running clang-format"
     VERBATIM)
 endif()
