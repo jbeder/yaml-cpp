@@ -2,9 +2,8 @@
 
 namespace YAML {
 
-DeepRecursion::DeepRecursion(int depth, const Mark& mark_, const std::string& msg_)
-    : ParserException(mark_, msg_),
-      m_depth(depth) {
-}
+DeepRecursion::DeepRecursion(int depth, const Mark& mark_,
+                             const std::string& msg_)
+    : ParserException(mark_, msg_), m_depth(depth) {}
 
-} // namespace YAML
+}  // namespace YAML

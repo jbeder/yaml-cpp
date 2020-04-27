@@ -91,4 +91,4 @@ void GraphBuilderAdapter::DispositionNode(void *pNode) {
     m_builder.AppendToSequence(pContainer, pNode);
   }
 }
-}
+}  // namespace YAML

@@ -22,5 +22,5 @@ node& memory::create_node() {
 void memory::merge(const memory& rhs) {
   m_nodes.insert(rhs.m_nodes.begin(), rhs.m_nodes.end());
 }
-}
-}
+}  // namespace detail
+}  // namespace YAML

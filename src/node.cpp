@@ -9,4 +9,4 @@ Node Clone(const Node& node) {
   events.Emit(builder);
   return builder.Root();
 }
-}
+}  // namespace YAML
