@@ -154,7 +154,29 @@ const char *ex2_18 =
     "quoted: \"So does this\n"
     "  quoted scalar.\\n\"";
 
-// TODO: 2.19 - 2.22 schema tags
+const char *ex2_19 =
+    "canonical: 12345\n"
+    "decimal: +12345\n"
+    "octal: 0o14\n"
+    "hexadecimal: 0xC\n";
+
+const char *ex2_20 =
+    "canonical: 1.23015e+3\n"
+    "exponential: 12.3015e+02\n"
+    "fixed: 1230.15\n"
+    "negative infinity: -.inf\n"
+    "not a number: .NaN\n";
+
+const char *ex2_21 =
+    "null:\n"
+    "booleans: [ true, false ]\n"
+    "string: '012345'\n";
+
+const char *ex2_22 =
+    "canonical: 2001-12-15T02:59:43.1Z\n"
+    "iso8601: 2001-12-14t21:59:43.10-05:00\n"
+    "spaced: 2001-12-14 21:59:43.10 -5\n"
+    "date: 2002-12-14\n";
 
 const char *ex2_23 =
     "---\n"

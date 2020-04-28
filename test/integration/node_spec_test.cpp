@@ -237,7 +237,49 @@ TEST(NodeSpecTest, Ex2_18_MultiLineFlowScalars) {
               "So does this quoted scalar.\n");
 }
 
-// TODO: 2.19 - 2.22 schema tags
+TEST(NodeSpecTest, Ex2_19_Integers) {
+  Node doc = Load(ex2_19);
+  EXPECT_EQ(4, doc.size());
+  EXPECT_TRUE(doc["canonical"].as<std::string>() == "12345");
+  EXPECT_TRUE(doc["decimal"].as<std::string>() == "+12345");
+  EXPECT_TRUE(doc["octal"].as<std::string>() == "0o14");
+  EXPECT_TRUE(doc["hexadecimal"].as<std::string>() == "0xC");
+}
+
+
+TEST(NodeSpecTest, Ex2_20_FloatingPoint) {
+  Node doc = Load(ex2_20);
+  EXPECT_EQ(5, doc.size());
+  EXPECT_TRUE(doc["canonical"].as<std::string>() == "1.23015e+3");
+  EXPECT_TRUE(doc["exponential"].as<std::string>() == "12.3015e+02");
+  EXPECT_TRUE(doc["fixed"].as<std::string>() == "1230.15");
+  EXPECT_TRUE(doc["negative infinity"].as<std::string>() == "-.inf");
+  EXPECT_TRUE(doc["not a number"].as<std::string>() == ".NaN");
+}
+
+
+TEST(NodeSpecTest, Ex2_21_Miscellaneous) {
+  Node doc = Load(ex2_21);
+  EXPECT_EQ(3, doc.size());
+  EXPECT_TRUE(doc[Null].IsNull());
+  EXPECT_TRUE(doc["booleans"][0].as<std::string>() == "true");
+  EXPECT_TRUE(doc["booleans"][1].as<std::string>() == "false");
+  EXPECT_TRUE(doc["string"].as<std::string>() == "012345");
+}
+
+
+TEST(NodeSpecTest, Ex2_22_Timestamps) {
+  Node doc = Load(ex2_22);
+  EXPECT_EQ(4, doc.size());
+  EXPECT_TRUE(doc["canonical"].as<std::string>() ==
+              "2001-12-15T02:59:43.1Z");
+  EXPECT_TRUE(doc["iso8601"].as<std::string>() ==
+              "2001-12-14t21:59:43.10-05:00");
+  EXPECT_TRUE(doc["spaced"].as<std::string>() ==
+              "2001-12-14 21:59:43.10 -5");
+  EXPECT_TRUE(doc["date"].as<std::string>() ==
+              "2002-12-14");
+}
 
 TEST(NodeSpecTest, Ex2_23_VariousExplicitTags) {
   Node doc = Load(ex2_23);
