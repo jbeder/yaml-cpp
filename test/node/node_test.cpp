@@ -11,6 +11,38 @@
 
 #include <sstream>
 
+namespace {
+
+// malloc/free based allocator just for testing custom allocators on stl containers
+template <class T>
+class CustomAllocator : public std::allocator<T> {
+  public:
+    typedef std::size_t     size_type;
+    typedef std::ptrdiff_t  difference_type;
+    typedef T*              pointer;
+    typedef const T*        const_pointer;
+    typedef T&              reference;
+    typedef const T&        const_reference;
+    typedef T               value_type;
+    template<class U> struct rebind { typedef CustomAllocator<U> other; };
+    CustomAllocator() : std::allocator<T>() {}
+    CustomAllocator(const CustomAllocator& other) : std::allocator<T>(other) {}
+    template<class U> CustomAllocator(const CustomAllocator<U>& other) : std::allocator<T>(other) {}
+    ~CustomAllocator() {}
+    size_type max_size() const { return (std::numeric_limits<std::ptrdiff_t>::max)()/sizeof(T); }
+    pointer allocate(size_type num, const void* /*hint*/ = 0) {
+      if (num > std::size_t(-1) / sizeof(T)) throw std::bad_alloc();
+      return static_cast<pointer>(malloc(num * sizeof(T)));
+    }
+    void deallocate(pointer p, size_type /*num*/) { free(p); }
+};
+
+template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
+template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
+template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
+
+}  // anonymous namespace
+
 using ::testing::AnyOf;
 using ::testing::Eq;
 
@@ -333,6 +365,20 @@ TEST(NodeTest, StdVector) {
   EXPECT_EQ(primes, node["primes"].as<std::vector<int>>());
 }
 
+TEST(NodeTest, StdVectorWithCustomAllocator) {
+  CustomVector<int> primes;
+  primes.push_back(2);
+  primes.push_back(3);
+  primes.push_back(5);
+  primes.push_back(7);
+  primes.push_back(11);
+  primes.push_back(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<CustomVector<int>>());
+}
+
 TEST(NodeTest, StdList) {
   std::list<int> primes;
   primes.push_back(2);
@@ -347,6 +393,20 @@ TEST(NodeTest, StdList) {
   EXPECT_EQ(primes, node["primes"].as<std::list<int>>());
 }
 
+TEST(NodeTest, StdListWithCustomAllocator) {
+  CustomList<int> primes;
+  primes.push_back(2);
+  primes.push_back(3);
+  primes.push_back(5);
+  primes.push_back(7);
+  primes.push_back(11);
+  primes.push_back(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<CustomList<int>>());
+}
+
 TEST(NodeTest, StdMap) {
   std::map<int, int> squares;
   squares[0] = 0;
@@ -358,6 +418,20 @@ TEST(NodeTest, StdMap) {
   Node node;
   node["squares"] = squares;
   std::map<int, int> actualSquares = node["squares"].as<std::map<int, int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdMapWithCustomAllocator) {
+  CustomMap<int,int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  CustomMap<int,int> actualSquares = node["squares"].as<CustomMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
