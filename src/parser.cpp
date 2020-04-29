@@ -17,9 +17,7 @@ Parser::Parser(std::istream& in) : Parser() { Load(in); }
 
 Parser::~Parser() = default;
 
-Parser::operator bool() const {
-  return m_pScanner && !m_pScanner->empty();
-}
+Parser::operator bool() const { return m_pScanner && !m_pScanner->empty(); }
 
 void Parser::Load(std::istream& in) {
   m_pScanner.reset(new Scanner(in));

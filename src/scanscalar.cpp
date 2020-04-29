@@ -247,4 +247,4 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
   return scalar;
 }
-}
+}  // namespace YAML

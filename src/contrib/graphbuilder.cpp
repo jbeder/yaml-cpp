@@ -14,4 +14,4 @@ void* BuildGraphOfNextDocument(Parser& parser,
     return nullptr;
   }
 }
-}
+}  // namespace YAML
