@@ -30,9 +30,9 @@ Node Load(std::istream& input) {
 }
 
 Node LoadFile(const std::string& filename) {
-  std::ifstream fin(filename.c_str());
+  std::ifstream fin(filename);
   if (!fin) {
-    throw BadFile();
+    throw BadFile(filename);
   }
   return Load(fin);
 }
@@ -63,9 +63,9 @@ std::vector<Node> LoadAll(std::istream& input) {
 }
 
 std::vector<Node> LoadAllFromFile(const std::string& filename) {
-  std::ifstream fin(filename.c_str());
+  std::ifstream fin(filename);
   if (!fin) {
-    throw BadFile();
+    throw BadFile(filename);
   }
   return LoadAll(fin);
 }

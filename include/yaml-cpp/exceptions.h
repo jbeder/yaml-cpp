@@ -136,7 +136,7 @@ inline const std::string INVALID_NODE_WITH_KEY(const std::string& key) {
   stream << "invalid node; first invalid key: \"" << key << "\"";
   return stream.str();
 }
-}
+}  // namespace ErrorMsg
 
 class YAML_CPP_API Exception : public std::runtime_error {
  public:
@@ -249,8 +249,7 @@ class YAML_CPP_API BadSubscript : public RepresentationException {
  public:
   template <typename Key>
   BadSubscript(const Mark& mark_, const Key& key)
-      : RepresentationException(mark_,
-                                ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
+      : RepresentationException(mark_, ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
   BadSubscript(const BadSubscript&) = default;
   ~BadSubscript() YAML_CPP_NOEXCEPT override;
 };
@@ -281,10 +280,12 @@ class YAML_CPP_API EmitterException : public Exception {
 
 class YAML_CPP_API BadFile : public Exception {
  public:
-  BadFile() : Exception(Mark::null_mark(), ErrorMsg::BAD_FILE) {}
+  explicit BadFile(const std::string& filename)
+      : Exception(Mark::null_mark(),
+                  std::string(ErrorMsg::BAD_FILE) + ": " + filename) {}
   BadFile(const BadFile&) = default;
   ~BadFile() YAML_CPP_NOEXCEPT override;
 };
-}
+}  // namespace YAML
 
 #endif  // EXCEPTIONS_H_62B23520_7C8E_11DE_8A39_0800200C9A66
