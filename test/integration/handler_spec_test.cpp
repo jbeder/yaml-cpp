@@ -347,7 +347,72 @@ TEST_F(HandlerSpecTest, Ex2_18_MultiLineFlowScalars) {
   Parse(ex2_18);
 }
 
-// TODO: 2.19 - 2.22 schema tags
+TEST_F(HandlerSpecTest, Ex2_19_Integers) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "canonical"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "12345"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "decimal"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "+12345"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "octal"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0o14"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "hexadecimal"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0xC"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex2_19);
+}
+
+TEST_F(HandlerSpecTest, Ex2_20_FloatingPoint) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "canonical"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "1.23015e+3"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "exponential"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "12.3015e+02"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "fixed"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "1230.15"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "negative infinity"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-.inf"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "not a number"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, ".NaN"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex2_20);
+}
+
+TEST_F(HandlerSpecTest, Ex2_21_Miscellaneous) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "booleans"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "true"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "false"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "string"));
+  EXPECT_CALL(handler, OnScalar(_, "!", 0, "012345"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex2_21);
+}
+
+TEST_F(HandlerSpecTest, Ex2_22_Timestamps) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "canonical"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "2001-12-15T02:59:43.1Z"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "iso8601"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "2001-12-14t21:59:43.10-05:00"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "spaced"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "2001-12-14 21:59:43.10 -5"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "date"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "2002-12-14"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex2_22);
+}
 
 TEST_F(HandlerSpecTest, Ex2_23_VariousExplicitTags) {
   EXPECT_CALL(handler, OnDocumentStart(_));
