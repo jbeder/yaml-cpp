@@ -15,6 +15,7 @@
 #include <sstream>
 #include <type_traits>
 #include <vector>
+#include <typeinfo>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/impl.h"
@@ -133,6 +134,13 @@ inner_encode(const T& rhs, std::stringstream& stream){
       const std::string& input = node.Scalar();                            \
       std::stringstream stream(input);                                     \
       stream.unsetf(std::ios::dec);                                        \
+      if ((stream.peek() == '-') &&                                        \
+         (typeid(rhs) == typeid(unsigned) ||                               \
+         typeid(rhs) == typeid(unsigned short) ||                          \
+         typeid(rhs) == typeid(unsigned long) ||                           \
+         typeid(rhs) == typeid(unsigned long long))) {                     \
+        return false;                                                      \
+      }                                                                    \
       if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) { \
         return true;                                                       \
       }                                                                    \
