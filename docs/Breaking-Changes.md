@@ -4,7 +4,7 @@
 
 ## HEAD ##
 
-_none_
+  * Throws an exception when trying to parse a negative number as an unsigned integer.
 
 ## 0.6.0 ##
 

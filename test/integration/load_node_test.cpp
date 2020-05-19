@@ -32,6 +32,11 @@ TEST(LoadNodeTest, NumericConversion) {
   EXPECT_EQ(-std::numeric_limits<float>::infinity(), node[4].as<float>());
   EXPECT_EQ(21, node[5].as<int>());
   EXPECT_EQ(13, node[6].as<int>());
+  // Throw exception: convert a negative number to an unsigned number.
+  EXPECT_THROW(node[7].as<unsigned>(), TypedBadConversion<unsigned int>);
+  EXPECT_THROW(node[7].as<unsigned short>(), TypedBadConversion<unsigned short>);
+  EXPECT_THROW(node[7].as<unsigned long>(), TypedBadConversion<unsigned long>);
+  EXPECT_THROW(node[7].as<unsigned long long>(), TypedBadConversion<unsigned long long>);
 }
 
 TEST(LoadNodeTest, Binary) {
