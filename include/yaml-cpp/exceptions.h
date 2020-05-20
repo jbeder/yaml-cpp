@@ -8,18 +8,11 @@
 #endif
 
 #include "yaml-cpp/mark.h"
+#include "yaml-cpp/noexcept.h"
 #include "yaml-cpp/traits.h"
 #include <sstream>
 #include <stdexcept>
 #include <string>
-
-// This is here for compatibility with older versions of Visual Studio
-// which don't support noexcept
-#if defined(_MSC_VER) && _MSC_VER < 1900
-    #define YAML_CPP_NOEXCEPT _NOEXCEPT
-#else
-    #define YAML_CPP_NOEXCEPT noexcept
-#endif
 
 namespace YAML {
 // error messages
@@ -143,7 +136,7 @@ inline const std::string INVALID_NODE_WITH_KEY(const std::string& key) {
   stream << "invalid node; first invalid key: \"" << key << "\"";
   return stream.str();
 }
-}
+}  // namespace ErrorMsg
 
 class YAML_CPP_API Exception : public std::runtime_error {
  public:
@@ -255,9 +248,8 @@ class YAML_CPP_API BadDereference : public RepresentationException {
 class YAML_CPP_API BadSubscript : public RepresentationException {
  public:
   template <typename Key>
-  BadSubscript(const Key& key)
-      : RepresentationException(Mark::null_mark(),
-                                ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
+  BadSubscript(const Mark& mark_, const Key& key)
+      : RepresentationException(mark_, ErrorMsg::BAD_SUBSCRIPT_WITH_KEY(key)) {}
   BadSubscript(const BadSubscript&) = default;
   ~BadSubscript() YAML_CPP_NOEXCEPT override;
 };
@@ -288,12 +280,12 @@ class YAML_CPP_API EmitterException : public Exception {
 
 class YAML_CPP_API BadFile : public Exception {
  public:
-  BadFile() : Exception(Mark::null_mark(), ErrorMsg::BAD_FILE) {}
+  explicit BadFile(const std::string& filename)
+      : Exception(Mark::null_mark(),
+                  std::string(ErrorMsg::BAD_FILE) + ": " + filename) {}
   BadFile(const BadFile&) = default;
   ~BadFile() YAML_CPP_NOEXCEPT override;
 };
-}
-
-#undef YAML_CPP_NOEXCEPT
+}  // namespace YAML
 
 #endif  // EXCEPTIONS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

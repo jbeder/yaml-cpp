@@ -97,4 +97,4 @@ std::vector<unsigned char> DecodeBase64(const std::string &input) {
   ret.resize(out - &ret[0]);
   return ret;
 }
-}
+}  // namespace YAML

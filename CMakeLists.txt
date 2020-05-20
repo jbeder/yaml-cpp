@@ -61,7 +61,7 @@ set(msvc-rt-mt-dll $<STREQUAL:${msvc-rt},MultiThreadedDLL>)
 set(backport-msvc-runtime $<VERSION_LESS:${CMAKE_VERSION},3.15>)
 
 add_library(yaml-cpp ${yaml-cpp-type} "")
-add_library(yaml::yaml ALIAS yaml-cpp)
+add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
 
 set_property(TARGET yaml-cpp
   PROPERTY
@@ -108,12 +108,16 @@ target_sources(yaml-cpp
   PRIVATE
     $<$<BOOL:${YAML_CPP_BUILD_CONTRIB}>:${yaml-cpp-contrib-sources}>
     ${yaml-cpp-sources})
+    
+if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
+  set(CMAKE_DEBUG_POSTFIX "d")
+endif()
 
 set_target_properties(yaml-cpp PROPERTIES
   VERSION "${PROJECT_VERSION}"
   SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
   PROJECT_LABEL "yaml-cpp ${yaml-cpp-label-postfix}"
-  DEBUG_POSTFIX d)
+  DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
 configure_package_config_file(
   "${PROJECT_SOURCE_DIR}/yaml-cpp-config.cmake.in"
@@ -156,6 +160,7 @@ endif()
 if (YAML_CPP_CLANG_FORMAT_EXE)
   add_custom_target(format
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
+    COMMAND_EXPAND_LISTS
     COMMENT "Running clang-format"
     VERBATIM)
 endif()

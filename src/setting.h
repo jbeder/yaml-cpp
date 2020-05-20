@@ -7,12 +7,18 @@
 #pragma once
 #endif
 
+#include "yaml-cpp/noexcept.h"
 #include <memory>
 #include <utility>
 #include <vector>
 
 namespace YAML {
-class SettingChangeBase;
+
+class SettingChangeBase {
+ public:
+  virtual ~SettingChangeBase() = default;
+  virtual void pop() = 0;
+};
 
 template <typename T>
 class Setting {
@@ -26,12 +32,6 @@ class Setting {
 
  private:
   T m_value;
-};
-
-class SettingChangeBase {
- public:
-  virtual ~SettingChangeBase() = default;
-  virtual void pop() = 0;
 };
 
 template <typename T>
@@ -64,16 +64,25 @@ class SettingChanges {
  public:
   SettingChanges() : m_settingChanges{} {}
   SettingChanges(const SettingChanges&) = delete;
-  SettingChanges(SettingChanges&&) = default;
+  SettingChanges(SettingChanges&&) YAML_CPP_NOEXCEPT = default;
   SettingChanges& operator=(const SettingChanges&) = delete;
+  SettingChanges& operator=(SettingChanges&& rhs) YAML_CPP_NOEXCEPT {
+    if (this == &rhs)
+      return *this;
+
+    clear();
+    std::swap(m_settingChanges, rhs.m_settingChanges);
+
+    return *this;
+  }
   ~SettingChanges() { clear(); }
 
-  void clear() {
+  void clear() YAML_CPP_NOEXCEPT {
     restore();
     m_settingChanges.clear();
   }
 
-  void restore() {
+  void restore() YAML_CPP_NOEXCEPT {
     for (setting_changes::const_iterator it = m_settingChanges.begin();
          it != m_settingChanges.end(); ++it)
       (*it)->pop();
@@ -83,19 +92,8 @@ class SettingChanges {
     m_settingChanges.push_back(std::move(pSettingChange));
   }
 
-  // like std::unique_ptr - assignment is transfer of ownership
-  SettingChanges& operator=(SettingChanges&& rhs) {
-    if (this == &rhs)
-      return *this;
-
-    clear();
-    std::swap(m_settingChanges, rhs.m_settingChanges);
-
-    return *this;
-  }
-
  private:
-  using setting_changes = std::vector<std::unique_ptr<SettingChangeBase> >;
+  using setting_changes = std::vector<std::unique_ptr<SettingChangeBase>>;
   setting_changes m_settingChanges;
 };
 }  // namespace YAML

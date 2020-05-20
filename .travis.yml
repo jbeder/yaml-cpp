@@ -1,21 +1,16 @@
 language: c++
-os:
-  - linux
-  - osx
-compiler:
-  - clang
-  - gcc
-before_install:
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y \
-      && sudo apt-get update -qq \
-      && if [ "$CXX" == "g++" ]; then
-        sudo apt-get install -qq g++-4.7 && export CXX="g++-4.7" CC="gcc-4.7"
-      fi
-    fi
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+    - os: osx
+      compiler: clang
+    - os: osx
+      compiler: gcc
 env:
   - CTEST_OUTPUT_ON_FAILURE=1
+
 before_script:
   - mkdir build
   - cd build
@@ -24,7 +19,19 @@ before_script:
 script:
   - cmake --build build
   - cmake --build build --target test
-matrix:
-  exclude:
-  - os: linux
-    compiler: clang
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.9
+    packages:
+    - g++-4.9
+    - clang-3.9
+    update: true
+  homebrew:
+    packages:
+    - ccache
+    - gcc@4.9
+    - llvm@4
+    update: true

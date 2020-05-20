@@ -9,6 +9,40 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include <sstream>
+
+namespace {
+
+// malloc/free based allocator just for testing custom allocators on stl containers
+template <class T>
+class CustomAllocator : public std::allocator<T> {
+  public:
+    typedef std::size_t     size_type;
+    typedef std::ptrdiff_t  difference_type;
+    typedef T*              pointer;
+    typedef const T*        const_pointer;
+    typedef T&              reference;
+    typedef const T&        const_reference;
+    typedef T               value_type;
+    template<class U> struct rebind { typedef CustomAllocator<U> other; };
+    CustomAllocator() : std::allocator<T>() {}
+    CustomAllocator(const CustomAllocator& other) : std::allocator<T>(other) {}
+    template<class U> CustomAllocator(const CustomAllocator<U>& other) : std::allocator<T>(other) {}
+    ~CustomAllocator() {}
+    size_type max_size() const { return (std::numeric_limits<std::ptrdiff_t>::max)()/sizeof(T); }
+    pointer allocate(size_type num, const void* /*hint*/ = 0) {
+      if (num > std::size_t(-1) / sizeof(T)) throw std::bad_alloc();
+      return static_cast<pointer>(malloc(num * sizeof(T)));
+    }
+    void deallocate(pointer p, size_type /*num*/) { free(p); }
+};
+
+template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
+template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
+template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
+
+}  // anonymous namespace
+
 using ::testing::AnyOf;
 using ::testing::Eq;
 
@@ -59,6 +93,44 @@ TEST(NodeTest, SequenceElementRemoval) {
   EXPECT_EQ("c", node[1].as<std::string>());
 }
 
+TEST(NodeTest, SequenceElementRemovalSizeCheck) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_EQ(3, node.size());
+  node.remove(1);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
+}
+
+TEST(NodeTest, SequenceFirstElementRemoval) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  node.remove(0);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("b", node[0].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
+}
+
+TEST(NodeTest, SequenceFirstElementRemovalSizeCheck) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_EQ(3, node.size());
+  node.remove(0);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("b", node[0].as<std::string>());
+  EXPECT_EQ("c", node[1].as<std::string>());
+}
+
 TEST(NodeTest, SequenceLastElementRemoval) {
   Node node;
   node[0] = "a";
@@ -69,6 +141,46 @@ TEST(NodeTest, SequenceLastElementRemoval) {
   EXPECT_EQ(2, node.size());
   EXPECT_EQ("a", node[0].as<std::string>());
   EXPECT_EQ("b", node[1].as<std::string>());
+}
+
+TEST(NodeTest, SequenceLastElementRemovalSizeCheck) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_EQ(3, node.size());
+  node.remove(2);
+  EXPECT_TRUE(node.IsSequence());
+  EXPECT_EQ(2, node.size());
+  EXPECT_EQ("a", node[0].as<std::string>());
+  EXPECT_EQ("b", node[1].as<std::string>());
+}
+
+TEST(NodeTest, NodeAssignment) {
+  Node node1;
+  Node node2;
+  node1[1] = 1;
+  node1[2] = 2;
+  node1[3] = 3;
+  node2 = node1;
+  EXPECT_EQ(node1, node2);
+  EXPECT_EQ(node1[1], node2[1]);
+  EXPECT_EQ(node1[2], node2[2]);
+  EXPECT_EQ(node1[3], node2[3]);
+}
+
+TEST(NodeTest, EqualRepresentationAfterMoveAssignment) {
+  Node node1;
+  Node node2;
+  std::ostringstream ss1, ss2;
+  node1["foo"] = "bar";
+  ss1 << node1;
+  node2["hello"] = "world";
+  node2 = std::move(node1);
+  ss2 << node2;
+  EXPECT_FALSE(node2["hello"]);
+  EXPECT_EQ("bar", node2["foo"].as<std::string>());
+  EXPECT_EQ(ss1.str(), ss2.str());
 }
 
 TEST(NodeTest, MapElementRemoval) {
@@ -253,6 +365,20 @@ TEST(NodeTest, StdVector) {
   EXPECT_EQ(primes, node["primes"].as<std::vector<int>>());
 }
 
+TEST(NodeTest, StdVectorWithCustomAllocator) {
+  CustomVector<int> primes;
+  primes.push_back(2);
+  primes.push_back(3);
+  primes.push_back(5);
+  primes.push_back(7);
+  primes.push_back(11);
+  primes.push_back(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<CustomVector<int>>());
+}
+
 TEST(NodeTest, StdList) {
   std::list<int> primes;
   primes.push_back(2);
@@ -267,6 +393,20 @@ TEST(NodeTest, StdList) {
   EXPECT_EQ(primes, node["primes"].as<std::list<int>>());
 }
 
+TEST(NodeTest, StdListWithCustomAllocator) {
+  CustomList<int> primes;
+  primes.push_back(2);
+  primes.push_back(3);
+  primes.push_back(5);
+  primes.push_back(7);
+  primes.push_back(11);
+  primes.push_back(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<CustomList<int>>());
+}
+
 TEST(NodeTest, StdMap) {
   std::map<int, int> squares;
   squares[0] = 0;
@@ -278,6 +418,20 @@ TEST(NodeTest, StdMap) {
   Node node;
   node["squares"] = squares;
   std::map<int, int> actualSquares = node["squares"].as<std::map<int, int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdMapWithCustomAllocator) {
+  CustomMap<int,int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  CustomMap<int,int> actualSquares = node["squares"].as<CustomMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
@@ -397,10 +551,64 @@ TEST(NodeTest, FloatingPrecisionFloat) {
   EXPECT_EQ(x, node.as<float>());
 }
 
+TEST(NodeTest, FloatingPrecisionPositiveInfinityFloat) {
+  if (!std::numeric_limits<float>::has_infinity) {
+    return;
+  }
+  const float x = std::numeric_limits<float>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionNegativeInfinityFloat) {
+  if (!std::numeric_limits<float>::has_infinity) {
+    return;
+  }
+  const float x = -std::numeric_limits<float>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionNanFloat) {
+  if (!std::numeric_limits<float>::has_quiet_NaN) {
+    return;
+  }
+  const float x = std::numeric_limits<float>::quiet_NaN();
+  Node node = Node(x);
+  EXPECT_TRUE(std::isnan(node.as<float>()));
+}
+
 TEST(NodeTest, FloatingPrecisionDouble) {
   const double x = 0.123456789;
   Node node = Node(x);
   EXPECT_EQ(x, node.as<double>());
+}
+
+TEST(NodeTest, FloatingPrecisionPositiveInfinityDouble) {
+  if (!std::numeric_limits<double>::has_infinity) {
+    return;
+  }
+  const double x = std::numeric_limits<double>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<float>());
+}
+
+TEST(NodeTest, FloatingPrecisionNegativeInfinityDouble) {
+  if (!std::numeric_limits<double>::has_infinity) {
+    return;
+  }
+  const double x = -std::numeric_limits<double>::infinity();
+  Node node = Node(x);
+  EXPECT_EQ(x, node.as<double>());
+}
+
+TEST(NodeTest, FloatingPrecisionNanDouble) {
+  if (!std::numeric_limits<double>::has_quiet_NaN) {
+    return;
+  }
+  const double x = std::numeric_limits<double>::quiet_NaN();
+  Node node = Node(x);
+  EXPECT_TRUE(std::isnan(node.as<double>()));
 }
 
 TEST(NodeTest, SpaceChar) {
