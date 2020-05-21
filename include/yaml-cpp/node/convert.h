@@ -7,15 +7,16 @@
 #pragma once
 #endif
 
+#include <algorithm>
 #include <array>
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <list>
 #include <map>
 #include <sstream>
 #include <type_traits>
 #include <vector>
-#include <type_traits>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/impl.h"
@@ -114,6 +115,44 @@ typename std::enable_if<!std::is_floating_point<T>::value, void>::type
 inner_encode(const T& rhs, std::stringstream& stream){
   stream << rhs;
 }
+
+template <typename T>
+typename std::enable_if<std::is_same<T, unsigned char>::value, bool>::type
+ConvertStreamTo(std::stringstream& stream, T& rhs) {
+  uint16_t num;
+  if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
+    rhs = std::min(num, (uint16_t)UINT8_MAX);
+    return true;
+  }
+  return false;
+}
+
+template <typename T>
+typename std::enable_if<std::is_same<T, signed char>::value, bool>::type
+ConvertStreamTo(std::stringstream& stream, T& rhs) {
+  int16_t num;
+  if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
+    if (num > INT8_MAX) {
+      rhs = INT8_MAX;
+    } else if (num < INT8_MIN) {
+      rhs = INT8_MIN;
+    } else {
+      rhs = num;
+    }
+    return true;
+  }
+  return false;
+}
+
+template <typename T>
+typename std::enable_if<!(std::is_same<T,unsigned char>::value ||
+                          std::is_same<T, signed char>::value), bool>::type
+ConvertStreamTo(std::stringstream& stream, T& rhs) {
+  if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) {
+    return true;
+  }
+  return false;
+}
 }
 
 #define YAML_DEFINE_CONVERT_STREAMABLE(type, negative_op)                  \
@@ -137,7 +176,7 @@ inner_encode(const T& rhs, std::stringstream& stream){
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
         return false;                                                      \
       }                                                                    \
-      if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) { \
+      if (conversion::ConvertStreamTo(stream, rhs)) {                      \
         return true;                                                       \
       }                                                                    \
       if (std::numeric_limits<type>::has_infinity) {                       \
