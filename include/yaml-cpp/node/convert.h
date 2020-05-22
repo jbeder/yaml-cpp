@@ -130,7 +130,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
 }
 
 template <typename T>
-typename std::enable_if<!(std::is_same<T,unsigned char>::value ||
+typename std::enable_if<!(std::is_same<T, unsigned char>::value ||
                           std::is_same<T, signed char>::value), bool>::type
 ConvertStreamTo(std::stringstream& stream, T& rhs) {
   if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) {
