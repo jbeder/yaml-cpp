@@ -7,10 +7,8 @@
 #pragma once
 #endif
 
-#include <algorithm>
 #include <array>
 #include <cmath>
-#include <cstdint>
 #include <limits>
 #include <list>
 #include <map>
@@ -117,29 +115,16 @@ inner_encode(const T& rhs, std::stringstream& stream){
 }
 
 template <typename T>
-typename std::enable_if<std::is_same<T, unsigned char>::value, bool>::type
+typename std::enable_if<(std::is_same<T, unsigned char>::value ||
+                         std::is_same<T, signed char>::value), bool>::type
 ConvertStreamTo(std::stringstream& stream, T& rhs) {
-  uint16_t num;
+  int num;
   if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
-    rhs = std::min(num, (uint16_t)UINT8_MAX);
-    return true;
-  }
-  return false;
-}
-
-template <typename T>
-typename std::enable_if<std::is_same<T, signed char>::value, bool>::type
-ConvertStreamTo(std::stringstream& stream, T& rhs) {
-  int16_t num;
-  if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
-    if (num > INT8_MAX) {
-      rhs = INT8_MAX;
-    } else if (num < INT8_MIN) {
-      rhs = INT8_MIN;
-    } else {
+    if (num >= std::numeric_limits<T>::min() &&
+        num <= std::numeric_limits<T>::max()) {
       rhs = num;
+      return true;
     }
-    return true;
   }
   return false;
 }
