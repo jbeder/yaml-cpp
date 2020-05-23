@@ -1127,5 +1127,10 @@ TEST(NodeSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_EQ(1, doc["mapping"].size());
   EXPECT_EQ("bar", doc["mapping"]["foo"].as<std::string>());
 }
+
+TEST(NodeSpecTest, FlowMapNotClosed) {
+  EXPECT_THROW_PARSER_EXCEPTION(Load("{x:"), ErrorMsg::UNKNOWN_TOKEN);
+}
+
 }
 }
