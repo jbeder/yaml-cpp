@@ -34,10 +34,11 @@ endif()
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
 set(build-windows-dll $<AND:$<BOOL:${CMAKE_HOST_WIN32}>,${build-shared}>)
 set(not-msvc $<NOT:$<CXX_COMPILER_ID:MSVC>>)
+set(msvc-shared_rt $<BOOL:${YAML_MSVC_SHARED_RT}>)
 
 if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
   set(CMAKE_MSVC_RUNTIME_LIBRARY
-    MultiThreaded$<$<CONFIG:Debug>:Debug>$<${build-shared}:DLL>)
+    MultiThreaded$<$<CONFIG:Debug>:Debug>$<${msvc-shared_rt}:DLL>)
 endif()
 
 set(contrib-pattern "src/contrib/*.cpp")
@@ -108,7 +109,7 @@ target_sources(yaml-cpp
   PRIVATE
     $<$<BOOL:${YAML_CPP_BUILD_CONTRIB}>:${yaml-cpp-contrib-sources}>
     ${yaml-cpp-sources})
-    
+
 if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX "d")
 endif()
