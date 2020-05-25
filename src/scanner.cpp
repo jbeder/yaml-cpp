@@ -88,7 +88,7 @@ void Scanner::ScanNextToken() {
     return StartStream();
   }
 
-  // get rid of whitespace, etc. (in between tokens it should be irrelevent)
+  // get rid of whitespace, etc. (in between tokens it should be irrelevant)
   ScanToNextToken();
 
   // maybe need to end some blocks
