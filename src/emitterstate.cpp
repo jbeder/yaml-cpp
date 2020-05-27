@@ -211,11 +211,15 @@ bool EmitterState::CurGroupLongKey() const {
 }
 
 std::size_t EmitterState::LastIndent() const {
-  if (m_groups.size() <= 1) {
-    return 0;
-  }
+  if (HasBegunNode()) {
+    return m_curIndent + (m_groups.empty() ? m_indent.get() : m_groups.back()->indent);
+  } else {
+    if (m_groups.size() <= 1) {
+      return 0;
+    }
 
-  return m_curIndent - m_groups[m_groups.size() - 2]->indent;
+    return m_curIndent - m_groups[m_groups.size() - 2]->indent;
+  }
 }
 
 void EmitterState::ClearModifiedSettings() { m_modifiedSettings.clear(); }

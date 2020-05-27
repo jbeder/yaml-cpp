@@ -269,9 +269,15 @@ inline Emitter& operator<<(Emitter& emitter, EMITTER_MANIP value) {
 inline Emitter& operator<<(Emitter& emitter, _Indent indent) {
   return emitter.SetLocalIndent(indent);
 }
-
 inline Emitter& operator<<(Emitter& emitter, _Precision precision) {
   return emitter.SetLocalPrecision(precision);
+}
+
+inline Emitter& operator<<(Emitter& emitter, std::nullptr_t) {
+  return emitter << _Null{};
+}
+inline Emitter& operator<<(Emitter& emitter, const void* v) {
+  return emitter.WriteIntegralType(v);
 }
 }  // namespace YAML
 

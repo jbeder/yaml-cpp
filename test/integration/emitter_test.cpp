@@ -566,7 +566,7 @@ TEST_F(EmitterTest, InitialCommentWithDocIndicator) {
 TEST_F(EmitterTest, CommentInFlowSeq) {
   out << Flow << BeginSeq << "foo" << Comment("foo!") << "bar" << EndSeq;
 
-  ExpectEmit("[foo,  # foo!\nbar]");
+  ExpectEmit("[foo,  # foo!\n  bar]");
 }
 
 TEST_F(EmitterTest, CommentInFlowMap) {
@@ -577,7 +577,7 @@ TEST_F(EmitterTest, CommentInFlowMap) {
   out << EndMap;
 
   ExpectEmit(
-      "{foo: foo value, bar: bar value,  # bar!\nbaz: baz value,  # baz!\n}");
+      "{foo: foo value, bar: bar value,  # bar!\n  baz: baz value,  # baz!\n}");
 }
 
 TEST_F(EmitterTest, Indentation) {
@@ -743,7 +743,7 @@ TEST_F(EmitterTest, NewlineInFlowSequence) {
   out << "a" << Newline << "b"
       << "c" << Newline << "d";
   out << EndSeq;
-  ExpectEmit("[a,\nb, c,\nd]");
+  ExpectEmit("[a,\n  b, c,\n  d]");
 }
 
 TEST_F(EmitterTest, NewlineInBlockMap) {
@@ -760,7 +760,7 @@ TEST_F(EmitterTest, NewlineInFlowMap) {
   out << Key << "a" << Value << "foo" << Newline;
   out << Key << "b" << Value << "bar";
   out << EndMap;
-  ExpectEmit("{a: foo,\nb: bar}");
+  ExpectEmit("{a: foo,\n  b: bar}");
 }
 
 TEST_F(EmitterTest, LotsOfNewlines) {
@@ -971,28 +971,28 @@ TEST_F(EmitterTest, QuoteNull) {
 }
 
 TEST_F(EmitterTest, ValueOfDoubleQuote) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value << '"';
-  out << YAML::EndMap;
+  out << BeginMap;
+  out << Key << "foo" << Value << '"';
+  out << EndMap;
 
   ExpectEmit("foo: \"\\\"\"");
 }
 
 TEST_F(EmitterTest, ValueOfBackslash) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value << '\\';
-  out << YAML::EndMap;
+  out << BeginMap;
+  out << Key << "foo" << Value << '\\';
+  out << EndMap;
 
   ExpectEmit("foo: \"\\\\\"");
 }
 
 TEST_F(EmitterTest, Infinity) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value
+  out << BeginMap;
+  out << Key << "foo" << Value
       << std::numeric_limits<float>::infinity();
-  out << YAML::Key << "bar" << YAML::Value
+  out << Key << "bar" << Value
       << std::numeric_limits<double>::infinity();
-  out << YAML::EndMap;
+  out << EndMap;
 
   ExpectEmit(
 	  "foo: .inf\n"
@@ -1000,12 +1000,12 @@ TEST_F(EmitterTest, Infinity) {
 }
 
 TEST_F(EmitterTest, NegInfinity) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value
+  out << BeginMap;
+  out << Key << "foo" << Value
       << -std::numeric_limits<float>::infinity();
-  out << YAML::Key << "bar" << YAML::Value
+  out << Key << "bar" << Value
       << -std::numeric_limits<double>::infinity();
-  out << YAML::EndMap;
+  out << EndMap;
 
   ExpectEmit(
 	  "foo: -.inf\n"
@@ -1013,12 +1013,12 @@ TEST_F(EmitterTest, NegInfinity) {
 }
 
 TEST_F(EmitterTest, NaN) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value
+  out << BeginMap;
+  out << Key << "foo" << Value
       << std::numeric_limits<float>::quiet_NaN();
-  out << YAML::Key << "bar" << YAML::Value
+  out << Key << "bar" << Value
       << std::numeric_limits<double>::quiet_NaN();
-  out << YAML::EndMap;
+  out << EndMap;
 
   ExpectEmit(
 	  "foo: .nan\n"
