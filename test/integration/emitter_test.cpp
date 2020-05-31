@@ -52,6 +52,63 @@ TEST_F(EmitterTest, SimpleQuotedScalar) {
   ExpectEmit("test");
 }
 
+TEST_F(EmitterTest, DumpAndSize) {
+  Node n(Load("test"));
+  EXPECT_EQ("test", Dump(n));
+  out << n;
+  EXPECT_EQ(4, out.size());
+}
+
+TEST_F(EmitterTest, NullScalar) {
+  Node n(Load("null"));
+  out << n;
+  ExpectEmit("~");
+}
+
+TEST_F(EmitterTest, AliasScalar) {
+  Node n(Load("[&a str, *a]"));
+  out << n;
+  ExpectEmit("[&1 str, *1]");
+}
+
+TEST_F(EmitterTest, StringFormat) {
+  out << BeginSeq;
+  out.SetStringFormat(SingleQuoted);
+  out << "string";
+  out.SetStringFormat(DoubleQuoted);
+  out << "string";
+  out.SetStringFormat(Literal);
+  out << "string";
+  out << EndSeq;
+
+  ExpectEmit("- 'string'\n- \"string\"\n- |\n  string");
+}
+
+TEST_F(EmitterTest, IntBase) {
+  out << BeginSeq;
+  out.SetIntBase(Dec);
+  out << 1024;
+  out.SetIntBase(Hex);
+  out << 1024;
+  out.SetIntBase(Oct);
+  out << 1024;
+  out << EndSeq;
+
+  ExpectEmit("- 1024\n- 0x400\n- 02000");
+}
+
+TEST_F(EmitterTest, NumberPrecision) {
+  out.SetFloatPrecision(3);
+  out.SetDoublePrecision(2);
+  out << BeginSeq;
+  out << 3.1425926f;
+  out << 53.5893;
+  out << 2384626.4338;
+  out << EndSeq;
+
+  ExpectEmit("- 3.14\n- 54\n- 2.4e+06");
+}
+
 TEST_F(EmitterTest, SimpleSeq) {
   out << BeginSeq;
   out << "eggs";
@@ -429,6 +486,12 @@ TEST_F(EmitterTest, ByKindTagWithScalar) {
   ExpectEmit("- \"12\"\n- 12\n- ! 12");
 }
 
+TEST_F(EmitterTest, LocalTagInNameHandle) {
+  out << LocalTag("a", "foo") << "bar";
+
+  ExpectEmit("!a!foo bar");
+}
+
 TEST_F(EmitterTest, LocalTagWithScalar) {
   out << LocalTag("foo") << "bar";
 
@@ -514,6 +577,17 @@ TEST_F(EmitterTest, STLContainers) {
   out << EndSeq;
 
   ExpectEmit("- [2, 3, 5, 7, 11, 13]\n- Daniel: 26\n  Jesse: 24");
+}
+
+TEST_F(EmitterTest, CommentStyle) {
+  out.SetPreCommentIndent(1);
+  out.SetPostCommentIndent(2);
+  out << BeginMap;
+  out << Key << "method";
+  out << Value << "least squares" << Comment("should we change this method?");
+  out << EndMap;
+
+  ExpectEmit("method: least squares #  should we change this method?");
 }
 
 TEST_F(EmitterTest, SimpleComment) {
@@ -644,6 +718,17 @@ TEST_F(EmitterTest, Null) {
   ExpectEmit("- ~\n- null value: ~\n  ~: null key");
 }
 
+TEST_F(EmitterTest, OutputCharset) {
+  out << BeginSeq;
+  out.SetOutputCharset(EmitNonAscii);
+  out << "\x24 \xC2\xA2 \xE2\x82\xAC";
+  out.SetOutputCharset(EscapeNonAscii);
+  out << "\x24 \xC2\xA2 \xE2\x82\xAC";
+  out << EndSeq;
+
+  ExpectEmit("- $ ¢ €\n- \"$ \\xa2 \\u20ac\"");
+}
+
 TEST_F(EmitterTest, EscapedUnicode) {
   out << EscapeNonAscii << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
 
@@ -658,6 +743,11 @@ TEST_F(EmitterTest, Unicode) {
 TEST_F(EmitterTest, DoubleQuotedUnicode) {
   out << DoubleQuoted << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
   ExpectEmit("\"\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2\"");
+}
+
+TEST_F(EmitterTest, DoubleQuotedString) {
+  out << DoubleQuoted << "\" \\ \n \t \r \b \x15 \xEF\xBB\xBF \x24";
+  ExpectEmit("\"\\\" \\\\ \\n \\t \\r \\b \\x15 \\ufeff $\"");
 }
 
 struct Foo {
@@ -824,6 +914,57 @@ TEST_F(EmitterTest, ColonAsScalar) {
 TEST_F(EmitterTest, ColonAtEndOfScalarInFlow) {
   out << Flow << BeginMap << Key << "C:" << Value << "C:" << EndMap;
   ExpectEmit("{\"C:\": \"C:\"}");
+}
+
+TEST_F(EmitterTest, GlobalBoolFormatting) {
+  out << BeginSeq;
+  out.SetBoolFormat(UpperCase);
+  out.SetBoolFormat(YesNoBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(TrueFalseBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(OnOffBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(LowerCase);
+  out.SetBoolFormat(YesNoBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(TrueFalseBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(OnOffBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(CamelCase);
+  out.SetBoolFormat(YesNoBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(TrueFalseBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(OnOffBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(ShortBool);
+  out.SetBoolFormat(UpperCase);
+  out.SetBoolFormat(YesNoBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(TrueFalseBool);
+  out << true;
+  out << false;
+  out.SetBoolFormat(OnOffBool);
+  out << true;
+  out << false;
+  out << EndSeq;
+  ExpectEmit(
+      "- YES\n- NO\n- TRUE\n- FALSE\n- ON\n- OFF\n"
+      "- yes\n- no\n- true\n- false\n- on\n- off\n"
+      "- Yes\n- No\n- True\n- False\n- On\n- Off\n"
+      "- Y\n- N\n- Y\n- N\n- Y\n- N");
 }
 
 TEST_F(EmitterTest, BoolFormatting) {
