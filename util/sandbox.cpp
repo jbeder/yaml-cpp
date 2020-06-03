@@ -9,7 +9,7 @@ class NullEventHandler : public YAML::EventHandler {
   typedef YAML::Mark Mark;
   typedef YAML::anchor_t anchor_t;
 
-  NullEventHandler() {}
+  NullEventHandler() = default;
 
   virtual void OnDocumentStart(const Mark&) {}
   virtual void OnDocumentEnd() {}
