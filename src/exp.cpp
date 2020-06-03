@@ -103,7 +103,7 @@ std::string Escape(Stream& in) {
     case 'e':
       return "\x1B";
     case ' ':
-      return "\x20";
+      return R"( )";
     case '\"':
       return "\"";
     case '\'':
