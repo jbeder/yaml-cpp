@@ -109,9 +109,9 @@ void node_data::compute_seq_size() const {
 }
 
 void node_data::compute_map_size() const {
-  kv_pairs::iterator it = m_undefinedPairs.begin();
+  auto it = m_undefinedPairs.begin();
   while (it != m_undefinedPairs.end()) {
-    kv_pairs::iterator jt = std::next(it);
+    auto jt = std::next(it);
     if (it->first->is_defined() && it->second->is_defined())
       m_undefinedPairs.erase(it);
     it = jt;
@@ -209,7 +209,7 @@ node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
     return nullptr;
   }
 
-  for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
+  for (auto it = m_map.begin(); it != m_map.end(); ++it) {
     if (it->first->is(key))
       return it->second;
   }
@@ -244,15 +244,14 @@ bool node_data::remove(node& key, shared_memory_holder /* pMemory */) {
   if (m_type != NodeType::Map)
     return false;
 
-  for (kv_pairs::iterator it = m_undefinedPairs.begin();
-       it != m_undefinedPairs.end();) {
-    kv_pairs::iterator jt = std::next(it);
+  for (auto it = m_undefinedPairs.begin(); it != m_undefinedPairs.end();) {
+    auto jt = std::next(it);
     if (it->first->is(key))
       m_undefinedPairs.erase(it);
     it = jt;
   }
 
-  for (node_map::iterator it = m_map.begin(); it != m_map.end(); ++it) {
+  for (auto it = m_map.begin(); it != m_map.end(); ++it) {
     if (it->first->is(key)) {
       m_map.erase(it);
       return true;

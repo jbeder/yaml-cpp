@@ -151,7 +151,7 @@ inline UtfIntroCharType IntroCharTypeOf(std::istream::int_type ch) {
 
 inline char Utf8Adjust(unsigned long ch, unsigned char lead_bits,
                        unsigned char rshift) {
-  const unsigned char header =
+  const auto header =
       static_cast<unsigned char>(((1 << lead_bits) - 1) << (8 - lead_bits));
   const unsigned char mask = (0xFF >> (lead_bits + 1));
   return static_cast<char>(
