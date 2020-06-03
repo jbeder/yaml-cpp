@@ -10,8 +10,7 @@ void* BuildGraphOfNextDocument(Parser& parser,
   GraphBuilderAdapter eventHandler(graphBuilder);
   if (parser.HandleNextDocument(eventHandler)) {
     return eventHandler.RootNode();
-  } else {
-    return nullptr;
   }
+  return nullptr;
 }
 }  // namespace YAML

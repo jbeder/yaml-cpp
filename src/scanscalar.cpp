@@ -47,7 +47,8 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
       if (INPUT.column() == 0 && Exp::DocIndicator().Matches(INPUT)) {
         if (params.onDocIndicator == BREAK) {
           break;
-        } else if (params.onDocIndicator == THROW) {
+        }
+        if (params.onDocIndicator == THROW) {
           throw ParserException(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
         }
       }

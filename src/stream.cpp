@@ -350,7 +350,9 @@ void Stream::StreamInUtf16() const {
     // Trailing (low) surrogate...ugh, wrong order
     QueueUnicodeCodepoint(m_readahead, CP_REPLACEMENT_CHARACTER);
     return;
-  } else if (ch >= 0xD800 && ch < 0xDC00) {
+  }
+
+  if (ch >= 0xD800 && ch < 0xDC00) {
     // ch is a leading (high) surrogate
 
     // Four byte UTF-8 code point
@@ -375,11 +377,10 @@ void Stream::StreamInUtf16() const {
           // Easiest case: queue the codepoint and return
           QueueUnicodeCodepoint(m_readahead, ch);
           return;
-        } else {
-          // Start the loop over with the new high surrogate
-          ch = chLow;
-          continue;
         }
+        // Start the loop over with the new high surrogate
+        ch = chLow;
+        continue;
       }
 
       // Select the payload bits from the high surrogate
