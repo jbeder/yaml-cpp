@@ -209,9 +209,9 @@ node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
     return nullptr;
   }
 
-  for (auto it = m_map.begin(); it != m_map.end(); ++it) {
-    if (it->first->is(key))
-      return it->second;
+  for (const auto& it : m_map) {
+    if (it.first->is(key))
+      return it.second;
   }
 
   return nullptr;
@@ -230,9 +230,9 @@ node& node_data::get(node& key, shared_memory_holder pMemory) {
       throw BadSubscript(m_mark, key);
   }
 
-  for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
-    if (it->first->is(key))
-      return *it->second;
+  for (const auto& it : m_map) {
+    if (it.first->is(key))
+      return *it.second;
   }
 
   node& value = pMemory->create_node();
