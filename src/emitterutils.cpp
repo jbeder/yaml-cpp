@@ -373,15 +373,15 @@ bool WriteChar(ostream_wrapper& out, char ch) {
   if (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
     out << ch;
   } else if (ch == '\"') {
-    out << "\"\\\"\"";
+    out << R"("\"")";
   } else if (ch == '\t') {
-    out << "\"\\t\"";
+    out << R"("\t")";
   } else if (ch == '\n') {
-    out << "\"\\n\"";
+    out << R"("\n")";
   } else if (ch == '\b') {
-    out << "\"\\b\"";
+    out << R"("\b")";
   } else if (ch == '\\') {
-    out << "\"\\\\\"";
+    out << R"("\\")";
   } else if (0x20 <= ch && ch <= 0x7e) {
     out << "\"" << ch << "\"";
   } else {
