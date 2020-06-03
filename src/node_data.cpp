@@ -120,7 +120,7 @@ void node_data::compute_map_size() const {
 
 const_node_iterator node_data::begin() const {
   if (!m_isDefined)
-    return const_node_iterator();
+    return {};
 
   switch (m_type) {
     case NodeType::Sequence:
@@ -128,13 +128,13 @@ const_node_iterator node_data::begin() const {
     case NodeType::Map:
       return const_node_iterator(m_map.begin(), m_map.end());
     default:
-      return const_node_iterator();
+      return {};
   }
 }
 
 node_iterator node_data::begin() {
   if (!m_isDefined)
-    return node_iterator();
+    return {};
 
   switch (m_type) {
     case NodeType::Sequence:
@@ -142,13 +142,13 @@ node_iterator node_data::begin() {
     case NodeType::Map:
       return node_iterator(m_map.begin(), m_map.end());
     default:
-      return node_iterator();
+      return {};
   }
 }
 
 const_node_iterator node_data::end() const {
   if (!m_isDefined)
-    return const_node_iterator();
+    return {};
 
   switch (m_type) {
     case NodeType::Sequence:
@@ -156,13 +156,13 @@ const_node_iterator node_data::end() const {
     case NodeType::Map:
       return const_node_iterator(m_map.end(), m_map.end());
     default:
-      return const_node_iterator();
+      return {};
   }
 }
 
 node_iterator node_data::end() {
   if (!m_isDefined)
-    return node_iterator();
+    return {};
 
   switch (m_type) {
     case NodeType::Sequence:
@@ -170,7 +170,7 @@ node_iterator node_data::end() {
     case NodeType::Map:
       return node_iterator(m_map.end(), m_map.end());
     default:
-      return node_iterator();
+      return {};
   }
 }
 
