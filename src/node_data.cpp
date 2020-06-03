@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <iterator>
 #include <sstream>
@@ -209,12 +210,10 @@ node* node_data::get(node& key, shared_memory_holder /* pMemory */) const {
     return nullptr;
   }
 
-  for (const auto& it : m_map) {
-    if (it.first->is(key))
-      return it.second;
-  }
-
-  return nullptr;
+  auto it = std::find_if(
+      m_map.begin(), m_map.end(),
+      [&](const std::pair<node*, node*> node) { return node.first->is(key); });
+  return it != m_map.end() ? it->second : nullptr;
 }
 
 node& node_data::get(node& key, shared_memory_holder pMemory) {
@@ -230,9 +229,11 @@ node& node_data::get(node& key, shared_memory_holder pMemory) {
       throw BadSubscript(m_mark, key);
   }
 
-  for (const auto& it : m_map) {
-    if (it.first->is(key))
-      return *it.second;
+  auto it = std::find_if(
+      m_map.begin(), m_map.end(),
+      [&](const std::pair<node*, node*> node) { return node.first->is(key); });
+  if (it != m_map.end()) {
+    return *it->second;
   }
 
   node& value = pMemory->create_node();
