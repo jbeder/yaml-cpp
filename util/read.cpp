@@ -11,7 +11,7 @@ class NullEventHandler : public YAML::EventHandler {
   using Mark = YAML::Mark;
   using anchor_t = YAML::anchor_t;
 
-  NullEventHandler() {}
+  NullEventHandler() = default;
 
   void OnDocumentStart(const Mark&) override {}
   void OnDocumentEnd() override {}
