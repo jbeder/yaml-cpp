@@ -166,7 +166,7 @@ void SingleDocParser::HandleBlockSequence(EventHandler& eventHandler) {
   m_scanner.pop();
   m_pCollectionStack->PushCollectionType(CollectionType::BlockSeq);
 
-  while (1) {
+  while (true) {
     if (m_scanner.empty())
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ);
 
@@ -199,7 +199,7 @@ void SingleDocParser::HandleFlowSequence(EventHandler& eventHandler) {
   m_scanner.pop();
   m_pCollectionStack->PushCollectionType(CollectionType::FlowSeq);
 
-  while (1) {
+  while (true) {
     if (m_scanner.empty())
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ_FLOW);
 
@@ -252,7 +252,7 @@ void SingleDocParser::HandleBlockMap(EventHandler& eventHandler) {
   m_scanner.pop();
   m_pCollectionStack->PushCollectionType(CollectionType::BlockMap);
 
-  while (1) {
+  while (true) {
     if (m_scanner.empty())
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_MAP);
 
@@ -291,7 +291,7 @@ void SingleDocParser::HandleFlowMap(EventHandler& eventHandler) {
   m_scanner.pop();
   m_pCollectionStack->PushCollectionType(CollectionType::FlowMap);
 
-  while (1) {
+  while (true) {
     if (m_scanner.empty())
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_MAP_FLOW);
 
@@ -376,7 +376,7 @@ void SingleDocParser::ParseProperties(std::string& tag, anchor_t& anchor,
   anchor_name.clear();
   anchor = NullAnchor;
 
-  while (1) {
+  while (true) {
     if (m_scanner.empty())
       return;
 
