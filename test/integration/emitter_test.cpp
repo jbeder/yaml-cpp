@@ -612,6 +612,38 @@ TEST_F(EmitterTest, SimpleGlobalSettings) {
   ExpectEmit("-   ? key 1\n    : value 1\n    ? key 2\n    : [a, b, c]");
 }
 
+TEST_F(EmitterTest, GlobalLongKeyOnSeq) {
+  out.SetMapFormat(LongKey);
+
+  out << BeginMap;
+  out << Key << Anchor("key");
+  out << BeginSeq << "a"
+      << "b" << EndSeq;
+  out << Value << Anchor("value");
+  out << BeginSeq << "c"
+      << "d" << EndSeq;
+  out << Key << Alias("key") << Value << Alias("value");
+  out << EndMap;
+
+  ExpectEmit("? &key\n  - a\n  - b\n: &value\n  - c\n  - d\n? *key\n: *value");
+}
+
+TEST_F(EmitterTest, GlobalLongKeyOnMap) {
+  out.SetMapFormat(LongKey);
+
+  out << BeginMap;
+  out << Key << Anchor("key");
+  out << BeginMap << "a"
+      << "b" << EndMap;
+  out << Value << Anchor("value");
+  out << BeginMap << "c"
+      << "d" << EndMap;
+  out << Key << Alias("key") << Value << Alias("value");
+  out << EndMap;
+
+  ExpectEmit("? &key\n  ? a\n  : b\n: &value\n  ? c\n  : d\n? *key\n: *value");
+}
+
 TEST_F(EmitterTest, ComplexGlobalSettings) {
   out << BeginSeq;
   out << Block;

@@ -556,6 +556,8 @@ void Emitter::BlockMapPrepareLongKey(EmitterNodeType::value child) {
       break;
     case EmitterNodeType::BlockSeq:
     case EmitterNodeType::BlockMap:
+      if (m_pState->HasBegunContent())
+        m_stream << "\n";
       break;
   }
 }
@@ -579,8 +581,12 @@ void Emitter::BlockMapPrepareLongKeyValue(EmitterNodeType::value child) {
     case EmitterNodeType::Scalar:
     case EmitterNodeType::FlowSeq:
     case EmitterNodeType::FlowMap:
+      SpaceOrIndentTo(true, curIndent + 1);
+      break;
     case EmitterNodeType::BlockSeq:
     case EmitterNodeType::BlockMap:
+      if (m_pState->HasBegunContent())
+        m_stream << "\n";
       SpaceOrIndentTo(true, curIndent + 1);
       break;
   }
