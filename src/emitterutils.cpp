@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 
@@ -199,15 +200,10 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
 
 bool IsValidSingleQuotedScalar(const std::string& str, bool escapeNonAscii) {
   // TODO: check for non-printable characters?
-  for (char ch : str) {
-    if (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch))) {
-      return false;
-    }
-    if (ch == '\n') {
-      return false;
-    }
-  }
-  return true;
+  return std::none_of(str.begin(), str.end(), [=](char ch) {
+    return (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch))) ||
+           (ch == '\n');
+  });
 }
 
 bool IsValidLiteralScalar(const std::string& str, FlowType::value flowType,
@@ -217,12 +213,9 @@ bool IsValidLiteralScalar(const std::string& str, FlowType::value flowType,
   }
 
   // TODO: check for non-printable characters?
-  for (char ch : str) {
-    if (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch))) {
-      return false;
-    }
-  }
-  return true;
+  return std::none_of(str.begin(), str.end(), [=](char ch) {
+    return (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch)));
+  });
 }
 
 void WriteDoubleQuoteEscapeSequence(ostream_wrapper& out, int codePoint) {
