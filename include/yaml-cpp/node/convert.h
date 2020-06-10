@@ -201,9 +201,8 @@ template <typename K, typename V, typename C, typename A>
 struct convert<std::map<K, V, C, A>> {
   static Node encode(const std::map<K, V, C, A>& rhs) {
     Node node(NodeType::Map);
-    for (typename std::map<K, V, C, A>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.force_insert(it->first, it->second);
+    for (const auto& it : rhs)
+      node.force_insert(it.first, it.second);
     return node;
   }
 
@@ -212,12 +211,12 @@ struct convert<std::map<K, V, C, A>> {
       return false;
 
     rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    for (const auto& it : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs[it->first.template as<K>()] = it->second.template as<V>();
+      rhs[it.first.template as<K>()] = it.second.template as<V>();
 #else
-      rhs[it->first.as<K>()] = it->second.as<V>();
+      rhs[it.first.as<K>()] = it.second.as<V>();
 #endif
     return true;
   }
@@ -228,9 +227,7 @@ template <typename T, typename A>
 struct convert<std::vector<T, A>> {
   static Node encode(const std::vector<T, A>& rhs) {
     Node node(NodeType::Sequence);
-    for (typename std::vector<T, A>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.push_back(*it);
+    std::copy(rhs.begin(), rhs.end(), std::back_inserter(rhs));
     return node;
   }
 
@@ -239,12 +236,12 @@ struct convert<std::vector<T, A>> {
       return false;
 
     rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    for (const auto& it : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs.push_back(it->template as<T>());
+      rhs.push_back(it.template as<T>());
 #else
-      rhs.push_back(it->as<T>());
+      rhs.push_back(it.as<T>());
 #endif
     return true;
   }
@@ -255,9 +252,7 @@ template <typename T, typename A>
 struct convert<std::list<T,A>> {
   static Node encode(const std::list<T,A>& rhs) {
     Node node(NodeType::Sequence);
-    for (typename std::list<T,A>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.push_back(*it);
+    std::copy(rhs.begin(), rhs.end(), std::back_inserter(rhs));
     return node;
   }
 
@@ -266,12 +261,12 @@ struct convert<std::list<T,A>> {
       return false;
 
     rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    for (const auto& it : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs.push_back(it->template as<T>());
+      rhs.push_back(it.template as<T>());
 #else
-      rhs.push_back(it->as<T>());
+      rhs.push_back(it.as<T>());
 #endif
     return true;
   }
@@ -282,9 +277,7 @@ template <typename T, std::size_t N>
 struct convert<std::array<T, N>> {
   static Node encode(const std::array<T, N>& rhs) {
     Node node(NodeType::Sequence);
-    for (const auto& element : rhs) {
-      node.push_back(element);
-    }
+    std::copy(rhs.begin(), rhs.end(), std::back_inserter(rhs));
     return node;
   }
 

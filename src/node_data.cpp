@@ -252,11 +252,15 @@ bool node_data::remove(node& key, shared_memory_holder /* pMemory */) {
     it = jt;
   }
 
-  for (auto it = m_map.begin(); it != m_map.end(); ++it) {
-    if (it->first->is(key)) {
-      m_map.erase(it);
-      return true;
-    }
+  auto it =
+      std::find_if(m_map.begin(), m_map.end(),
+                   [&](std::pair<YAML::detail::node*, YAML::detail::node*> j) {
+                     return (j.first->is(key));
+                   });
+
+  if (it != m_map.end()) {
+    m_map.erase(it);
+    return true;
   }
 
   return false;
