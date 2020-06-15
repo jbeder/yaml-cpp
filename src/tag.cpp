@@ -29,7 +29,7 @@ Tag::Tag(const Token& token)
   }
 }
 
-std::string Tag::Translate(const Directives& directives) {
+std::string Tag::Translate(const Directives& directives) const {
   switch (type) {
     case VERBATIM:
       return value;
