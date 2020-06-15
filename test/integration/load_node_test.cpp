@@ -254,7 +254,7 @@ TEST(NodeTest, IncompleteJson) {
       {"JSON map without end brace", "{\"access\":\"abc\"",
        ErrorMsg::END_OF_MAP_FLOW},
   };
-  for (const ParserExceptionTestCase test : tests) {
+  for (const ParserExceptionTestCase& test : tests) {
     try {
       Load(test.input);
       FAIL() << "Expected exception " << test.expected_exception << " for "
