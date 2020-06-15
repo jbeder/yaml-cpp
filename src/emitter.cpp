@@ -25,9 +25,7 @@ std::size_t Emitter::size() const { return m_stream.pos(); }
 // state checking
 bool Emitter::good() const { return m_pState->good(); }
 
-const std::string Emitter::GetLastError() const {
-  return m_pState->GetLastError();
-}
+std::string Emitter::GetLastError() const { return m_pState->GetLastError(); }
 
 // global setters
 bool Emitter::SetOutputCharset(EMITTER_MANIP value) {
