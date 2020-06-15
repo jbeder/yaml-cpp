@@ -44,7 +44,7 @@ class YAML_CPP_API Emitter {
 
   // state checking
   bool good() const;
-  const std::string GetLastError() const;
+  std::string GetLastError() const;
 
   // global setters
   bool SetOutputCharset(EMITTER_MANIP value);
