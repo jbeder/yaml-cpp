@@ -68,14 +68,14 @@ int main(int argc, char** argv) {
     }
   }
 
-  if (N > 1 && !cache && filename == "") {
+  if (N > 1 && !cache && filename.empty()) {
     usage();
     return -1;
   }
 
   if (cache) {
     std::string input;
-    if (filename != "") {
+    if (!filename.empty()) {
       std::ifstream in(filename);
       input = read_stream(in);
     } else {
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
       run(in);
     }
   } else {
-    if (filename != "") {
+    if (!filename.empty()) {
       std::ifstream in(filename);
       for (int i = 0; i < N; i++) {
         in.seekg(std::ios_base::beg);
