@@ -32,13 +32,12 @@ void NodeEvents::Setup(const detail::node& node) {
     return;
 
   if (node.type() == NodeType::Sequence) {
-    for (const auto& it : node)
-      Setup(*it);
+    for (auto element : node)
+      Setup(*element);
   } else if (node.type() == NodeType::Map) {
-    for (detail::const_node_iterator it = node.begin(); it != node.end();
-         ++it) {
-      Setup(*it->first);
-      Setup(*it->second);
+    for (auto element : node) {
+      Setup(*element.first);
+      Setup(*element.second);
     }
   }
 }
@@ -77,16 +76,15 @@ void NodeEvents::Emit(const detail::node& node, EventHandler& handler,
       break;
     case NodeType::Sequence:
       handler.OnSequenceStart(Mark(), node.tag(), anchor, node.style());
-      for (const auto& it : node)
-        Emit(*it, handler, am);
+      for (auto element : node)
+        Emit(*element, handler, am);
       handler.OnSequenceEnd();
       break;
     case NodeType::Map:
       handler.OnMapStart(Mark(), node.tag(), anchor, node.style());
-      for (detail::const_node_iterator it = node.begin(); it != node.end();
-           ++it) {
-        Emit(*it->first, handler, am);
-        Emit(*it->second, handler, am);
+      for (auto element : node) {
+        Emit(*element.first, handler, am);
+        Emit(*element.second, handler, am);
       }
       handler.OnMapEnd();
       break;
