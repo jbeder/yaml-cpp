@@ -5,6 +5,7 @@
 ## HEAD ##
 
   * Throws an exception when trying to parse a negative number as an unsigned integer.
+  * Supports the `as<int8_t>`/`as<uint8_t>`, which throws an exception when the value exceeds the range of `int8_t`/`uint8_t`.
 
 ## 0.6.0 ##
 
