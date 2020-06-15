@@ -94,14 +94,12 @@ EmitterNodeType::value EmitterState::NextGroupType(
   if (type == GroupType::Seq) {
     if (GetFlowType(type) == Block)
       return EmitterNodeType::BlockSeq;
-    else
-      return EmitterNodeType::FlowSeq;
-  } else {
-    if (GetFlowType(type) == Block)
-      return EmitterNodeType::BlockMap;
-    else
-      return EmitterNodeType::FlowMap;
+    return EmitterNodeType::FlowSeq;
   }
+
+  if (GetFlowType(type) == Block)
+    return EmitterNodeType::BlockMap;
+  return EmitterNodeType::FlowMap;
 
   // can't happen
   assert(false);
@@ -156,9 +154,8 @@ void EmitterState::EndedGroup(GroupType::value type) {
   if (m_groups.empty()) {
     if (type == GroupType::Seq) {
       return SetError(ErrorMsg::UNEXPECTED_END_SEQ);
-    } else {
-      return SetError(ErrorMsg::UNEXPECTED_END_MAP);
     }
+    return SetError(ErrorMsg::UNEXPECTED_END_MAP);
   }
 
   // get rid of the current group
