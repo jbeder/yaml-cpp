@@ -158,7 +158,7 @@ inline node& node_data::get(const Key& key, shared_memory_holder pMemory) {
   });
 
   if (it != m_map.end()) {
-    return it->second;
+    return *it->second;
   }
 
   node& k = convert_to_node(key, pMemory);
