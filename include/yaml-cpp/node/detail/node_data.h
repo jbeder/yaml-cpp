@@ -60,8 +60,8 @@ class YAML_CPP_API node_data {
   node_iterator end();
 
   // sequence
-  void push_back(node& node, shared_memory_holder pMemory);
-  void insert(node& key, node& value, shared_memory_holder pMemory);
+  void push_back(node& node, const shared_memory_holder& pMemory);
+  void insert(node& key, node& value, const shared_memory_holder& pMemory);
 
   // indexing
   template <typename Key>
@@ -71,9 +71,9 @@ class YAML_CPP_API node_data {
   template <typename Key>
   bool remove(const Key& key, shared_memory_holder pMemory);
 
-  node* get(node& key, shared_memory_holder pMemory) const;
-  node& get(node& key, shared_memory_holder pMemory);
-  bool remove(node& key, shared_memory_holder pMemory);
+  node* get(node& key, const shared_memory_holder& pMemory) const;
+  node& get(node& key, const shared_memory_holder& pMemory);
+  bool remove(node& key, const shared_memory_holder& pMemory);
 
   // map
   template <typename Key, typename Value>
@@ -91,8 +91,8 @@ class YAML_CPP_API node_data {
   void reset_map();
 
   void insert_map_pair(node& key, node& value);
-  void convert_to_map(shared_memory_holder pMemory);
-  void convert_sequence_to_map(shared_memory_holder pMemory);
+  void convert_to_map(const shared_memory_holder& pMemory);
+  void convert_sequence_to_map(const shared_memory_holder& pMemory);
 
   template <typename T>
   static node& convert_to_node(const T& rhs, shared_memory_holder pMemory);
