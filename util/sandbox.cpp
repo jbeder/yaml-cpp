@@ -6,8 +6,8 @@
 
 class NullEventHandler : public YAML::EventHandler {
  public:
-  typedef YAML::Mark Mark;
-  typedef YAML::anchor_t anchor_t;
+  using Mark = YAML::Mark;
+  using anchor_t = YAML::anchor_t;
 
   NullEventHandler() = default;
 
