@@ -269,8 +269,6 @@ void Emitter::EmitNewline() {
   m_pState->SetNonContent();
 }
 
-bool Emitter::CanEmitNewline() const { return true; }
-
 // Put the stream in a state so we can simply write the next node
 // E.g., if we're in a sequence, write the "- "
 void Emitter::PrepareNode(EmitterNodeType::value child) {

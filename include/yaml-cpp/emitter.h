@@ -126,7 +126,6 @@ class YAML_CPP_API Emitter {
 
   const char* ComputeFullBoolName(bool b) const;
   const char* ComputeNullName() const;
-  bool CanEmitNewline() const;
 
  private:
   std::unique_ptr<EmitterState> m_pState;
