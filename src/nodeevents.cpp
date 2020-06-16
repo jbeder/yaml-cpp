@@ -13,7 +13,7 @@ void NodeEvents::AliasManager::RegisterReference(const detail::node& node) {
 
 anchor_t NodeEvents::AliasManager::LookupAnchor(
     const detail::node& node) const {
-  AnchorByIdentity::const_iterator it = m_anchorByIdentity.find(node.ref());
+  auto it = m_anchorByIdentity.find(node.ref());
   if (it == m_anchorByIdentity.end())
     return 0;
   return it->second;
@@ -92,7 +92,7 @@ void NodeEvents::Emit(const detail::node& node, EventHandler& handler,
 }
 
 bool NodeEvents::IsAliased(const detail::node& node) const {
-  RefCount::const_iterator it = m_refCount.find(node.ref());
+  auto it = m_refCount.find(node.ref());
   return it != m_refCount.end() && it->second > 1;
 }
 }  // namespace YAML
