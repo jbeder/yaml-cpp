@@ -37,7 +37,7 @@ void Scanner::ScanDirective() {
     token.value += INPUT.get();
 
   // read parameters
-  while (1) {
+  while (true) {
     // first get rid of whitespace
     while (Exp::Blank().Matches(INPUT))
       INPUT.eat(1);
@@ -171,7 +171,7 @@ void Scanner::ScanBlockEntry() {
 
 // Key
 void Scanner::ScanKey() {
-  // handle keys diffently in the block context (and manage indents)
+  // handle keys differently in the block context (and manage indents)
   if (InBlockContext()) {
     if (!m_simpleKeyAllowed)
       throw ParserException(INPUT.mark(), ErrorMsg::MAP_KEY);
@@ -199,7 +199,7 @@ void Scanner::ScanValue() {
     // seems fine)
     m_simpleKeyAllowed = false;
   } else {
-    // handle values diffently in the block context (and manage indents)
+    // handle values differently in the block context (and manage indents)
     if (InBlockContext()) {
       if (!m_simpleKeyAllowed)
         throw ParserException(INPUT.mark(), ErrorMsg::MAP_VALUE);

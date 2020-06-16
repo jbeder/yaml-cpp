@@ -9,6 +9,8 @@
 
 #include "yaml-cpp/node/detail/node.h"
 #include "yaml-cpp/node/detail/node_data.h"
+
+#include <algorithm>
 #include <type_traits>
 
 namespace YAML {
@@ -125,13 +127,11 @@ inline node* node_data::get(const Key& key,
       throw BadSubscript(m_mark, key);
   }
 
-  for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
-    if (it->first->equals(key, pMemory)) {
-      return it->second;
-    }
-  }
+  auto it = std::find_if(m_map.begin(), m_map.end(), [&](const kv_pair m) {
+    return m.first->equals(key, pMemory);
+  });
 
-  return nullptr;
+  return it != m_map.end() ? it->second : nullptr;
 }
 
 template <typename Key>
@@ -153,10 +153,12 @@ inline node& node_data::get(const Key& key, shared_memory_holder pMemory) {
       throw BadSubscript(m_mark, key);
   }
 
-  for (node_map::const_iterator it = m_map.begin(); it != m_map.end(); ++it) {
-    if (it->first->equals(key, pMemory)) {
-      return *it->second;
-    }
+  auto it = std::find_if(m_map.begin(), m_map.end(), [&](const kv_pair m) {
+    return m.first->equals(key, pMemory);
+  });
+
+  if (it != m_map.end()) {
+    return *it->second;
   }
 
   node& k = convert_to_node(key, pMemory);
@@ -169,7 +171,9 @@ template <typename Key>
 inline bool node_data::remove(const Key& key, shared_memory_holder pMemory) {
   if (m_type == NodeType::Sequence) {
     return remove_idx<Key>::remove(m_sequence, key, m_seqSize);
-  } else if (m_type == NodeType::Map) {
+  }
+
+  if (m_type == NodeType::Map) {
     kv_pairs::iterator it = m_undefinedPairs.begin();
     while (it != m_undefinedPairs.end()) {
       kv_pairs::iterator jt = std::next(it);
@@ -179,11 +183,13 @@ inline bool node_data::remove(const Key& key, shared_memory_holder pMemory) {
       it = jt;
     }
 
-    for (node_map::iterator iter = m_map.begin(); iter != m_map.end(); ++iter) {
-      if (iter->first->equals(key, pMemory)) {
-        m_map.erase(iter);
-        return true;
-      }
+    auto iter = std::find_if(m_map.begin(), m_map.end(), [&](const kv_pair m) {
+      return m.first->equals(key, pMemory);
+    });
+
+    if (iter != m_map.end()) {
+      m_map.erase(iter);
+      return true;
     }
   }
 

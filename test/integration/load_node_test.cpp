@@ -21,22 +21,35 @@ TEST(LoadNodeTest, FallbackValues) {
 }
 
 TEST(LoadNodeTest, NumericConversion) {
-  Node node = Load("[1.5, 1, .nan, .inf, -.inf, 0x15, 015]");
-  EXPECT_EQ(1.5f, node[0].as<float>());
-  EXPECT_EQ(1.5, node[0].as<double>());
-  EXPECT_THROW(node[0].as<int>(), TypedBadConversion<int>);
-  EXPECT_EQ(1, node[1].as<int>());
-  EXPECT_EQ(1.0f, node[1].as<float>());
-  EXPECT_NE(node[2].as<float>(), node[2].as<float>());
-  EXPECT_EQ(std::numeric_limits<float>::infinity(), node[3].as<float>());
-  EXPECT_EQ(-std::numeric_limits<float>::infinity(), node[4].as<float>());
-  EXPECT_EQ(21, node[5].as<int>());
-  EXPECT_EQ(13, node[6].as<int>());
+  EXPECT_EQ(1.5f, Load("1.5").as<float>());
+  EXPECT_EQ(1.5, Load("1.5").as<double>());
+  EXPECT_THROW(Load("1.5").as<int>(), TypedBadConversion<int>);
+  EXPECT_EQ(1, Load("1").as<int>());
+  EXPECT_EQ(1.0f, Load("1").as<float>());
+  EXPECT_NE(Load(".nan").as<float>(), Load(".nan").as<float>());
+  EXPECT_EQ(std::numeric_limits<float>::infinity(), Load(".inf").as<float>());
+  EXPECT_EQ(-std::numeric_limits<float>::infinity(), Load("-.inf").as<float>());
+  EXPECT_EQ(21, Load("0x15").as<int>());
+  EXPECT_EQ(13, Load("015").as<int>());
+  EXPECT_EQ(-128, +Load("-128").as<int8_t>());
+  EXPECT_EQ(127, +Load("127").as<int8_t>());
+  EXPECT_THROW(Load("128").as<int8_t>(), TypedBadConversion<signed char>);
+  EXPECT_EQ(255, +Load("255").as<uint8_t>());
+  EXPECT_THROW(Load("256").as<uint8_t>(), TypedBadConversion<unsigned char>);
+  // test as<char>/as<uint8_t> with ‘a’,"ab",'1',"127"
+  EXPECT_EQ('a', Load("a").as<char>());
+  EXPECT_THROW(Load("ab").as<char>(), TypedBadConversion<char>);
+  EXPECT_EQ('1', Load("1").as<char>());
+  EXPECT_THROW(Load("127").as<char>(), TypedBadConversion<char>);
+  EXPECT_THROW(Load("a").as<uint8_t>(), TypedBadConversion<unsigned char>);
+  EXPECT_THROW(Load("ab").as<uint8_t>(), TypedBadConversion<unsigned char>);
+  EXPECT_EQ(1, +Load("1").as<uint8_t>());
   // Throw exception: convert a negative number to an unsigned number.
-  EXPECT_THROW(node[7].as<unsigned>(), TypedBadConversion<unsigned int>);
-  EXPECT_THROW(node[7].as<unsigned short>(), TypedBadConversion<unsigned short>);
-  EXPECT_THROW(node[7].as<unsigned long>(), TypedBadConversion<unsigned long>);
-  EXPECT_THROW(node[7].as<unsigned long long>(), TypedBadConversion<unsigned long long>);
+  EXPECT_THROW(Load("-128").as<unsigned>(), TypedBadConversion<unsigned int>);
+  EXPECT_THROW(Load("-128").as<unsigned short>(), TypedBadConversion<unsigned short>);
+  EXPECT_THROW(Load("-128").as<unsigned long>(), TypedBadConversion<unsigned long>);
+  EXPECT_THROW(Load("-128").as<unsigned long long>(), TypedBadConversion<unsigned long long>);
+  EXPECT_THROW(Load("-128").as<uint8_t>(), TypedBadConversion<unsigned char>);
 }
 
 TEST(LoadNodeTest, Binary) {
@@ -241,7 +254,7 @@ TEST(NodeTest, IncompleteJson) {
       {"JSON map without end brace", "{\"access\":\"abc\"",
        ErrorMsg::END_OF_MAP_FLOW},
   };
-  for (const ParserExceptionTestCase test : tests) {
+  for (const ParserExceptionTestCase& test : tests) {
     try {
       Load(test.input);
       FAIL() << "Expected exception " << test.expected_exception << " for "
@@ -256,7 +269,18 @@ TEST(NodeTest, LoadTildeAsNull) {
   Node node = Load("~");
   ASSERT_TRUE(node.IsNull());
 }
-    
+
+TEST(NodeTest, LoadNullWithStrTag) {
+  Node node = Load("!!str null");
+  EXPECT_EQ(node.Tag(), "tag:yaml.org,2002:str");
+  EXPECT_EQ(node.as<std::string>(), "null");
+}
+
+TEST(NodeTest, LoadQuotedNull) {
+  Node node = Load("\"null\"");
+  EXPECT_EQ(node.as<std::string>(), "null");
+}
+
 TEST(NodeTest, LoadTagWithParenthesis) {
     Node node = Load("!Complex(Tag) foo");
     EXPECT_EQ(node.Tag(), "!Complex(Tag)");

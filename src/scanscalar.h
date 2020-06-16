@@ -57,7 +57,7 @@ struct ScanScalarParams {
   bool leadingSpaces;
 };
 
-std::string ScanScalar(Stream& INPUT, ScanScalarParams& info);
+std::string ScanScalar(Stream& INPUT, ScanScalarParams& params);
 }
 
 #endif  // SCANSCALAR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

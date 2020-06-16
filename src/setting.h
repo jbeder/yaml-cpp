@@ -83,9 +83,8 @@ class SettingChanges {
   }
 
   void restore() YAML_CPP_NOEXCEPT {
-    for (setting_changes::const_iterator it = m_settingChanges.begin();
-         it != m_settingChanges.end(); ++it)
-      (*it)->pop();
+    for (const auto& setting : m_settingChanges)
+      setting->pop();
   }
 
   void push(std::unique_ptr<SettingChangeBase> pSettingChange) {

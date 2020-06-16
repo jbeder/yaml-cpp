@@ -54,14 +54,16 @@ std::string Escape(Stream& in, int codeLength) {
   // now break it up into chars
   if (value <= 0x7F)
     return Str(value);
-  else if (value <= 0x7FF)
+
+  if (value <= 0x7FF)
     return Str(0xC0 + (value >> 6)) + Str(0x80 + (value & 0x3F));
-  else if (value <= 0xFFFF)
+
+  if (value <= 0xFFFF)
     return Str(0xE0 + (value >> 12)) + Str(0x80 + ((value >> 6) & 0x3F)) +
            Str(0x80 + (value & 0x3F));
-  else
-    return Str(0xF0 + (value >> 18)) + Str(0x80 + ((value >> 12) & 0x3F)) +
-           Str(0x80 + ((value >> 6) & 0x3F)) + Str(0x80 + (value & 0x3F));
+
+  return Str(0xF0 + (value >> 18)) + Str(0x80 + ((value >> 12) & 0x3F)) +
+         Str(0x80 + ((value >> 6) & 0x3F)) + Str(0x80 + (value & 0x3F));
 }
 
 // Escape
@@ -103,7 +105,7 @@ std::string Escape(Stream& in) {
     case 'e':
       return "\x1B";
     case ' ':
-      return "\x20";
+      return R"( )";
     case '\"':
       return "\"";
     case '\'':
