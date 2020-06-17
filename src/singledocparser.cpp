@@ -90,15 +90,16 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
 
   const Token& token = m_scanner.peek();
 
-  if (token.type == Token::PLAIN_SCALAR && IsNullString(token.value)) {
+  // add non-specific tags
+  if (tag.empty())
+    tag = (token.type == Token::NON_PLAIN_SCALAR ? "!" : "?");
+  
+  if (token.type == Token::PLAIN_SCALAR 
+      && tag.compare("?") == 0 && IsNullString(token.value)) {
     eventHandler.OnNull(mark, anchor);
     m_scanner.pop();
     return;
   }
-
-  // add non-specific tags
-  if (tag.empty())
-    tag = (token.type == Token::NON_PLAIN_SCALAR ? "!" : "?");
 
   // now split based on what kind of node we should be
   switch (token.type) {

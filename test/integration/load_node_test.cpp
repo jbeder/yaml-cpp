@@ -269,7 +269,18 @@ TEST(NodeTest, LoadTildeAsNull) {
   Node node = Load("~");
   ASSERT_TRUE(node.IsNull());
 }
-    
+
+TEST(NodeTest, LoadNullWithStrTag) {
+  Node node = Load("!!str null");
+  EXPECT_EQ(node.Tag(), "tag:yaml.org,2002:str");
+  EXPECT_EQ(node.as<std::string>(), "null");
+}
+
+TEST(NodeTest, LoadQuotedNull) {
+  Node node = Load("\"null\"");
+  EXPECT_EQ(node.as<std::string>(), "null");
+}
+
 TEST(NodeTest, LoadTagWithParenthesis) {
     Node node = Load("!Complex(Tag) foo");
     EXPECT_EQ(node.Tag(), "!Complex(Tag)");
