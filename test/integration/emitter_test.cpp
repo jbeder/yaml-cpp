@@ -625,14 +625,14 @@ TEST_F(EmitterTest, GlobalLongKeyOnSeq) {
   out << Key << Alias("key") << Value << Alias("value");
   out << EndMap;
 
-  ExpectEmit("? &key\n"
-             "  - a\n"
-             "  - b\n"
-             ": &value\n"
-             "  - c\n"
-             "  - d\n"
-             "? *key\n"
-             ": *value");
+  ExpectEmit(R"(? &key
+  - a
+  - b
+: &value
+  - c
+  - d
+? *key
+: *value)");
 }
 
 TEST_F(EmitterTest, GlobalLongKeyOnMap) {
@@ -648,14 +648,14 @@ TEST_F(EmitterTest, GlobalLongKeyOnMap) {
   out << Key << Alias("key") << Value << Alias("value");
   out << EndMap;
 
-  ExpectEmit("? &key\n"
-             "  ? a\n"
-             "  : b\n"
-             ": &value\n"
-             "  ? c\n"
-             "  : d\n"
-             "? *key\n"
-             ": *value");
+  ExpectEmit(R"(? &key
+  ? a
+  : b
+: &value
+  ? c
+  : d
+? *key
+: *value)");
 }
 
 TEST_F(EmitterTest, ComplexGlobalSettings) {
