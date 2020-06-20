@@ -86,6 +86,10 @@ bool Emitter::SetDoublePrecision(std::size_t n) {
   return m_pState->SetDoublePrecision(n, FmtScope::Global);
 }
 
+void Emitter::RestoreGlobalModifiedSettings() {
+  m_pState->RestoreGlobalModifiedSettings();
+}
+
 // SetLocalValue
 // . Either start/end a group, or set a modifier locally
 Emitter& Emitter::SetLocalValue(EMITTER_MANIP value) {

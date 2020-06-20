@@ -217,6 +217,10 @@ std::size_t EmitterState::LastIndent() const {
 
 void EmitterState::ClearModifiedSettings() { m_modifiedSettings.clear(); }
 
+void EmitterState::RestoreGlobalModifiedSettings() {
+  m_globalModifiedSettings.restore();
+}
+
 bool EmitterState::SetOutputCharset(EMITTER_MANIP value,
                                     FmtScope::value scope) {
   switch (value) {
