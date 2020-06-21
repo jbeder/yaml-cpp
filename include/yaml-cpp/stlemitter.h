@@ -39,7 +39,6 @@ inline Emitter& operator<<(Emitter& emitter, const std::set<T>& v) {
 
 template <typename K, typename V>
 inline Emitter& operator<<(Emitter& emitter, const std::map<K, V>& m) {
-  typedef typename std::map<K, V> map;
   emitter << BeginMap;
   for (const auto& emit : m)
     emitter << Key << emit.first << Value << emit.second;
