@@ -1212,6 +1212,42 @@ TEST_F(EmitterTest, NaN) {
 	  "bar: .nan");
 }
 
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) { 
+  out << YAML::BeginMap;
+
+  out << YAML::Key << "NodeA" << YAML::Value << YAML::BeginMap;
+  out << YAML::Key << "k" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 0 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 1 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::EndSeq;
+  out << YAML::EndMap;
+
+  out << YAML::Key << "NodeB" << YAML::Value << YAML::BeginMap;
+  out << YAML::Key << "k" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 0 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 1 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::EndSeq;
+  out << YAML::EndMap;
+
+  out << YAML::EndMap;
+
+  ExpectEmit(
+      "NodeA:\n"
+      "  k: [{i: 0},\n"
+      "    {i: 1},\n"
+      "    ]\n"
+      "NodeB:\n"
+      "  k: [{i: 0},\n"
+      "    {i: 1},\n"
+      "    ]"
+  );
+
+}
+
 class EmitterErrorTest : public ::testing::Test {
  protected:
   void ExpectEmitError(const std::string& expectedError) {
