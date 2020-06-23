@@ -1235,17 +1235,58 @@ TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) {
 
   out << YAML::EndMap;
 
-  ExpectEmit(
-      "NodeA:\n"
-      "  k: [{i: 0},\n"
-      "    {i: 1},\n"
-      "    ]\n"
-      "NodeB:\n"
-      "  k: [{i: 0},\n"
-      "    {i: 1},\n"
-      "    ]"
-  );
+  ExpectEmit(R"(NodeA:
+  k: [{i: 0},
+    {i: 1},
+    ]
+NodeB:
+  k: [{i: 0},
+    {i: 1},
+    ])");
+}
 
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases) {
+  out << BeginMap;
+
+  out << Key << "Node" << Anchor("Node") << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << YAML::Newline;
+  out << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << YAML::Newline;
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeA" << Alias("Node");
+  out << Key << "NodeB" << Alias("Node");
+
+  out << EndMap;
+
+  ExpectEmit(R"(Node: &Node
+  k: [{i: 0},
+    {i: 1},
+    ]
+NodeA: *Node
+NodeB: *Node)");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases) {
+  out << BeginMap;
+
+  out << Key << "Node" << Anchor("Node") << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeA" << Alias("Node");
+  out << Key << "NodeB" << Alias("Node");
+
+  out << EndMap;
+
+  ExpectEmit(R"(Node: &Node
+  k: [{i: 0}, {i: 1}]
+NodeA: *Node
+NodeB: *Node)");
 }
 
 class EmitterErrorTest : public ::testing::Test {

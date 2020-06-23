@@ -175,7 +175,7 @@ void EmitterState::EndedGroup(GroupType::value type) {
   // some global settings that we changed may have been overridden
   // by a local setting we just popped, so we need to restore them
   m_globalModifiedSettings.restore();
-  
+
   ClearModifiedSettings();
   m_hasAnchor = false;
   m_hasTag = false;
