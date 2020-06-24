@@ -91,6 +91,9 @@ class EmitterState {
   bool SetBoolCaseFormat(EMITTER_MANIP value, FmtScope::value scope);
   EMITTER_MANIP GetBoolCaseFormat() const { return m_boolCaseFmt.get(); }
 
+  bool SetNullFormat(EMITTER_MANIP value, FmtScope::value scope);
+  EMITTER_MANIP GetNullFormat() const { return m_nullFmt.get(); }
+
   bool SetIntFormat(EMITTER_MANIP value, FmtScope::value scope);
   EMITTER_MANIP GetIntFormat() const { return m_intFmt.get(); }
 
@@ -131,6 +134,7 @@ class EmitterState {
   Setting<EMITTER_MANIP> m_boolFmt;
   Setting<EMITTER_MANIP> m_boolLengthFmt;
   Setting<EMITTER_MANIP> m_boolCaseFmt;
+  Setting<EMITTER_MANIP> m_nullFmt;
   Setting<EMITTER_MANIP> m_intFmt;
   Setting<std::size_t> m_indent;
   Setting<std::size_t> m_preCommentIndent, m_postCommentIndent;

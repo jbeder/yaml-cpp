@@ -26,6 +26,12 @@ enum EMITTER_MANIP {
   DoubleQuoted,
   Literal,
 
+  // null manipulators
+  LowerNull,
+  UpperNull,
+  CamelNull,
+  TildeNull,
+
   // bool manipulators
   YesNoBool,      // yes, no
   TrueFalseBool,  // true, false

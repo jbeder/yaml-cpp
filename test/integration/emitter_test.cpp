@@ -1047,6 +1047,37 @@ TEST_F(EmitterTest, BoolFormatting) {
       "- Y\n- Y\n- y\n- N\n- N\n- n");
 }
 
+TEST_F(EmitterTest, GlobalNullFormatting) {
+  out << BeginSeq;
+  out.SetNullFormat(LowerNull);
+  out << Null;
+  out.SetNullFormat(UpperNull);
+  out << Null;
+  out.SetNullFormat(CamelNull);
+  out << Null;
+  out.SetNullFormat(TildeNull);
+  out << Null;
+  out << EndSeq;
+  ExpectEmit("- null\n- NULL\n- Null\n- ~");
+}
+
+TEST_F(EmitterTest, NullFormatting) {
+  out << BeginSeq;
+  out << LowerNull << Null;
+  out << UpperNull << Null;
+  out << CamelNull << Null;
+  out << TildeNull << Null;
+  out << EndSeq;
+  ExpectEmit("- null\n- NULL\n- Null\n- ~");
+}
+
+TEST_F(EmitterTest, NullFormattingOnNode) {
+  Node n(Load("null"));
+  out.SetNullFormat(UpperNull);
+  out << n;
+  ExpectEmit("NULL");
+}
+
 // TODO: Fix this test.
 // TEST_F(EmitterTest, DocStartAndEnd) {
 //  out << BeginDoc;
