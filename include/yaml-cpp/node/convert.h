@@ -120,8 +120,8 @@ typename std::enable_if<(std::is_same<T, unsigned char>::value ||
 ConvertStreamTo(std::stringstream& stream, T& rhs) {
   int num;
   if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
-    if (num >= std::numeric_limits<T>::min() &&
-        num <= std::numeric_limits<T>::max()) {
+    if (num >= (std::numeric_limits<T>::min)() &&
+        num <= (std::numeric_limits<T>::max)()) {
       rhs = num;
       return true;
     }
