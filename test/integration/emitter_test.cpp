@@ -1048,7 +1048,7 @@ TEST_F(EmitterTest, BoolFormatting) {
 }
 
 TEST_F(EmitterTest, GlobalNullFormatting) {
-  out << BeginSeq;
+  out << Flow << BeginSeq;
   out.SetNullFormat(LowerNull);
   out << Null;
   out.SetNullFormat(UpperNull);
@@ -1058,24 +1058,32 @@ TEST_F(EmitterTest, GlobalNullFormatting) {
   out.SetNullFormat(TildeNull);
   out << Null;
   out << EndSeq;
-  ExpectEmit("- null\n- NULL\n- Null\n- ~");
+  ExpectEmit("[null, NULL, Null, ~]");
 }
 
 TEST_F(EmitterTest, NullFormatting) {
-  out << BeginSeq;
+  out << Flow << BeginSeq;
   out << LowerNull << Null;
   out << UpperNull << Null;
   out << CamelNull << Null;
   out << TildeNull << Null;
   out << EndSeq;
-  ExpectEmit("- null\n- NULL\n- Null\n- ~");
+  ExpectEmit("[null, NULL, Null, ~]");
 }
 
 TEST_F(EmitterTest, NullFormattingOnNode) {
   Node n(Load("null"));
+  out << Flow << BeginSeq;
+  out.SetNullFormat(LowerNull);
+  out << n;
   out.SetNullFormat(UpperNull);
   out << n;
-  ExpectEmit("NULL");
+  out.SetNullFormat(CamelNull);
+  out << n;
+  out.SetNullFormat(TildeNull);
+  out << n;
+  out << EndSeq;
+  ExpectEmit("[null, NULL, Null, ~]");
 }
 
 // TODO: Fix this test.

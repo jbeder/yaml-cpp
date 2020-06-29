@@ -775,8 +775,7 @@ const char* Emitter::ComputeFullBoolName(bool b) const {
 }
 
 const char* Emitter::ComputeNullName() const {
-  const EMITTER_MANIP nullFmt = m_pState->GetNullFormat();
-  switch (nullFmt) {
+  switch (m_pState->GetNullFormat()) {
     case LowerNull:
       return "null";
     case UpperNull:
@@ -784,8 +783,9 @@ const char* Emitter::ComputeNullName() const {
     case CamelNull:
       return "Null";
     case TildeNull:
-    default:
       return "~";
+    default:  // fallthrough
+      break;
   }
 }
 
@@ -912,8 +912,7 @@ Emitter& Emitter::Write(const _Null& /*null*/) {
 
   PrepareNode(EmitterNodeType::Scalar);
 
-  const char* name = ComputeNullName();
-  m_stream << name;
+  m_stream << ComputeNullName();
 
   StartedScalar();
 
