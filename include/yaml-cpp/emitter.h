@@ -50,6 +50,7 @@ class YAML_CPP_API Emitter {
   bool SetOutputCharset(EMITTER_MANIP value);
   bool SetStringFormat(EMITTER_MANIP value);
   bool SetBoolFormat(EMITTER_MANIP value);
+  bool SetNullFormat(EMITTER_MANIP value);
   bool SetIntBase(EMITTER_MANIP value);
   bool SetSeqFormat(EMITTER_MANIP value);
   bool SetMapFormat(EMITTER_MANIP value);
@@ -123,6 +124,7 @@ class YAML_CPP_API Emitter {
   void SpaceOrIndentTo(bool requireSpace, std::size_t indent);
 
   const char* ComputeFullBoolName(bool b) const;
+  const char* ComputeNullName() const;
   bool CanEmitNewline() const;
 
  private:

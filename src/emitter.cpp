@@ -49,6 +49,10 @@ bool Emitter::SetBoolFormat(EMITTER_MANIP value) {
   return ok;
 }
 
+bool Emitter::SetNullFormat(EMITTER_MANIP value) {
+  return m_pState->SetNullFormat(value, FmtScope::Global);
+}
+
 bool Emitter::SetIntBase(EMITTER_MANIP value) {
   return m_pState->SetIntFormat(value, FmtScope::Global);
 }
@@ -770,6 +774,21 @@ const char* Emitter::ComputeFullBoolName(bool b) const {
                          // these answers
 }
 
+const char* Emitter::ComputeNullName() const {
+  switch (m_pState->GetNullFormat()) {
+    case LowerNull:
+      return "null";
+    case UpperNull:
+      return "NULL";
+    case CamelNull:
+      return "Null";
+    case TildeNull:
+      // fallthrough
+    default:
+      return "~";
+  }
+}
+
 Emitter& Emitter::Write(bool b) {
   if (!good())
     return *this;
@@ -893,7 +912,7 @@ Emitter& Emitter::Write(const _Null& /*null*/) {
 
   PrepareNode(EmitterNodeType::Scalar);
 
-  m_stream << "~";
+  m_stream << ComputeNullName();
 
   StartedScalar();
 
