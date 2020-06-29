@@ -783,9 +783,9 @@ const char* Emitter::ComputeNullName() const {
     case CamelNull:
       return "Null";
     case TildeNull:
+      // fallthrough
+    default:
       return "~";
-    default:  // fallthrough
-      break;
   }
 }
 
