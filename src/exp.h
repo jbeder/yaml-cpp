@@ -69,7 +69,7 @@ inline const RegEx& Hex() {
 inline const RegEx& NotPrintable() {
   static const RegEx e =
       RegEx(0) |
-      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OR) |
+      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x0D\x7F", REGEX_OR) |
       RegEx(0x0E, 0x1F) |
       (RegEx('\xC2') + (RegEx('\x80', '\x84') | RegEx('\x86', '\x9F')));
   return e;

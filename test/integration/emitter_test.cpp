@@ -1127,6 +1127,13 @@ TEST_F(EmitterTest, SingleChar) {
   ExpectEmit("- a\n- \":\"\n- \"\\x10\"\n- \"\\n\"\n- \" \"\n- \"\\t\"");
 }
 
+TEST_F(EmitterTest, EscepeCharOnMap) {
+  out << BeginMap;
+  out << Key << "key" << Value << "\rvalue";
+  out << EndMap;
+  ExpectEmit("key: \"\\rvalue\"");
+}
+
 TEST_F(EmitterTest, DefaultPrecision) {
   out << BeginSeq;
   out << 1.3125f;
