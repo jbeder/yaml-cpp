@@ -1127,6 +1127,17 @@ TEST_F(EmitterTest, SingleChar) {
   ExpectEmit("- a\n- \":\"\n- \"\\x10\"\n- \"\\n\"\n- \" \"\n- \"\\t\"");
 }
 
+TEST_F(EmitterTest, EscapeCarriageReturn) {
+  out << "aaa\rbbb";
+  ExpectEmit("\"aaa\\rbbb\"");
+}
+
+TEST_F(EmitterTest, EscapeCarriageReturnOnNode) {
+  Node n(Load("\"aaa\rbbb\""));
+  out << n;
+  ExpectEmit("\"aaa\\rbbb\"");
+}
+
 TEST_F(EmitterTest, DefaultPrecision) {
   out << BeginSeq;
   out << 1.3125f;
