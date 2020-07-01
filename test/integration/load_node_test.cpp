@@ -246,15 +246,59 @@ struct ParserExceptionTestCase {
 
 TEST(NodeTest, IncompleteJson) {
   std::vector<ParserExceptionTestCase> tests = {
-      {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
-      {"JSON map with colon but no value", "{\"access\":",
-       ErrorMsg::END_OF_MAP_FLOW},
-      {"JSON map with unclosed value quote", "{\"access\":\"",
-       ErrorMsg::END_OF_MAP_FLOW},
-      {"JSON map without end brace", "{\"access\":\"abc\"",
-       ErrorMsg::END_OF_MAP_FLOW},
+    {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
+    {"JSON map with colon but no value", "{\"access\":",
+     ErrorMsg::END_OF_MAP_FLOW},
+    {"JSON map with unclosed value quote", "{\"access\":\"",
+     ErrorMsg::END_OF_MAP_FLOW},
+    {"JSON map without end brace", "{\"access\":\"abc\"",
+     ErrorMsg::END_OF_MAP_FLOW},
   };
   for (const ParserExceptionTestCase& test : tests) {
+    try {
+      Load(test.input);
+      FAIL() << "Expected exception " << test.expected_exception << " for "
+             << test.name << ", input: " << test.input;
+    } catch (const ParserException& e) {
+      EXPECT_EQ(test.expected_exception, e.msg);
+    }
+  }
+}
+
+struct SingleNodeTestCase {
+  std::string input;
+  NodeType::value nodeType;
+  int nodeSize;
+  std::string expected_content;
+};
+
+TEST(NodeTest, SpecialFlow) {
+  std::vector<SingleNodeTestCase> tests = {
+    {"[,]", NodeType::Sequence, 1, "[~]"},
+    {"[a:]", NodeType::Sequence, 1, "[\"a:\"]"},
+    {"[:a]", NodeType::Sequence, 1, "[:a]"},
+    {"[:]", NodeType::Sequence, 1, "[\":\"]"},
+    {"{:}", NodeType::Map, 1, "{~: ~}"},
+    {"{,}", NodeType::Map, 1, "{~: ~}"},
+    {"{a:}", NodeType::Map, 1, "{\"a:\": ~}"},
+    {"{:a}", NodeType::Map, 1, "{:a: ~}"},
+  };
+  for (const SingleNodeTestCase& test : tests) {
+    Node node = Load(test.input);
+    Emitter emitter;
+    emitter << node;
+    EXPECT_EQ(test.nodeType, node.Type());
+    EXPECT_EQ(test.nodeSize, node.size());
+    EXPECT_EQ(test.expected_content, std::string(emitter.c_str()));
+  }
+}
+
+TEST(NodeTest, IncorrectFlow) {
+  std::vector<ParserExceptionTestCase> tests = {
+    {"Incorrect yaml: \"{:]\"", "{:]", ErrorMsg::FLOW_END},
+    {"Incorrect yaml: \"[:}\"", "[:}", ErrorMsg::FLOW_END},
+  };
+  for (const ParserExceptionTestCase test : tests) {
     try {
       Load(test.input);
       FAIL() << "Expected exception " << test.expected_exception << " for "

@@ -164,8 +164,7 @@ inline const RegEx& EndScalar() {
 }
 inline const RegEx& EndScalarInFlow() {
   static const RegEx e =
-      (RegEx(':') + (BlankOrBreak() | RegEx() | RegEx(",]}", REGEX_OR))) |
-      RegEx(",?[]{}", REGEX_OR);
+      (RegEx(':') + (BlankOrBreak() | RegEx())) | RegEx(",?[]{}", REGEX_OR);
   return e;
 }
 
