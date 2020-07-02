@@ -1251,6 +1251,224 @@ TEST_F(EmitterTest, NaN) {
 	  "bar: .nan");
 }
 
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) { 
+  out << YAML::BeginMap;
+
+  out << YAML::Key << "NodeA" << YAML::Value << YAML::BeginMap;
+  out << YAML::Key << "k" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 0 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 1 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::EndSeq;
+  out << YAML::EndMap;
+
+  out << YAML::Key << "NodeB" << YAML::Value << YAML::BeginMap;
+  out << YAML::Key << "k" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 0 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 1 << YAML::EndMap
+      << YAML::Newline;
+  out << YAML::EndSeq;
+  out << YAML::EndMap;
+
+  out << YAML::EndMap;
+
+  ExpectEmit(R"(NodeA:
+  k: [{i: 0},
+    {i: 1},
+    ]
+NodeB:
+  k: [{i: 0},
+    {i: 1},
+    ])");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases) {
+  out << BeginMap;
+
+  out << Key << "Node" << Anchor("Node") << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << YAML::Newline;
+  out << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << YAML::Newline;
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeA" << Alias("Node");
+  out << Key << "NodeB" << Alias("Node");
+
+  out << EndMap;
+
+  ExpectEmit(R"(Node: &Node
+  k: [{i: 0},
+    {i: 1},
+    ]
+NodeA: *Node
+NodeB: *Node)");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases) {
+  out << BeginMap;
+
+  out << Key << "Node" << Anchor("Node") << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeA" << Alias("Node");
+  out << Key << "NodeB" << Alias("Node");
+
+  out << EndMap;
+
+  ExpectEmit(R"(Node: &Node
+  k: [{i: 0}, {i: 1}]
+NodeA: *Node
+NodeB: *Node)");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases2) {
+  out << BeginMap;
+
+  out << Key << "Seq" << Anchor("Seq") << Flow << BeginSeq;
+  out << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << YAML::Newline;
+  out << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << YAML::Newline;
+  out << EndSeq;
+
+  out << Key << "NodeA" << Value << BeginMap;
+  out << Key << "k" << Value << Alias("Seq") << EndMap;
+  out << Key << "NodeB" << Value << BeginMap;
+  out << Key << "k" << Value << Alias("Seq") << EndMap;
+
+  out << EndMap;
+
+  ExpectEmit(R"(Seq: &Seq [{i: 0},
+  {i: 1},
+  ]
+NodeA:
+  k: *Seq
+NodeB:
+  k: *Seq)");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases2) {
+  out << BeginMap;
+
+  out << Key << "Seq" << Anchor("Seq") << Value << Flow << BeginSeq;
+  out << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << EndSeq;
+
+  out << Key << "NodeA" << Value << BeginMap;
+  out << Key << "k" << Value << Alias("Seq") << EndMap;
+  out << Key << "NodeB" << Value << BeginMap;
+  out << Key << "k" << Value << Alias("Seq") << EndMap;
+
+  out << EndMap;
+
+  ExpectEmit(R"(Seq: &Seq [{i: 0}, {i: 1}]
+NodeA:
+  k: *Seq
+NodeB:
+  k: *Seq)");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases3) {
+  out << BeginMap;
+
+  out << Key << "Keys" << Value << Flow << BeginSeq;
+  out << Anchor("k0") << BeginMap << Key << "i" << Value << 0 << EndMap
+      << Newline;
+  out << Anchor("k1") << BeginMap << Key << "i" << Value << 1 << EndMap
+      << Newline;
+  out << EndSeq;
+
+  out << Key << "NodeA" << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << Alias("k0") << Newline << Alias("k1") << Newline;
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeB" << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << Alias("k0") << Newline << Alias("k1") << Newline;
+  out << EndSeq << EndMap;
+
+  out << EndMap;
+
+  ExpectEmit(R"(Keys: [&k0 {i: 0},
+&k1 {i: 1},
+  ]
+NodeA:
+  k: [*k0,
+  *k1,
+    ]
+NodeB:
+  k: [*k0,
+  *k1,
+    ])");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases3a) {
+  out << BeginMap;
+
+  out << Key << "Keys" << Value << BeginSeq;
+  out << Anchor("k0") << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << Anchor("k1") << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << EndSeq;
+
+  out << Key << "NodeA" << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << Alias("k0") << Alias("k1");
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeB" << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << Alias("k0") << Alias("k1");
+  out << EndSeq << EndMap;
+
+  out << EndMap;
+
+  ExpectEmit(R"(Keys:
+  - &k0
+    i: 0
+  - &k1
+    i: 1
+NodeA:
+  k: [*k0, *k1]
+NodeB:
+  k: [*k0, *k1])");
+}
+
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases3b) {
+  out << BeginMap;
+
+  out << Key << "Keys" << Value << Flow << BeginSeq;
+  out << Anchor("k0") << BeginMap << Key << "i" << Value << 0 << EndMap;
+  out << Anchor("k1") << BeginMap << Key << "i" << Value << 1 << EndMap;
+  out << EndSeq;
+
+  out << Key << "NodeA" << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << Alias("k0") << Alias("k1");
+  out << EndSeq << EndMap;
+
+  out << Key << "NodeB" << Value << BeginMap;
+  out << Key << "k" << Value << Flow << BeginSeq;
+  out << Alias("k0") << Alias("k1");
+  out << EndSeq << EndMap;
+
+  out << EndMap;
+
+  ExpectEmit(R"(Keys: [&k0 {i: 0}, &k1 {i: 1}]
+NodeA:
+  k: [*k0, *k1]
+NodeB:
+  k: [*k0, *k1])");
+}
+
 class EmitterErrorTest : public ::testing::Test {
  protected:
   void ExpectEmitError(const std::string& expectedError) {

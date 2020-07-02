@@ -179,6 +179,9 @@ void EmitterState::EndedGroup(GroupType::value type) {
   m_globalModifiedSettings.restore();
 
   ClearModifiedSettings();
+  m_hasAnchor = false;
+  m_hasTag = false;
+  m_hasNonContent = false;
 }
 
 EmitterNodeType::value EmitterState::CurGroupNodeType() const {
