@@ -246,13 +246,13 @@ struct ParserExceptionTestCase {
 
 TEST(NodeTest, IncompleteJson) {
   std::vector<ParserExceptionTestCase> tests = {
-    {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
-    {"JSON map with colon but no value", "{\"access\":",
-     ErrorMsg::END_OF_MAP_FLOW},
-    {"JSON map with unclosed value quote", "{\"access\":\"",
-     ErrorMsg::END_OF_MAP_FLOW},
-    {"JSON map without end brace", "{\"access\":\"abc\"",
-     ErrorMsg::END_OF_MAP_FLOW},
+      {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
+      {"JSON map with colon but no value", "{\"access\":",
+       ErrorMsg::END_OF_MAP_FLOW},
+      {"JSON map with unclosed value quote", "{\"access\":\"",
+       ErrorMsg::END_OF_MAP_FLOW},
+      {"JSON map without end brace", "{\"access\":\"abc\"",
+       ErrorMsg::END_OF_MAP_FLOW},
   };
   for (const ParserExceptionTestCase& test : tests) {
     try {
@@ -274,14 +274,16 @@ struct SingleNodeTestCase {
 
 TEST(NodeTest, SpecialFlow) {
   std::vector<SingleNodeTestCase> tests = {
-    {"[,]", NodeType::Sequence, 1, "[~]"},
-    {"[a:]", NodeType::Sequence, 1, "[\"a:\"]"},
-    {"[:a]", NodeType::Sequence, 1, "[:a]"},
-    {"[:]", NodeType::Sequence, 1, "[\":\"]"},
-    {"{:}", NodeType::Map, 1, "{~: ~}"},
-    {"{,}", NodeType::Map, 1, "{~: ~}"},
-    {"{a:}", NodeType::Map, 1, "{\"a:\": ~}"},
-    {"{:a}", NodeType::Map, 1, "{:a: ~}"},
+      {"[:]", NodeType::Sequence, 1, "[{~: ~}]"},
+      {"[a:]", NodeType::Sequence, 1, "[{a: ~}]"},
+      {"[:a]", NodeType::Sequence, 1, "[:a]"},
+      {"[,]", NodeType::Sequence, 1, "[~]"},
+      {"[a:,]", NodeType::Sequence, 1, "[{a: ~}]"},
+      {"{:}", NodeType::Map, 1, "{~: ~}"},
+      {"{a:}", NodeType::Map, 1, "{a: ~}"},
+      {"{:a}", NodeType::Map, 1, "{:a: ~}"},
+      {"{,}", NodeType::Map, 1, "{~: ~}"},
+      {"{a:,}", NodeType::Map, 1, "{a: ~}"},
   };
   for (const SingleNodeTestCase& test : tests) {
     Node node = Load(test.input);

@@ -552,7 +552,7 @@ const char *ex7_2 =
 
 const char *ex7_3 =
     "{\n"
-    "  ? foo : ,\n"
+    "  ? foo :,\n"
     "  : bar,\n"
     "}\n";
 
@@ -641,8 +641,8 @@ const char *ex7_17 =
     "{\n"
     "unquoted : \"separate\",\n"
     "http://foo.com,\n"
-    "omitted value: ,\n"
-    " : omitted key,\n"
+    "omitted value:,\n"
+    ": omitted key,\n"
     "}";
 
 const char *ex7_18 =

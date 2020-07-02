@@ -110,7 +110,7 @@ inline const RegEx& Value() {
   return e;
 }
 inline const RegEx& ValueInFlow() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",}", REGEX_OR));
+  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",]}", REGEX_OR));
   return e;
 }
 inline const RegEx& ValueInJSONFlow() {
@@ -164,7 +164,8 @@ inline const RegEx& EndScalar() {
 }
 inline const RegEx& EndScalarInFlow() {
   static const RegEx e =
-      (RegEx(':') + (BlankOrBreak() | RegEx())) | RegEx(",?[]{}", REGEX_OR);
+      (RegEx(':') + (BlankOrBreak() | RegEx() | RegEx(",]}", REGEX_OR))) |
+      RegEx(",?[]{}", REGEX_OR);
   return e;
 }
 
