@@ -59,6 +59,7 @@ class YAML_CPP_API Emitter {
   bool SetPostCommentIndent(std::size_t n);
   bool SetFloatPrecision(std::size_t n);
   bool SetDoublePrecision(std::size_t n);
+  void RestoreGlobalModifiedSettings();
 
   // local setters
   Emitter& SetLocalValue(EMITTER_MANIP value);

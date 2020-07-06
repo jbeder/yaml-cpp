@@ -732,6 +732,31 @@ TEST_F(EmitterTest, GlobalLongKeyOnMap) {
 : *value)");
 }
 
+TEST_F(EmitterTest, GlobalSettingStyleOnSeqNode) {
+  Node n(Load(R"(foo:
+  - 1
+  - 2
+  - 3
+bar: aa)"));
+  out.SetSeqFormat(YAML::Flow);
+  out << n;
+  ExpectEmit(R"(foo: [1, 2, 3]
+bar: aa)");
+}
+
+TEST_F(EmitterTest, GlobalSettingStyleOnMapNode) {
+  Node n(Load(R"(-
+  foo: a
+  bar: b
+- 2
+- 3)"));
+  out.SetMapFormat(YAML::Flow);
+  out << n;
+  ExpectEmit(R"(- {foo: a, bar: b}
+- 2
+- 3)");
+}
+
 TEST_F(EmitterTest, ComplexGlobalSettings) {
   out << BeginSeq;
   out << Block;

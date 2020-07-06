@@ -72,6 +72,7 @@ class EmitterState {
   bool HasBegunContent() const { return m_hasAnchor || m_hasTag; }
 
   void ClearModifiedSettings();
+  void RestoreGlobalModifiedSettings();
 
   // formatters
   void SetLocalValue(EMITTER_MANIP value);
