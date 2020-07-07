@@ -695,7 +695,7 @@ Emitter& Emitter::Write(const std::string& str) {
       Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
                                  m_pState->CurGroupFlowType(), escapeNonAscii);
 
-  if (strFormat == StringFormat::Literal)
+  if (strFormat == StringFormat::Literal || str.size() > 1024)
     m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
 
   PrepareNode(EmitterNodeType::Scalar);
