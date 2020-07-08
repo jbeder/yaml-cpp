@@ -1,5 +1,12 @@
 # 3.5 is actually available almost everywhere, but this a good minimum
 cmake_minimum_required(VERSION 3.4)
+
+# enable MSVC_RUNTIME_LIBRARY target property
+# see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+if(POLICY CMP0091)
+  cmake_policy(SET CMP0091 NEW)
+endif()
+
 project(YAML_CPP VERSION 0.6.3 LANGUAGES CXX)
 
 include(CMakePackageConfigHelpers)
