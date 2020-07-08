@@ -266,8 +266,8 @@ TEST_F(EmitterTest, SimpleLongKey) {
 }
 
 TEST_F(EmitterTest, SingleLongKey) {
-  const std::string& shortKey = std::string(1024, 'a');
-  const std::string& longKey = std::string(1025, 'a');
+  const std::string shortKey(1024, 'a');
+  const std::string longKey(1025, 'a');
   out << BeginMap;
   out << Key << "age";
   out << Value << "24";
