@@ -275,6 +275,11 @@ StringFormat::value ComputeStringFormat(const std::string& str,
         return StringFormat::Literal;
       }
       return StringFormat::DoubleQuoted;
+    case Folded:
+      if (IsValidLiteralScalar(str, flowType, escapeNonAscii)) {
+        return StringFormat::Folded;
+      }
+      return StringFormat::DoubleQuoted;
     default:
       break;
   }
@@ -349,6 +354,22 @@ bool WriteDoubleQuotedString(ostream_wrapper& out, const std::string& str,
 bool WriteLiteralString(ostream_wrapper& out, const std::string& str,
                         std::size_t indent) {
   out << "|\n";
+  out << IndentTo(indent);
+  int codePoint;
+  for (std::string::const_iterator i = str.begin();
+       GetNextCodePointAndAdvance(codePoint, i, str.end());) {
+    if (codePoint == '\n') {
+      out << "\n" << IndentTo(indent);
+    } else {
+      WriteCodePoint(out, codePoint);
+    }
+  }
+  return true;
+}
+
+bool WriteFoldedString(ostream_wrapper& out, const std::string& str,
+                        std::size_t indent) {
+  out << ">\n";
   out << IndentTo(indent);
   int codePoint;
   for (std::string::const_iterator i = str.begin();

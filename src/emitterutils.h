@@ -21,7 +21,7 @@ namespace YAML {
 class Binary;
 
 struct StringFormat {
-  enum value { Plain, SingleQuoted, DoubleQuoted, Literal };
+  enum value { Plain, SingleQuoted, DoubleQuoted, Literal, Folded };
 };
 
 namespace Utils {
@@ -34,6 +34,8 @@ bool WriteSingleQuotedString(ostream_wrapper& out, const std::string& str);
 bool WriteDoubleQuotedString(ostream_wrapper& out, const std::string& str,
                              bool escapeNonAscii);
 bool WriteLiteralString(ostream_wrapper& out, const std::string& str,
+                        std::size_t indent);
+bool WriteFoldedString(ostream_wrapper& out, const std::string& str,
                         std::size_t indent);
 bool WriteChar(ostream_wrapper& out, char ch);
 bool WriteComment(ostream_wrapper& out, const std::string& str,

@@ -695,7 +695,7 @@ Emitter& Emitter::Write(const std::string& str) {
       Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
                                  m_pState->CurGroupFlowType(), escapeNonAscii);
 
-  if (strFormat == StringFormat::Literal)
+  if (strFormat == StringFormat::Literal || strFormat == StringFormat::Folded)
     m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
 
   PrepareNode(EmitterNodeType::Scalar);
@@ -712,6 +712,9 @@ Emitter& Emitter::Write(const std::string& str) {
       break;
     case StringFormat::Literal:
       Utils::WriteLiteralString(m_stream, str,
+                                m_pState->CurIndent() + m_pState->GetIndent());
+    case StringFormat::Folded:
+      Utils::WriteFoldedString(m_stream, str,
                                 m_pState->CurIndent() + m_pState->GetIndent());
       break;
   }
