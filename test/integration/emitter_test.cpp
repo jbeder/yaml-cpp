@@ -138,6 +138,70 @@ TEST_F(EmitterTest, EmptyFlowSeq) {
   ExpectEmit("[]");
 }
 
+TEST_F(EmitterTest, EmptyBlockSeqWithBegunContent) {
+  out << BeginSeq;
+  out << BeginSeq << Comment("comment") << EndSeq;
+  out << BeginSeq << Newline << EndSeq;
+  out << BeginSeq << Anchor("test") << EndSeq;
+  out << BeginSeq << VerbatimTag("foo") << EndSeq;
+  out << EndSeq;
+
+  ExpectEmit(R"(-
+# comment
+  []
+-
+
+  []
+-
+  - &test[]
+-
+  - !<foo>[])");
+}
+
+TEST_F(EmitterTest, EmptyBlockMapWithBegunContent) {
+  out << BeginSeq;
+  out << BeginMap << Comment("comment") << EndMap;
+  out << BeginMap << Newline << EndMap;
+  out << BeginMap << Anchor("test") << EndMap;
+  out << BeginMap << VerbatimTag("foo") << EndMap;
+  out << EndSeq;
+
+  ExpectEmit(R"(-  # comment
+  {}
+-
+  {}
+- &test{}
+- !<foo>{})");
+}
+
+TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
+  out << Flow;
+  out << BeginSeq;
+  out << BeginSeq << Comment("comment") << EndSeq;
+  out << BeginSeq << Newline << EndSeq;
+  out << BeginSeq << Anchor("test") << EndSeq;
+  out << BeginSeq << VerbatimTag("foo") << EndSeq;
+  out << EndSeq;
+
+  ExpectEmit(R"([[  # comment
+  ], [
+  ], [&test], [!<foo>]])");
+}
+
+TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
+  out << Flow;
+  out << BeginSeq;
+  out << BeginMap << Comment("comment") << EndMap;
+  out << BeginMap << Newline << EndMap;
+  out << BeginMap << Anchor("test") << EndMap;
+  out << BeginMap << VerbatimTag("foo") << EndMap;
+  out << EndSeq;
+
+  ExpectEmit(R"([{  # comment
+  }, {
+  }, {&test}, {!<foo>}])");
+}
+
 TEST_F(EmitterTest, NestedBlockSeq) {
   out << BeginSeq;
   out << "item 1";
