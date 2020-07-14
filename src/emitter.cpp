@@ -686,14 +686,27 @@ void Emitter::StartedScalar() { m_pState->StartedScalar(); }
 // *******************************************************************************************
 // overloads of Write
 
+StringEscaping::value GetStringEscapingStyle(const EMITTER_MANIP emitterManip) {
+  switch (emitterManip) {
+    case EscapeNonAscii:
+      return StringEscaping::NonAscii;
+    case EscapeAsJson:
+      return StringEscaping::JSON;
+    default:
+      return StringEscaping::None;
+      break;
+  }
+}
+
 Emitter& Emitter::Write(const std::string& str) {
   if (!good())
     return *this;
 
-  const bool escapeNonAscii = m_pState->GetOutputCharset() == EscapeNonAscii;
+  StringEscaping::value stringEscaping = GetStringEscapingStyle(m_pState->GetOutputCharset());
+
   const StringFormat::value strFormat =
       Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
-                                 m_pState->CurGroupFlowType(), escapeNonAscii);
+                                 m_pState->CurGroupFlowType(), stringEscaping == StringEscaping::NonAscii);
 
   if (strFormat == StringFormat::Literal)
     m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
@@ -708,7 +721,7 @@ Emitter& Emitter::Write(const std::string& str) {
       Utils::WriteSingleQuotedString(m_stream, str);
       break;
     case StringFormat::DoubleQuoted:
-      Utils::WriteDoubleQuotedString(m_stream, str, escapeNonAscii);
+      Utils::WriteDoubleQuotedString(m_stream, str, stringEscaping);
       break;
     case StringFormat::Literal:
       Utils::WriteLiteralString(m_stream, str,
@@ -814,8 +827,10 @@ Emitter& Emitter::Write(char ch) {
   if (!good())
     return *this;
 
+
+
   PrepareNode(EmitterNodeType::Scalar);
-  Utils::WriteChar(m_stream, ch);
+  Utils::WriteChar(m_stream, ch, GetStringEscapingStyle(m_pState->GetOutputCharset()));
   StartedScalar();
 
   return *this;
