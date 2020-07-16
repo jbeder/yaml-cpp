@@ -204,7 +204,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
   // post-processing
   if (params.trimTrailingSpaces) {
-    std::size_t pos = scalar.find_last_not_of(' ');
+    std::size_t pos = scalar.find_last_not_of(" \t");
     if (lastEscapedChar != std::string::npos) {
       if (pos < lastEscapedChar || pos == std::string::npos) {
         pos = lastEscapedChar;
