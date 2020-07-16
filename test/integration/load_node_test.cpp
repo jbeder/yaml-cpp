@@ -314,6 +314,8 @@ TEST(NodeTest, IncorrectFlow) {
 TEST(NodeTest, LoadTildeAsNull) {
   Node node = Load("~");
   ASSERT_TRUE(node.IsNull());
+  EXPECT_EQ(node.as<std::string>(), "null");
+  EXPECT_EQ(node.as<std::string>("~"), "null");
 }
 
 TEST(NodeTest, LoadNullWithStrTag) {
