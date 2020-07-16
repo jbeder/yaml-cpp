@@ -3,6 +3,7 @@
 #include "yaml-cpp/node/convert.h"
 #include "yaml-cpp/node/detail/impl.h"
 #include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/node/hash.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/iterator.h"
 
@@ -643,6 +644,17 @@ TEST(NodeTest, AccessNonexistentKeyOnConstNode) {
   node["3"] = "4";
   const YAML::Node& other = node;
   ASSERT_FALSE(other["5"]);
+}
+
+TEST(NodeTest, NodeIsHashable) {
+  YAML::Node node1(YAML::NodeType::value::Null);
+  YAML::Node node2(YAML::NodeType::value::Null);
+  YAML::Node node3 = node1;
+  std::hash<YAML::Node> hash_func;
+  auto node1_digest = hash_func(node1);
+  ASSERT_EQ(hash_func(node1), node1_digest);
+  ASSERT_NE(hash_func(node2), node1_digest);
+  ASSERT_EQ(hash_func(node3), node1_digest);
 }
 
 class NodeEmitterTest : public ::testing::Test {

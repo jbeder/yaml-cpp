@@ -24,6 +24,8 @@ class node {
   };
 
  public:
+  friend struct std::hash<node>;
+
   node() : m_pRef(new node_ref), m_dependencies{} {}
   node(const node&) = delete;
   node& operator=(const node&) = delete;
