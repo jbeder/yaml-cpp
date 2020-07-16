@@ -266,6 +266,8 @@ TEST_F(EmitterTest, SimpleLongKey) {
 }
 
 TEST_F(EmitterTest, SingleLongKey) {
+  const std::string shortKey(1024, 'a');
+  const std::string longKey(1025, 'a');
   out << BeginMap;
   out << Key << "age";
   out << Value << "24";
@@ -273,9 +275,14 @@ TEST_F(EmitterTest, SingleLongKey) {
   out << Value << "5'9\"";
   out << Key << "weight";
   out << Value << 145;
+  out << Key << shortKey;
+  out << Value << "1";
+  out << Key << longKey;
+  out << Value << "1";
   out << EndMap;
 
-  ExpectEmit("age: 24\n? height\n: 5'9\"\nweight: 145");
+  ExpectEmit("age: 24\n? height\n: 5'9\"\nweight: 145\n" + shortKey +
+             ": 1\n? " + longKey + "\n: 1");
 }
 
 TEST_F(EmitterTest, ComplexLongKey) {
