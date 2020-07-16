@@ -199,3 +199,79 @@ YAML::Node node = YAML::Load("start: [1, 3, 0]");
 Vec3 v = node["start"].as<Vec3>();
 node["end"] = Vec3(2, -1, 0);
 ```
+
+## Partial specialization
+
+If you need to specialize the `convert` struct for a set of types instead of just one you can use partial specialization with the help of `std::enable_if` (SFINAE).
+
+Here is a small example showing how to partially specialize the `convert` struct for all types deriving from a base class:
+
+```cpp
+// Base class
+class A
+{
+public:
+  A() = default;
+  A(int a) : a{a} {}
+
+  // virtual load/emit methods
+  virtual void load(const YAML::Node &node) {
+    a = node["a"].as<int>();
+  }
+
+  virtual YAML::Node emit() const  {
+    YAML::Node node;
+    node["a"] = a;
+    return node;
+  }
+  
+  int a;
+};
+
+// Derived class
+class B : public A
+{
+public:
+  B() = default;
+  B(int a, int b) : A{a}, b{b} {}
+
+  // override virtual load/emit methods
+  virtual void load(const YAML::Node &node) override {
+    A::load(node);
+    b = node["b"].as<int>();
+  }
+
+  virtual YAML::Node emit() const override {
+    YAML::Node node = A::emit();
+    node["b"] = b;
+    return node;
+  }
+
+  int b;
+};
+
+// Implementation of convert::{encode,decode} for all classes derived from or being A
+namespace YAML {
+  template<typename T> 
+  struct convert<T, typename std::enable_if<std::is_base_of<A, T>::value>::type> {
+    static Node encode(const T &rhs) {
+      Node node = rhs.emit();
+      return node;
+    }
+
+    static bool decode(const Node &node, T &rhs) {
+      rhs.load(node);
+      return true;
+    }
+  };
+}
+```
+
+Which can then be use like this:
+```cpp
+YAML::Node node = YAML::Load("{a: 1, b: 2}");
+B b = node.as<B>();
+b.a = 12;
+b.b = 42;
+node = b;
+```

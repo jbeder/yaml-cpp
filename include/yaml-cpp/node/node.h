@@ -141,7 +141,7 @@ YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);
 
 YAML_CPP_API Node Clone(const Node& node);
 
-template <typename T>
+template <typename T, typename Enable = void>
 struct convert;
 }
 
