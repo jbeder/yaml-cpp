@@ -48,7 +48,7 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
 }
 
 void SingleDocParser::HandleNode(EventHandler& eventHandler) {
-  DepthGuard<2000> depthguard(depth, m_scanner.mark(), ErrorMsg::BAD_FILE);
+  DepthGuard<500> depthguard(depth, m_scanner.mark(), ErrorMsg::BAD_FILE);
 
   // an empty node *is* a possibility
   if (m_scanner.empty()) {

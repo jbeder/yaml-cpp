@@ -804,7 +804,7 @@ TEST_F(EmitterTest, OutputCharset) {
   out << "\x24 \xC2\xA2 \xE2\x82\xAC";
   out << EndSeq;
 
-  ExpectEmit("- $ ¢ €\n- \"$ \\xa2 \\u20ac\"");
+  ExpectEmit("- \x24 \xC2\xA2 \xE2\x82\xAC\n- \"\x24 \\xa2 \\u20ac\"");
 }
 
 TEST_F(EmitterTest, EscapedUnicode) {
