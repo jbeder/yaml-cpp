@@ -142,8 +142,6 @@ TEST_F(EmitterTest, EmptyBlockSeqWithBegunContent) {
   out << BeginSeq;
   out << BeginSeq << Comment("comment") << EndSeq;
   out << BeginSeq << Newline << EndSeq;
-  out << BeginSeq << Anchor("test") << EndSeq;
-  out << BeginSeq << VerbatimTag("foo") << EndSeq;
   out << EndSeq;
 
   ExpectEmit(R"(-
@@ -151,27 +149,19 @@ TEST_F(EmitterTest, EmptyBlockSeqWithBegunContent) {
   []
 -
 
-  []
--
-  - &test[]
--
-  - !<foo>[])");
+  [])");
 }
 
 TEST_F(EmitterTest, EmptyBlockMapWithBegunContent) {
   out << BeginSeq;
   out << BeginMap << Comment("comment") << EndMap;
   out << BeginMap << Newline << EndMap;
-  out << BeginMap << Anchor("test") << EndMap;
-  out << BeginMap << VerbatimTag("foo") << EndMap;
   out << EndSeq;
 
   ExpectEmit(R"(-  # comment
   {}
 -
-  {}
-- &test{}
-- !<foo>{})");
+  {})");
 }
 
 TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
@@ -179,13 +169,11 @@ TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
   out << BeginSeq;
   out << BeginSeq << Comment("comment") << EndSeq;
   out << BeginSeq << Newline << EndSeq;
-  out << BeginSeq << Anchor("test") << EndSeq;
-  out << BeginSeq << VerbatimTag("foo") << EndSeq;
   out << EndSeq;
 
   ExpectEmit(R"([[  # comment
   ], [
-  ], [&test], [!<foo>]])");
+  ]])");
 }
 
 TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
@@ -193,13 +181,11 @@ TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
   out << BeginSeq;
   out << BeginMap << Comment("comment") << EndMap;
   out << BeginMap << Newline << EndMap;
-  out << BeginMap << Anchor("test") << EndMap;
-  out << BeginMap << VerbatimTag("foo") << EndMap;
   out << EndSeq;
 
   ExpectEmit(R"([{  # comment
   }, {
-  }, {&test}, {!<foo>}])");
+  }])");
 }
 
 TEST_F(EmitterTest, NestedBlockSeq) {
@@ -1572,6 +1558,26 @@ TEST_F(EmitterErrorTest, BadLocalTag) {
   out << LocalTag("e!far") << "bar";
 
   ExpectEmitError("invalid tag");
+}
+
+TEST_F(EmitterErrorTest, BadTagAndTag) {
+  out << VerbatimTag("!far") << VerbatimTag("!foo") << "bar";
+  ExpectEmitError(ErrorMsg::INVALID_TAG);
+}
+
+TEST_F(EmitterErrorTest, BadAnchorAndAnchor) {
+  out << Anchor("far") << Anchor("foo") << "bar";
+  ExpectEmitError(ErrorMsg::INVALID_ANCHOR);
+}
+
+TEST_F(EmitterErrorTest, BadEmptyAnchorOnGroup) {
+  out << BeginSeq << "bar" << Anchor("foo") << EndSeq;
+  ExpectEmitError(ErrorMsg::INVALID_ANCHOR);
+}
+
+TEST_F(EmitterErrorTest, BadEmptyTagOnGroup) {
+  out << BeginSeq << "bar" << VerbatimTag("!foo") << EndSeq;
+  ExpectEmitError(ErrorMsg::INVALID_TAG);
 }
 
 TEST_F(EmitterErrorTest, ExtraEndSeq) {
