@@ -74,12 +74,17 @@ struct convert<std::string> {
 // C-strings can only be encoded
 template <>
 struct convert<const char*> {
-  static Node encode(const char*& rhs) { return Node(rhs); }
+  static Node encode(const char* rhs) { return Node(rhs); }
+};
+
+template <>
+struct convert<char*> {
+  static Node encode(const char* rhs) { return Node(rhs); }
 };
 
 template <std::size_t N>
-struct convert<const char[N]> {
-  static Node encode(const char(&rhs)[N]) { return Node(rhs); }
+struct convert<char[N]> {
+  static Node encode(const char* rhs) { return Node(rhs); }
 };
 
 template <>

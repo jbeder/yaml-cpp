@@ -100,6 +100,12 @@ inline const std::string KEY_NOT_FOUND_WITH_KEY(const std::string& key) {
   return stream.str();
 }
 
+inline const std::string KEY_NOT_FOUND_WITH_KEY(const char* key) {
+  std::stringstream stream;
+  stream << KEY_NOT_FOUND << ": " << key;
+  return stream.str();
+}
+
 template <typename T>
 inline const std::string KEY_NOT_FOUND_WITH_KEY(
     const T& key, typename enable_if<is_numeric<T>>::type* = 0) {
@@ -115,6 +121,12 @@ inline const std::string BAD_SUBSCRIPT_WITH_KEY(
 }
 
 inline const std::string BAD_SUBSCRIPT_WITH_KEY(const std::string& key) {
+  std::stringstream stream;
+  stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
+  return stream.str();
+}
+
+inline const std::string BAD_SUBSCRIPT_WITH_KEY(const char* key) {
   std::stringstream stream;
   stream << BAD_SUBSCRIPT << " (key: \"" << key << "\")";
   return stream.str();
