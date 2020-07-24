@@ -160,11 +160,12 @@ void EmitterState::EndedGroup(GroupType::value type) {
     return SetError(ErrorMsg::UNEXPECTED_END_MAP);
   }
 
-  // if have the unhandled Tag/Anchor, set the error message
-  if (m_hasTag)
+  if (m_hasTag) {
     SetError(ErrorMsg::INVALID_TAG);
-  if (m_hasAnchor)
+  }
+  if (m_hasAnchor) {
     SetError(ErrorMsg::INVALID_ANCHOR);
+  }
 
   // get rid of the current group
   {
