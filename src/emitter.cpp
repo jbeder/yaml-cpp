@@ -504,6 +504,9 @@ void Emitter::FlowMapPrepareSimpleKeyValue(EmitterNodeType::value child) {
     if (m_stream.comment())
       m_stream << "\n";
     m_stream << IndentTo(lastIndent);
+    if (m_pState->HasAlias()) {
+      m_stream << " ";
+    }
     m_stream << ":";
   }
 
@@ -643,6 +646,9 @@ void Emitter::BlockMapPrepareSimpleKeyValue(EmitterNodeType::value child) {
   const std::size_t nextIndent = curIndent + m_pState->CurGroupIndent();
 
   if (!m_pState->HasBegunNode()) {
+    if (m_pState->HasAlias()) {
+      m_stream << " ";
+    }
     m_stream << ":";
   }
 
@@ -863,6 +869,8 @@ Emitter& Emitter::Write(const _Alias& alias) {
   }
 
   StartedScalar();
+
+  m_pState->SetAlias();
 
   return *this;
 }
