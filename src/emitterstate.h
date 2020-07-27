@@ -43,6 +43,7 @@ class EmitterState {
 
   // node handling
   void SetAnchor();
+  void SetAlias();
   void SetTag();
   void SetNonContent();
   void SetLongKey();
@@ -65,6 +66,7 @@ class EmitterState {
   std::size_t LastIndent() const;
   std::size_t CurIndent() const { return m_curIndent; }
   bool HasAnchor() const { return m_hasAnchor; }
+  bool HasAlias() const { return m_hasAlias; }
   bool HasTag() const { return m_hasTag; }
   bool HasBegunNode() const {
     return m_hasAnchor || m_hasTag || m_hasNonContent;
@@ -187,6 +189,7 @@ class EmitterState {
   std::vector<std::unique_ptr<Group>> m_groups;
   std::size_t m_curIndent;
   bool m_hasAnchor;
+  bool m_hasAlias;
   bool m_hasTag;
   bool m_hasNonContent;
   std::size_t m_docCount;

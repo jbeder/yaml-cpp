@@ -430,6 +430,21 @@ TEST_F(EmitterTest, AliasAndAnchor) {
   ExpectEmit("- &fred\n  name: Fred\n  age: 42\n- *fred");
 }
 
+TEST_F(EmitterTest, AliasOnKey) {
+  out << BeginSeq;
+  out << Anchor("name") << "Name";
+  out << BeginMap;
+  out << Key << Alias("name") << Value << "Fred";
+  out << EndMap;
+  out << Flow << BeginMap;
+  out << Key << Alias("name") << Value << "Mike";
+  out << EndMap;
+  out << EndSeq;
+  ExpectEmit(R"(- &name Name
+- *name : Fred
+- {*name : Mike})");
+}
+
 TEST_F(EmitterTest, AliasAndAnchorWithNull) {
   out << BeginSeq;
   out << Anchor("fred") << Null;
