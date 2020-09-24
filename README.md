@@ -46,13 +46,13 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=ON|OFF] ..
 
 ## Bazel
 
-## Build
+### Build
 
 ```bash
 $ bazel build :yaml-cpp
 ```
 
-## Dependency
+### External Dependency
 
 ```python
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
@@ -61,9 +61,8 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 # ----------------------------------------------------------------------
 git_repository(
     name = "yaml_parser",
-    remote = "https://github.com/jbeder/yaml-cpp.git",
-    #commit = "98acc5a",
-    #tag = "",
+    remote = "https://github.com/yicm/yaml-cpp.git",
+    commit = "c5d1fcf",
 )
 ```
 
