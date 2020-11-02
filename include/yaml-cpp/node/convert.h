@@ -14,6 +14,7 @@
 #include <map>
 #include <sstream>
 #include <type_traits>
+#include <valarray>
 #include <vector>
 
 #include "yaml-cpp/binary.h"
@@ -335,6 +336,37 @@ struct convert<std::array<T, N>> {
     return node.IsSequence() && node.size() == N;
   }
 };
+
+
+// std::valarray
+template <typename T>
+struct convert<std::valarray<T>> {
+  static Node encode(const std::valarray<T>& rhs) {
+    Node node(NodeType::Sequence);
+    for (const auto& element : rhs) {
+      node.push_back(element);
+    }
+    return node;
+  }
+
+  static bool decode(const Node& node, std::valarray<T>& rhs) {
+    if (!node.IsSequence()) {
+      return false;
+    }
+
+    rhs.resize(node.size());
+    for (auto i = 0u; i < node.size(); ++i) {
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[i] = node[i].template as<T>();
+#else
+      rhs[i] = node[i].as<T>();
+#endif
+    }
+    return true;
+  }
+};
+
 
 // std::pair
 template <typename T, typename U>
