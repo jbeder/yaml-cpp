@@ -356,7 +356,9 @@ TEST(NodeTest, StdValrray) {
   Node node;
   node["evens"] = evens;
   std::valarray<int> actualEvens = node["evens"].as<std::valarray<int>>();
-  EXPECT_EQ(evens, actualEvens);
+  for (int i = 0; i < evens.size(); ++i) {
+    EXPECT_EQ(evens[i], actualEvens[i]);
+  }
 }
 
 TEST(NodeTest, StdVector) {
