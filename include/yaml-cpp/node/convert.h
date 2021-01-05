@@ -127,7 +127,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
   if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
     if (num >= (std::numeric_limits<T>::min)() &&
         num <= (std::numeric_limits<T>::max)()) {
-      rhs = num;
+      rhs = (T)num;
       return true;
     }
   }
