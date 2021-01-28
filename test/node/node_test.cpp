@@ -663,6 +663,12 @@ class NodeEmitterTest : public ::testing::Test {
   }
 };
 
+TEST_F(NodeEmitterTest, StringWithColons) {
+  Node node{"String:with:colons"};
+
+  ExpectOutput("\"String:with:colons\"", node);
+}
+
 TEST_F(NodeEmitterTest, SimpleFlowSeqNode) {
   Node node;
   node.SetStyle(EmitterStyle::Flow);

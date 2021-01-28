@@ -32,6 +32,10 @@ inline const RegEx& Tab() {
   static const RegEx e = RegEx('\t');
   return e;
 }
+inline const RegEx& Colon() {
+  static const RegEx e = RegEx(':');
+  return e;
+}
 inline const RegEx& Blank() {
   static const RegEx e = Space() | Tab();
   return e;
