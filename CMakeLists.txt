@@ -16,6 +16,10 @@ include(GNUInstallDirs)
 include(CTest)
 include(GenerateExportHeader)
 
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
 find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
