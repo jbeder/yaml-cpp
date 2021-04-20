@@ -15,6 +15,8 @@
 #include <utility>
 #include <vector>
 
+static_assert(std::is_constructible<YAML::Node, const YAML::Node&>::value, "Node must be copy constructable");
+
 namespace YAML {
 namespace detail {
 struct iterator_value : public Node, std::pair<Node, Node> {
