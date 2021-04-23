@@ -22,20 +22,20 @@ class node_ref {
 
   bool is_defined() const { return m_pData->is_defined(); }
   const Mark& mark() const { return m_pData->mark(); }
-  NodeType::value type() const { return m_pData->type(); }
+  NodeType type() const { return m_pData->type(); }
   const std::string& scalar() const { return m_pData->scalar(); }
   const std::string& tag() const { return m_pData->tag(); }
-  EmitterStyle::value style() const { return m_pData->style(); }
+  EmitterStyle style() const { return m_pData->style(); }
 
   void mark_defined() { m_pData->mark_defined(); }
   void set_data(const node_ref& rhs) { m_pData = rhs.m_pData; }
 
   void set_mark(const Mark& mark) { m_pData->set_mark(mark); }
-  void set_type(NodeType::value type) { m_pData->set_type(type); }
+  void set_type(NodeType type) { m_pData->set_type(type); }
   void set_tag(const std::string& tag) { m_pData->set_tag(tag); }
   void set_null() { m_pData->set_null(); }
   void set_scalar(const std::string& scalar) { m_pData->set_scalar(scalar); }
-  void set_style(EmitterStyle::value style) { m_pData->set_style(style); }
+  void set_style(EmitterStyle style) { m_pData->set_style(style); }
 
   // size/iterator
   std::size_t size() const { return m_pData->size(); }

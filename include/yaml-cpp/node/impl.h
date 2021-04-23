@@ -19,7 +19,7 @@ namespace YAML {
 inline Node::Node()
     : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
 
-inline Node::Node(NodeType::value type)
+inline Node::Node(NodeType type)
     : m_isValid(true),
       m_invalidKey{},
       m_pMemory(new detail::memory_holder),
@@ -79,7 +79,7 @@ inline Mark Node::Mark() const {
   return m_pNode ? m_pNode->mark() : Mark::null_mark();
 }
 
-inline NodeType::value Node::Type() const {
+inline NodeType Node::Type() const {
   if (!m_isValid)
     throw InvalidNode(m_invalidKey);
   return m_pNode ? m_pNode->type() : NodeType::Null;
@@ -180,13 +180,13 @@ inline void Node::SetTag(const std::string& tag) {
   m_pNode->set_tag(tag);
 }
 
-inline EmitterStyle::value Node::Style() const {
+inline EmitterStyle Node::Style() const {
   if (!m_isValid)
     throw InvalidNode(m_invalidKey);
   return m_pNode ? m_pNode->style() : EmitterStyle::Default;
 }
 
-inline void Node::SetStyle(EmitterStyle::value style) {
+inline void Node::SetStyle(EmitterStyle style) {
   EnsureNodeExists();
   m_pNode->set_style(style);
 }

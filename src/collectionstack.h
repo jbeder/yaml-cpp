@@ -11,30 +11,28 @@
 #include <stack>
 
 namespace YAML {
-struct CollectionType {
-  enum value { NoCollection, BlockMap, BlockSeq, FlowMap, FlowSeq, CompactMap };
-};
+enum class CollectionType { NoCollection, BlockMap, BlockSeq, FlowMap, FlowSeq, CompactMap };
 
 class CollectionStack {
  public:
   CollectionStack() : collectionStack{} {}
-  CollectionType::value GetCurCollectionType() const {
+  CollectionType GetCurCollectionType() const {
     if (collectionStack.empty())
       return CollectionType::NoCollection;
     return collectionStack.top();
   }
 
-  void PushCollectionType(CollectionType::value type) {
+  void PushCollectionType(CollectionType type) {
     collectionStack.push(type);
   }
-  void PopCollectionType(CollectionType::value type) {
+  void PopCollectionType(CollectionType type) {
     assert(type == GetCurCollectionType());
     (void)type;
     collectionStack.pop();
   }
 
  private:
-  std::stack<CollectionType::value> collectionStack;
+  std::stack<CollectionType> collectionStack;
 };
 }  // namespace YAML
 

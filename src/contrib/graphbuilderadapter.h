@@ -45,11 +45,11 @@ class GraphBuilderAdapter : public EventHandler {
                         anchor_t anchor, const std::string& value);
 
   virtual void OnSequenceStart(const Mark& mark, const std::string& tag,
-                               anchor_t anchor, EmitterStyle::value style);
+                               anchor_t anchor, EmitterStyle style);
   virtual void OnSequenceEnd();
 
   virtual void OnMapStart(const Mark& mark, const std::string& tag,
-                          anchor_t anchor, EmitterStyle::value style);
+                          anchor_t anchor, EmitterStyle style);
   virtual void OnMapEnd();
 
   void* RootNode() const { return m_pRootNode; }
