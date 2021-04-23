@@ -101,32 +101,32 @@ Emitter& Emitter::SetLocalValue(EMITTER_MANIP value) {
     return *this;
 
   switch (value) {
-    case BeginDoc:
+    case EMITTER_MANIP::BeginDoc:
       EmitBeginDoc();
       break;
-    case EndDoc:
+    case EMITTER_MANIP::EndDoc:
       EmitEndDoc();
       break;
-    case BeginSeq:
+    case EMITTER_MANIP::BeginSeq:
       EmitBeginSeq();
       break;
-    case EndSeq:
+    case EMITTER_MANIP::EndSeq:
       EmitEndSeq();
       break;
-    case BeginMap:
+    case EMITTER_MANIP::BeginMap:
       EmitBeginMap();
       break;
-    case EndMap:
+    case EMITTER_MANIP::EndMap:
       EmitEndMap();
       break;
-    case Key:
-    case Value:
+    case EMITTER_MANIP::Key:
+    case EMITTER_MANIP::Value:
       // deprecated (these can be deduced by the parity of nodes in a map)
       break;
-    case TagByKind:
+    case EMITTER_MANIP::TagByKind:
       EmitKindTag();
       break;
-    case Newline:
+    case EMITTER_MANIP::Newline:
       EmitNewline();
       break;
     default:
@@ -392,7 +392,7 @@ void Emitter::BlockSeqPrepareNode(EmitterNodeType::value child) {
 
 void Emitter::FlowMapPrepareNode(EmitterNodeType::value child) {
   if (m_pState->CurGroupChildCount() % 2 == 0) {
-    if (m_pState->GetMapKeyFormat() == LongKey)
+    if (m_pState->GetMapKeyFormat() == EMITTER_MANIP::LongKey)
       m_pState->SetLongKey();
 
     if (m_pState->CurGroupLongKey())
@@ -530,7 +530,7 @@ void Emitter::FlowMapPrepareSimpleKeyValue(EmitterNodeType::value child) {
 
 void Emitter::BlockMapPrepareNode(EmitterNodeType::value child) {
   if (m_pState->CurGroupChildCount() % 2 == 0) {
-    if (m_pState->GetMapKeyFormat() == LongKey)
+    if (m_pState->GetMapKeyFormat() == EMITTER_MANIP::LongKey)
       m_pState->SetLongKey();
     if (child == EmitterNodeType::BlockSeq ||
         child == EmitterNodeType::BlockMap)
@@ -681,14 +681,14 @@ void Emitter::SpaceOrIndentTo(bool requireSpace, std::size_t indent) {
 void Emitter::PrepareIntegralStream(std::stringstream& stream) const {
 
   switch (m_pState->GetIntFormat()) {
-    case Dec:
+    case EMITTER_MANIP::Dec:
       stream << std::dec;
       break;
-    case Hex:
+    case EMITTER_MANIP::Hex:
       stream << "0x";
       stream << std::hex;
       break;
-    case Oct:
+    case EMITTER_MANIP::Oct:
       stream << "0";
       stream << std::oct;
       break;
@@ -704,9 +704,9 @@ void Emitter::StartedScalar() { m_pState->StartedScalar(); }
 
 StringEscaping::value GetStringEscapingStyle(const EMITTER_MANIP emitterManip) {
   switch (emitterManip) {
-    case EscapeNonAscii:
+    case EMITTER_MANIP::EscapeNonAscii:
       return StringEscaping::NonAscii;
-    case EscapeAsJson:
+    case EMITTER_MANIP::EscapeAsJson:
       return StringEscaping::JSON;
     default:
       return StringEscaping::None;
@@ -725,7 +725,7 @@ Emitter& Emitter::Write(const std::string& str) {
                                  m_pState->CurGroupFlowType(), stringEscaping == StringEscaping::NonAscii);
 
   if (strFormat == StringFormat::Literal || str.size() > 1024)
-    m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
+    m_pState->SetMapKeyFormat(YAML::EMITTER_MANIP::LongKey, FmtScope::Local);
 
   PrepareNode(EmitterNodeType::Scalar);
 
@@ -759,42 +759,42 @@ std::size_t Emitter::GetDoublePrecision() const {
 }
 
 const char* Emitter::ComputeFullBoolName(bool b) const {
-  const EMITTER_MANIP mainFmt = (m_pState->GetBoolLengthFormat() == ShortBool
-                                     ? YesNoBool
+  const EMITTER_MANIP mainFmt = (m_pState->GetBoolLengthFormat() == EMITTER_MANIP::ShortBool
+                                     ? EMITTER_MANIP::YesNoBool
                                      : m_pState->GetBoolFormat());
   const EMITTER_MANIP caseFmt = m_pState->GetBoolCaseFormat();
   switch (mainFmt) {
-    case YesNoBool:
+    case EMITTER_MANIP::YesNoBool:
       switch (caseFmt) {
-        case UpperCase:
+        case EMITTER_MANIP::UpperCase:
           return b ? "YES" : "NO";
-        case CamelCase:
+        case EMITTER_MANIP::CamelCase:
           return b ? "Yes" : "No";
-        case LowerCase:
+        case EMITTER_MANIP::LowerCase:
           return b ? "yes" : "no";
         default:
           break;
       }
       break;
-    case OnOffBool:
+    case EMITTER_MANIP::OnOffBool:
       switch (caseFmt) {
-        case UpperCase:
+        case EMITTER_MANIP::UpperCase:
           return b ? "ON" : "OFF";
-        case CamelCase:
+        case EMITTER_MANIP::CamelCase:
           return b ? "On" : "Off";
-        case LowerCase:
+        case EMITTER_MANIP::LowerCase:
           return b ? "on" : "off";
         default:
           break;
       }
       break;
-    case TrueFalseBool:
+    case EMITTER_MANIP::TrueFalseBool:
       switch (caseFmt) {
-        case UpperCase:
+        case EMITTER_MANIP::UpperCase:
           return b ? "TRUE" : "FALSE";
-        case CamelCase:
+        case EMITTER_MANIP::CamelCase:
           return b ? "True" : "False";
-        case LowerCase:
+        case EMITTER_MANIP::LowerCase:
           return b ? "true" : "false";
         default:
           break;
@@ -809,13 +809,13 @@ const char* Emitter::ComputeFullBoolName(bool b) const {
 
 const char* Emitter::ComputeNullName() const {
   switch (m_pState->GetNullFormat()) {
-    case LowerNull:
+    case EMITTER_MANIP::LowerNull:
       return "null";
-    case UpperNull:
+    case EMITTER_MANIP::UpperNull:
       return "NULL";
-    case CamelNull:
+    case EMITTER_MANIP::CamelNull:
       return "Null";
-    case TildeNull:
+    case EMITTER_MANIP::TildeNull:
       // fallthrough
     default:
       return "~";
@@ -829,7 +829,7 @@ Emitter& Emitter::Write(bool b) {
   PrepareNode(EmitterNodeType::Scalar);
 
   const char* name = ComputeFullBoolName(b);
-  if (m_pState->GetBoolLengthFormat() == ShortBool)
+  if (m_pState->GetBoolLengthFormat() == EMITTER_MANIP::ShortBool)
     m_stream << name[0];
   else
     m_stream << name;

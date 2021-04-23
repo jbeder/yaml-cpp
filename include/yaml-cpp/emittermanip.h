@@ -10,7 +10,7 @@
 #include <string>
 
 namespace YAML {
-enum EMITTER_MANIP {
+enum class EMITTER_MANIP {
   // general manipulators
   Auto,
   TagByKind,

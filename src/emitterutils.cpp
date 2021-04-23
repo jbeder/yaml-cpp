@@ -272,19 +272,19 @@ StringFormat::value ComputeStringFormat(const std::string& str,
                                         FlowType::value flowType,
                                         bool escapeNonAscii) {
   switch (strFormat) {
-    case Auto:
+    case EMITTER_MANIP::Auto:
       if (IsValidPlainScalar(str, flowType, escapeNonAscii)) {
         return StringFormat::Plain;
       }
       return StringFormat::DoubleQuoted;
-    case SingleQuoted:
+    case EMITTER_MANIP::SingleQuoted:
       if (IsValidSingleQuotedScalar(str, escapeNonAscii)) {
         return StringFormat::SingleQuoted;
       }
       return StringFormat::DoubleQuoted;
-    case DoubleQuoted:
+    case EMITTER_MANIP::DoubleQuoted:
       return StringFormat::DoubleQuoted;
-    case Literal:
+    case EMITTER_MANIP::Literal:
       if (IsValidLiteralScalar(str, flowType, escapeNonAscii)) {
         return StringFormat::Literal;
       }

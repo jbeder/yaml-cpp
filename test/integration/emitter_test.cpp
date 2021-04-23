@@ -72,27 +72,27 @@ TEST_F(EmitterTest, AliasScalar) {
 }
 
 TEST_F(EmitterTest, StringFormat) {
-  out << BeginSeq;
-  out.SetStringFormat(SingleQuoted);
+  out << EMITTER_MANIP::BeginSeq;
+  out.SetStringFormat(EMITTER_MANIP::SingleQuoted);
   out << "string";
-  out.SetStringFormat(DoubleQuoted);
+  out.SetStringFormat(EMITTER_MANIP::DoubleQuoted);
   out << "string";
-  out.SetStringFormat(Literal);
+  out.SetStringFormat(EMITTER_MANIP::Literal);
   out << "string";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- 'string'\n- \"string\"\n- |\n  string");
 }
 
 TEST_F(EmitterTest, IntBase) {
-  out << BeginSeq;
-  out.SetIntBase(Dec);
+  out << EMITTER_MANIP::BeginSeq;
+  out.SetIntBase(EMITTER_MANIP::Dec);
   out << 1024;
-  out.SetIntBase(Hex);
+  out.SetIntBase(EMITTER_MANIP::Hex);
   out << 1024;
-  out.SetIntBase(Oct);
+  out.SetIntBase(EMITTER_MANIP::Oct);
   out << 1024;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- 1024\n- 0x400\n- 02000");
 }
@@ -100,49 +100,49 @@ TEST_F(EmitterTest, IntBase) {
 TEST_F(EmitterTest, NumberPrecision) {
   out.SetFloatPrecision(3);
   out.SetDoublePrecision(2);
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << 3.1425926f;
   out << 53.5893;
   out << 2384626.4338;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- 3.14\n- 54\n- 2.4e+06");
 }
 
 TEST_F(EmitterTest, SimpleSeq) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "eggs";
   out << "bread";
   out << "milk";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- eggs\n- bread\n- milk");
 }
 
 TEST_F(EmitterTest, SimpleFlowSeq) {
-  out << Flow;
-  out << BeginSeq;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginSeq;
   out << "Larry";
   out << "Curly";
   out << "Moe";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("[Larry, Curly, Moe]");
 }
 
 TEST_F(EmitterTest, EmptyFlowSeq) {
-  out << Flow;
-  out << BeginSeq;
-  out << EndSeq;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("[]");
 }
 
 TEST_F(EmitterTest, EmptyBlockSeqWithBegunContent) {
-  out << BeginSeq;
-  out << BeginSeq << Comment("comment") << EndSeq;
-  out << BeginSeq << Newline << EndSeq;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginSeq << Comment("comment") << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::BeginSeq << EMITTER_MANIP::Newline << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(R"(-
 # comment
@@ -153,10 +153,10 @@ TEST_F(EmitterTest, EmptyBlockSeqWithBegunContent) {
 }
 
 TEST_F(EmitterTest, EmptyBlockMapWithBegunContent) {
-  out << BeginSeq;
-  out << BeginMap << Comment("comment") << EndMap;
-  out << BeginMap << Newline << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << Comment("comment") << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Newline << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(R"(-  # comment
   {}
@@ -165,11 +165,11 @@ TEST_F(EmitterTest, EmptyBlockMapWithBegunContent) {
 }
 
 TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
-  out << Flow;
-  out << BeginSeq;
-  out << BeginSeq << Comment("comment") << EndSeq;
-  out << BeginSeq << Newline << EndSeq;
-  out << EndSeq;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginSeq << Comment("comment") << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::BeginSeq << EMITTER_MANIP::Newline << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(R"([[  # comment
   ], [
@@ -177,11 +177,11 @@ TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
 }
 
 TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
-  out << Flow;
-  out << BeginSeq;
-  out << BeginMap << Comment("comment") << EndMap;
-  out << BeginMap << Newline << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << Comment("comment") << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Newline << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(R"([{  # comment
   }, {
@@ -189,128 +189,128 @@ TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
 }
 
 TEST_F(EmitterTest, NestedBlockSeq) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "item 1";
-  out << BeginSeq << "subitem 1"
-      << "subitem 2" << EndSeq;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginSeq << "subitem 1"
+      << "subitem 2" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- item 1\n-\n  - subitem 1\n  - subitem 2");
 }
 
 TEST_F(EmitterTest, NestedFlowSeq) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "one";
-  out << Flow << BeginSeq << "two"
-      << "three" << EndSeq;
-  out << EndSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq << "two"
+      << "three" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- one\n- [two, three]");
 }
 
 TEST_F(EmitterTest, SimpleMap) {
-  out << BeginMap;
-  out << Key << "name";
-  out << Value << "Ryan Braun";
-  out << Key << "position";
-  out << Value << "3B";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name";
+  out << EMITTER_MANIP::Value << "Ryan Braun";
+  out << EMITTER_MANIP::Key << "position";
+  out << EMITTER_MANIP::Value << "3B";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("name: Ryan Braun\nposition: 3B");
 }
 
 TEST_F(EmitterTest, SimpleFlowMap) {
-  out << Flow;
-  out << BeginMap;
-  out << Key << "shape";
-  out << Value << "square";
-  out << Key << "color";
-  out << Value << "blue";
-  out << EndMap;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "shape";
+  out << EMITTER_MANIP::Value << "square";
+  out << EMITTER_MANIP::Key << "color";
+  out << EMITTER_MANIP::Value << "blue";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("{shape: square, color: blue}");
 }
 
 TEST_F(EmitterTest, MapAndList) {
-  out << BeginMap;
-  out << Key << "name";
-  out << Value << "Barack Obama";
-  out << Key << "children";
-  out << Value << BeginSeq << "Sasha"
-      << "Malia" << EndSeq;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name";
+  out << EMITTER_MANIP::Value << "Barack Obama";
+  out << EMITTER_MANIP::Key << "children";
+  out << EMITTER_MANIP::Value << EMITTER_MANIP::BeginSeq << "Sasha"
+      << "Malia" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("name: Barack Obama\nchildren:\n  - Sasha\n  - Malia");
 }
 
 TEST_F(EmitterTest, ListAndMap) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "item 1";
-  out << BeginMap;
-  out << Key << "pens" << Value << 8;
-  out << Key << "pencils" << Value << 14;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "pens" << EMITTER_MANIP::Value << 8;
+  out << EMITTER_MANIP::Key << "pencils" << EMITTER_MANIP::Value << 14;
+  out << EMITTER_MANIP::EndMap;
   out << "item 2";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- item 1\n- pens: 8\n  pencils: 14\n- item 2");
 }
 
 TEST_F(EmitterTest, NestedBlockMap) {
-  out << BeginMap;
-  out << Key << "name";
-  out << Value << "Fred";
-  out << Key << "grades";
-  out << Value;
-  out << BeginMap;
-  out << Key << "algebra" << Value << "A";
-  out << Key << "physics" << Value << "C+";
-  out << Key << "literature" << Value << "B";
-  out << EndMap;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name";
+  out << EMITTER_MANIP::Value << "Fred";
+  out << EMITTER_MANIP::Key << "grades";
+  out << EMITTER_MANIP::Value;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "algebra" << EMITTER_MANIP::Value << "A";
+  out << EMITTER_MANIP::Key << "physics" << EMITTER_MANIP::Value << "C+";
+  out << EMITTER_MANIP::Key << "literature" << EMITTER_MANIP::Value << "B";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
       "name: Fred\ngrades:\n  algebra: A\n  physics: C+\n  literature: B");
 }
 
 TEST_F(EmitterTest, NestedFlowMap) {
-  out << Flow;
-  out << BeginMap;
-  out << Key << "name";
-  out << Value << "Fred";
-  out << Key << "grades";
-  out << Value;
-  out << BeginMap;
-  out << Key << "algebra" << Value << "A";
-  out << Key << "physics" << Value << "C+";
-  out << Key << "literature" << Value << "B";
-  out << EndMap;
-  out << EndMap;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name";
+  out << EMITTER_MANIP::Value << "Fred";
+  out << EMITTER_MANIP::Key << "grades";
+  out << EMITTER_MANIP::Value;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "algebra" << EMITTER_MANIP::Value << "A";
+  out << EMITTER_MANIP::Key << "physics" << EMITTER_MANIP::Value << "C+";
+  out << EMITTER_MANIP::Key << "literature" << EMITTER_MANIP::Value << "B";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("{name: Fred, grades: {algebra: A, physics: C+, literature: B}}");
 }
 
 TEST_F(EmitterTest, MapListMix) {
-  out << BeginMap;
-  out << Key << "name";
-  out << Value << "Bob";
-  out << Key << "position";
-  out << Value;
-  out << Flow << BeginSeq << 2 << 4 << EndSeq;
-  out << Key << "invincible" << Value << OnOffBool << false;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name";
+  out << EMITTER_MANIP::Value << "Bob";
+  out << EMITTER_MANIP::Key << "position";
+  out << EMITTER_MANIP::Value;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq << 2 << 4 << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Key << "invincible" << EMITTER_MANIP::Value << EMITTER_MANIP::OnOffBool << false;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("name: Bob\nposition: [2, 4]\ninvincible: off");
 }
 
 TEST_F(EmitterTest, SimpleLongKey) {
-  out << LongKey;
-  out << BeginMap;
-  out << Key << "height";
-  out << Value << "5'9\"";
-  out << Key << "weight";
-  out << Value << 145;
-  out << EndMap;
+  out << EMITTER_MANIP::LongKey;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "height";
+  out << EMITTER_MANIP::Value << "5'9\"";
+  out << EMITTER_MANIP::Key << "weight";
+  out << EMITTER_MANIP::Value << 145;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("? height\n: 5'9\"\n? weight\n: 145");
 }
@@ -318,59 +318,59 @@ TEST_F(EmitterTest, SimpleLongKey) {
 TEST_F(EmitterTest, SingleLongKey) {
   const std::string shortKey(1024, 'a');
   const std::string longKey(1025, 'a');
-  out << BeginMap;
-  out << Key << "age";
-  out << Value << "24";
-  out << LongKey << Key << "height";
-  out << Value << "5'9\"";
-  out << Key << "weight";
-  out << Value << 145;
-  out << Key << shortKey;
-  out << Value << "1";
-  out << Key << longKey;
-  out << Value << "1";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "age";
+  out << EMITTER_MANIP::Value << "24";
+  out << EMITTER_MANIP::LongKey << EMITTER_MANIP::Key << "height";
+  out << EMITTER_MANIP::Value << "5'9\"";
+  out << EMITTER_MANIP::Key << "weight";
+  out << EMITTER_MANIP::Value << 145;
+  out << EMITTER_MANIP::Key << shortKey;
+  out << EMITTER_MANIP::Value << "1";
+  out << EMITTER_MANIP::Key << longKey;
+  out << EMITTER_MANIP::Value << "1";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("age: 24\n? height\n: 5'9\"\nweight: 145\n" + shortKey +
              ": 1\n? " + longKey + "\n: 1");
 }
 
 TEST_F(EmitterTest, ComplexLongKey) {
-  out << LongKey;
-  out << BeginMap;
-  out << Key << BeginSeq << 1 << 3 << EndSeq;
-  out << Value << "monster";
-  out << Key << Flow << BeginSeq << 2 << 0 << EndSeq;
-  out << Value << "demon";
-  out << EndMap;
+  out << EMITTER_MANIP::LongKey;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << EMITTER_MANIP::BeginSeq << 1 << 3 << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Value << "monster";
+  out << EMITTER_MANIP::Key << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq << 2 << 0 << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Value << "demon";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("? - 1\n  - 3\n: monster\n? [2, 0]\n: demon");
 }
 
 TEST_F(EmitterTest, AutoLongKey) {
-  out << BeginMap;
-  out << Key << BeginSeq << 1 << 3 << EndSeq;
-  out << Value << "monster";
-  out << Key << Flow << BeginSeq << 2 << 0 << EndSeq;
-  out << Value << "demon";
-  out << Key << "the origin";
-  out << Value << "angel";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << EMITTER_MANIP::BeginSeq << 1 << 3 << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Value << "monster";
+  out << EMITTER_MANIP::Key << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq << 2 << 0 << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Value << "demon";
+  out << EMITTER_MANIP::Key << "the origin";
+  out << EMITTER_MANIP::Value << "angel";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("? - 1\n  - 3\n: monster\n[2, 0]: demon\nthe origin: angel");
 }
 
 TEST_F(EmitterTest, ScalarFormat) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "simple scalar";
-  out << SingleQuoted << "explicit single-quoted scalar";
-  out << DoubleQuoted << "explicit double-quoted scalar";
+  out << EMITTER_MANIP::SingleQuoted << "explicit single-quoted scalar";
+  out << EMITTER_MANIP::DoubleQuoted << "explicit double-quoted scalar";
   out << "auto-detected\ndouble-quoted scalar";
   out << "a non-\"auto-detected\" double-quoted scalar";
-  out << Literal
+  out << EMITTER_MANIP::Literal
       << "literal scalar\nthat may span\nmany, many\nlines "
          "and have \"whatever\" crazy\tsymbols that we like";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(
       "- simple scalar\n- 'explicit single-quoted scalar'\n- \"explicit "
@@ -383,86 +383,86 @@ TEST_F(EmitterTest, ScalarFormat) {
 }
 
 TEST_F(EmitterTest, AutoLongKeyScalar) {
-  out << BeginMap;
-  out << Key << Literal << "multi-line\nscalar";
-  out << Value << "and its value";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << EMITTER_MANIP::Literal << "multi-line\nscalar";
+  out << EMITTER_MANIP::Value << "and its value";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("? |\n  multi-line\n  scalar\n: and its value");
 }
 
 TEST_F(EmitterTest, LongKeyFlowMap) {
-  out << Flow;
-  out << BeginMap;
-  out << Key << "simple key";
-  out << Value << "and value";
-  out << LongKey << Key << "long key";
-  out << Value << "and its value";
-  out << EndMap;
+  out << EMITTER_MANIP::Flow;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "simple key";
+  out << EMITTER_MANIP::Value << "and value";
+  out << EMITTER_MANIP::LongKey << EMITTER_MANIP::Key << "long key";
+  out << EMITTER_MANIP::Value << "and its value";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("{simple key: and value, ? long key: and its value}");
 }
 
 TEST_F(EmitterTest, BlockMapAsKey) {
-  out << BeginMap;
-  out << Key;
-  out << BeginMap;
-  out << Key << "key" << Value << "value";
-  out << Key << "next key" << Value << "next value";
-  out << EndMap;
-  out << Value;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "key" << EMITTER_MANIP::Value << "value";
+  out << EMITTER_MANIP::Key << "next key" << EMITTER_MANIP::Value << "next value";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Value;
   out << "total value";
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("? key: value\n  next key: next value\n: total value");
 }
 
 TEST_F(EmitterTest, AliasAndAnchor) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Anchor("fred");
-  out << BeginMap;
-  out << Key << "name" << Value << "Fred";
-  out << Key << "age" << Value << 42;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name" << EMITTER_MANIP::Value << "Fred";
+  out << EMITTER_MANIP::Key << "age" << EMITTER_MANIP::Value << 42;
+  out << EMITTER_MANIP::EndMap;
   out << Alias("fred");
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- &fred\n  name: Fred\n  age: 42\n- *fred");
 }
 
 TEST_F(EmitterTest, AliasOnKey) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Anchor("name") << "Name";
-  out << BeginMap;
-  out << Key << Alias("name") << Value << "Fred";
-  out << EndMap;
-  out << Flow << BeginMap;
-  out << Key << Alias("name") << Value << "Mike";
-  out << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << Alias("name") << EMITTER_MANIP::Value << "Fred";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << Alias("name") << EMITTER_MANIP::Value << "Mike";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit(R"(- &name Name
 - *name : Fred
 - {*name : Mike})");
 }
 
 TEST_F(EmitterTest, AliasAndAnchorWithNull) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Anchor("fred") << Null;
   out << Alias("fred");
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- &fred ~\n- *fred");
 }
 
 TEST_F(EmitterTest, AliasAndAnchorInFlow) {
-  out << Flow << BeginSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << Anchor("fred");
-  out << BeginMap;
-  out << Key << "name" << Value << "Fred";
-  out << Key << "age" << Value << 42;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "name" << EMITTER_MANIP::Value << "Fred";
+  out << EMITTER_MANIP::Key << "age" << EMITTER_MANIP::Value << 42;
+  out << EMITTER_MANIP::EndMap;
   out << Alias("fred");
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("[&fred {name: Fred, age: 42}, *fred]");
 }
@@ -474,86 +474,86 @@ TEST_F(EmitterTest, SimpleVerbatimTag) {
 }
 
 TEST_F(EmitterTest, VerbatimTagInBlockSeq) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << VerbatimTag("!foo") << "bar";
   out << "baz";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- !<!foo> bar\n- baz");
 }
 
 TEST_F(EmitterTest, VerbatimTagInFlowSeq) {
-  out << Flow << BeginSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << VerbatimTag("!foo") << "bar";
   out << "baz";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("[!<!foo> bar, baz]");
 }
 
 TEST_F(EmitterTest, VerbatimTagInFlowSeqWithNull) {
-  out << Flow << BeginSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << VerbatimTag("!foo") << Null;
   out << "baz";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("[!<!foo> ~, baz]");
 }
 
 TEST_F(EmitterTest, VerbatimTagInBlockMap) {
-  out << BeginMap;
-  out << Key << VerbatimTag("!foo") << "bar";
-  out << Value << VerbatimTag("!waz") << "baz";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << VerbatimTag("!foo") << "bar";
+  out << EMITTER_MANIP::Value << VerbatimTag("!waz") << "baz";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("!<!foo> bar: !<!waz> baz");
 }
 
 TEST_F(EmitterTest, VerbatimTagInFlowMap) {
-  out << Flow << BeginMap;
-  out << Key << VerbatimTag("!foo") << "bar";
-  out << Value << "baz";
-  out << EndMap;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << VerbatimTag("!foo") << "bar";
+  out << EMITTER_MANIP::Value << "baz";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("{!<!foo> bar: baz}");
 }
 
 TEST_F(EmitterTest, VerbatimTagInFlowMapWithNull) {
-  out << Flow << BeginMap;
-  out << Key << VerbatimTag("!foo") << Null;
-  out << Value << "baz";
-  out << EndMap;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << VerbatimTag("!foo") << Null;
+  out << EMITTER_MANIP::Value << "baz";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("{!<!foo> ~: baz}");
 }
 
 TEST_F(EmitterTest, VerbatimTagWithEmptySeq) {
-  out << VerbatimTag("!foo") << BeginSeq << EndSeq;
+  out << VerbatimTag("!foo") << EMITTER_MANIP::BeginSeq << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("!<!foo>\n[]");
 }
 
 TEST_F(EmitterTest, VerbatimTagWithEmptyMap) {
-  out << VerbatimTag("!bar") << BeginMap << EndMap;
+  out << VerbatimTag("!bar") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::EndMap;
 
   ExpectEmit("!<!bar>\n{}");
 }
 
 TEST_F(EmitterTest, VerbatimTagWithEmptySeqAndMap) {
-  out << BeginSeq;
-  out << VerbatimTag("!foo") << BeginSeq << EndSeq;
-  out << VerbatimTag("!bar") << BeginMap << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginSeq;
+  out << VerbatimTag("!foo") << EMITTER_MANIP::BeginSeq << EMITTER_MANIP::EndSeq;
+  out << VerbatimTag("!bar") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- !<!foo>\n  []\n- !<!bar>\n  {}");
 }
 
 TEST_F(EmitterTest, ByKindTagWithScalar) {
-  out << BeginSeq;
-  out << DoubleQuoted << "12";
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::DoubleQuoted << "12";
   out << "12";
-  out << TagByKind << "12";
-  out << EndSeq;
+  out << EMITTER_MANIP::TagByKind << "12";
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- \"12\"\n- 12\n- ! 12");
 }
@@ -571,56 +571,56 @@ TEST_F(EmitterTest, LocalTagWithScalar) {
 }
 
 TEST_F(EmitterTest, ComplexDoc) {
-  out << BeginMap;
-  out << Key << "receipt";
-  out << Value << "Oz-Ware Purchase Invoice";
-  out << Key << "date";
-  out << Value << "2007-08-06";
-  out << Key << "customer";
-  out << Value;
-  out << BeginMap;
-  out << Key << "given";
-  out << Value << "Dorothy";
-  out << Key << "family";
-  out << Value << "Gale";
-  out << EndMap;
-  out << Key << "items";
-  out << Value;
-  out << BeginSeq;
-  out << BeginMap;
-  out << Key << "part_no";
-  out << Value << "A4786";
-  out << Key << "descrip";
-  out << Value << "Water Bucket (Filled)";
-  out << Key << "price";
-  out << Value << 1.47;
-  out << Key << "quantity";
-  out << Value << 4;
-  out << EndMap;
-  out << BeginMap;
-  out << Key << "part_no";
-  out << Value << "E1628";
-  out << Key << "descrip";
-  out << Value << "High Heeled \"Ruby\" Slippers";
-  out << Key << "price";
-  out << Value << 100.27;
-  out << Key << "quantity";
-  out << Value << 1;
-  out << EndMap;
-  out << EndSeq;
-  out << Key << "bill-to";
-  out << Value << Anchor("id001");
-  out << BeginMap;
-  out << Key << "street";
-  out << Value << Literal << "123 Tornado Alley\nSuite 16";
-  out << Key << "city";
-  out << Value << "East Westville";
-  out << Key << "state";
-  out << Value << "KS";
-  out << EndMap;
-  out << Key << "ship-to";
-  out << Value << Alias("id001");
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "receipt";
+  out << EMITTER_MANIP::Value << "Oz-Ware Purchase Invoice";
+  out << EMITTER_MANIP::Key << "date";
+  out << EMITTER_MANIP::Value << "2007-08-06";
+  out << EMITTER_MANIP::Key << "customer";
+  out << EMITTER_MANIP::Value;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "given";
+  out << EMITTER_MANIP::Value << "Dorothy";
+  out << EMITTER_MANIP::Key << "family";
+  out << EMITTER_MANIP::Value << "Gale";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Key << "items";
+  out << EMITTER_MANIP::Value;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "part_no";
+  out << EMITTER_MANIP::Value << "A4786";
+  out << EMITTER_MANIP::Key << "descrip";
+  out << EMITTER_MANIP::Value << "Water Bucket (Filled)";
+  out << EMITTER_MANIP::Key << "price";
+  out << EMITTER_MANIP::Value << 1.47;
+  out << EMITTER_MANIP::Key << "quantity";
+  out << EMITTER_MANIP::Value << 4;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "part_no";
+  out << EMITTER_MANIP::Value << "E1628";
+  out << EMITTER_MANIP::Key << "descrip";
+  out << EMITTER_MANIP::Value << "High Heeled \"Ruby\" Slippers";
+  out << EMITTER_MANIP::Key << "price";
+  out << EMITTER_MANIP::Value << 100.27;
+  out << EMITTER_MANIP::Key << "quantity";
+  out << EMITTER_MANIP::Value << 1;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Key << "bill-to";
+  out << EMITTER_MANIP::Value << Anchor("id001");
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "street";
+  out << EMITTER_MANIP::Value << EMITTER_MANIP::Literal << "123 Tornado Alley\nSuite 16";
+  out << EMITTER_MANIP::Key << "city";
+  out << EMITTER_MANIP::Value << "East Westville";
+  out << EMITTER_MANIP::Key << "state";
+  out << EMITTER_MANIP::Value << "KS";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Key << "ship-to";
+  out << EMITTER_MANIP::Value << Alias("id001");
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
       "receipt: Oz-Ware Purchase Invoice\ndate: 2007-08-06\ncustomer:\n  "
@@ -633,7 +633,7 @@ TEST_F(EmitterTest, ComplexDoc) {
 }
 
 TEST_F(EmitterTest, STLContainers) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   std::vector<int> primes;
   primes.push_back(2);
   primes.push_back(3);
@@ -641,12 +641,12 @@ TEST_F(EmitterTest, STLContainers) {
   primes.push_back(7);
   primes.push_back(11);
   primes.push_back(13);
-  out << Flow << primes;
+  out << EMITTER_MANIP::Flow << primes;
   std::map<std::string, int> ages;
   ages["Daniel"] = 26;
   ages["Jesse"] = 24;
   out << ages;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- [2, 3, 5, 7, 11, 13]\n- Daniel: 26\n  Jesse: 24");
 }
@@ -654,31 +654,31 @@ TEST_F(EmitterTest, STLContainers) {
 TEST_F(EmitterTest, CommentStyle) {
   out.SetPreCommentIndent(1);
   out.SetPostCommentIndent(2);
-  out << BeginMap;
-  out << Key << "method";
-  out << Value << "least squares" << Comment("should we change this method?");
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "method";
+  out << EMITTER_MANIP::Value << "least squares" << Comment("should we change this method?");
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("method: least squares #  should we change this method?");
 }
 
 TEST_F(EmitterTest, SimpleComment) {
-  out << BeginMap;
-  out << Key << "method";
-  out << Value << "least squares" << Comment("should we change this method?");
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "method";
+  out << EMITTER_MANIP::Value << "least squares" << Comment("should we change this method?");
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("method: least squares  # should we change this method?");
 }
 
 TEST_F(EmitterTest, MultiLineComment) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "item 1"
       << Comment(
              "really really long\ncomment that couldn't "
              "possibly\nfit on one line");
   out << "item 2";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(
       "- item 1  # really really long\n          # comment that couldn't "
@@ -686,41 +686,41 @@ TEST_F(EmitterTest, MultiLineComment) {
 }
 
 TEST_F(EmitterTest, ComplexComments) {
-  out << BeginMap;
-  out << LongKey << Key << "long key" << Comment("long key");
-  out << Value << "value";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::LongKey << EMITTER_MANIP::Key << "long key" << Comment("long key");
+  out << EMITTER_MANIP::Value << "value";
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("? long key  # long key\n: value");
 }
 
 TEST_F(EmitterTest, InitialComment) {
   out << Comment("A comment describing the purpose of the file.");
-  out << BeginMap << Key << "key" << Value << "value" << EndMap;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "key" << EMITTER_MANIP::Value << "value" << EMITTER_MANIP::EndMap;
 
   ExpectEmit("# A comment describing the purpose of the file.\nkey: value");
 }
 
 TEST_F(EmitterTest, InitialCommentWithDocIndicator) {
-  out << BeginDoc << Comment("A comment describing the purpose of the file.");
-  out << BeginMap << Key << "key" << Value << "value" << EndMap;
+  out << EMITTER_MANIP::BeginDoc << Comment("A comment describing the purpose of the file.");
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "key" << EMITTER_MANIP::Value << "value" << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
       "---\n# A comment describing the purpose of the file.\nkey: value");
 }
 
 TEST_F(EmitterTest, CommentInFlowSeq) {
-  out << Flow << BeginSeq << "foo" << Comment("foo!") << "bar" << EndSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq << "foo" << Comment("foo!") << "bar" << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("[foo,  # foo!\nbar]");
 }
 
 TEST_F(EmitterTest, CommentInFlowMap) {
-  out << Flow << BeginMap;
-  out << Key << "foo" << Value << "foo value";
-  out << Key << "bar" << Value << "bar value" << Comment("bar!");
-  out << Key << "baz" << Value << "baz value" << Comment("baz!");
-  out << EndMap;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "foo" << EMITTER_MANIP::Value << "foo value";
+  out << EMITTER_MANIP::Key << "bar" << EMITTER_MANIP::Value << "bar value" << Comment("bar!");
+  out << EMITTER_MANIP::Key << "baz" << EMITTER_MANIP::Value << "baz value" << Comment("baz!");
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
       "{foo: foo value, bar: bar value,  # bar!\nbaz: baz value,  # baz!\n}");
@@ -728,14 +728,14 @@ TEST_F(EmitterTest, CommentInFlowMap) {
 
 TEST_F(EmitterTest, Indentation) {
   out << Indent(4);
-  out << BeginSeq;
-  out << BeginMap;
-  out << Key << "key 1" << Value << "value 1";
-  out << Key << "key 2" << Value << BeginSeq << "a"
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "key 1" << EMITTER_MANIP::Value << "value 1";
+  out << EMITTER_MANIP::Key << "key 2" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginSeq << "a"
       << "b"
-      << "c" << EndSeq;
-  out << EndMap;
-  out << EndSeq;
+      << "c" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(
       "-   key 1: value 1\n    key 2:\n        -   a\n        -   b\n        - "
@@ -744,32 +744,32 @@ TEST_F(EmitterTest, Indentation) {
 
 TEST_F(EmitterTest, SimpleGlobalSettings) {
   out.SetIndent(4);
-  out.SetMapFormat(LongKey);
+  out.SetMapFormat(EMITTER_MANIP::LongKey);
 
-  out << BeginSeq;
-  out << BeginMap;
-  out << Key << "key 1" << Value << "value 1";
-  out << Key << "key 2" << Value << Flow << BeginSeq << "a"
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "key 1" << EMITTER_MANIP::Value << "value 1";
+  out << EMITTER_MANIP::Key << "key 2" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq << "a"
       << "b"
-      << "c" << EndSeq;
-  out << EndMap;
-  out << EndSeq;
+      << "c" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("-   ? key 1\n    : value 1\n    ? key 2\n    : [a, b, c]");
 }
 
 TEST_F(EmitterTest, GlobalLongKeyOnSeq) {
-  out.SetMapFormat(LongKey);
+  out.SetMapFormat(EMITTER_MANIP::LongKey);
 
-  out << BeginMap;
-  out << Key << Anchor("key");
-  out << BeginSeq << "a"
-      << "b" << EndSeq;
-  out << Value << Anchor("value");
-  out << BeginSeq << "c"
-      << "d" << EndSeq;
-  out << Key << Alias("key") << Value << Alias("value");
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << Anchor("key");
+  out << EMITTER_MANIP::BeginSeq << "a"
+      << "b" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Value << Anchor("value");
+  out << EMITTER_MANIP::BeginSeq << "c"
+      << "d" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Key << Alias("key") << EMITTER_MANIP::Value << Alias("value");
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(? &key
   - a
@@ -782,17 +782,17 @@ TEST_F(EmitterTest, GlobalLongKeyOnSeq) {
 }
 
 TEST_F(EmitterTest, GlobalLongKeyOnMap) {
-  out.SetMapFormat(LongKey);
+  out.SetMapFormat(EMITTER_MANIP::LongKey);
 
-  out << BeginMap;
-  out << Key << Anchor("key");
-  out << BeginMap << "a"
-      << "b" << EndMap;
-  out << Value << Anchor("value");
-  out << BeginMap << "c"
-      << "d" << EndMap;
-  out << Key << Alias("key") << Value << Alias("value");
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << Anchor("key");
+  out << EMITTER_MANIP::BeginMap << "a"
+      << "b" << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Value << Anchor("value");
+  out << EMITTER_MANIP::BeginMap << "c"
+      << "d" << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Key << Alias("key") << EMITTER_MANIP::Value << Alias("value");
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(? &key
   ? a
@@ -810,7 +810,7 @@ TEST_F(EmitterTest, GlobalSettingStyleOnSeqNode) {
   - 2
   - 3
 bar: aa)"));
-  out.SetSeqFormat(YAML::Flow);
+  out.SetSeqFormat(EMITTER_MANIP::Flow);
   out << n;
   ExpectEmit(R"(foo: [1, 2, 3]
 bar: aa)");
@@ -822,7 +822,7 @@ TEST_F(EmitterTest, GlobalSettingStyleOnMapNode) {
   bar: b
 - 2
 - 3)"));
-  out.SetMapFormat(YAML::Flow);
+  out.SetMapFormat(EMITTER_MANIP::Flow);
   out << n;
   ExpectEmit(R"(- {foo: a, bar: b}
 - 2
@@ -830,50 +830,50 @@ TEST_F(EmitterTest, GlobalSettingStyleOnMapNode) {
 }
 
 TEST_F(EmitterTest, ComplexGlobalSettings) {
-  out << BeginSeq;
-  out << Block;
-  out << BeginMap;
-  out << Key << "key 1" << Value << "value 1";
-  out << Key << "key 2" << Value;
-  out.SetSeqFormat(Flow);
-  out << BeginSeq << "a"
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::Block;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "key 1" << EMITTER_MANIP::Value << "value 1";
+  out << EMITTER_MANIP::Key << "key 2" << EMITTER_MANIP::Value;
+  out.SetSeqFormat(EMITTER_MANIP::Flow);
+  out << EMITTER_MANIP::BeginSeq << "a"
       << "b"
-      << "c" << EndSeq;
-  out << EndMap;
-  out << BeginMap;
-  out << Key << BeginSeq << 1 << 2 << EndSeq;
-  out << Value << BeginMap << Key << "a" << Value << "b" << EndMap;
-  out << EndMap;
-  out << EndSeq;
+      << "c" << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << EMITTER_MANIP::BeginSeq << 1 << 2 << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "a" << EMITTER_MANIP::Value << "b" << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- key 1: value 1\n  key 2: [a, b, c]\n- [1, 2]:\n    a: b");
 }
 
 TEST_F(EmitterTest, Null) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Null;
-  out << BeginMap;
-  out << Key << "null value" << Value << Null;
-  out << Key << Null << Value << "null key";
-  out << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "null value" << EMITTER_MANIP::Value << Null;
+  out << EMITTER_MANIP::Key << Null << EMITTER_MANIP::Value << "null key";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- ~\n- null value: ~\n  ~: null key");
 }
 
 TEST_F(EmitterTest, OutputCharset) {
-  out << BeginSeq;
-  out.SetOutputCharset(EmitNonAscii);
+  out << EMITTER_MANIP::BeginSeq;
+  out.SetOutputCharset(EMITTER_MANIP::EmitNonAscii);
   out << "\x24 \xC2\xA2 \xE2\x82\xAC";
-  out.SetOutputCharset(EscapeNonAscii);
+  out.SetOutputCharset(EMITTER_MANIP::EscapeNonAscii);
   out << "\x24 \xC2\xA2 \xE2\x82\xAC";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- \x24 \xC2\xA2 \xE2\x82\xAC\n- \"\x24 \\xa2 \\u20ac\"");
 }
 
 TEST_F(EmitterTest, EscapedUnicode) {
-  out << EscapeNonAscii << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
+  out << EMITTER_MANIP::EscapeNonAscii << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
 
   ExpectEmit("\"$ \\xa2 \\u20ac \\U00024b62\"");
 }
@@ -884,13 +884,13 @@ TEST_F(EmitterTest, Unicode) {
 }
 
 TEST_F(EmitterTest, DoubleQuotedUnicode) {
-  out << DoubleQuoted << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
+  out << EMITTER_MANIP::DoubleQuoted << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
   ExpectEmit("\"\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2\""); 
 }
 
 TEST_F(EmitterTest, EscapedJsonString) {
-  out.SetStringFormat(DoubleQuoted);
-  out.SetOutputCharset(EscapeAsJson);
+  out.SetStringFormat(EMITTER_MANIP::DoubleQuoted);
+  out.SetOutputCharset(EMITTER_MANIP::EscapeAsJson);
   out << "\" \\ "
     "\x01 \x02 \x03 \x04 \x05 \x06 \x07 \x08 \x09 \x0A \x0B \x0C \x0D \x0E \x0F "
     "\x10 \x11 \x12 \x13 \x14 \x15 \x16 \x17 \x18 \x19 \x1A \x1B \x1C \x1D \x1E \x1F "
@@ -904,28 +904,28 @@ TEST_F(EmitterTest, EscapedJsonString) {
 }
 
 TEST_F(EmitterTest, EscapedCharacters) {
-  out << BeginSeq 
+  out << EMITTER_MANIP::BeginSeq 
     << '\x00'
     << '\x0C'
     << '\x0D'
-    << EndSeq;
+    << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- \"\\x00\"\n- \"\\f\"\n- \"\\r\"");
 }
 
 TEST_F(EmitterTest, CharactersEscapedAsJson) {
-  out.SetOutputCharset(EscapeAsJson);
-  out << BeginSeq
+  out.SetOutputCharset(EMITTER_MANIP::EscapeAsJson);
+  out << EMITTER_MANIP::BeginSeq
     << '\x00'
     << '\x0C'
     << '\x0D'
-    << EndSeq;
+    << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- \"\\u0000\"\n- \"\\f\"\n- \"\\r\"");
 }
 
 TEST_F(EmitterTest, DoubleQuotedString) {
-  out << DoubleQuoted << "\" \\ \n \t \r \b \x15 \xEF\xBB\xBF \x24";
+  out << EMITTER_MANIP::DoubleQuoted << "\" \\ \n \t \r \b \x15 \xEF\xBB\xBF \x24";
   ExpectEmit("\"\\\" \\\\ \\n \\t \\r \\b \\x15 \\ufeff $\"");
 }
 
@@ -938,18 +938,18 @@ struct Foo {
 };
 
 Emitter& operator<<(Emitter& out, const Foo& foo) {
-  out << BeginMap;
-  out << Key << "x" << Value << foo.x;
-  out << Key << "bar" << Value << foo.bar;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "x" << EMITTER_MANIP::Value << foo.x;
+  out << EMITTER_MANIP::Key << "bar" << EMITTER_MANIP::Value << foo.bar;
+  out << EMITTER_MANIP::EndMap;
   return out;
 }
 
 TEST_F(EmitterTest, UserType) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Foo(5, "hello");
   out << Foo(3, "goodbye");
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- x: 5\n  bar: hello\n- x: 3\n  bar: goodbye");
 }
@@ -976,9 +976,9 @@ TEST_F(EmitterTest, PointerToInt) {
   int foo = 5;
   int* bar = &foo;
   int* baz = 0;
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << bar << baz;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- 5\n- ~");
 }
@@ -987,64 +987,64 @@ TEST_F(EmitterTest, PointerToUserType) {
   Foo foo(5, "hello");
   Foo* bar = &foo;
   Foo* baz = 0;
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << bar << baz;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit("- x: 5\n  bar: hello\n- ~");
 }
 
 TEST_F(EmitterTest, NewlineAtEnd) {
-  out << "Hello" << Newline << Newline;
+  out << "Hello" << EMITTER_MANIP::Newline << EMITTER_MANIP::Newline;
   ExpectEmit("Hello\n\n");
 }
 
 TEST_F(EmitterTest, NewlineInBlockSequence) {
-  out << BeginSeq;
-  out << "a" << Newline << "b"
-      << "c" << Newline << "d";
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginSeq;
+  out << "a" << EMITTER_MANIP::Newline << "b"
+      << "c" << EMITTER_MANIP::Newline << "d";
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("- a\n\n- b\n- c\n\n- d");
 }
 
 TEST_F(EmitterTest, NewlineInFlowSequence) {
-  out << Flow << BeginSeq;
-  out << "a" << Newline << "b"
-      << "c" << Newline << "d";
-  out << EndSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << "a" << EMITTER_MANIP::Newline << "b"
+      << "c" << EMITTER_MANIP::Newline << "d";
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("[a,\nb, c,\nd]");
 }
 
 TEST_F(EmitterTest, NewlineInBlockMap) {
-  out << BeginMap;
-  out << Key << "a" << Value << "foo" << Newline;
-  out << Key << "b" << Newline << Value << "bar";
-  out << LongKey << Key << "c" << Newline << Value << "car";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "a" << EMITTER_MANIP::Value << "foo" << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::Key << "b" << EMITTER_MANIP::Newline << EMITTER_MANIP::Value << "bar";
+  out << EMITTER_MANIP::LongKey << EMITTER_MANIP::Key << "c" << EMITTER_MANIP::Newline << EMITTER_MANIP::Value << "car";
+  out << EMITTER_MANIP::EndMap;
   ExpectEmit("a: foo\nb:\n  bar\n? c\n\n: car");
 }
 
 TEST_F(EmitterTest, NewlineInFlowMap) {
-  out << Flow << BeginMap;
-  out << Key << "a" << Value << "foo" << Newline;
-  out << Key << "b" << Value << "bar";
-  out << EndMap;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "a" << EMITTER_MANIP::Value << "foo" << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::Key << "b" << EMITTER_MANIP::Value << "bar";
+  out << EMITTER_MANIP::EndMap;
   ExpectEmit("{a: foo,\nb: bar}");
 }
 
 TEST_F(EmitterTest, LotsOfNewlines) {
-  out << BeginSeq;
-  out << "a" << Newline;
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
+  out << "a" << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::BeginSeq;
   out << "b"
-      << "c" << Newline;
-  out << EndSeq;
-  out << Newline;
-  out << BeginMap;
-  out << Newline << Key << "d" << Value << Newline << "e";
-  out << LongKey << Key << "f" << Newline << Value << "foo";
-  out << EndMap;
-  out << EndSeq;
+      << "c" << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Newline << EMITTER_MANIP::Key << "d" << EMITTER_MANIP::Value << EMITTER_MANIP::Newline << "e";
+  out << EMITTER_MANIP::LongKey << EMITTER_MANIP::Key << "f" << EMITTER_MANIP::Newline << EMITTER_MANIP::Value << "foo";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("- a\n\n-\n  - b\n  - c\n\n\n-\n  d:\n    e\n  ? f\n\n  : foo");
 }
 
@@ -1083,62 +1083,62 @@ TEST_F(EmitterTest, ColonAtEndOfScalar) {
 }
 
 TEST_F(EmitterTest, ColonAsScalar) {
-  out << BeginMap;
-  out << Key << "apple" << Value << ":";
-  out << Key << "banana" << Value << ":";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "apple" << EMITTER_MANIP::Value << ":";
+  out << EMITTER_MANIP::Key << "banana" << EMITTER_MANIP::Value << ":";
+  out << EMITTER_MANIP::EndMap;
   ExpectEmit("apple: \":\"\nbanana: \":\"");
 }
 
 TEST_F(EmitterTest, ColonAtEndOfScalarInFlow) {
-  out << Flow << BeginMap << Key << "C:" << Value << "C:" << EndMap;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "C:" << EMITTER_MANIP::Value << "C:" << EMITTER_MANIP::EndMap;
   ExpectEmit("{\"C:\": \"C:\"}");
 }
 
 TEST_F(EmitterTest, GlobalBoolFormatting) {
-  out << BeginSeq;
-  out.SetBoolFormat(UpperCase);
-  out.SetBoolFormat(YesNoBool);
+  out << EMITTER_MANIP::BeginSeq;
+  out.SetBoolFormat(EMITTER_MANIP::UpperCase);
+  out.SetBoolFormat(EMITTER_MANIP::YesNoBool);
   out << true;
   out << false;
-  out.SetBoolFormat(TrueFalseBool);
+  out.SetBoolFormat(EMITTER_MANIP::TrueFalseBool);
   out << true;
   out << false;
-  out.SetBoolFormat(OnOffBool);
+  out.SetBoolFormat(EMITTER_MANIP::OnOffBool);
   out << true;
   out << false;
-  out.SetBoolFormat(LowerCase);
-  out.SetBoolFormat(YesNoBool);
+  out.SetBoolFormat(EMITTER_MANIP::LowerCase);
+  out.SetBoolFormat(EMITTER_MANIP::YesNoBool);
   out << true;
   out << false;
-  out.SetBoolFormat(TrueFalseBool);
+  out.SetBoolFormat(EMITTER_MANIP::TrueFalseBool);
   out << true;
   out << false;
-  out.SetBoolFormat(OnOffBool);
+  out.SetBoolFormat(EMITTER_MANIP::OnOffBool);
   out << true;
   out << false;
-  out.SetBoolFormat(CamelCase);
-  out.SetBoolFormat(YesNoBool);
+  out.SetBoolFormat(EMITTER_MANIP::CamelCase);
+  out.SetBoolFormat(EMITTER_MANIP::YesNoBool);
   out << true;
   out << false;
-  out.SetBoolFormat(TrueFalseBool);
+  out.SetBoolFormat(EMITTER_MANIP::TrueFalseBool);
   out << true;
   out << false;
-  out.SetBoolFormat(OnOffBool);
+  out.SetBoolFormat(EMITTER_MANIP::OnOffBool);
   out << true;
   out << false;
-  out.SetBoolFormat(ShortBool);
-  out.SetBoolFormat(UpperCase);
-  out.SetBoolFormat(YesNoBool);
+  out.SetBoolFormat(EMITTER_MANIP::ShortBool);
+  out.SetBoolFormat(EMITTER_MANIP::UpperCase);
+  out.SetBoolFormat(EMITTER_MANIP::YesNoBool);
   out << true;
   out << false;
-  out.SetBoolFormat(TrueFalseBool);
+  out.SetBoolFormat(EMITTER_MANIP::TrueFalseBool);
   out << true;
   out << false;
-  out.SetBoolFormat(OnOffBool);
+  out.SetBoolFormat(EMITTER_MANIP::OnOffBool);
   out << true;
   out << false;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit(
       "- YES\n- NO\n- TRUE\n- FALSE\n- ON\n- OFF\n"
       "- yes\n- no\n- true\n- false\n- on\n- off\n"
@@ -1147,32 +1147,32 @@ TEST_F(EmitterTest, GlobalBoolFormatting) {
 }
 
 TEST_F(EmitterTest, BoolFormatting) {
-  out << BeginSeq;
-  out << TrueFalseBool << UpperCase << true;
-  out << TrueFalseBool << CamelCase << true;
-  out << TrueFalseBool << LowerCase << true;
-  out << TrueFalseBool << UpperCase << false;
-  out << TrueFalseBool << CamelCase << false;
-  out << TrueFalseBool << LowerCase << false;
-  out << YesNoBool << UpperCase << true;
-  out << YesNoBool << CamelCase << true;
-  out << YesNoBool << LowerCase << true;
-  out << YesNoBool << UpperCase << false;
-  out << YesNoBool << CamelCase << false;
-  out << YesNoBool << LowerCase << false;
-  out << OnOffBool << UpperCase << true;
-  out << OnOffBool << CamelCase << true;
-  out << OnOffBool << LowerCase << true;
-  out << OnOffBool << UpperCase << false;
-  out << OnOffBool << CamelCase << false;
-  out << OnOffBool << LowerCase << false;
-  out << ShortBool << UpperCase << true;
-  out << ShortBool << CamelCase << true;
-  out << ShortBool << LowerCase << true;
-  out << ShortBool << UpperCase << false;
-  out << ShortBool << CamelCase << false;
-  out << ShortBool << LowerCase << false;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::TrueFalseBool << EMITTER_MANIP::UpperCase << true;
+  out << EMITTER_MANIP::TrueFalseBool << EMITTER_MANIP::CamelCase << true;
+  out << EMITTER_MANIP::TrueFalseBool << EMITTER_MANIP::LowerCase << true;
+  out << EMITTER_MANIP::TrueFalseBool << EMITTER_MANIP::UpperCase << false;
+  out << EMITTER_MANIP::TrueFalseBool << EMITTER_MANIP::CamelCase << false;
+  out << EMITTER_MANIP::TrueFalseBool << EMITTER_MANIP::LowerCase << false;
+  out << EMITTER_MANIP::YesNoBool << EMITTER_MANIP::UpperCase << true;
+  out << EMITTER_MANIP::YesNoBool << EMITTER_MANIP::CamelCase << true;
+  out << EMITTER_MANIP::YesNoBool << EMITTER_MANIP::LowerCase << true;
+  out << EMITTER_MANIP::YesNoBool << EMITTER_MANIP::UpperCase << false;
+  out << EMITTER_MANIP::YesNoBool << EMITTER_MANIP::CamelCase << false;
+  out << EMITTER_MANIP::YesNoBool << EMITTER_MANIP::LowerCase << false;
+  out << EMITTER_MANIP::OnOffBool << EMITTER_MANIP::UpperCase << true;
+  out << EMITTER_MANIP::OnOffBool << EMITTER_MANIP::CamelCase << true;
+  out << EMITTER_MANIP::OnOffBool << EMITTER_MANIP::LowerCase << true;
+  out << EMITTER_MANIP::OnOffBool << EMITTER_MANIP::UpperCase << false;
+  out << EMITTER_MANIP::OnOffBool << EMITTER_MANIP::CamelCase << false;
+  out << EMITTER_MANIP::OnOffBool << EMITTER_MANIP::LowerCase << false;
+  out << EMITTER_MANIP::ShortBool << EMITTER_MANIP::UpperCase << true;
+  out << EMITTER_MANIP::ShortBool << EMITTER_MANIP::CamelCase << true;
+  out << EMITTER_MANIP::ShortBool << EMITTER_MANIP::LowerCase << true;
+  out << EMITTER_MANIP::ShortBool << EMITTER_MANIP::UpperCase << false;
+  out << EMITTER_MANIP::ShortBool << EMITTER_MANIP::CamelCase << false;
+  out << EMITTER_MANIP::ShortBool << EMITTER_MANIP::LowerCase << false;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit(
       "- TRUE\n- True\n- true\n- FALSE\n- False\n- false\n"
       "- YES\n- Yes\n- yes\n- NO\n- No\n- no\n"
@@ -1181,54 +1181,54 @@ TEST_F(EmitterTest, BoolFormatting) {
 }
 
 TEST_F(EmitterTest, GlobalNullFormatting) {
-  out << Flow << BeginSeq;
-  out.SetNullFormat(LowerNull);
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out.SetNullFormat(EMITTER_MANIP::LowerNull);
   out << Null;
-  out.SetNullFormat(UpperNull);
+  out.SetNullFormat(EMITTER_MANIP::UpperNull);
   out << Null;
-  out.SetNullFormat(CamelNull);
+  out.SetNullFormat(EMITTER_MANIP::CamelNull);
   out << Null;
-  out.SetNullFormat(TildeNull);
+  out.SetNullFormat(EMITTER_MANIP::TildeNull);
   out << Null;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("[null, NULL, Null, ~]");
 }
 
 TEST_F(EmitterTest, NullFormatting) {
-  out << Flow << BeginSeq;
-  out << LowerNull << Null;
-  out << UpperNull << Null;
-  out << CamelNull << Null;
-  out << TildeNull << Null;
-  out << EndSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::LowerNull << Null;
+  out << EMITTER_MANIP::UpperNull << Null;
+  out << EMITTER_MANIP::CamelNull << Null;
+  out << EMITTER_MANIP::TildeNull << Null;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("[null, NULL, Null, ~]");
 }
 
 TEST_F(EmitterTest, NullFormattingOnNode) {
   Node n(Load("null"));
-  out << Flow << BeginSeq;
-  out.SetNullFormat(LowerNull);
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out.SetNullFormat(EMITTER_MANIP::LowerNull);
   out << n;
-  out.SetNullFormat(UpperNull);
+  out.SetNullFormat(EMITTER_MANIP::UpperNull);
   out << n;
-  out.SetNullFormat(CamelNull);
+  out.SetNullFormat(EMITTER_MANIP::CamelNull);
   out << n;
-  out.SetNullFormat(TildeNull);
+  out.SetNullFormat(EMITTER_MANIP::TildeNull);
   out << n;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("[null, NULL, Null, ~]");
 }
 
 // TODO: Fix this test.
 // TEST_F(EmitterTest, DocStartAndEnd) {
-//  out << BeginDoc;
-//  out << BeginSeq << 1 << 2 << 3 << EndSeq;
-//  out << BeginDoc;
+//  out << EMITTER_MANIP::BeginDoc;
+//  out << EMITTER_MANIP::BeginSeq << 1 << 2 << 3 << EMITTER_MANIP::EndSeq;
+//  out << EMITTER_MANIP::BeginDoc;
 //  out << "Hi there!";
-//  out << EndDoc;
-//  out << EndDoc;
-//  out << EndDoc;
-//  out << BeginDoc;
+//  out << EMITTER_MANIP::EndDoc;
+//  out << EMITTER_MANIP::EndDoc;
+//  out << EMITTER_MANIP::EndDoc;
+//  out << EMITTER_MANIP::BeginDoc;
 //  out << VerbatimTag("foo") << "bar";
 //  ExpectEmit(
 //      "---\n- 1\n- 2\n- 3\n---\nHi there!\n...\n...\n...\n---\n!<foo> bar");
@@ -1242,70 +1242,70 @@ TEST_F(EmitterTest, ImplicitDocStart) {
 }
 
 TEST_F(EmitterTest, EmptyString) {
-  out << BeginMap;
-  out << Key << "key" << Value << "";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "key" << EMITTER_MANIP::Value << "";
+  out << EMITTER_MANIP::EndMap;
   ExpectEmit("key: \"\"");
 }
 
 TEST_F(EmitterTest, SingleChar) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << 'a';
   out << ':';
   out << (char)0x10;
   out << '\n';
   out << ' ';
   out << '\t';
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("- a\n- \":\"\n- \"\\x10\"\n- \"\\n\"\n- \" \"\n- \"\\t\"");
 }
 
 TEST_F(EmitterTest, DefaultPrecision) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << 1.3125f;
   out << 1.23455810546875;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("- 1.3125\n- 1.23455810546875");
 }
 
 TEST_F(EmitterTest, SetPrecision) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << FloatPrecision(3) << 1.3125f;
   out << DoublePrecision(6) << 1.23455810546875;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("- 1.31\n- 1.23456");
 }
 
 TEST_F(EmitterTest, DashInBlockContext) {
-  out << BeginMap;
-  out << Key << "key" << Value << "-";
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "key" << EMITTER_MANIP::Value << "-";
+  out << EMITTER_MANIP::EndMap;
   ExpectEmit("key: \"-\"");
 }
 
 TEST_F(EmitterTest, HexAndOct) {
-  out << Flow << BeginSeq;
+  out << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << 31;
-  out << Hex << 31;
-  out << Oct << 31;
-  out << EndSeq;
+  out << EMITTER_MANIP::Hex << 31;
+  out << EMITTER_MANIP::Oct << 31;
+  out << EMITTER_MANIP::EndSeq;
   ExpectEmit("[31, 0x1f, 037]");
 }
 
 TEST_F(EmitterTest, CompactMapWithNewline) {
   out << Comment("Characteristics");
-  out << BeginSeq;
-  out << BeginMap;
-  out << Key << "color" << Value << "blue";
-  out << Key << "height" << Value << 120;
-  out << EndMap;
-  out << Newline << Newline;
+  out << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "color" << EMITTER_MANIP::Value << "blue";
+  out << EMITTER_MANIP::Key << "height" << EMITTER_MANIP::Value << 120;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Newline << EMITTER_MANIP::Newline;
   out << Comment("Skills");
-  out << BeginMap;
-  out << Key << "attack" << Value << 23;
-  out << Key << "intelligence" << Value << 56;
-  out << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "attack" << EMITTER_MANIP::Value << 23;
+  out << EMITTER_MANIP::Key << "intelligence" << EMITTER_MANIP::Value << 56;
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmit(
       "# Characteristics\n"
@@ -1318,7 +1318,7 @@ TEST_F(EmitterTest, CompactMapWithNewline) {
 }
 
 TEST_F(EmitterTest, ForceSingleQuotedToDouble) {
-  out << SingleQuoted << "Hello\nWorld";
+  out << EMITTER_MANIP::SingleQuoted << "Hello\nWorld";
 
   ExpectEmit("\"Hello\\nWorld\"");
 }
@@ -1330,28 +1330,28 @@ TEST_F(EmitterTest, QuoteNull) {
 }
 
 TEST_F(EmitterTest, ValueOfDoubleQuote) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value << '"';
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "foo" << EMITTER_MANIP::Value << '"';
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("foo: \"\\\"\"");
 }
 
 TEST_F(EmitterTest, ValueOfBackslash) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value << '\\';
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "foo" << EMITTER_MANIP::Value << '\\';
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit("foo: \"\\\\\"");
 }
 
 TEST_F(EmitterTest, Infinity) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "foo" << EMITTER_MANIP::Value
       << std::numeric_limits<float>::infinity();
-  out << YAML::Key << "bar" << YAML::Value
+  out << EMITTER_MANIP::Key << "bar" << EMITTER_MANIP::Value
       << std::numeric_limits<double>::infinity();
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
 	  "foo: .inf\n"
@@ -1359,12 +1359,12 @@ TEST_F(EmitterTest, Infinity) {
 }
 
 TEST_F(EmitterTest, NegInfinity) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "foo" << EMITTER_MANIP::Value
       << -std::numeric_limits<float>::infinity();
-  out << YAML::Key << "bar" << YAML::Value
+  out << EMITTER_MANIP::Key << "bar" << EMITTER_MANIP::Value
       << -std::numeric_limits<double>::infinity();
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
 	  "foo: -.inf\n"
@@ -1372,12 +1372,12 @@ TEST_F(EmitterTest, NegInfinity) {
 }
 
 TEST_F(EmitterTest, NaN) {
-  out << YAML::BeginMap;
-  out << YAML::Key << "foo" << YAML::Value
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "foo" << EMITTER_MANIP::Value
       << std::numeric_limits<float>::quiet_NaN();
-  out << YAML::Key << "bar" << YAML::Value
+  out << EMITTER_MANIP::Key << "bar" << EMITTER_MANIP::Value
       << std::numeric_limits<double>::quiet_NaN();
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(
 	  "foo: .nan\n"
@@ -1385,27 +1385,27 @@ TEST_F(EmitterTest, NaN) {
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) { 
-  out << YAML::BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << YAML::Key << "NodeA" << YAML::Value << YAML::BeginMap;
-  out << YAML::Key << "k" << YAML::Value << YAML::Flow << YAML::BeginSeq;
-  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 0 << YAML::EndMap
-      << YAML::Newline;
-  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 1 << YAML::EndMap
-      << YAML::Newline;
-  out << YAML::EndSeq;
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::Key << "NodeA" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap
+      << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap
+      << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndMap;
 
-  out << YAML::Key << "NodeB" << YAML::Value << YAML::BeginMap;
-  out << YAML::Key << "k" << YAML::Value << YAML::Flow << YAML::BeginSeq;
-  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 0 << YAML::EndMap
-      << YAML::Newline;
-  out << YAML::BeginMap << YAML::Key << "i" << YAML::Value << 1 << YAML::EndMap
-      << YAML::Newline;
-  out << YAML::EndSeq;
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::Key << "NodeB" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap
+      << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap
+      << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndMap;
 
-  out << YAML::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(NodeA:
   k: [{i: 0},
@@ -1418,20 +1418,20 @@ NodeB:
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Node" << Anchor("Node") << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
-  out << BeginMap << Key << "i" << Value << 0 << EndMap;
-  out << YAML::Newline;
-  out << BeginMap << Key << "i" << Value << 1 << EndMap;
-  out << YAML::Newline;
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::Key << "Node" << Anchor("Node") << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << Key << "NodeA" << Alias("Node");
-  out << Key << "NodeB" << Alias("Node");
+  out << EMITTER_MANIP::Key << "NodeA" << Alias("Node");
+  out << EMITTER_MANIP::Key << "NodeB" << Alias("Node");
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Node: &Node
   k: [{i: 0},
@@ -1442,18 +1442,18 @@ NodeB: *Node)");
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Node" << Anchor("Node") << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
-  out << BeginMap << Key << "i" << Value << 0 << EndMap;
-  out << BeginMap << Key << "i" << Value << 1 << EndMap;
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::Key << "Node" << Anchor("Node") << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << Key << "NodeA" << Alias("Node");
-  out << Key << "NodeB" << Alias("Node");
+  out << EMITTER_MANIP::Key << "NodeA" << Alias("Node");
+  out << EMITTER_MANIP::Key << "NodeB" << Alias("Node");
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Node: &Node
   k: [{i: 0}, {i: 1}]
@@ -1462,21 +1462,21 @@ NodeB: *Node)");
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases2) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Seq" << Anchor("Seq") << Flow << BeginSeq;
-  out << BeginMap << Key << "i" << Value << 0 << EndMap;
-  out << YAML::Newline;
-  out << BeginMap << Key << "i" << Value << 1 << EndMap;
-  out << YAML::Newline;
-  out << EndSeq;
+  out << EMITTER_MANIP::Key << "Seq" << Anchor("Seq") << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq;
 
-  out << Key << "NodeA" << Value << BeginMap;
-  out << Key << "k" << Value << Alias("Seq") << EndMap;
-  out << Key << "NodeB" << Value << BeginMap;
-  out << Key << "k" << Value << Alias("Seq") << EndMap;
+  out << EMITTER_MANIP::Key << "NodeA" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << Alias("Seq") << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Key << "NodeB" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << Alias("Seq") << EMITTER_MANIP::EndMap;
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Seq: &Seq [{i: 0},
   {i: 1},
@@ -1488,19 +1488,19 @@ NodeB:
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases2) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Seq" << Anchor("Seq") << Value << Flow << BeginSeq;
-  out << BeginMap << Key << "i" << Value << 0 << EndMap;
-  out << BeginMap << Key << "i" << Value << 1 << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::Key << "Seq" << Anchor("Seq") << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
-  out << Key << "NodeA" << Value << BeginMap;
-  out << Key << "k" << Value << Alias("Seq") << EndMap;
-  out << Key << "NodeB" << Value << BeginMap;
-  out << Key << "k" << Value << Alias("Seq") << EndMap;
+  out << EMITTER_MANIP::Key << "NodeA" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << Alias("Seq") << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::Key << "NodeB" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << Alias("Seq") << EMITTER_MANIP::EndMap;
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Seq: &Seq [{i: 0}, {i: 1}]
 NodeA:
@@ -1510,26 +1510,26 @@ NodeB:
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLineUsingAliases3) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Keys" << Value << Flow << BeginSeq;
-  out << Anchor("k0") << BeginMap << Key << "i" << Value << 0 << EndMap
-      << Newline;
-  out << Anchor("k1") << BeginMap << Key << "i" << Value << 1 << EndMap
-      << Newline;
-  out << EndSeq;
+  out << EMITTER_MANIP::Key << "Keys" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << Anchor("k0") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap
+      << EMITTER_MANIP::Newline;
+  out << Anchor("k1") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap
+      << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq;
 
-  out << Key << "NodeA" << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
-  out << Alias("k0") << Newline << Alias("k1") << Newline;
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::Key << "NodeA" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << Alias("k0") << EMITTER_MANIP::Newline << Alias("k1") << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << Key << "NodeB" << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
-  out << Alias("k0") << Newline << Alias("k1") << Newline;
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::Key << "NodeB" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << Alias("k0") << EMITTER_MANIP::Newline << Alias("k1") << EMITTER_MANIP::Newline;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Keys: [&k0 {i: 0},
 &k1 {i: 1},
@@ -1545,24 +1545,24 @@ NodeB:
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases3a) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Keys" << Value << BeginSeq;
-  out << Anchor("k0") << BeginMap << Key << "i" << Value << 0 << EndMap;
-  out << Anchor("k1") << BeginMap << Key << "i" << Value << 1 << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::Key << "Keys" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginSeq;
+  out << Anchor("k0") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap;
+  out << Anchor("k1") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
-  out << Key << "NodeA" << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
+  out << EMITTER_MANIP::Key << "NodeA" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << Alias("k0") << Alias("k1");
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << Key << "NodeB" << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
+  out << EMITTER_MANIP::Key << "NodeB" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << Alias("k0") << Alias("k1");
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Keys:
   - &k0
@@ -1576,24 +1576,24 @@ NodeB:
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapUsingAliases3b) {
-  out << BeginMap;
+  out << EMITTER_MANIP::BeginMap;
 
-  out << Key << "Keys" << Value << Flow << BeginSeq;
-  out << Anchor("k0") << BeginMap << Key << "i" << Value << 0 << EndMap;
-  out << Anchor("k1") << BeginMap << Key << "i" << Value << 1 << EndMap;
-  out << EndSeq;
+  out << EMITTER_MANIP::Key << "Keys" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
+  out << Anchor("k0") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 0 << EMITTER_MANIP::EndMap;
+  out << Anchor("k1") << EMITTER_MANIP::BeginMap << EMITTER_MANIP::Key << "i" << EMITTER_MANIP::Value << 1 << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndSeq;
 
-  out << Key << "NodeA" << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
+  out << EMITTER_MANIP::Key << "NodeA" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << Alias("k0") << Alias("k1");
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << Key << "NodeB" << Value << BeginMap;
-  out << Key << "k" << Value << Flow << BeginSeq;
+  out << EMITTER_MANIP::Key << "NodeB" << EMITTER_MANIP::Value << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "k" << EMITTER_MANIP::Value << EMITTER_MANIP::Flow << EMITTER_MANIP::BeginSeq;
   out << Alias("k0") << Alias("k1");
-  out << EndSeq << EndMap;
+  out << EMITTER_MANIP::EndSeq << EMITTER_MANIP::EndMap;
 
-  out << EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmit(R"(Keys: [&k0 {i: 0}, &k1 {i: 1}]
 NodeA:
@@ -1629,46 +1629,46 @@ TEST_F(EmitterErrorTest, BadAnchorAndAnchor) {
 }
 
 TEST_F(EmitterErrorTest, BadEmptyAnchorOnGroup) {
-  out << BeginSeq << "bar" << Anchor("foo") << EndSeq;
+  out << EMITTER_MANIP::BeginSeq << "bar" << Anchor("foo") << EMITTER_MANIP::EndSeq;
   ExpectEmitError(ErrorMsg::INVALID_ANCHOR);
 }
 
 TEST_F(EmitterErrorTest, BadEmptyTagOnGroup) {
-  out << BeginSeq << "bar" << VerbatimTag("!foo") << EndSeq;
+  out << EMITTER_MANIP::BeginSeq << "bar" << VerbatimTag("!foo") << EMITTER_MANIP::EndSeq;
   ExpectEmitError(ErrorMsg::INVALID_TAG);
 }
 
 TEST_F(EmitterErrorTest, ExtraEndSeq) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << "Hello";
   out << "World";
-  out << EndSeq;
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmitError(ErrorMsg::UNEXPECTED_END_SEQ);
 }
 
 TEST_F(EmitterErrorTest, ExtraEndMap) {
-  out << BeginMap;
-  out << Key << "Hello" << Value << "World";
-  out << EndMap;
-  out << EndMap;
+  out << EMITTER_MANIP::BeginMap;
+  out << EMITTER_MANIP::Key << "Hello" << EMITTER_MANIP::Value << "World";
+  out << EMITTER_MANIP::EndMap;
+  out << EMITTER_MANIP::EndMap;
 
   ExpectEmitError(ErrorMsg::UNEXPECTED_END_MAP);
 }
 
 TEST_F(EmitterErrorTest, InvalidAnchor) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Anchor("new\nline") << "Test";
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmitError(ErrorMsg::INVALID_ANCHOR);
 }
 
 TEST_F(EmitterErrorTest, InvalidAlias) {
-  out << BeginSeq;
+  out << EMITTER_MANIP::BeginSeq;
   out << Alias("new\nline");
-  out << EndSeq;
+  out << EMITTER_MANIP::EndSeq;
 
   ExpectEmitError(ErrorMsg::INVALID_ALIAS);
 }

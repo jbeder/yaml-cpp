@@ -51,22 +51,22 @@ void EmitFromEvents::OnSequenceStart(const Mark&, const std::string& tag,
   EmitProps(tag, anchor);
   switch (style) {
     case EmitterStyle::Block:
-      m_emitter << Block;
+      m_emitter << EMITTER_MANIP::Block;
       break;
     case EmitterStyle::Flow:
-      m_emitter << Flow;
+      m_emitter << EMITTER_MANIP::Flow;
       break;
     default:
       break;
   }
   // Restore the global settings to eliminate the override from node style
   m_emitter.RestoreGlobalModifiedSettings();
-  m_emitter << BeginSeq;
+  m_emitter << EMITTER_MANIP::BeginSeq;
   m_stateStack.push(State::WaitingForSequenceEntry);
 }
 
 void EmitFromEvents::OnSequenceEnd() {
-  m_emitter << EndSeq;
+  m_emitter << EMITTER_MANIP::EndSeq;
   assert(m_stateStack.top() == State::WaitingForSequenceEntry);
   m_stateStack.pop();
 }
@@ -77,22 +77,22 @@ void EmitFromEvents::OnMapStart(const Mark&, const std::string& tag,
   EmitProps(tag, anchor);
   switch (style) {
     case EmitterStyle::Block:
-      m_emitter << Block;
+      m_emitter << EMITTER_MANIP::Block;
       break;
     case EmitterStyle::Flow:
-      m_emitter << Flow;
+      m_emitter << EMITTER_MANIP::Flow;
       break;
     default:
       break;
   }
   // Restore the global settings to eliminate the override from node style
   m_emitter.RestoreGlobalModifiedSettings();
-  m_emitter << BeginMap;
+  m_emitter << EMITTER_MANIP::BeginMap;
   m_stateStack.push(State::WaitingForKey);
 }
 
 void EmitFromEvents::OnMapEnd() {
-  m_emitter << EndMap;
+  m_emitter << EMITTER_MANIP::EndMap;
   assert(m_stateStack.top() == State::WaitingForKey);
   m_stateStack.pop();
 }
@@ -103,11 +103,11 @@ void EmitFromEvents::BeginNode() {
 
   switch (m_stateStack.top()) {
     case State::WaitingForKey:
-      m_emitter << Key;
+      m_emitter << EMITTER_MANIP::Key;
       m_stateStack.top() = State::WaitingForValue;
       break;
     case State::WaitingForValue:
-      m_emitter << Value;
+      m_emitter << EMITTER_MANIP::Value;
       m_stateStack.top() = State::WaitingForKey;
       break;
     default:
