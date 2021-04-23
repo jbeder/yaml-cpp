@@ -33,11 +33,11 @@ class EmitFromEvents : public EventHandler {
                         anchor_t anchor, const std::string& value) override;
 
   void OnSequenceStart(const Mark& mark, const std::string& tag,
-                               anchor_t anchor, EmitterStyle::value style) override;
+                               anchor_t anchor, EmitterStyle style) override;
   void OnSequenceEnd() override;
 
   void OnMapStart(const Mark& mark, const std::string& tag,
-                          anchor_t anchor, EmitterStyle::value style) override;
+                          anchor_t anchor, EmitterStyle style) override;
   void OnMapEnd() override;
 
  private:
@@ -47,10 +47,8 @@ class EmitFromEvents : public EventHandler {
  private:
   Emitter& m_emitter;
 
-  struct State {
-    enum value { WaitingForSequenceEntry, WaitingForKey, WaitingForValue };
-  };
-  std::stack<State::value> m_stateStack;
+  enum class State { WaitingForSequenceEntry, WaitingForKey, WaitingForValue };
+  std::stack<State> m_stateStack;
 };
 }
 

@@ -19,11 +19,11 @@ class MockEventHandler : public EventHandler {
                               const std::string&));
 
   MOCK_METHOD4(OnSequenceStart, void(const Mark&, const std::string&, anchor_t,
-                                     EmitterStyle::value));
+                                     EmitterStyle));
   MOCK_METHOD0(OnSequenceEnd, void());
 
   MOCK_METHOD4(OnMapStart, void(const Mark&, const std::string&, anchor_t,
-                                EmitterStyle::value));
+                                EmitterStyle));
   MOCK_METHOD0(OnMapEnd, void());
   MOCK_METHOD2(OnAnchor, void(const Mark&, const std::string&));
 };

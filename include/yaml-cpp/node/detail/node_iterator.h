@@ -18,9 +18,7 @@
 
 namespace YAML {
 namespace detail {
-struct iterator_type {
-  enum value { NoneType, Sequence, Map };
-};
+enum class iterator_type { NoneType, Sequence, Map };
 
 template <typename V>
 struct node_iterator_value : public std::pair<V*, V*> {
@@ -167,7 +165,7 @@ class node_iterator_base {
   }
 
  private:
-  typename iterator_type::value m_type;
+  iterator_type m_type;
 
   SeqIter m_seqIt;
   MapIter m_mapIt, m_mapEnd;

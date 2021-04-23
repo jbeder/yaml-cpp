@@ -8,9 +8,7 @@
 #endif
 
 namespace YAML {
-struct EmitterNodeType {
-  enum value { NoType, Property, Scalar, FlowSeq, BlockSeq, FlowMap, BlockMap };
-};
+  enum class EmitterNodeType { NoType, Property, Scalar, FlowSeq, BlockSeq, FlowMap, BlockMap };
 }
 
 #endif  // EMITTERDEF_H_62B23520_7C8E_11DE_8A39_0800200C9A66

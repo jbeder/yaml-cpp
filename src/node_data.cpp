@@ -40,7 +40,7 @@ void node_data::mark_defined() {
 
 void node_data::set_mark(const Mark& mark) { m_mark = mark; }
 
-void node_data::set_type(NodeType::value type) {
+void node_data::set_type(NodeType type) {
   if (type == NodeType::Undefined) {
     m_type = type;
     m_isDefined = false;
@@ -73,7 +73,7 @@ void node_data::set_type(NodeType::value type) {
 
 void node_data::set_tag(const std::string& tag) { m_tag = tag; }
 
-void node_data::set_style(EmitterStyle::value style) { m_style = style; }
+void node_data::set_style(EmitterStyle style) { m_style = style; }
 
 void node_data::set_null() {
   m_isDefined = true;

@@ -267,7 +267,7 @@ TEST(NodeTest, IncompleteJson) {
 
 struct SingleNodeTestCase {
   std::string input;
-  NodeType::value nodeType;
+  NodeType nodeType;
   int nodeSize;
   std::string expected_content;
 };

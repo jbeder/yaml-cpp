@@ -46,7 +46,7 @@ void EmitFromEvents::OnScalar(const Mark&, const std::string& tag,
 
 void EmitFromEvents::OnSequenceStart(const Mark&, const std::string& tag,
                                      anchor_t anchor,
-                                     EmitterStyle::value style) {
+                                     EmitterStyle style) {
   BeginNode();
   EmitProps(tag, anchor);
   switch (style) {
@@ -72,7 +72,7 @@ void EmitFromEvents::OnSequenceEnd() {
 }
 
 void EmitFromEvents::OnMapStart(const Mark&, const std::string& tag,
-                                anchor_t anchor, EmitterStyle::value style) {
+                                anchor_t anchor, EmitterStyle style) {
   BeginNode();
   EmitProps(tag, anchor);
   switch (style) {
