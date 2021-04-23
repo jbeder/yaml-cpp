@@ -34,7 +34,7 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
   eventHandler.OnDocumentStart(m_scanner.peek().mark);
 
   // eat doc start
-  if (m_scanner.peek().type == Token::DOC_START)
+  if (m_scanner.peek().type == Token::TYPE::DOC_START)
     m_scanner.pop();
 
   // recurse!
@@ -43,7 +43,7 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
   eventHandler.OnDocumentEnd();
 
   // and finally eat any doc ends we see
-  while (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
+  while (!m_scanner.empty() && m_scanner.peek().type == Token::TYPE::DOC_END)
     m_scanner.pop();
 }
 
@@ -60,7 +60,7 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   Mark mark = m_scanner.peek().mark;
 
   // special case: a value node by itself must be a map, with no header
-  if (m_scanner.peek().type == Token::VALUE) {
+  if (m_scanner.peek().type == Token::TYPE::VALUE) {
     eventHandler.OnMapStart(mark, "?", NullAnchor, EmitterStyle::Default);
     HandleMap(eventHandler);
     eventHandler.OnMapEnd();
@@ -68,7 +68,7 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   }
 
   // special case: an alias node
-  if (m_scanner.peek().type == Token::ALIAS) {
+  if (m_scanner.peek().type == Token::TYPE::ALIAS) {
     eventHandler.OnAlias(mark, LookupAnchor(mark, m_scanner.peek().value));
     m_scanner.pop();
     return;
@@ -92,9 +92,9 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
 
   // add non-specific tags
   if (tag.empty())
-    tag = (token.type == Token::NON_PLAIN_SCALAR ? "!" : "?");
+    tag = (token.type == Token::TYPE::NON_PLAIN_SCALAR ? "!" : "?");
   
-  if (token.type == Token::PLAIN_SCALAR 
+  if (token.type == Token::TYPE::PLAIN_SCALAR 
       && tag.compare("?") == 0 && IsNullString(token.value)) {
     eventHandler.OnNull(mark, anchor);
     m_scanner.pop();
@@ -103,32 +103,32 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
 
   // now split based on what kind of node we should be
   switch (token.type) {
-    case Token::PLAIN_SCALAR:
-    case Token::NON_PLAIN_SCALAR:
+    case Token::TYPE::PLAIN_SCALAR:
+    case Token::TYPE::NON_PLAIN_SCALAR:
       eventHandler.OnScalar(mark, tag, anchor, token.value);
       m_scanner.pop();
       return;
-    case Token::FLOW_SEQ_START:
+    case Token::TYPE::FLOW_SEQ_START:
       eventHandler.OnSequenceStart(mark, tag, anchor, EmitterStyle::Flow);
       HandleSequence(eventHandler);
       eventHandler.OnSequenceEnd();
       return;
-    case Token::BLOCK_SEQ_START:
+    case Token::TYPE::BLOCK_SEQ_START:
       eventHandler.OnSequenceStart(mark, tag, anchor, EmitterStyle::Block);
       HandleSequence(eventHandler);
       eventHandler.OnSequenceEnd();
       return;
-    case Token::FLOW_MAP_START:
+    case Token::TYPE::FLOW_MAP_START:
       eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Flow);
       HandleMap(eventHandler);
       eventHandler.OnMapEnd();
       return;
-    case Token::BLOCK_MAP_START:
+    case Token::TYPE::BLOCK_MAP_START:
       eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Block);
       HandleMap(eventHandler);
       eventHandler.OnMapEnd();
       return;
-    case Token::KEY:
+    case Token::TYPE::KEY:
       // compact maps can only go in a flow sequence
       if (m_pCollectionStack->GetCurCollectionType() ==
           CollectionType::FlowSeq) {
@@ -151,10 +151,10 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
 void SingleDocParser::HandleSequence(EventHandler& eventHandler) {
   // split based on start token
   switch (m_scanner.peek().type) {
-    case Token::BLOCK_SEQ_START:
+    case Token::TYPE::BLOCK_SEQ_START:
       HandleBlockSequence(eventHandler);
       break;
-    case Token::FLOW_SEQ_START:
+    case Token::TYPE::FLOW_SEQ_START:
       HandleFlowSequence(eventHandler);
       break;
     default:
@@ -172,18 +172,18 @@ void SingleDocParser::HandleBlockSequence(EventHandler& eventHandler) {
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ);
 
     Token token = m_scanner.peek();
-    if (token.type != Token::BLOCK_ENTRY && token.type != Token::BLOCK_SEQ_END)
+    if (token.type != Token::TYPE::BLOCK_ENTRY && token.type != Token::TYPE::BLOCK_SEQ_END)
       throw ParserException(token.mark, ErrorMsg::END_OF_SEQ);
 
     m_scanner.pop();
-    if (token.type == Token::BLOCK_SEQ_END)
+    if (token.type == Token::TYPE::BLOCK_SEQ_END)
       break;
 
     // check for null
     if (!m_scanner.empty()) {
       const Token& nextToken = m_scanner.peek();
-      if (nextToken.type == Token::BLOCK_ENTRY ||
-          nextToken.type == Token::BLOCK_SEQ_END) {
+      if (nextToken.type == Token::TYPE::BLOCK_ENTRY ||
+          nextToken.type == Token::TYPE::BLOCK_SEQ_END) {
         eventHandler.OnNull(nextToken.mark, NullAnchor);
         continue;
       }
@@ -205,7 +205,7 @@ void SingleDocParser::HandleFlowSequence(EventHandler& eventHandler) {
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ_FLOW);
 
     // first check for end
-    if (m_scanner.peek().type == Token::FLOW_SEQ_END) {
+    if (m_scanner.peek().type == Token::TYPE::FLOW_SEQ_END) {
       m_scanner.pop();
       break;
     }
@@ -219,9 +219,9 @@ void SingleDocParser::HandleFlowSequence(EventHandler& eventHandler) {
     // now eat the separator (or could be a sequence end, which we ignore - but
     // if it's neither, then it's a bad node)
     Token& token = m_scanner.peek();
-    if (token.type == Token::FLOW_ENTRY)
+    if (token.type == Token::TYPE::FLOW_ENTRY)
       m_scanner.pop();
-    else if (token.type != Token::FLOW_SEQ_END)
+    else if (token.type != Token::TYPE::FLOW_SEQ_END)
       throw ParserException(token.mark, ErrorMsg::END_OF_SEQ_FLOW);
   }
 
@@ -231,16 +231,16 @@ void SingleDocParser::HandleFlowSequence(EventHandler& eventHandler) {
 void SingleDocParser::HandleMap(EventHandler& eventHandler) {
   // split based on start token
   switch (m_scanner.peek().type) {
-    case Token::BLOCK_MAP_START:
+    case Token::TYPE::BLOCK_MAP_START:
       HandleBlockMap(eventHandler);
       break;
-    case Token::FLOW_MAP_START:
+    case Token::TYPE::FLOW_MAP_START:
       HandleFlowMap(eventHandler);
       break;
-    case Token::KEY:
+    case Token::TYPE::KEY:
       HandleCompactMap(eventHandler);
       break;
-    case Token::VALUE:
+    case Token::TYPE::VALUE:
       HandleCompactMapWithNoKey(eventHandler);
       break;
     default:
@@ -258,17 +258,17 @@ void SingleDocParser::HandleBlockMap(EventHandler& eventHandler) {
       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_MAP);
 
     Token token = m_scanner.peek();
-    if (token.type != Token::KEY && token.type != Token::VALUE &&
-        token.type != Token::BLOCK_MAP_END)
+    if (token.type != Token::TYPE::KEY && token.type != Token::TYPE::VALUE &&
+        token.type != Token::TYPE::BLOCK_MAP_END)
       throw ParserException(token.mark, ErrorMsg::END_OF_MAP);
 
-    if (token.type == Token::BLOCK_MAP_END) {
+    if (token.type == Token::TYPE::BLOCK_MAP_END) {
       m_scanner.pop();
       break;
     }
 
     // grab key (if non-null)
-    if (token.type == Token::KEY) {
+    if (token.type == Token::TYPE::KEY) {
       m_scanner.pop();
       HandleNode(eventHandler);
     } else {
@@ -276,7 +276,7 @@ void SingleDocParser::HandleBlockMap(EventHandler& eventHandler) {
     }
 
     // now grab value (optional)
-    if (!m_scanner.empty() && m_scanner.peek().type == Token::VALUE) {
+    if (!m_scanner.empty() && m_scanner.peek().type == Token::TYPE::VALUE) {
       m_scanner.pop();
       HandleNode(eventHandler);
     } else {
@@ -299,13 +299,13 @@ void SingleDocParser::HandleFlowMap(EventHandler& eventHandler) {
     Token& token = m_scanner.peek();
     const Mark mark = token.mark;
     // first check for end
-    if (token.type == Token::FLOW_MAP_END) {
+    if (token.type == Token::TYPE::FLOW_MAP_END) {
       m_scanner.pop();
       break;
     }
 
     // grab key (if non-null)
-    if (token.type == Token::KEY) {
+    if (token.type == Token::TYPE::KEY) {
       m_scanner.pop();
       HandleNode(eventHandler);
     } else {
@@ -313,7 +313,7 @@ void SingleDocParser::HandleFlowMap(EventHandler& eventHandler) {
     }
 
     // now grab value (optional)
-    if (!m_scanner.empty() && m_scanner.peek().type == Token::VALUE) {
+    if (!m_scanner.empty() && m_scanner.peek().type == Token::TYPE::VALUE) {
       m_scanner.pop();
       HandleNode(eventHandler);
     } else {
@@ -326,9 +326,9 @@ void SingleDocParser::HandleFlowMap(EventHandler& eventHandler) {
     // now eat the separator (or could be a map end, which we ignore - but if
     // it's neither, then it's a bad node)
     Token& nextToken = m_scanner.peek();
-    if (nextToken.type == Token::FLOW_ENTRY)
+    if (nextToken.type == Token::TYPE::FLOW_ENTRY)
       m_scanner.pop();
-    else if (nextToken.type != Token::FLOW_MAP_END)
+    else if (nextToken.type != Token::TYPE::FLOW_MAP_END)
       throw ParserException(nextToken.mark, ErrorMsg::END_OF_MAP_FLOW);
   }
 
@@ -345,7 +345,7 @@ void SingleDocParser::HandleCompactMap(EventHandler& eventHandler) {
   HandleNode(eventHandler);
 
   // now grab value (optional)
-  if (!m_scanner.empty() && m_scanner.peek().type == Token::VALUE) {
+  if (!m_scanner.empty() && m_scanner.peek().type == Token::TYPE::VALUE) {
     m_scanner.pop();
     HandleNode(eventHandler);
   } else {
@@ -382,10 +382,10 @@ void SingleDocParser::ParseProperties(std::string& tag, anchor_t& anchor,
       return;
 
     switch (m_scanner.peek().type) {
-      case Token::TAG:
+      case Token::TYPE::TAG:
         ParseTag(tag);
         break;
-      case Token::ANCHOR:
+      case Token::TYPE::ANCHOR:
         ParseAnchor(anchor, anchor_name);
         break;
       default:

@@ -20,7 +20,7 @@ namespace YAML {
 //   and different places in the above flow.
 std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
   bool foundNonEmptyLine = false;
-  bool pastOpeningBreak = (params.fold == FOLD_FLOW);
+  bool pastOpeningBreak = (params.fold == FOLD::FOLD_FLOW);
   bool emptyLine = false, moreIndented = false;
   int foldedNewlineCount = 0;
   bool foldedNewlineStartedMoreIndented = false;
@@ -45,10 +45,10 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
       // document indicator?
       if (INPUT.column() == 0 && Exp::DocIndicator().Matches(INPUT)) {
-        if (params.onDocIndicator == BREAK) {
+        if (params.onDocIndicator == ACTION::BREAK) {
           break;
         }
-        if (params.onDocIndicator == THROW) {
+        if (params.onDocIndicator == ACTION::THROW) {
           throw ParserException(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
         }
       }
@@ -91,7 +91,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     }
 
     // doc indicator?
-    if (params.onDocIndicator == BREAK && INPUT.column() == 0 &&
+    if (params.onDocIndicator == ACTION::BREAK && INPUT.column() == 0 &&
         Exp::DocIndicator().Matches(INPUT)) {
       break;
     }
@@ -106,7 +106,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     }
 
     // do we remove trailing whitespace?
-    if (params.fold == FOLD_FLOW)
+    if (params.fold == FOLD::FOLD_FLOW)
       scalar.erase(lastNonWhitespaceChar);
 
     // ********************************
@@ -134,7 +134,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     while (Exp::Blank().Matches(INPUT)) {
       // we check for tabs that masquerade as indentation
       if (INPUT.peek() == '\t' && INPUT.column() < params.indent &&
-          params.onTabInIndentation == THROW) {
+          params.onTabInIndentation == ACTION::THROW) {
         throw ParserException(INPUT.mark(), ErrorMsg::TAB_IN_INDENTATION);
       }
 
@@ -152,17 +152,17 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     // was this an empty line?
     bool nextEmptyLine = Exp::Break().Matches(INPUT);
     bool nextMoreIndented = Exp::Blank().Matches(INPUT);
-    if (params.fold == FOLD_BLOCK && foldedNewlineCount == 0 && nextEmptyLine)
+    if (params.fold == FOLD::FOLD_BLOCK && foldedNewlineCount == 0 && nextEmptyLine)
       foldedNewlineStartedMoreIndented = moreIndented;
 
     // for block scalars, we always start with a newline, so we should ignore it
     // (not fold or keep)
     if (pastOpeningBreak) {
       switch (params.fold) {
-        case DONT_FOLD:
+        case FOLD::DONT_FOLD:
           scalar += "\n";
           break;
-        case FOLD_BLOCK:
+        case FOLD::FOLD_BLOCK:
           if (!emptyLine && !nextEmptyLine && !moreIndented &&
               !nextMoreIndented && INPUT.column() >= params.indent) {
             scalar += " ";
@@ -181,7 +181,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
             foldedNewlineCount = 0;
           }
           break;
-        case FOLD_FLOW:
+        case FOLD::FOLD_FLOW:
           if (nextEmptyLine) {
             scalar += "\n";
           } else if (!emptyLine && !escapedNewline) {
@@ -216,7 +216,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
   }
 
   switch (params.chomp) {
-    case CLIP: {
+    case CHOMP::CLIP: {
       std::size_t pos = scalar.find_last_not_of('\n');
       if (lastEscapedChar != std::string::npos) {
         if (pos < lastEscapedChar || pos == std::string::npos) {
@@ -229,7 +229,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
         scalar.erase(pos + 2);
       }
     } break;
-    case STRIP: {
+    case CHOMP::STRIP: {
       std::size_t pos = scalar.find_last_not_of('\n');
       if (lastEscapedChar != std::string::npos) {
         if (pos < lastEscapedChar || pos == std::string::npos) {

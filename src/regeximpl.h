@@ -56,8 +56,8 @@ template <>
 inline bool RegEx::IsValidSource<StringCharSource>(
     const StringCharSource& source) const {
   switch (m_op) {
-    case REGEX_MATCH:
-    case REGEX_RANGE:
+    case REGEX_OP::REGEX_MATCH:
+    case REGEX_OP::REGEX_RANGE:
       return source;
     default:
       return true;
@@ -72,19 +72,19 @@ inline int RegEx::Match(const Source& source) const {
 template <typename Source>
 inline int RegEx::MatchUnchecked(const Source& source) const {
   switch (m_op) {
-    case REGEX_EMPTY:
+    case REGEX_OP::REGEX_EMPTY:
       return MatchOpEmpty(source);
-    case REGEX_MATCH:
+    case REGEX_OP::REGEX_MATCH:
       return MatchOpMatch(source);
-    case REGEX_RANGE:
+    case REGEX_OP::REGEX_RANGE:
       return MatchOpRange(source);
-    case REGEX_OR:
+    case REGEX_OP::REGEX_OR:
       return MatchOpOr(source);
-    case REGEX_AND:
+    case REGEX_OP::REGEX_AND:
       return MatchOpAnd(source);
-    case REGEX_NOT:
+    case REGEX_OP::REGEX_NOT:
       return MatchOpNot(source);
-    case REGEX_SEQ:
+    case REGEX_OP::REGEX_SEQ:
       return MatchOpSeq(source);
   }
 

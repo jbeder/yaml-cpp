@@ -13,9 +13,9 @@
 #include "stream.h"
 
 namespace YAML {
-enum CHOMP { STRIP = -1, CLIP, KEEP };
-enum ACTION { NONE, BREAK, THROW };
-enum FOLD { DONT_FOLD, FOLD_BLOCK, FOLD_FLOW };
+enum class CHOMP { STRIP = -1, CLIP, KEEP };
+enum class ACTION { NONE, BREAK, THROW };
+enum class FOLD { DONT_FOLD, FOLD_BLOCK, FOLD_FLOW };
 
 struct ScanScalarParams {
   ScanScalarParams()
@@ -25,11 +25,11 @@ struct ScanScalarParams {
         detectIndent(false),
         eatLeadingWhitespace(0),
         escape(0),
-        fold(DONT_FOLD),
+        fold(FOLD::DONT_FOLD),
         trimTrailingSpaces(0),
-        chomp(CLIP),
-        onDocIndicator(NONE),
-        onTabInIndentation(NONE),
+        chomp(CHOMP::CLIP),
+        onDocIndicator(ACTION::NONE),
+        onTabInIndentation(ACTION::NONE),
         leadingSpaces(false) {}
 
   // input:

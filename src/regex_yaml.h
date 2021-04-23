@@ -15,7 +15,7 @@
 namespace YAML {
 class Stream;
 
-enum REGEX_OP {
+enum class REGEX_OP {
   REGEX_EMPTY,
   REGEX_MATCH,
   REGEX_RANGE,
@@ -33,7 +33,7 @@ class YAML_CPP_API RegEx {
   RegEx();
   explicit RegEx(char ch);
   RegEx(char a, char z);
-  RegEx(const std::string& str, REGEX_OP op = REGEX_SEQ);
+  RegEx(const std::string& str, REGEX_OP op = REGEX_OP::REGEX_SEQ);
   ~RegEx() = default;
 
   friend YAML_CPP_API RegEx operator!(const RegEx& ex);

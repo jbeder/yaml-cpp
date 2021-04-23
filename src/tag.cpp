@@ -9,20 +9,20 @@ namespace YAML {
 Tag::Tag(const Token& token)
     : type(static_cast<TYPE>(token.data)), handle{}, value{} {
   switch (type) {
-    case VERBATIM:
+    case TYPE::VERBATIM:
       value = token.value;
       break;
-    case PRIMARY_HANDLE:
+    case TYPE::PRIMARY_HANDLE:
       value = token.value;
       break;
-    case SECONDARY_HANDLE:
+    case TYPE::SECONDARY_HANDLE:
       value = token.value;
       break;
-    case NAMED_HANDLE:
+    case TYPE::NAMED_HANDLE:
       handle = token.value;
       value = token.params[0];
       break;
-    case NON_SPECIFIC:
+    case TYPE::NON_SPECIFIC:
       break;
     default:
       assert(false);
@@ -31,15 +31,15 @@ Tag::Tag(const Token& token)
 
 const std::string Tag::Translate(const Directives& directives) {
   switch (type) {
-    case VERBATIM:
+    case TYPE::VERBATIM:
       return value;
-    case PRIMARY_HANDLE:
+    case TYPE::PRIMARY_HANDLE:
       return directives.TranslateTagHandle("!") + value;
-    case SECONDARY_HANDLE:
+    case TYPE::SECONDARY_HANDLE:
       return directives.TranslateTagHandle("!!") + value;
-    case NAMED_HANDLE:
+    case TYPE::NAMED_HANDLE:
       return directives.TranslateTagHandle("!" + handle + "!") + value;
-    case NON_SPECIFIC:
+    case TYPE::NON_SPECIFIC:
       // TODO:
       return "!";
     default:

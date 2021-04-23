@@ -43,7 +43,7 @@ void Parser::ParseDirectives() {
 
   while (!m_pScanner->empty()) {
     Token& token = m_pScanner->peek();
-    if (token.type != Token::DIRECTIVE) {
+    if (token.type != Token::TYPE::DIRECTIVE) {
       break;
     }
 
