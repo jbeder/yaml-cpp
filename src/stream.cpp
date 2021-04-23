@@ -218,22 +218,22 @@ Stream::Stream(std::istream& input)
 
   switch (state) {
     case uis_utf8:
-      m_charSet = utf8;
+      m_charSet = CharacterSet::utf8;
       break;
     case uis_utf16le:
-      m_charSet = utf16le;
+      m_charSet = CharacterSet::utf16le;
       break;
     case uis_utf16be:
-      m_charSet = utf16be;
+      m_charSet = CharacterSet::utf16be;
       break;
     case uis_utf32le:
-      m_charSet = utf32le;
+      m_charSet = CharacterSet::utf32le;
       break;
     case uis_utf32be:
-      m_charSet = utf32be;
+      m_charSet = CharacterSet::utf32be;
       break;
     default:
-      m_charSet = utf8;
+      m_charSet = CharacterSet::utf8;
       break;
   }
 
@@ -301,19 +301,19 @@ void Stream::AdvanceCurrent() {
 bool Stream::_ReadAheadTo(size_t i) const {
   while (m_input.good() && (m_readahead.size() <= i)) {
     switch (m_charSet) {
-      case utf8:
+      case CharacterSet::utf8:
         StreamInUtf8();
         break;
-      case utf16le:
+      case CharacterSet::utf16le:
         StreamInUtf16();
         break;
-      case utf16be:
+      case CharacterSet::utf16be:
         StreamInUtf16();
         break;
-      case utf32le:
+      case CharacterSet::utf32le:
         StreamInUtf32();
         break;
-      case utf32be:
+      case CharacterSet::utf32be:
         StreamInUtf32();
         break;
     }
@@ -336,7 +336,7 @@ void Stream::StreamInUtf8() const {
 void Stream::StreamInUtf16() const {
   unsigned long ch = 0;
   unsigned char bytes[2];
-  int nBigEnd = (m_charSet == utf16be) ? 0 : 1;
+  int nBigEnd = (m_charSet == CharacterSet::utf16be) ? 0 : 1;
 
   bytes[0] = GetNextByte();
   bytes[1] = GetNextByte();
@@ -426,7 +426,7 @@ void Stream::StreamInUtf32() const {
 
   unsigned long ch = 0;
   unsigned char bytes[4];
-  int* pIndexes = (m_charSet == utf32be) ? indexes[1] : indexes[0];
+  int* pIndexes = (m_charSet == CharacterSet::utf32be) ? indexes[1] : indexes[0];
 
   bytes[0] = GetNextByte();
   bytes[1] = GetNextByte();

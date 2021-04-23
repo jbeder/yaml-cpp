@@ -46,10 +46,10 @@ class Scanner {
 
  private:
   struct IndentMarker {
-    enum INDENT_TYPE { MAP, SEQ, NONE };
-    enum STATUS { VALID, INVALID, UNKNOWN };
+    enum class INDENT_TYPE { MAP, SEQ, NONE };
+    enum class STATUS { VALID, INVALID, UNKNOWN };
     IndentMarker(int column_, INDENT_TYPE type_)
-        : column(column_), type(type_), status(VALID), pStartToken(nullptr) {}
+        : column(column_), type(type_), status(STATUS::VALID), pStartToken(nullptr) {}
 
     int column;
     INDENT_TYPE type;
@@ -57,7 +57,7 @@ class Scanner {
     Token *pStartToken;
   };
 
-  enum FLOW_MARKER { FLOW_MAP, FLOW_SEQ };
+  enum class FLOW_MARKER { FLOW_MAP, FLOW_SEQ };
 
  private:
   // scanning

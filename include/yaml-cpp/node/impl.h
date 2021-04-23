@@ -327,7 +327,7 @@ inline const Node Node::operator[](const Key& key) const {
   detail::node* value =
       static_cast<const detail::node&>(*m_pNode).get(key, m_pMemory);
   if (!value) {
-    return Node(ZombieNode, key_to_string(key));
+    return Node(Zombie::ZombieNode, key_to_string(key));
   }
   return Node(*value, m_pMemory);
 }
@@ -352,7 +352,7 @@ inline const Node Node::operator[](const Node& key) const {
   detail::node* value =
       static_cast<const detail::node&>(*m_pNode).get(*key.m_pNode, m_pMemory);
   if (!value) {
-    return Node(ZombieNode, key_to_string(key));
+    return Node(Zombie::ZombieNode, key_to_string(key));
   }
   return Node(*value, m_pMemory);
 }

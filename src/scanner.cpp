@@ -56,12 +56,12 @@ void Scanner::EnsureTokensInQueue() {
       Token& token = m_tokens.front();
 
       // if this guy's valid, then we're done
-      if (token.status == Token::VALID) {
+      if (token.status == Token::STATUS::VALID) {
         return;
       }
 
       // here's where we clean up the impossible tokens
-      if (token.status == Token::INVALID) {
+      if (token.status == Token::STATUS::INVALID) {
         m_tokens.pop();
         continue;
       }
@@ -246,7 +246,7 @@ void Scanner::StartStream() {
   m_startedStream = true;
   m_simpleKeyAllowed = true;
   std::unique_ptr<IndentMarker> pIndent(
-      new IndentMarker(-1, IndentMarker::NONE));
+      new IndentMarker(-1, IndentMarker::INDENT_TYPE::NONE));
   m_indentRefs.push_back(std::move(pIndent));
   m_indents.push(&m_indentRefs.back());
 }
@@ -271,11 +271,11 @@ Token* Scanner::PushToken(Token::TYPE type) {
 
 Token::TYPE Scanner::GetStartTokenFor(IndentMarker::INDENT_TYPE type) const {
   switch (type) {
-    case IndentMarker::SEQ:
-      return Token::BLOCK_SEQ_START;
-    case IndentMarker::MAP:
-      return Token::BLOCK_MAP_START;
-    case IndentMarker::NONE:
+    case IndentMarker::INDENT_TYPE::SEQ:
+      return Token::TYPE::BLOCK_SEQ_START;
+    case IndentMarker::INDENT_TYPE::MAP:
+      return Token::TYPE::BLOCK_MAP_START;
+    case IndentMarker::INDENT_TYPE::NONE:
       assert(false);
       break;
   }
@@ -299,8 +299,8 @@ Scanner::IndentMarker* Scanner::PushIndentTo(int column,
     return nullptr;
   }
   if (indent.column == lastIndent.column &&
-      !(indent.type == IndentMarker::SEQ &&
-        lastIndent.type == IndentMarker::MAP)) {
+      !(indent.type == IndentMarker::INDENT_TYPE::SEQ &&
+        lastIndent.type == IndentMarker::INDENT_TYPE::MAP)) {
     return nullptr;
   }
 
@@ -326,7 +326,7 @@ void Scanner::PopIndentToHere() {
       break;
     }
     if (indent.column == INPUT.column() &&
-        !(indent.type == IndentMarker::SEQ &&
+        !(indent.type == IndentMarker::INDENT_TYPE::SEQ &&
           !Exp::BlockEntry().Matches(INPUT))) {
       break;
     }
@@ -335,7 +335,7 @@ void Scanner::PopIndentToHere() {
   }
 
   while (!m_indents.empty() &&
-         m_indents.top()->status == IndentMarker::INVALID) {
+         m_indents.top()->status == IndentMarker::STATUS::INVALID) {
     PopIndent();
   }
 }
@@ -349,7 +349,7 @@ void Scanner::PopAllIndents() {
   // now pop away
   while (!m_indents.empty()) {
     const IndentMarker& indent = *m_indents.top();
-    if (indent.type == IndentMarker::NONE) {
+    if (indent.type == IndentMarker::INDENT_TYPE::NONE) {
       break;
     }
 
@@ -361,15 +361,15 @@ void Scanner::PopIndent() {
   const IndentMarker& indent = *m_indents.top();
   m_indents.pop();
 
-  if (indent.status != IndentMarker::VALID) {
+  if (indent.status != IndentMarker::STATUS::VALID) {
     InvalidateSimpleKey();
     return;
   }
 
-  if (indent.type == IndentMarker::SEQ) {
-    m_tokens.push(Token(Token::BLOCK_SEQ_END, INPUT.mark()));
-  } else if (indent.type == IndentMarker::MAP) {
-    m_tokens.push(Token(Token::BLOCK_MAP_END, INPUT.mark()));
+  if (indent.type == IndentMarker::INDENT_TYPE::SEQ) {
+    m_tokens.push(Token(Token::TYPE::BLOCK_SEQ_END, INPUT.mark()));
+  } else if (indent.type == IndentMarker::INDENT_TYPE::MAP) {
+    m_tokens.push(Token(Token::TYPE::BLOCK_MAP_END, INPUT.mark()));
   }
 }
 

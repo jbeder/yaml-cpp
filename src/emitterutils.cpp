@@ -15,7 +15,7 @@
 namespace YAML {
 namespace Utils {
 namespace {
-enum { REPLACEMENT_CHARACTER = 0xFFFD };
+constexpr int REPLACEMENT_CHARACTER = 0xFFFD;
 
 bool IsAnchorChar(int ch) {  // test for ns-anchor-char
   switch (ch) {

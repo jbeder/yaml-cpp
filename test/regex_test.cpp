@@ -165,7 +165,7 @@ TEST(RegExTest, OperatorPlus) {
 
 TEST(RegExTest, StringOr) {
   std::string str = "abcde";
-  RegEx ex = RegEx(str, YAML::REGEX_OR);
+  RegEx ex = RegEx(str, YAML::REGEX_OP::REGEX_OR);
 
   for (size_t i = 0; i < str.size(); ++i) {
     EXPECT_TRUE(ex.Matches(str.substr(i, 1)));

@@ -16,20 +16,20 @@ void Scanner::SimpleKey::Validate() {
   //       we "garbage collect" them so we can
   //       always refer to them
   if (pIndent)
-    pIndent->status = IndentMarker::VALID;
+    pIndent->status = IndentMarker::STATUS::VALID;
   if (pMapStart)
-    pMapStart->status = Token::VALID;
+    pMapStart->status = Token::STATUS::VALID;
   if (pKey)
-    pKey->status = Token::VALID;
+    pKey->status = Token::STATUS::VALID;
 }
 
 void Scanner::SimpleKey::Invalidate() {
   if (pIndent)
-    pIndent->status = IndentMarker::INVALID;
+    pIndent->status = IndentMarker::STATUS::INVALID;
   if (pMapStart)
-    pMapStart->status = Token::INVALID;
+    pMapStart->status = Token::STATUS::INVALID;
   if (pKey)
-    pKey->status = Token::INVALID;
+    pKey->status = Token::STATUS::INVALID;
 }
 
 // CanInsertPotentialSimpleKey
@@ -63,18 +63,18 @@ void Scanner::InsertPotentialSimpleKey() {
 
   // first add a map start, if necessary
   if (InBlockContext()) {
-    key.pIndent = PushIndentTo(INPUT.column(), IndentMarker::MAP);
+    key.pIndent = PushIndentTo(INPUT.column(), IndentMarker::INDENT_TYPE::MAP);
     if (key.pIndent) {
-      key.pIndent->status = IndentMarker::UNKNOWN;
+      key.pIndent->status = IndentMarker::STATUS::UNKNOWN;
       key.pMapStart = key.pIndent->pStartToken;
-      key.pMapStart->status = Token::UNVERIFIED;
+      key.pMapStart->status = Token::STATUS::UNVERIFIED;
     }
   }
 
   // then add the (now unverified) key
-  m_tokens.push(Token(Token::KEY, INPUT.mark()));
+  m_tokens.push(Token(Token::TYPE::KEY, INPUT.mark()));
   key.pKey = &m_tokens.back();
-  key.pKey->status = Token::UNVERIFIED;
+  key.pKey->status = Token::STATUS::UNVERIFIED;
 
   m_simpleKeys.push(key);
 }

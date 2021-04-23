@@ -15,71 +15,71 @@
 namespace YAML {
 template <typename>
 struct is_numeric {
-  enum { value = false };
+  static constexpr bool value = false;
 };
 
 template <>
 struct is_numeric<char> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<unsigned char> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<int> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<unsigned int> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<long int> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<unsigned long int> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<short int> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<unsigned short int> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 #if defined(_MSC_VER) && (_MSC_VER < 1310)
 template <>
 struct is_numeric<__int64> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<unsigned __int64> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 #else
 template <>
 struct is_numeric<long long> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<unsigned long long> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 #endif
 template <>
 struct is_numeric<float> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<double> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 template <>
 struct is_numeric<long double> {
-  enum { value = true };
+  static constexpr bool value = true;
 };
 
 template <bool, class T = void>

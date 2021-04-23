@@ -22,8 +22,8 @@ const std::string TokenNames[] = {
 
 struct Token {
   // enums
-  enum STATUS { VALID, INVALID, UNVERIFIED };
-  enum TYPE {
+  enum class STATUS { VALID, INVALID, UNVERIFIED };
+  enum class TYPE {
     DIRECTIVE,
     DOC_START,
     DOC_END,
@@ -49,10 +49,10 @@ struct Token {
 
   // data
   Token(TYPE type_, const Mark& mark_)
-      : status(VALID), type(type_), mark(mark_), value{}, params{}, data(0) {}
+      : status(STATUS::VALID), type(type_), mark(mark_), value{}, params{}, data(0) {}
 
   friend std::ostream& operator<<(std::ostream& out, const Token& token) {
-    out << TokenNames[token.type] << std::string(": ") << token.value;
+    out << TokenNames[static_cast<int>(token.type)] << std::string(": ") << token.value;
     for (const std::string& param : token.params)
       out << std::string(" ") << param;
     return out;

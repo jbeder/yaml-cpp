@@ -69,7 +69,7 @@ inline const RegEx& Hex() {
 inline const RegEx& NotPrintable() {
   static const RegEx e =
       RegEx(0) |
-      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OR) |
+      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OP::REGEX_OR) |
       RegEx(0x0E, 0x1F) |
       (RegEx('\xC2') + (RegEx('\x80', '\x84') | RegEx('\x86', '\x9F')));
   return e;
@@ -110,7 +110,7 @@ inline const RegEx& Value() {
   return e;
 }
 inline const RegEx& ValueInFlow() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",]}", REGEX_OR));
+  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",]}", REGEX_OP::REGEX_OR));
   return e;
 }
 inline const RegEx& ValueInJSONFlow() {
@@ -122,20 +122,20 @@ inline const RegEx Comment() {
   return e;
 }
 inline const RegEx& Anchor() {
-  static const RegEx e = !(RegEx("[]{},", REGEX_OR) | BlankOrBreak());
+  static const RegEx e = !(RegEx("[]{},", REGEX_OP::REGEX_OR) | BlankOrBreak());
   return e;
 }
 inline const RegEx& AnchorEnd() {
-  static const RegEx e = RegEx("?:,]}%@`", REGEX_OR) | BlankOrBreak();
+  static const RegEx e = RegEx("?:,]}%@`", REGEX_OP::REGEX_OR) | BlankOrBreak();
   return e;
 }
 inline const RegEx& URI() {
-  static const RegEx e = Word() | RegEx("#;/?:@&=+$,_.!~*'()[]", REGEX_OR) |
+  static const RegEx e = Word() | RegEx("#;/?:@&=+$,_.!~*'()[]", REGEX_OP::REGEX_OR) |
                          (RegEx('%') + Hex() + Hex());
   return e;
 }
 inline const RegEx& Tag() {
-  static const RegEx e = Word() | RegEx("#;/?:@&=+$_.~*'()", REGEX_OR) |
+  static const RegEx e = Word() | RegEx("#;/?:@&=+$_.~*'()", REGEX_OP::REGEX_OR) |
                          (RegEx('%') + Hex() + Hex());
   return e;
 }
@@ -148,14 +148,14 @@ inline const RegEx& Tag() {
 // space.
 inline const RegEx& PlainScalar() {
   static const RegEx e =
-      !(BlankOrBreak() | RegEx(",[]{}#&*!|>\'\"%@`", REGEX_OR) |
-        (RegEx("-?:", REGEX_OR) + (BlankOrBreak() | RegEx())));
+      !(BlankOrBreak() | RegEx(",[]{}#&*!|>\'\"%@`", REGEX_OP::REGEX_OR) |
+        (RegEx("-?:", REGEX_OP::REGEX_OR) + (BlankOrBreak() | RegEx())));
   return e;
 }
 inline const RegEx& PlainScalarInFlow() {
   static const RegEx e =
-      !(BlankOrBreak() | RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OR) |
-        (RegEx("-:", REGEX_OR) + (Blank() | RegEx())));
+      !(BlankOrBreak() | RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OP::REGEX_OR) |
+        (RegEx("-:", REGEX_OP::REGEX_OR) + (Blank() | RegEx())));
   return e;
 }
 inline const RegEx& EndScalar() {
@@ -164,8 +164,8 @@ inline const RegEx& EndScalar() {
 }
 inline const RegEx& EndScalarInFlow() {
   static const RegEx e =
-      (RegEx(':') + (BlankOrBreak() | RegEx() | RegEx(",]}", REGEX_OR))) |
-      RegEx(",?[]{}", REGEX_OR);
+      (RegEx(':') + (BlankOrBreak() | RegEx() | RegEx(",]}", REGEX_OP::REGEX_OR))) |
+      RegEx(",?[]{}", REGEX_OP::REGEX_OR);
   return e;
 }
 
@@ -188,7 +188,7 @@ inline const RegEx& EscBreak() {
 }
 
 inline const RegEx& ChompIndicator() {
-  static const RegEx e = RegEx("+-", REGEX_OR);
+  static const RegEx e = RegEx("+-", REGEX_OP::REGEX_OR);
   return e;
 }
 inline const RegEx& Chomp() {
