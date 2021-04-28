@@ -66,7 +66,8 @@ template <>
 struct convert<Node> {
   static Node encode(const Node& rhs) { return rhs; }
 
-  static bool decode(const Node& node, Node& rhs) {
+  static bool decode(const Node& node, Node& rhs) { //FIXME, this is dangerous
+    throw std::runtime_error("this should not have been encountered");
     rhs.reset(node);
     return true;
   }
@@ -77,10 +78,10 @@ template <>
 struct convert<std::string> {
   static Node encode(const std::string& rhs) { return Node(rhs); }
 
-  static std::pair<bool, std::string> decode(const Node& node) {
+  static std::string decode(const Node& node) {
     if (!node.IsScalar())
       throw conversion::DecodeException("");
-    return std::make_pair(true, node.Scalar());
+    return node.Scalar();
   }
 
 };
@@ -105,10 +106,10 @@ template <>
 struct convert<_Null> {
   static Node encode(const _Null& /* rhs */) { return Node(); }
 
-  static std::pair<bool, _Null> decode(const Node& node) {
+  static _Null decode(const Node& node) {
     if (!node.IsNull())
       throw conversion::DecodeException("");
-    return std::make_pair(node.IsNull(), _Null());
+    return _Null();
   }
 };
 
@@ -172,7 +173,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       return Node(stream.str());                                           \
     }                                                                      \
                                                                            \
-    static std::pair<bool, type> decode(const Node& node) {     \
+    static type decode(const Node& node) {     \
       if (node.Type() != NodeType::Scalar) {                               \
         throw conversion::DecodeException("");                             \
       }                                                                    \
@@ -188,19 +189,15 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       }                                                                    \
       if (std::numeric_limits<type>::has_infinity) {                       \
         if (conversion::IsInfinity(input)) {                               \
-          return std::make_pair(true,                                      \
-                                std::numeric_limits<type>::infinity());    \
+          return std::numeric_limits<type>::infinity();                    \
         } else if (conversion::IsNegativeInfinity(input)) {                \
-          return std::make_pair(true,                                      \
-            negative_op std::numeric_limits<type>::infinity());            \
+          return negative_op std::numeric_limits<type>::infinity();        \
         }                                                                  \
       }                                                                    \
                                                                            \
       if (std::numeric_limits<type>::has_quiet_NaN) {                      \
         if (conversion::IsNaN(input)) {                                    \
-          rhs = std::numeric_limits<type>::quiet_NaN();                    \
-          return std::make_pair(true,                                      \
-            std::numeric_limits<type>::quiet_NaN());                       \
+          return std::numeric_limits<type>::quiet_NaN();                   \
         }                                                                  \
       }                                                                    \
                                                                            \
@@ -240,7 +237,7 @@ template <>
 struct convert<bool> {
   static Node encode(bool rhs) { return rhs ? Node("true") : Node("false"); }
 
-  YAML_CPP_API static std::pair<bool, bool> decode(const Node& node);
+  YAML_CPP_API static bool decode(const Node& node);
 };
 
 // std::map
@@ -253,7 +250,7 @@ struct convert<std::map<K, V, C, A>> {
     return node;
   }
 
-  static std::pair<bool, std::map<K, V, C, A> > decode(const Node& node) {
+  static std::map<K, V, C, A> decode(const Node& node) {
     if (!node.IsMap())
       throw conversion::DecodeException("");
 
@@ -265,7 +262,7 @@ struct convert<std::map<K, V, C, A>> {
 #else
       rhs[element.first.as<K>()] = element.second.as<V>();
 #endif
-    return std::make_pair(true, rhs);
+    return rhs;
   }
 };
 
@@ -279,7 +276,7 @@ struct convert<std::vector<T, A>> {
     return node;
   }
 
-  static std::pair<bool, std::vector<T, A> > decode(const Node& node) {
+  static std::vector<T, A> decode(const Node& node) {
     if (!node.IsSequence())
       throw conversion::DecodeException("");
 
@@ -291,7 +288,7 @@ struct convert<std::vector<T, A>> {
 #else
       rhs.push_back(element.as<T>());
 #endif
-    return std::make_pair(true, rhs);
+    return rhs;
   }
 };
 
@@ -305,7 +302,7 @@ struct convert<std::list<T,A>> {
     return node;
   }
 
-  static std::pair<bool, std::list<T,A> > decode(const Node& node) {
+  static std::list<T,A> decode(const Node& node) {
     if (!node.IsSequence())
       throw conversion::DecodeException("");
 
@@ -317,7 +314,7 @@ struct convert<std::list<T,A>> {
 #else
       rhs.push_back(element.as<T>());
 #endif
-    return std::make_pair(true, rhs);
+    return rhs;
   }
 };
 
@@ -332,7 +329,7 @@ struct convert<std::array<T, N>> {
     return node;
   }
 
-  static std::pair<bool, std::array<T, N> > decode(const Node& node) {
+  static std::array<T, N> decode(const Node& node) {
     if (!isNodeValid(node))
       throw conversion::DecodeException("");
 
@@ -345,7 +342,7 @@ struct convert<std::array<T, N>> {
       rhs[i] = node[i].as<T>();
 #endif
     }
-    return std::make_pair(true, rhs);
+    return rhs;
   }
 
  private:
@@ -364,7 +361,7 @@ struct convert<std::pair<T, U>> {
     return node;
   }
 
-  static std::pair<bool, std::pair<T, U> > decode(const Node& node) {
+  static std::pair<T, U> decode(const Node& node) {
     if (!node.IsSequence() or node.size() != 2)
       throw conversion::DecodeException("");
 
@@ -381,7 +378,7 @@ struct convert<std::pair<T, U>> {
 #else
     rhs.second = node[1].as<U>();
 #endif
-    return std::make_pair(true, rhs);
+    return rhs;
   }
 };
 
@@ -392,7 +389,7 @@ struct convert<Binary> {
     return Node(EncodeBase64(rhs.data(), rhs.size()));
   }
 
-  static std::pair<bool, Binary> decode(const Node& node) {
+  static Binary decode(const Node& node) {
     if (!node.IsScalar())
       throw conversion::DecodeException("");
 
@@ -402,7 +399,7 @@ struct convert<Binary> {
 
     Binary rhs;
     rhs.swap(data);
-    return std::make_pair(true, rhs);
+    return rhs;
   }
 };
 }

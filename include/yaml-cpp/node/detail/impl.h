@@ -100,10 +100,7 @@ template <typename T>
 inline bool node::equals(const T& rhs, shared_memory_holder pMemory) {
   try {
     const auto rslt = convert<T>::decode(Node(*this, pMemory));
-    if (rslt.first) {
-      return rslt.second == rhs;
-    }
-    return false;
+    return rslt == rhs;
   } catch (const conversion::DecodeException& e) {
     return false;
   } catch(...) {
@@ -115,9 +112,7 @@ inline bool node::equals(const char* rhs, shared_memory_holder pMemory) {
   try {
     const auto rslt =
         convert<std::string>::decode(Node(*this, std::move(pMemory)));
-    if (rslt.first)
-      return rslt.second == rhs;
-    return false;
+    return rslt == rhs;
   } catch (const conversion::DecodeException& e) {
     return false;
   } catch(...) {

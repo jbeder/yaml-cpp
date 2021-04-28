@@ -99,9 +99,7 @@ struct as_if {
       return fallback;
 
     try {
-      const auto rslt = convert<T>::decode(node);
-      if (rslt.first)
-        return rslt.second;
+      return convert<T>::decode(node);
     } catch (conversion::DecodeException& e) {
       return fallback;
     } catch (...) {
@@ -109,6 +107,35 @@ struct as_if {
     }
   }
 };
+
+//specialize for Node
+template <typename S>
+struct as_if<Node, S> {
+  explicit as_if(const Node& node_) : node(node_) {}
+  const Node& node;
+
+  Node operator()(const S& fallback) const {
+    if (!node.m_pNode)
+      return fallback;
+
+    try {
+      node.reset(node);
+      return node;
+    } catch (conversion::DecodeException& e) {
+      return fallback;
+    } catch (...) {
+      std::rethrow_exception(std::current_exception());
+    }
+  }
+};
+
+
+
+
+
+
+
+
 
 template <typename S>
 struct as_if<std::string, S> {
@@ -134,11 +161,7 @@ struct as_if<T, void> {
       throw TypedBadConversion<T>(node.Mark());
 
     try {
-      auto result = convert<T>::decode(node);
-      if (result.first)
-        return result.second;
-      else
-        throw TypedBadConversion<T>(node.Mark());
+      return convert<T>::decode(node);
     } catch(const conversion::DecodeException& e) {
       throw TypedBadConversion<T>(node.Mark());
     } catch (...) {
