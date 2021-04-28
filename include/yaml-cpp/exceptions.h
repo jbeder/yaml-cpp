@@ -298,6 +298,14 @@ class YAML_CPP_API BadFile : public Exception {
   BadFile(const BadFile&) = default;
   ~BadFile() YAML_CPP_NOEXCEPT override;
 };
+
+
+namespace conversion{
+  class DecodeException : public std::runtime_error {
+    using runtime_error::runtime_error;
+  };
+}
+
 }  // namespace YAML
 
 #endif  // EXCEPTIONS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

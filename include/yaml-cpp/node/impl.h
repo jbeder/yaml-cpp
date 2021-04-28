@@ -15,6 +15,7 @@
 #include <sstream>
 #include <string>
 
+
 namespace YAML {
 inline Node::Node()
     : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
@@ -97,10 +98,15 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    return fallback;
+    try {
+      const auto rslt = convert<T>::decode(node);
+      if (rslt.first)
+        return rslt.second;
+    } catch (conversion::DecodeException& e) {
+      return fallback;
+    } catch (...) {
+      std::rethrow_exception(std::current_exception());
+    }
   }
 };
 
@@ -127,11 +133,18 @@ struct as_if<T, void> {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    throw TypedBadConversion<T>(node.Mark());
-  }
+    try {
+      auto result = convert<T>::decode(node);
+      if (result.first)
+        return result.second;
+      else
+        throw TypedBadConversion<T>(node.Mark());
+    } catch(const conversion::DecodeException& e) {
+      throw TypedBadConversion<T>(node.Mark());
+    } catch (...) {
+      std::rethrow_exception(std::current_exception());
+    }
+  };
 };
 
 template <>

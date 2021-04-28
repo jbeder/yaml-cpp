@@ -38,9 +38,9 @@ bool IsFlexibleCase(const std::string& str) {
 }  // namespace
 
 namespace YAML {
-bool convert<bool>::decode(const Node& node, bool& rhs) {
+std::pair<bool, bool> convert<bool>::decode(const Node& node) {
   if (!node.IsScalar())
-    return false;
+    throw conversion::DecodeException("");
 
   // we can't use iostream bool extraction operators as they don't
   // recognize all possible values in the table below (taken from
@@ -55,20 +55,18 @@ bool convert<bool>::decode(const Node& node, bool& rhs) {
   };
 
   if (!IsFlexibleCase(node.Scalar()))
-    return false;
+    throw conversion::DecodeException("");
 
   for (const auto& name : names) {
     if (name.truename == tolower(node.Scalar())) {
-      rhs = true;
-      return true;
+      return std::make_pair(true, true);
     }
 
     if (name.falsename == tolower(node.Scalar())) {
-      rhs = false;
-      return true;
+      return std::make_pair(true, false);
     }
   }
 
-  return false;
+  throw conversion::DecodeException("");
 }
 }  // namespace YAML
