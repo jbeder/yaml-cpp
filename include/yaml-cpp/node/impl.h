@@ -100,7 +100,7 @@ struct as_if {
 
     try {
       return convert<T>::decode(node);
-    } catch (conversion::DecodeException& e) {
+    } catch (const conversion::DecodeException& e) {
       return fallback;
     } catch (...) {
       std::rethrow_exception(std::current_exception());
@@ -122,7 +122,7 @@ struct as_if<Node, S> {
       Node n;
       n.reset(node);
       return node;
-    } catch (conversion::DecodeException& e) {
+    } catch (const conversion::DecodeException& e) {
       return fallback;
     } catch (...) {
       std::rethrow_exception(std::current_exception());
