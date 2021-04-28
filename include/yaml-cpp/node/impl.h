@@ -119,7 +119,8 @@ struct as_if<Node, S> {
       return fallback;
 
     try {
-      node.reset(node);
+      Node n;
+      n.reset(node);
       return node;
     } catch (conversion::DecodeException& e) {
       return fallback;
@@ -128,14 +129,6 @@ struct as_if<Node, S> {
     }
   }
 };
-
-
-
-
-
-
-
-
 
 template <typename S>
 struct as_if<std::string, S> {
