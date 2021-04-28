@@ -41,9 +41,15 @@ class DecodeException : public std::runtime_error {
 namespace YAML {
 class Binary;
 struct _Null;
+
 template <typename T>
-struct convert;
+struct convert {
+  using this_type = T;
+};
 }  // namespace YAML
+
+#define BAD_DECODE_EXCEPTION throw YAML::conversion::DecodeException();
+
 
 namespace YAML {
 namespace conversion {
@@ -81,7 +87,7 @@ struct convert<std::string> {
 
   static std::string decode(const Node& node) {
     if (!node.IsScalar())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
     return node.Scalar();
   }
 
@@ -109,7 +115,7 @@ struct convert<_Null> {
 
   static _Null decode(const Node& node) {
     if (!node.IsNull())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
     return _Null();
   }
 };
@@ -176,13 +182,13 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
                                                                            \
     static type decode(const Node& node) {     \
       if (node.Type() != NodeType::Scalar) {                               \
-        throw conversion::DecodeException("");                             \
+        BAD_DECODE_EXCEPTION;                             \
       }                                                                    \
       const std::string& input = node.Scalar();                            \
       std::stringstream stream(input);                                     \
       stream.unsetf(std::ios::dec);                                        \
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
-        throw conversion::DecodeException("");                             \
+        BAD_DECODE_EXCEPTION                             \
       }                                                                    \
       type rhs;                                                            \
       if (conversion::ConvertStreamTo(stream, rhs)) {                      \
@@ -202,7 +208,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
         }                                                                  \
       }                                                                    \
                                                                            \
-      throw conversion::DecodeException("");                               \
+      BAD_DECODE_EXCEPTION                               \
     }                                                                      \
   }
 
@@ -253,7 +259,7 @@ struct convert<std::map<K, V, C, A>> {
 
   static std::map<K, V, C, A> decode(const Node& node) {
     if (!node.IsMap())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     std::map<K, V, C, A> rhs;
     for (const auto& element : node)
@@ -279,7 +285,7 @@ struct convert<std::vector<T, A>> {
 
   static std::vector<T, A> decode(const Node& node) {
     if (!node.IsSequence())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     std::vector<T, A> rhs;
     for (const auto& element : node)
@@ -305,7 +311,7 @@ struct convert<std::list<T,A>> {
 
   static std::list<T,A> decode(const Node& node) {
     if (!node.IsSequence())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     std::list<T,A> rhs;
     for (const auto& element : node)
@@ -332,7 +338,7 @@ struct convert<std::array<T, N>> {
 
   static std::array<T, N> decode(const Node& node) {
     if (!isNodeValid(node))
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     std::array<T, N> rhs;
     for (auto i = 0u; i < node.size(); ++i) {
@@ -364,7 +370,7 @@ struct convert<std::pair<T, U>> {
 
   static std::pair<T, U> decode(const Node& node) {
     if (!node.IsSequence() or node.size() != 2)
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     std::pair<T, U> rhs;
 #if defined(__GNUC__) && __GNUC__ < 4
@@ -392,11 +398,11 @@ struct convert<Binary> {
 
   static Binary decode(const Node& node) {
     if (!node.IsScalar())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     std::vector<unsigned char> data = DecodeBase64(node.Scalar());
     if (data.empty() && !node.Scalar().empty())
-      throw conversion::DecodeException("");
+      BAD_DECODE_EXCEPTION
 
     Binary rhs;
     rhs.swap(data);

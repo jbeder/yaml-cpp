@@ -180,7 +180,7 @@ struct convert<Vec3> {
 
   static Vec3 decode(const Node& node) {
     if(!node.IsSequence() || node.size() != 3) {
-      return YAML::conversion::DecodeException("");
+      throw YAML::conversion::DecodeException("");
     }
 
     Vec3 rhs;

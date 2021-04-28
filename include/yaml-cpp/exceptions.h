@@ -302,7 +302,8 @@ class YAML_CPP_API BadFile : public Exception {
 
 namespace conversion{
   class DecodeException : public std::runtime_error {
-    using runtime_error::runtime_error;
+  public:
+    DecodeException(const std::string& s="") : std::runtime_error(s) {};
   };
 }
 
