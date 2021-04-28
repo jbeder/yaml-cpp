@@ -66,10 +66,11 @@ template <>
 struct convert<Node> {
   static Node encode(const Node& rhs) { return rhs; }
 
-  static bool decode(const Node& node, Node& rhs) { //FIXME, this is dangerous
+  static Node decode(const Node& node) { //FIXME, this is dangerous
     throw std::runtime_error("this should not have been encountered");
+    Node rhs;
     rhs.reset(node);
-    return true;
+    return rhs;
   }
 };
 
@@ -185,7 +186,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       }                                                                    \
       type rhs;                                                            \
       if (conversion::ConvertStreamTo(stream, rhs)) {                      \
-        throw conversion::DecodeException("");                             \
+        return rhs;                             \
       }                                                                    \
       if (std::numeric_limits<type>::has_infinity) {                       \
         if (conversion::IsInfinity(input)) {                               \
