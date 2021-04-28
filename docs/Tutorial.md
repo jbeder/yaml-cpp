@@ -178,11 +178,12 @@ struct convert<Vec3> {
     return node;
   }
 
-  static bool decode(const Node& node, Vec3& rhs) {
+  static Vec3 decode(const Node& node) {
     if(!node.IsSequence() || node.size() != 3) {
-      return false;
+      return YAML::conversion::DecodeException("");
     }
 
+    Vec3 rhs;
     rhs.x = node[0].as<double>();
     rhs.y = node[1].as<double>();
     rhs.z = node[2].as<double>();
