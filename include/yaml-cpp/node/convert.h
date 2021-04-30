@@ -25,27 +25,12 @@
 #include "yaml-cpp/null.h"
 
 
-
-namespace YAML{
-namespace conversion{
-namespace exception{
-class DecodeException : public std::runtime_error {
-  using runtime_error::runtime_error;
-};
-}
-}
-}
-
-
-
 namespace YAML {
 class Binary;
 struct _Null;
 
 template <typename T>
-struct convert {
-  using this_type = T;
-};
+struct convert;
 }  // namespace YAML
 
 #define BAD_DECODE_EXCEPTION throw YAML::conversion::DecodeException();
