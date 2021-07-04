@@ -385,7 +385,7 @@ TEST_F(EmitterTest, ScalarFormat) {
 TEST_F(EmitterTest, LiteralWithoutTrailingSpaces) {
   out << YAML::BeginMap;
   out << YAML::Key << "key";
-  out << YAML::Literal;
+  out << YAML::Value << YAML::Literal;
   out << "expect that with two newlines\n\n"
          "no spaces are emitted in the empty line";
   out << YAML::EndMap;
