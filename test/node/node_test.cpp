@@ -769,17 +769,5 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
 
   ExpectOutput("{position: [1.5, 2.25, 3.125]}", mapNode);
 }
-
-TEST_F(NodeEmitterTest, LiteralWithoutTrailingSpaces) {
-  YAML::Emitter emitter;
-  emitter << YAML::BeginMap;
-  emitter << YAML::Key << "key";
-  emitter << YAML::Literal;
-  emitter << "value\n\nwith newlines";
-  emitter << YAML::EndMap;
-
-  ASSERT_TRUE(emitter.good());
-  EXPECT_STREQ("key: |\n  value\n\n  with newlines", emitter.c_str());
-}
 }
 }
