@@ -382,6 +382,20 @@ TEST_F(EmitterTest, ScalarFormat) {
       "crazy\tsymbols that we like");
 }
 
+TEST_F(EmitterTest, LiteralWithoutTrailingSpaces) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "key";
+  out << YAML::Value << YAML::Literal;
+  out << "expect that with two newlines\n\n"
+         "no spaces are emitted in the empty line";
+  out << YAML::EndMap;
+
+  ExpectEmit(
+      "key: |\n"
+      "  expect that with two newlines\n\n"
+      "  no spaces are emitted in the empty line");
+}
+
 TEST_F(EmitterTest, AutoLongKeyScalar) {
   out << BeginMap;
   out << Key << Literal << "multi-line\nscalar";
