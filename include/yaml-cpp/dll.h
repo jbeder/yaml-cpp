@@ -18,13 +18,22 @@
 
 #ifdef YAML_CPP_DLL      // Using or Building YAML-CPP DLL (definition defined
                          // manually)
+
+#if defined(_WIN32) || defined(WIN32)
+#  define YAML_CPP_API_IMPORT __declspec(dllimport)
+#  define YAML_CPP_API_EXPORT __declspec(dllexport)
+#else
+#  define YAML_CPP_API_IMPORT __attribute__((visibility("default")))
+#  define YAML_CPP_API_EXPORT __attribute__((visibility("default")))
+#endif
+
 #ifdef yaml_cpp_EXPORTS  // Building YAML-CPP DLL (definition created by CMake
                          // or defined manually)
 //	#pragma message( "Defining YAML_CPP_API for DLL export" )
-#define YAML_CPP_API __declspec(dllexport)
+#define YAML_CPP_API YAML_CPP_API_EXPORT
 #else  // yaml_cpp_EXPORTS
 //	#pragma message( "Defining YAML_CPP_API for DLL import" )
-#define YAML_CPP_API __declspec(dllimport)
+#define YAML_CPP_API YAML_CPP_API_IMPORT
 #endif  // yaml_cpp_EXPORTS
 #else   // YAML_CPP_DLL
 #define YAML_CPP_API
