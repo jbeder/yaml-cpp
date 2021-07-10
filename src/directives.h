@@ -19,7 +19,7 @@ struct Version {
 struct Directives {
   Directives();
 
-  const std::string TranslateTagHandle(const std::string& handle) const;
+  std::string TranslateTagHandle(const std::string& handle) const;
 
   Version version;
   std::map<std::string, std::string> tags;

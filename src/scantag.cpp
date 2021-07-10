@@ -6,7 +6,7 @@
 #include "yaml-cpp/mark.h"
 
 namespace YAML {
-const std::string ScanVerbatimTag(Stream& INPUT) {
+std::string ScanVerbatimTag(Stream& INPUT) {
   std::string tag;
 
   // eat the start character
@@ -29,7 +29,7 @@ const std::string ScanVerbatimTag(Stream& INPUT) {
   throw ParserException(INPUT.mark(), ErrorMsg::END_OF_VERBATIM_TAG);
 }
 
-const std::string ScanTagHandle(Stream& INPUT, bool& canBeHandle) {
+std::string ScanTagHandle(Stream& INPUT, bool& canBeHandle) {
   std::string tag;
   canBeHandle = true;
   Mark firstNonWordChar;
@@ -62,7 +62,7 @@ const std::string ScanTagHandle(Stream& INPUT, bool& canBeHandle) {
   return tag;
 }
 
-const std::string ScanTagSuffix(Stream& INPUT) {
+std::string ScanTagSuffix(Stream& INPUT) {
   std::string tag;
 
   while (INPUT) {

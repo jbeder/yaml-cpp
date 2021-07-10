@@ -44,7 +44,7 @@ class YAML_CPP_API Emitter {
 
   // state checking
   bool good() const;
-  const std::string GetLastError() const;
+  std::string GetLastError() const;
 
   // global setters
   bool SetOutputCharset(EMITTER_MANIP value);
@@ -126,7 +126,6 @@ class YAML_CPP_API Emitter {
 
   const char* ComputeFullBoolName(bool b) const;
   const char* ComputeNullName() const;
-  bool CanEmitNewline() const;
 
  private:
   std::unique_ptr<EmitterState> m_pState;
