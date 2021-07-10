@@ -42,7 +42,7 @@ inline Node::Node(const detail::iterator_value& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(const Node& rhs) = default;
+inline Node::Node(const Node&) = default;
 
 inline Node::Node(Zombie)
     : m_isValid(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
