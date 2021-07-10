@@ -7,7 +7,7 @@ if(POLICY CMP0091)
   cmake_policy(SET CMP0091 NEW)
 endif()
 
-project(YAML_CPP VERSION 0.6.3 LANGUAGES CXX)
+project(YAML_CPP VERSION 0.7.0 LANGUAGES CXX)
 
 include(CMakePackageConfigHelpers)
 include(CMakeDependentOption)
