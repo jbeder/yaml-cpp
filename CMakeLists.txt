@@ -17,16 +17,22 @@ include(CTest)
 
 find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 
+if (NOT DEFINED YAML_CPP_MASTER_PROJECT)
+  set(YAML_CPP_MASTER_PROJECT OFF)
+  if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(YAML_CPP_MASTER_PROJECT ON)
+    message(STATUS "Configuring YAML-CPP as master project. CMake version: ${CMAKE_VERSION}")
+  endif ()
+endif ()
+
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIBS})
+option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_CPP_MASTER_PROJECT})
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
-  "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
-cmake_dependent_option(YAML_CPP_INSTALL
-  "Enable generation of yaml-cpp install targets" ON
-  "CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
+  "BUILD_TESTING;YAML_CPP_MASTER_PROJECT" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "MSVC" OFF)
