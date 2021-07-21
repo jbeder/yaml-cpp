@@ -99,8 +99,7 @@ endif()
 
 target_compile_options(yaml-cpp
   PRIVATE
-    $<${not-msvc}:-Wall -Wextra -Wshadow -Wno-long-long>
-    $<$<BOOL:${YAML_CPP_MASTER_PROJECT}>:-Weffc++>
+    $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
     $<${not-msvc}:-pedantic -pedantic-errors>
 
     $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-static}>:-MTd>
