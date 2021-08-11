@@ -148,13 +148,13 @@ if (YAML_CPP_INSTALL)
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 		FILES_MATCHING PATTERN "*.h")
   install(EXPORT yaml-cpp-targets
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/yaml-cpp")
 	install(FILES
 		"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
 		"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/yaml-cpp")
   install(FILES "${PROJECT_BINARY_DIR}/yaml-cpp.pc"
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/pkgconfig)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 
 if(YAML_CPP_BUILD_TESTS)
