@@ -351,6 +351,16 @@ std::string key_to_string(const Key& key) {
 
 // indexing
 template <typename Key>
+inline bool Node::ContainsKey(const Key& key) const {
+  EnsureNodeExists();
+  if (! IsMap())
+    return false;
+  detail::node* value =
+      static_cast<const detail::node&>(*m_pNode).get(key, m_pMemory);
+  return (bool)value;
+}
+
+template <typename Key>
 inline const Node Node::operator[](const Key& key) const {
   EnsureNodeExists();
   detail::node* value =
