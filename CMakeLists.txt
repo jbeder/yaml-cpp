@@ -72,6 +72,9 @@ add_library(yaml-cpp ${yaml-cpp-type} "")
 add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
 
 set_property(TARGET yaml-cpp
+  PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+set_property(TARGET yaml-cpp
   PROPERTY
     MSVC_RUNTIME_LIBRARY ${CMAKE_MSVC_RUNTIME_LIBRARY})
 set_property(TARGET yaml-cpp
