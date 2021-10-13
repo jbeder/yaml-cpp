@@ -26,7 +26,7 @@ class Setting {
   Setting() : m_value() {}
   Setting(const T& value) : m_value() { set(value); }
 
-  const T get() const { return m_value; }
+  T get() const { return m_value; }
   std::unique_ptr<SettingChangeBase> set(const T& value);
   void restore(const Setting<T>& oldSetting) { m_value = oldSetting.get(); }
 
