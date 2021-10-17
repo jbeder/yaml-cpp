@@ -18,7 +18,7 @@ environment:
 before_build:
    - cmd: mkdir build
    - cmd: cd build
-   - cmd: cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_GENERATOR_PLATFORM=%CMAKE_PLATFORM%
+   - cmd: cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_GENERATOR_PLATFORM=%CMAKE_PLATFORM% -DYAML_BUILD_SHARED_LIBS=ON
    - cmd: cd ..
 
 build_script:
