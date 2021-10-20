@@ -79,7 +79,7 @@ std::vector<unsigned char> DecodeBase64(const std::string &input) {
       // skip newlines
       continue;
     }
-    unsigned char d = decoding[static_cast<unsigned>(input[i])];
+    unsigned char d = decoding[static_cast<unsigned char>(input[i])];
     if (d == 255)
       return ret_type();
 
