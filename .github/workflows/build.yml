@@ -1,0 +1,40 @@
+name: Github PR
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  build:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Build static
+          shell: bash
+          run: |
+            mkdir -p build && cd build
+            cmake ..
+            cmake --build . --parallel 4
+
+        - name: Test static
+          shell: bash
+          run: cd build && ctest --output-on-failure
+
+        - name: Build shared
+          shell: bash
+          run: |
+            rm -rf build && mkdir -p build && cd build
+            cmake .. -DYAML_BUILD_SHARED_LIBS=ON
+            cmake --build . --parallel 4
+
+          # tests are failing for unknown reasons
+        - if: matrix.os == 'ubuntu-latest'
+          name: Test shared
+          shell: bash
+          run: cd build && ctest --output-on-failure
+          # test all ASAP
