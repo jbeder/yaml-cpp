@@ -32,9 +32,6 @@ jobs:
             cmake .. -DYAML_BUILD_SHARED_LIBS=ON
             cmake --build . --parallel 4
 
-          # tests are failing for unknown reasons
-        - if: matrix.os == 'ubuntu-latest'
-          name: Test shared
+        - name: Test shared
           shell: bash
           run: cd build && ctest --output-on-failure
-          # test all ASAP
