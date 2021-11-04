@@ -31,63 +31,63 @@ const std::string Emitter::GetLastError() const {
 
 // global setters
 bool Emitter::SetOutputCharset(EMITTER_MANIP value) {
-  return m_pState->SetOutputCharset(value, FmtScope::Global);
+  return m_pState->SetOutputCharset(value, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetStringFormat(EMITTER_MANIP value) {
-  return m_pState->SetStringFormat(value, FmtScope::Global);
+  return m_pState->SetStringFormat(value, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetBoolFormat(EMITTER_MANIP value) {
   bool ok = false;
-  if (m_pState->SetBoolFormat(value, FmtScope::Global))
+  if (m_pState->SetBoolFormat(value, FmtScopeTypeValue::Global))
     ok = true;
-  if (m_pState->SetBoolCaseFormat(value, FmtScope::Global))
+  if (m_pState->SetBoolCaseFormat(value, FmtScopeTypeValue::Global))
     ok = true;
-  if (m_pState->SetBoolLengthFormat(value, FmtScope::Global))
+  if (m_pState->SetBoolLengthFormat(value, FmtScopeTypeValue::Global))
     ok = true;
   return ok;
 }
 
 bool Emitter::SetNullFormat(EMITTER_MANIP value) {
-  return m_pState->SetNullFormat(value, FmtScope::Global);
+  return m_pState->SetNullFormat(value, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetIntBase(EMITTER_MANIP value) {
-  return m_pState->SetIntFormat(value, FmtScope::Global);
+  return m_pState->SetIntFormat(value, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetSeqFormat(EMITTER_MANIP value) {
-  return m_pState->SetFlowType(GroupType::Seq, value, FmtScope::Global);
+  return m_pState->SetFlowType(GroupTypeValue::Seq, value, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetMapFormat(EMITTER_MANIP value) {
   bool ok = false;
-  if (m_pState->SetFlowType(GroupType::Map, value, FmtScope::Global))
+  if (m_pState->SetFlowType(GroupTypeValue::Map, value, FmtScopeTypeValue::Global))
     ok = true;
-  if (m_pState->SetMapKeyFormat(value, FmtScope::Global))
+  if (m_pState->SetMapKeyFormat(value, FmtScopeTypeValue::Global))
     ok = true;
   return ok;
 }
 
 bool Emitter::SetIndent(std::size_t n) {
-  return m_pState->SetIndent(n, FmtScope::Global);
+  return m_pState->SetIndent(n, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetPreCommentIndent(std::size_t n) {
-  return m_pState->SetPreCommentIndent(n, FmtScope::Global);
+  return m_pState->SetPreCommentIndent(n, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetPostCommentIndent(std::size_t n) {
-  return m_pState->SetPostCommentIndent(n, FmtScope::Global);
+  return m_pState->SetPostCommentIndent(n, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetFloatPrecision(std::size_t n) {
-  return m_pState->SetFloatPrecision(n, FmtScope::Global);
+  return m_pState->SetFloatPrecision(n, FmtScopeTypeValue::Global);
 }
 
 bool Emitter::SetDoublePrecision(std::size_t n) {
-  return m_pState->SetDoublePrecision(n, FmtScope::Global);
+  return m_pState->SetDoublePrecision(n, FmtScopeTypeValue::Global);
 }
 
 void Emitter::RestoreGlobalModifiedSettings() {
@@ -137,15 +137,15 @@ Emitter& Emitter::SetLocalValue(EMITTER_MANIP value) {
 }
 
 Emitter& Emitter::SetLocalIndent(const _Indent& indent) {
-  m_pState->SetIndent(indent.value, FmtScope::Local);
+  m_pState->SetIndent(indent.value, FmtScopeTypeValue::Local);
   return *this;
 }
 
 Emitter& Emitter::SetLocalPrecision(const _Precision& precision) {
   if (precision.floatPrecision >= 0)
-    m_pState->SetFloatPrecision(precision.floatPrecision, FmtScope::Local);
+    m_pState->SetFloatPrecision(precision.floatPrecision, FmtScopeTypeValue::Local);
   if (precision.doublePrecision >= 0)
-    m_pState->SetDoublePrecision(precision.doublePrecision, FmtScope::Local);
+    m_pState->SetDoublePrecision(precision.doublePrecision, FmtScopeTypeValue::Local);
   return *this;
 }
 
@@ -154,7 +154,7 @@ void Emitter::EmitBeginDoc() {
   if (!good())
     return;
 
-  if (m_pState->CurGroupType() != GroupType::NoType) {
+  if (m_pState->CurGroupType() != GroupTypeValue::NoType) {
     m_pState->SetError("Unexpected begin document");
     return;
   }
@@ -176,7 +176,7 @@ void Emitter::EmitEndDoc() {
   if (!good())
     return;
 
-  if (m_pState->CurGroupType() != GroupType::NoType) {
+  if (m_pState->CurGroupType() != GroupTypeValue::NoType) {
     m_pState->SetError("Unexpected begin document");
     return;
   }
@@ -196,25 +196,25 @@ void Emitter::EmitBeginSeq() {
   if (!good())
     return;
 
-  PrepareNode(m_pState->NextGroupType(GroupType::Seq));
+  PrepareNode(m_pState->NextGroupType(GroupTypeValue::Seq));
 
-  m_pState->StartedGroup(GroupType::Seq);
+  m_pState->StartedGroup(GroupTypeValue::Seq);
 }
 
 // EmitEndSeq
 void Emitter::EmitEndSeq() {
   if (!good())
     return;
-  FlowType::value originalType = m_pState->CurGroupFlowType();
+  FlowTypeValue originalType = m_pState->CurGroupFlowType();
 
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
 
-  if (m_pState->CurGroupFlowType() == FlowType::Flow) {
+  if (m_pState->CurGroupFlowType() == FlowTypeValue::Flow) {
     if (m_stream.comment())
       m_stream << "\n";
     m_stream << IndentTo(m_pState->CurIndent());
-    if (originalType == FlowType::Block) {
+    if (originalType ==FlowTypeValue::Block) {
       m_stream << "[";
     } else {
       if (m_pState->CurGroupChildCount() == 0 && !m_pState->HasBegunNode())
@@ -223,7 +223,7 @@ void Emitter::EmitEndSeq() {
     m_stream << "]";
   }
 
-  m_pState->EndedGroup(GroupType::Seq);
+  m_pState->EndedGroup(GroupTypeValue::Seq);
 }
 
 // EmitBeginMap
@@ -231,25 +231,25 @@ void Emitter::EmitBeginMap() {
   if (!good())
     return;
 
-  PrepareNode(m_pState->NextGroupType(GroupType::Map));
+  PrepareNode(m_pState->NextGroupType(GroupTypeValue::Map));
 
-  m_pState->StartedGroup(GroupType::Map);
+  m_pState->StartedGroup(GroupTypeValue::Map);
 }
 
 // EmitEndMap
 void Emitter::EmitEndMap() {
   if (!good())
     return;
-  FlowType::value originalType = m_pState->CurGroupFlowType();
+  FlowTypeValue originalType = m_pState->CurGroupFlowType();
 
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
 
-  if (m_pState->CurGroupFlowType() == FlowType::Flow) {
+  if (m_pState->CurGroupFlowType() == FlowTypeValue::Flow) {
     if (m_stream.comment())
       m_stream << "\n";
     m_stream << IndentTo(m_pState->CurIndent());
-    if (originalType == FlowType::Block) {
+    if (originalType == FlowTypeValue::Block) {
       m_stream << "{";
     } else {
       if (m_pState->CurGroupChildCount() == 0 && !m_pState->HasBegunNode())
@@ -258,7 +258,7 @@ void Emitter::EmitEndMap() {
     m_stream << "}";
   }
 
-  m_pState->EndedGroup(GroupType::Map);
+  m_pState->EndedGroup(GroupTypeValue::Map);
 }
 
 // EmitNewline
@@ -720,12 +720,12 @@ Emitter& Emitter::Write(const std::string& str) {
 
   StringEscaping::value stringEscaping = GetStringEscapingStyle(m_pState->GetOutputCharset());
 
-  const StringFormat::value strFormat =
+  const StringFormat strFormat =
       Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
                                  m_pState->CurGroupFlowType(), stringEscaping == StringEscaping::NonAscii);
 
   if (strFormat == StringFormat::Literal || str.size() > 1024)
-    m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
+    m_pState->SetMapKeyFormat(YAML::LongKey, FmtScopeTypeValue::Local);
 
   PrepareNode(EmitterNodeType::Scalar);
 

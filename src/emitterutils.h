@@ -20,8 +20,8 @@ class ostream_wrapper;
 namespace YAML {
 class Binary;
 
-struct StringFormat {
-  enum value { Plain, SingleQuoted, DoubleQuoted, Literal };
+enum class StringFormat {
+  Plain, SingleQuoted, DoubleQuoted, Literal
 };
 
 struct StringEscaping {
@@ -29,9 +29,9 @@ struct StringEscaping {
 };
 
 namespace Utils {
-StringFormat::value ComputeStringFormat(const std::string& str,
+StringFormat ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
-                                        FlowType::value flowType,
+                                        FlowTypeValue flowType,
                                         bool escapeNonAscii);
 
 bool WriteSingleQuotedString(ostream_wrapper& out, const std::string& str);

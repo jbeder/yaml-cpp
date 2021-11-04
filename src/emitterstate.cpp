@@ -40,16 +40,16 @@ EmitterState::~EmitterState() = default;
 // . We blindly tries to set all possible formatters to this value
 // . Only the ones that make sense will be accepted
 void EmitterState::SetLocalValue(EMITTER_MANIP value) {
-  SetOutputCharset(value, FmtScope::Local);
-  SetStringFormat(value, FmtScope::Local);
-  SetBoolFormat(value, FmtScope::Local);
-  SetBoolCaseFormat(value, FmtScope::Local);
-  SetBoolLengthFormat(value, FmtScope::Local);
-  SetNullFormat(value, FmtScope::Local);
-  SetIntFormat(value, FmtScope::Local);
-  SetFlowType(GroupType::Seq, value, FmtScope::Local);
-  SetFlowType(GroupType::Map, value, FmtScope::Local);
-  SetMapKeyFormat(value, FmtScope::Local);
+  SetOutputCharset(value, FmtScopeTypeValue::Local);
+  SetStringFormat(value, FmtScopeTypeValue::Local);
+  SetBoolFormat(value, FmtScopeTypeValue::Local);
+  SetBoolCaseFormat(value, FmtScopeTypeValue::Local);
+  SetBoolLengthFormat(value, FmtScopeTypeValue::Local);
+  SetNullFormat(value, FmtScopeTypeValue::Local);
+  SetIntFormat(value, FmtScopeTypeValue::Local);
+  SetFlowType(GroupTypeValue::Seq, value, FmtScopeTypeValue::Local);
+  SetFlowType(GroupTypeValue::Map, value, FmtScopeTypeValue::Local);
+  SetMapKeyFormat(value, FmtScopeTypeValue::Local);
 }
 
 void EmitterState::SetAnchor() { m_hasAnchor = true; }
@@ -66,7 +66,7 @@ void EmitterState::SetLongKey() {
     return;
   }
 
-  assert(m_groups.back()->type == GroupType::Map);
+  assert(m_groups.back()->type == GroupTypeValue::Map);
   m_groups.back()->longKey = true;
 }
 
@@ -76,7 +76,7 @@ void EmitterState::ForceFlow() {
     return;
   }
 
-  m_groups.back()->flowType = FlowType::Flow;
+  m_groups.back()->flowType = FlowTypeValue::Flow;
 }
 
 void EmitterState::StartedNode() {
@@ -96,8 +96,8 @@ void EmitterState::StartedNode() {
 }
 
 EmitterNodeType::value EmitterState::NextGroupType(
-    GroupType::value type) const {
-  if (type == GroupType::Seq) {
+    GroupTypeValue type) const {
+  if (type == GroupTypeValue::Seq) {
     if (GetFlowType(type) == Block)
       return EmitterNodeType::BlockSeq;
     return EmitterNodeType::FlowSeq;
@@ -129,7 +129,7 @@ void EmitterState::StartedScalar() {
   ClearModifiedSettings();
 }
 
-void EmitterState::StartedGroup(GroupType::value type) {
+void EmitterState::StartedGroup(GroupTypeValue type) {
   StartedNode();
 
   const std::size_t lastGroupIndent =
@@ -147,18 +147,18 @@ void EmitterState::StartedGroup(GroupType::value type) {
 
   // set up group
   if (GetFlowType(type) == Block) {
-    pGroup->flowType = FlowType::Block;
+    pGroup->flowType = FlowTypeValue::Block;
   } else {
-    pGroup->flowType = FlowType::Flow;
+    pGroup->flowType = FlowTypeValue::Flow;
   }
   pGroup->indent = GetIndent();
 
   m_groups.push_back(std::move(pGroup));
 }
 
-void EmitterState::EndedGroup(GroupType::value type) {
+void EmitterState::EndedGroup(GroupTypeValue type) {
   if (m_groups.empty()) {
-    if (type == GroupType::Seq) {
+    if (type == GroupTypeValue::Seq) {
       return SetError(ErrorMsg::UNEXPECTED_END_SEQ);
     }
     return SetError(ErrorMsg::UNEXPECTED_END_MAP);
@@ -203,12 +203,12 @@ EmitterNodeType::value EmitterState::CurGroupNodeType() const {
   return m_groups.back()->NodeType();
 }
 
-GroupType::value EmitterState::CurGroupType() const {
-  return m_groups.empty() ? GroupType::NoType : m_groups.back()->type;
+GroupTypeValue EmitterState::CurGroupType() const {
+  return m_groups.empty() ? GroupTypeValue::NoType : m_groups.back()->type;
 }
 
-FlowType::value EmitterState::CurGroupFlowType() const {
-  return m_groups.empty() ? FlowType::NoType : m_groups.back()->flowType;
+FlowTypeValue EmitterState::CurGroupFlowType() const {
+  return m_groups.empty() ? FlowTypeValue::NoType : m_groups.back()->flowType;
 }
 
 std::size_t EmitterState::CurGroupIndent() const {
@@ -238,7 +238,7 @@ void EmitterState::RestoreGlobalModifiedSettings() {
 }
 
 bool EmitterState::SetOutputCharset(EMITTER_MANIP value,
-                                    FmtScope::value scope) {
+                                    FmtScopeTypeValue scope) {
   switch (value) {
     case EmitNonAscii:
     case EscapeNonAscii:
@@ -250,7 +250,7 @@ bool EmitterState::SetOutputCharset(EMITTER_MANIP value,
   }
 }
 
-bool EmitterState::SetStringFormat(EMITTER_MANIP value, FmtScope::value scope) {
+bool EmitterState::SetStringFormat(EMITTER_MANIP value, FmtScopeTypeValue scope) {
   switch (value) {
     case Auto:
     case SingleQuoted:
@@ -263,7 +263,7 @@ bool EmitterState::SetStringFormat(EMITTER_MANIP value, FmtScope::value scope) {
   }
 }
 
-bool EmitterState::SetBoolFormat(EMITTER_MANIP value, FmtScope::value scope) {
+bool EmitterState::SetBoolFormat(EMITTER_MANIP value, FmtScopeTypeValue scope) {
   switch (value) {
     case OnOffBool:
     case TrueFalseBool:
@@ -276,7 +276,7 @@ bool EmitterState::SetBoolFormat(EMITTER_MANIP value, FmtScope::value scope) {
 }
 
 bool EmitterState::SetBoolLengthFormat(EMITTER_MANIP value,
-                                       FmtScope::value scope) {
+                                       FmtScopeTypeValue scope) {
   switch (value) {
     case LongBool:
     case ShortBool:
@@ -288,7 +288,7 @@ bool EmitterState::SetBoolLengthFormat(EMITTER_MANIP value,
 }
 
 bool EmitterState::SetBoolCaseFormat(EMITTER_MANIP value,
-                                     FmtScope::value scope) {
+                                     FmtScopeTypeValue scope) {
   switch (value) {
     case UpperCase:
     case LowerCase:
@@ -300,7 +300,7 @@ bool EmitterState::SetBoolCaseFormat(EMITTER_MANIP value,
   }
 }
 
-bool EmitterState::SetNullFormat(EMITTER_MANIP value, FmtScope::value scope) {
+bool EmitterState::SetNullFormat(EMITTER_MANIP value, FmtScopeTypeValue scope) {
   switch (value) {
     case LowerNull:
     case UpperNull:
@@ -313,7 +313,7 @@ bool EmitterState::SetNullFormat(EMITTER_MANIP value, FmtScope::value scope) {
   }
 }
 
-bool EmitterState::SetIntFormat(EMITTER_MANIP value, FmtScope::value scope) {
+bool EmitterState::SetIntFormat(EMITTER_MANIP value, FmtScopeTypeValue scope) {
   switch (value) {
     case Dec:
     case Hex:
@@ -325,7 +325,7 @@ bool EmitterState::SetIntFormat(EMITTER_MANIP value, FmtScope::value scope) {
   }
 }
 
-bool EmitterState::SetIndent(std::size_t value, FmtScope::value scope) {
+bool EmitterState::SetIndent(std::size_t value, FmtScopeTypeValue scope) {
   if (value <= 1)
     return false;
 
@@ -334,7 +334,7 @@ bool EmitterState::SetIndent(std::size_t value, FmtScope::value scope) {
 }
 
 bool EmitterState::SetPreCommentIndent(std::size_t value,
-                                       FmtScope::value scope) {
+                                       FmtScopeTypeValue scope) {
   if (value == 0)
     return false;
 
@@ -343,7 +343,7 @@ bool EmitterState::SetPreCommentIndent(std::size_t value,
 }
 
 bool EmitterState::SetPostCommentIndent(std::size_t value,
-                                        FmtScope::value scope) {
+                                        FmtScopeTypeValue scope) {
   if (value == 0)
     return false;
 
@@ -351,28 +351,28 @@ bool EmitterState::SetPostCommentIndent(std::size_t value,
   return true;
 }
 
-bool EmitterState::SetFlowType(GroupType::value groupType, EMITTER_MANIP value,
-                               FmtScope::value scope) {
+bool EmitterState::SetFlowType(GroupTypeValue groupType, EMITTER_MANIP value,
+                               FmtScopeTypeValue scope) {
   switch (value) {
     case Block:
     case Flow:
-      _Set(groupType == GroupType::Seq ? m_seqFmt : m_mapFmt, value, scope);
+      _Set(groupType == GroupTypeValue::Seq ? m_seqFmt : m_mapFmt, value, scope);
       return true;
     default:
       return false;
   }
 }
 
-EMITTER_MANIP EmitterState::GetFlowType(GroupType::value groupType) const {
+EMITTER_MANIP EmitterState::GetFlowType(GroupTypeValue groupType) const {
   // force flow style if we're currently in a flow
-  if (CurGroupFlowType() == FlowType::Flow)
+  if (CurGroupFlowType() == FlowTypeValue::Flow)
     return Flow;
 
   // otherwise, go with what's asked of us
-  return (groupType == GroupType::Seq ? m_seqFmt.get() : m_mapFmt.get());
+  return (groupType == GroupTypeValue::Seq ? m_seqFmt.get() : m_mapFmt.get());
 }
 
-bool EmitterState::SetMapKeyFormat(EMITTER_MANIP value, FmtScope::value scope) {
+bool EmitterState::SetMapKeyFormat(EMITTER_MANIP value, FmtScopeTypeValue scope) {
   switch (value) {
     case Auto:
     case LongKey:
@@ -383,7 +383,7 @@ bool EmitterState::SetMapKeyFormat(EMITTER_MANIP value, FmtScope::value scope) {
   }
 }
 
-bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope::value scope) {
+bool EmitterState::SetFloatPrecision(std::size_t value, FmtScopeTypeValue scope) {
   if (value > std::numeric_limits<float>::max_digits10)
     return false;
   _Set(m_floatPrecision, value, scope);
@@ -391,7 +391,7 @@ bool EmitterState::SetFloatPrecision(std::size_t value, FmtScope::value scope) {
 }
 
 bool EmitterState::SetDoublePrecision(std::size_t value,
-                                      FmtScope::value scope) {
+                                      FmtScopeTypeValue scope) {
   if (value > std::numeric_limits<double>::max_digits10)
     return false;
   _Set(m_doublePrecision, value, scope);

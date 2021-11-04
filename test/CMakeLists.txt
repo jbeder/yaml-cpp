@@ -4,12 +4,13 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(BUILD_MOCK ON CACHE BOOL "" FORCE)
 set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
 
-add_subdirectory(
-  "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.10.0"
-  "${CMAKE_CURRENT_BINARY_DIR}/prefix")
-
-include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.10.0/googletest/include")
-
+#add_subdirectory(
+#  "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.10.0"
+#  "${CMAKE_CURRENT_BINARY_DIR}/prefix")
+#
+#include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.10.0/googletest/include")
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 set(test-new-api-pattern "new-api/*.cpp")
 set(test-source-pattern "*.cpp" "integration/*.cpp" "node/*.cpp")
 if (CMAKE_VERSION VERSION_GREATER 3.11)
@@ -44,6 +45,5 @@ set_property(TARGET yaml-cpp-tests PROPERTY CXX_STANDARD_REQUIRED ON)
 if (NOT DEFINED CMAKE_CXX_STANDARD)
   set_target_properties(yaml-cpp-tests PROPERTIES CXX_STANDARD 11)
 endif()
-
 
 add_test(yaml-cpp::test yaml-cpp-tests)

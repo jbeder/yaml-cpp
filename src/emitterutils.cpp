@@ -152,7 +152,7 @@ void WriteCodePoint(ostream_wrapper& out, int codePoint) {
   }
 }
 
-bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
+bool IsValidPlainScalar(const std::string& str, FlowTypeValue flowType,
                         bool allowOnlyAscii) {
   // check against null
   if (IsNullString(str)) {
@@ -160,7 +160,7 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
   }
 
   // check the start
-  const RegEx& start = (flowType == FlowType::Flow ? Exp::PlainScalarInFlow()
+  const RegEx& start = (flowType == FlowTypeValue::Flow ? Exp::PlainScalarInFlow()
                                                    : Exp::PlainScalar());
   if (!start.Matches(str)) {
     return false;
@@ -182,7 +182,7 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
       Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
       Exp::Tab();
   const RegEx& disallowed =
-      flowType == FlowType::Flow ? disallowed_flow : disallowed_block;
+      flowType == FlowTypeValue::Flow ? disallowed_flow : disallowed_block;
 
   StringCharSource buffer(str.c_str(), str.size());
   while (buffer) {
@@ -206,9 +206,9 @@ bool IsValidSingleQuotedScalar(const std::string& str, bool escapeNonAscii) {
   });
 }
 
-bool IsValidLiteralScalar(const std::string& str, FlowType::value flowType,
+bool IsValidLiteralScalar(const std::string& str, FlowTypeValue flowType,
                           bool escapeNonAscii) {
-  if (flowType == FlowType::Flow) {
+  if (flowType == FlowTypeValue::Flow) {
     return false;
   }
 
@@ -267,9 +267,9 @@ bool WriteAliasName(ostream_wrapper& out, const std::string& str) {
 }
 }  // namespace
 
-StringFormat::value ComputeStringFormat(const std::string& str,
+StringFormat ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
-                                        FlowType::value flowType,
+                                        FlowTypeValue flowType,
                                         bool escapeNonAscii) {
   switch (strFormat) {
     case Auto:
