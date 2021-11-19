@@ -14,11 +14,6 @@ include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 include(GNUInstallDirs)
 include(CTest)
-include(GenerateExportHeader)
-
-set(CMAKE_C_VISIBILITY_PRESET hidden)
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 
@@ -86,7 +81,6 @@ set_property(TARGET yaml-cpp
 target_include_directories(yaml-cpp
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>)
@@ -142,12 +136,6 @@ write_basic_package_version_file(
   "${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
   COMPATIBILITY AnyNewerVersion)
 
-generate_export_header(yaml-cpp
-  BASE_NAME YAML_CPP
-  EXPORT_FILE_NAME "${PROJECT_BINARY_DIR}/include/yaml-cpp/dll.h"
-  EXPORT_MACRO_NAME YAML_CPP_API
-)
-
 configure_file(yaml-cpp.pc.in yaml-cpp.pc @ONLY)
 
 if (YAML_CPP_INSTALL)
@@ -157,9 +145,6 @@ if (YAML_CPP_INSTALL)
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 	install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-		FILES_MATCHING PATTERN "*.h")
-	install(DIRECTORY ${PROJECT_BINARY_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 		FILES_MATCHING PATTERN "*.h")
   install(EXPORT yaml-cpp-targets
