@@ -31,11 +31,13 @@ cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "MSVC" OFF)
 
-set(yaml-cpp-type STATIC)
-set(yaml-cpp-label-postfix "static")
 if (YAML_BUILD_SHARED_LIBS)
   set(yaml-cpp-type SHARED)
   set(yaml-cpp-label-postfix "shared")
+else()
+  set(yaml-cpp-type STATIC)
+  set(yaml-cpp-label-postfix "static")
+  add_definitions(-DYAML_CPP_STATIC_DEFINE)
 endif()
 
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
