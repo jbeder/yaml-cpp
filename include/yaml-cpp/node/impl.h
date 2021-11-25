@@ -163,6 +163,14 @@ inline T Node::as(const S& fallback) const {
   return as_if<T, S>(*this)(fallback);
 }
 
+template <typename T>
+inline bool Node::into(T& target) const {
+  if (!this->IsDefined())
+    return false;
+  target = this->as<T>();
+  return true;
+}
+
 inline const std::string& Node::Scalar() const {
   if (!m_isValid)
     throw InvalidNode(m_invalidKey);

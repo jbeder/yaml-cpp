@@ -645,6 +645,28 @@ TEST(NodeTest, AccessNonexistentKeyOnConstNode) {
   ASSERT_FALSE(other["5"]);
 }
 
+TEST(NodeTest, IntoExists) {
+  Node node;
+  node["A"] = 4;
+
+  int dest = 5;
+  bool res = node["A"].into(dest);
+
+  ASSERT_TRUE(res);
+  EXPECT_EQ(dest, 4);
+}
+
+TEST(NodeTest, IntoMissing) {
+  Node node;
+  node["A"] = 4;
+
+  int dest = 5;
+  bool res = node["B"].into(dest);
+
+  ASSERT_FALSE(res);
+  EXPECT_EQ(dest, 5);
+}
+
 class NodeEmitterTest : public ::testing::Test {
  protected:
   void ExpectOutput(const std::string& output, const Node& node) {
