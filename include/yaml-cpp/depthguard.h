@@ -20,17 +20,15 @@ namespace YAML {
  * maximum depth.
  */
 class DeepRecursion : public ParserException {
-public:
+ public:
   virtual ~DeepRecursion() = default;
 
   DeepRecursion(int depth, const Mark& mark_, const std::string& msg_);
 
   // Returns the recursion depth when the exception was thrown
-  int depth() const {
-    return m_depth;
-  }
+  int depth() const { return m_depth; }
 
-private:
+ private:
   int m_depth = 0;
 };
 
@@ -47,31 +45,28 @@ private:
  */
 template <int max_depth = 2000>
 class DepthGuard final {
-public:
-  DepthGuard(int & depth_, const Mark& mark_, const std::string& msg_) : m_depth(depth_) {
+ public:
+  DepthGuard(int& depth_, const Mark& mark_, const std::string& msg_)
+      : m_depth(depth_) {
     ++m_depth;
-    if ( max_depth <= m_depth ) {
-        throw DeepRecursion{m_depth, mark_, msg_};
+    if (max_depth <= m_depth) {
+      throw DeepRecursion{m_depth, mark_, msg_};
     }
   }
 
-  DepthGuard(const DepthGuard & copy_ctor) = delete;
-  DepthGuard(DepthGuard && move_ctor) = delete;
-  DepthGuard & operator=(const DepthGuard & copy_assign) = delete;
-  DepthGuard & operator=(DepthGuard && move_assign) = delete;
+  DepthGuard(const DepthGuard& copy_ctor) = delete;
+  DepthGuard(DepthGuard&& move_ctor) = delete;
+  DepthGuard& operator=(const DepthGuard& copy_assign) = delete;
+  DepthGuard& operator=(DepthGuard&& move_assign) = delete;
 
-  ~DepthGuard() {
-    --m_depth;
-  }
+  ~DepthGuard() { --m_depth; }
 
-  int current_depth() const {
-    return m_depth;
-  }
+  int current_depth() const { return m_depth; }
 
-private:
-    int & m_depth;
+ private:
+  int& m_depth;
 };
 
-} // namespace YAML
+}  // namespace YAML
 
-#endif // DEPTH_GUARD_H_00000000000000000000000000000000000000000000000000000000
+#endif  // DEPTH_GUARD_H_00000000000000000000000000000000000000000000000000000000

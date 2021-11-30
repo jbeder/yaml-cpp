@@ -37,42 +37,42 @@ This simple wrapper passes all command line flags and
 USAGE: upload_gtest.py [options for upload.py]
 """
 
-__author__ = 'wan@google.com (Zhanyong Wan)'
+__author__ = "wan@google.com (Zhanyong Wan)"
 
 import os
 import sys
 
-CC_FLAG = '--cc='
-GTEST_GROUP = 'googletestframework@googlegroups.com'
+CC_FLAG = "--cc="
+GTEST_GROUP = "googletestframework@googlegroups.com"
 
 
 def main():
-  # Finds the path to upload.py, assuming it is in the same directory
-  # as this file.
-  my_dir = os.path.dirname(os.path.abspath(__file__))
-  upload_py_path = os.path.join(my_dir, 'upload.py')
+    # Finds the path to upload.py, assuming it is in the same directory
+    # as this file.
+    my_dir = os.path.dirname(os.path.abspath(__file__))
+    upload_py_path = os.path.join(my_dir, "upload.py")
 
-  # Adds Google Test discussion group to the cc line if it's not there
-  # already.
-  upload_py_argv = [upload_py_path]
-  found_cc_flag = False
-  for arg in sys.argv[1:]:
-    if arg.startswith(CC_FLAG):
-      found_cc_flag = True
-      cc_line = arg[len(CC_FLAG):]
-      cc_list = [addr for addr in cc_line.split(',') if addr]
-      if GTEST_GROUP not in cc_list:
-        cc_list.append(GTEST_GROUP)
-      upload_py_argv.append(CC_FLAG + ','.join(cc_list))
-    else:
-      upload_py_argv.append(arg)
+    # Adds Google Test discussion group to the cc line if it's not there
+    # already.
+    upload_py_argv = [upload_py_path]
+    found_cc_flag = False
+    for arg in sys.argv[1:]:
+        if arg.startswith(CC_FLAG):
+            found_cc_flag = True
+            cc_line = arg[len(CC_FLAG) :]
+            cc_list = [addr for addr in cc_line.split(",") if addr]
+            if GTEST_GROUP not in cc_list:
+                cc_list.append(GTEST_GROUP)
+            upload_py_argv.append(CC_FLAG + ",".join(cc_list))
+        else:
+            upload_py_argv.append(arg)
 
-  if not found_cc_flag:
-    upload_py_argv.append(CC_FLAG + GTEST_GROUP)
+    if not found_cc_flag:
+        upload_py_argv.append(CC_FLAG + GTEST_GROUP)
 
-  # Invokes upload.py with the modified command line flags.
-  os.execv(upload_py_path, upload_py_argv)
+    # Invokes upload.py with the modified command line flags.
+    os.execv(upload_py_path, upload_py_argv)
 
 
-if __name__ == '__main__':
-  main()
+if __name__ == "__main__":
+    main()

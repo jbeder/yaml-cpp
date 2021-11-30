@@ -178,5 +178,5 @@ TEST_F(EncodingTest, UTF32BE_BOM) {
   SetUpEncoding(&EncodeToUtf32BE, true);
   Run();
 }
-}
-}
+}  // namespace
+}  // namespace YAML

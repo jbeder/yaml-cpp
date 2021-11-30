@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file implements some actions that depend on gmock-generated-actions.h.
@@ -49,9 +48,8 @@ namespace internal {
 // necessary because Visual Studio deprecates ::std::copy, issuing warning 4996.
 // However Visual Studio 2010 and later do not honor #pragmas which disable that
 // warning.
-template<typename InputIterator, typename OutputIterator>
-inline OutputIterator CopyElements(InputIterator first,
-                                   InputIterator last,
+template <typename InputIterator, typename OutputIterator>
+inline OutputIterator CopyElements(InputIterator first, InputIterator last,
                                    OutputIterator output) {
   for (; first != last; ++first, ++output) {
     *output = *first;
@@ -69,37 +67,33 @@ inline OutputIterator CopyElements(InputIterator first,
 // is expanded and macro expansion cannot contain #pragma.  Therefore
 // we suppress them here.
 #ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable:4100)
+#pragma warning(push)
+#pragma warning(disable : 4100)
 #endif
 
 // Action ReturnArg<k>() returns the k-th argument of the mock function.
-ACTION_TEMPLATE(ReturnArg,
-                HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(ReturnArg, HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_0_VALUE_PARAMS()) {
   return ::std::get<k>(args);
 }
 
 // Action SaveArg<k>(pointer) saves the k-th (0-based) argument of the
 // mock function to *pointer.
-ACTION_TEMPLATE(SaveArg,
-                HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(SaveArg, HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_1_VALUE_PARAMS(pointer)) {
   *pointer = ::std::get<k>(args);
 }
 
 // Action SaveArgPointee<k>(pointer) saves the value pointed to
 // by the k-th (0-based) argument of the mock function to *pointer.
-ACTION_TEMPLATE(SaveArgPointee,
-                HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(SaveArgPointee, HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_1_VALUE_PARAMS(pointer)) {
   *pointer = *::std::get<k>(args);
 }
 
 // Action SetArgReferee<k>(value) assigns 'value' to the variable
 // referenced by the k-th (0-based) argument of the mock function.
-ACTION_TEMPLATE(SetArgReferee,
-                HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(SetArgReferee, HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_1_VALUE_PARAMS(value)) {
   typedef typename ::std::tuple_element<k, args_type>::type argk_type;
   // Ensures that argument #k is a reference.  If you get a compiler
@@ -115,8 +109,7 @@ ACTION_TEMPLATE(SetArgReferee,
 // (0-based) argument, which can be either a pointer or an
 // iterator. The action does not take ownership of the elements in the
 // source range.
-ACTION_TEMPLATE(SetArrayArgument,
-                HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(SetArrayArgument, HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_2_VALUE_PARAMS(first, last)) {
   // Visual Studio deprecates ::std::copy, so we use our own copy in that case.
 #ifdef _MSC_VER
@@ -128,8 +121,7 @@ ACTION_TEMPLATE(SetArrayArgument,
 
 // Action DeleteArg<k>() deletes the k-th (0-based) argument of the mock
 // function.
-ACTION_TEMPLATE(DeleteArg,
-                HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(DeleteArg, HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_0_VALUE_PARAMS()) {
   delete ::std::get<k>(args);
 }
@@ -142,19 +134,19 @@ ACTION_P(ReturnPointee, pointer) { return *pointer; }
 #if GTEST_HAS_EXCEPTIONS
 
 // Suppresses the 'unreachable code' warning that VC generates in opt modes.
-# ifdef _MSC_VER
-#  pragma warning(push)          // Saves the current warning state.
-#  pragma warning(disable:4702)  // Temporarily disables warning 4702.
-# endif
+#ifdef _MSC_VER
+#pragma warning(push)            // Saves the current warning state.
+#pragma warning(disable : 4702)  // Temporarily disables warning 4702.
+#endif
 ACTION_P(Throw, exception) { throw exception; }
-# ifdef _MSC_VER
-#  pragma warning(pop)           // Restores the warning state.
-# endif
+#ifdef _MSC_VER
+#pragma warning(pop)  // Restores the warning state.
+#endif
 
 #endif  // GTEST_HAS_EXCEPTIONS
 
 #ifdef _MSC_VER
-# pragma warning(pop)
+#pragma warning(pop)
 #endif
 
 }  // namespace testing

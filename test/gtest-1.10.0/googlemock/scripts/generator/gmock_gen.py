@@ -16,16 +16,17 @@
 
 """Driver for starting up Google Mock class generator."""
 
-__author__ = 'nnorwitz@google.com (Neal Norwitz)'
+__author__ = "nnorwitz@google.com (Neal Norwitz)"
 
 import os
 import sys
 
-if __name__ == '__main__':
-  # Add the directory of this script to the path so we can import gmock_class.
-  sys.path.append(os.path.dirname(__file__))
+if __name__ == "__main__":
+    # Add the directory of this script to the path so we can import gmock_class.
+    sys.path.append(os.path.dirname(__file__))
 
-  from cpp import gmock_class
-  # Fix the docstring in case they require the usage.
-  gmock_class.__doc__ = gmock_class.__doc__.replace('gmock_class.py', __file__)
-  gmock_class.main()
+    from cpp import gmock_class
+
+    # Fix the docstring in case they require the usage.
+    gmock_class.__doc__ = gmock_class.__doc__.replace("gmock_class.py", __file__)
+    gmock_class.main()

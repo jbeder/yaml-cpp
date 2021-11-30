@@ -1,7 +1,7 @@
-#include "gmock/gmock.h"
-
 #include <memory>
 #include <string>
+
+#include "gmock/gmock.h"
 
 #if defined(TEST_MOCK_METHOD_INVALID_CONST_SPEC)
 

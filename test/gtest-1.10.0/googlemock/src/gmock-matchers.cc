@@ -27,19 +27,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file implements Matcher<const string&>, Matcher<string>, and
 // utilities for defining matchers.
 
 #include "gmock/gmock-matchers.h"
-#include "gmock/gmock-generated-matchers.h"
 
 #include <string.h>
+
 #include <iostream>
 #include <sstream>
 #include <string>
+
+#include "gmock/gmock-generated-matchers.h"
 
 namespace testing {
 namespace internal {

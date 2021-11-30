@@ -1,4 +1,4 @@
-# Introduction #
+# Introduction
 
 A typical example, loading a configuration file, might look like this:
 
@@ -18,7 +18,7 @@ std::ofstream fout("config.yaml");
 fout << config;
 ```
 
-# Basic Parsing and Node Editing #
+# Basic Parsing and Node Editing
 
 All nodes in a YAML document (including the root) are represented by `YAML::Node`. You can check what kind it is:
 
@@ -90,7 +90,7 @@ if (node.IsSequence()) {
 }
 ```
 
-# Building Nodes #
+# Building Nodes
 
 You can build `YAML::Node` from scratch:
 
@@ -119,7 +119,7 @@ self: *1
 *3 : *2
 ```
 
-# How Sequences Turn Into Maps #
+# How Sequences Turn Into Maps
 
 Sequences can be turned into maps by asking for non-integer keys. For example,
 
@@ -138,7 +138,7 @@ node[3] = 4; // still a sequence, [1, 2, 3, 4]
 node[10] = 10;  // now it's a map! {0: 1, 1: 2, 2: 3, 3: 4, 10: 10}
 ```
 
-# Converting To/From Native Data Types #
+# Converting To/From Native Data Types
 
 Yaml-cpp has built-in conversion to and from most built-in data types, as well as `std::vector`, `std::list`, and `std::map`. The following examples demonstrate when those conversions are used:
 

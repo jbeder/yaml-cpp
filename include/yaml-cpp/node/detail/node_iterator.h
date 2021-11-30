@@ -11,8 +11,8 @@
 #include "yaml-cpp/node/ptr.h"
 #include <cstddef>
 #include <iterator>
-#include <memory>
 #include <map>
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -28,7 +28,8 @@ struct node_iterator_value : public std::pair<V*, V*> {
 
   node_iterator_value() : kv(), pNode(nullptr) {}
   explicit node_iterator_value(V& rhs) : kv(), pNode(&rhs) {}
-  explicit node_iterator_value(V& key, V& value) : kv(&key, &value), pNode(nullptr) {}
+  explicit node_iterator_value(V& key, V& value)
+      : kv(&key, &value), pNode(nullptr) {}
 
   V& operator*() const { return *pNode; }
   V& operator->() const { return *pNode; }
@@ -36,7 +37,7 @@ struct node_iterator_value : public std::pair<V*, V*> {
   V* pNode;
 };
 
-using node_seq = std::vector<node *>;
+using node_seq = std::vector<node*>;
 using node_map = std::vector<std::pair<node*, node*>>;
 
 template <typename V>
@@ -175,7 +176,7 @@ class node_iterator_base {
 
 using node_iterator = node_iterator_base<node>;
 using const_node_iterator = node_iterator_base<const node>;
-}
-}
+}  // namespace detail
+}  // namespace YAML
 
 #endif  // VALUE_DETAIL_NODE_ITERATOR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

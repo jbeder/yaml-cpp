@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file implements some commonly used cardinalities.  More
@@ -40,8 +39,10 @@
 #define GMOCK_INCLUDE_GMOCK_GMOCK_CARDINALITIES_H_
 
 #include <limits.h>
+
 #include <memory>
 #include <ostream>  // NOLINT
+
 #include "gmock/internal/gmock-port.h"
 #include "gtest/gtest.h"
 
@@ -116,7 +117,7 @@ class GTEST_API_ Cardinality {
   // cardinality, i.e. exceed the maximum number of allowed calls.
   bool IsOverSaturatedByCallCount(int call_count) const {
     return impl_->IsSaturatedByCallCount(call_count) &&
-        !impl_->IsSatisfiedByCallCount(call_count);
+           !impl_->IsSatisfiedByCallCount(call_count);
   }
 
   // Describes self to an ostream

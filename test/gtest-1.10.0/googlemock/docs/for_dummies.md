@@ -10,19 +10,19 @@ object (so it can be used as one), but lets you specify at run time how it will
 be used and what it should do (which methods will be called? in which order? how
 many times? with what arguments? what will they return? etc).
 
-**Note:** It is easy to confuse the term *fake objects* with mock objects. Fakes
+**Note:** It is easy to confuse the term _fake objects_ with mock objects. Fakes
 and mocks actually mean very different things in the Test-Driven Development
 (TDD) community:
 
-*   **Fake** objects have working implementations, but usually take some
-    shortcut (perhaps to make the operations less expensive), which makes them
-    not suitable for production. An in-memory file system would be an example of
-    a fake.
-*   **Mocks** are objects pre-programmed with *expectations*, which form a
-    specification of the calls they are expected to receive.
+- **Fake** objects have working implementations, but usually take some
+  shortcut (perhaps to make the operations less expensive), which makes them
+  not suitable for production. An in-memory file system would be an example of
+  a fake.
+- **Mocks** are objects pre-programmed with _expectations_, which form a
+  specification of the calls they are expected to receive.
 
 If all this seems too abstract for you, don't worry - the most important thing
-to remember is that a mock allows you to check the *interaction* between itself
+to remember is that a mock allows you to check the _interaction_ between itself
 and code that uses it. The difference between fakes and mocks shall become much
 clearer once you start to use mocks.
 
@@ -42,15 +42,15 @@ When using gMock,
 ### Why gMock?
 
 While mock objects help you remove unnecessary dependencies in tests and make
-them fast and reliable, using mocks manually in C++ is *hard*:
+them fast and reliable, using mocks manually in C++ is _hard_:
 
-*   Someone has to implement the mocks. The job is usually tedious and
-    error-prone. No wonder people go great distance to avoid it.
-*   The quality of those manually written mocks is a bit, uh, unpredictable. You
-    may see some really polished ones, but you may also see some that were
-    hacked up in a hurry and have all sorts of ad hoc restrictions.
-*   The knowledge you gained from using one mock doesn't transfer to the next
-    one.
+- Someone has to implement the mocks. The job is usually tedious and
+  error-prone. No wonder people go great distance to avoid it.
+- The quality of those manually written mocks is a bit, uh, unpredictable. You
+  may see some really polished ones, but you may also see some that were
+  hacked up in a hurry and have all sorts of ad hoc restrictions.
+- The knowledge you gained from using one mock doesn't transfer to the next
+  one.
 
 In contrast, Java and Python programmers have some fine mock frameworks (jMock,
 EasyMock, [Mox](http://wtf/mox), etc), which automate the creation of mocks. As
@@ -61,29 +61,29 @@ gMock was built to help C++ programmers. It was inspired by jMock and EasyMock,
 but designed with C++'s specifics in mind. It is your friend if any of the
 following problems is bothering you:
 
-*   You are stuck with a sub-optimal design and wish you had done more
-    prototyping before it was too late, but prototyping in C++ is by no means
-    "rapid".
-*   Your tests are slow as they depend on too many libraries or use expensive
-    resources (e.g. a database).
-*   Your tests are brittle as some resources they use are unreliable (e.g. the
-    network).
-*   You want to test how your code handles a failure (e.g. a file checksum
-    error), but it's not easy to cause one.
-*   You need to make sure that your module interacts with other modules in the
-    right way, but it's hard to observe the interaction; therefore you resort to
-    observing the side effects at the end of the action, but it's awkward at
-    best.
-*   You want to "mock out" your dependencies, except that they don't have mock
-    implementations yet; and, frankly, you aren't thrilled by some of those
-    hand-written mocks.
+- You are stuck with a sub-optimal design and wish you had done more
+  prototyping before it was too late, but prototyping in C++ is by no means
+  "rapid".
+- Your tests are slow as they depend on too many libraries or use expensive
+  resources (e.g. a database).
+- Your tests are brittle as some resources they use are unreliable (e.g. the
+  network).
+- You want to test how your code handles a failure (e.g. a file checksum
+  error), but it's not easy to cause one.
+- You need to make sure that your module interacts with other modules in the
+  right way, but it's hard to observe the interaction; therefore you resort to
+  observing the side effects at the end of the action, but it's awkward at
+  best.
+- You want to "mock out" your dependencies, except that they don't have mock
+  implementations yet; and, frankly, you aren't thrilled by some of those
+  hand-written mocks.
 
 We encourage you to use gMock as
 
-*   a *design* tool, for it lets you experiment with your interface design early
-    and often. More iterations lead to better designs!
-*   a *testing* tool to cut your tests' outbound dependencies and probe the
-    interaction between your module and its collaborators.
+- a _design_ tool, for it lets you experiment with your interface design early
+  and often. More iterations lead to better designs!
+- a _testing_ tool to cut your tests' outbound dependencies and probe the
+  interaction between your module and its collaborators.
 
 ### Getting Started
 
@@ -133,7 +133,7 @@ check what drawing primitives your program is calling, with what arguments, and
 in which order. Tests written this way are much more robust (they won't break
 because your new machine does anti-aliasing differently), easier to read and
 maintain (the intent of a test is expressed in the code, not in some binary
-images), and run *much, much faster*.
+images), and run _much, much faster_.
 
 ### Writing the Mock Class
 
@@ -146,22 +146,22 @@ class, relax - gMock turns this task into a fun game! (Well, almost.)
 Using the `Turtle` interface as example, here are the simple steps you need to
 follow:
 
-*   Derive a class `MockTurtle` from `Turtle`.
-*   Take a *virtual* function of `Turtle` (while it's possible to
-    [mock non-virtual methods using templates](cook_book.md#MockingNonVirtualMethods),
-    it's much more involved).
-*   In the `public:` section of the child class, write `MOCK_METHOD();`
-*   Now comes the fun part: you take the function signature, cut-and-paste it
-    into the macro, and add two commas - one between the return type and the
-    name, another between the name and the argument list.
-*   If you're mocking a const method, add a 4th parameter containing `(const)`
-    (the parentheses are required).
-*   Since you're overriding a virtual method, we suggest adding the `override`
-    keyword. For const methods the 4th parameter becomes `(const, override)`,
-    for non-const methods just `(override)`. This isn't mandatory.
-*   Repeat until all virtual functions you want to mock are done. (It goes
-    without saying that *all* pure virtual methods in your abstract class must
-    be either mocked or overridden.)
+- Derive a class `MockTurtle` from `Turtle`.
+- Take a _virtual_ function of `Turtle` (while it's possible to
+  [mock non-virtual methods using templates](cook_book.md#MockingNonVirtualMethods),
+  it's much more involved).
+- In the `public:` section of the child class, write `MOCK_METHOD();`
+- Now comes the fun part: you take the function signature, cut-and-paste it
+  into the macro, and add two commas - one between the return type and the
+  name, another between the name and the argument list.
+- If you're mocking a const method, add a 4th parameter containing `(const)`
+  (the parentheses are required).
+- Since you're overriding a virtual method, we suggest adding the `override`
+  keyword. For const methods the 4th parameter becomes `(const, override)`,
+  for non-const methods just `(override)`. This isn't mandatory.
+- Repeat until all virtual functions you want to mock are done. (It goes
+  without saying that _all_ pure virtual methods in your abstract class must
+  be either mocked or overridden.)
 
 After the process, you should have something like:
 
@@ -270,18 +270,18 @@ functions are called, otherwise the behavior is **undefined**. In particular,
 you mustn't interleave `EXPECT_CALL()s` and calls to the mock functions.
 
 This means `EXPECT_CALL()` should be read as expecting that a call will occur
-*in the future*, not that a call has occurred. Why does gMock work like that?
+_in the future_, not that a call has occurred. Why does gMock work like that?
 Well, specifying the expectation beforehand allows gMock to report a violation
 as soon as it rises, when the context (stack trace, etc) is still available.
 This makes debugging much easier.
 
 Admittedly, this test is contrived and doesn't do much. You can easily achieve
 the same effect without using gMock. However, as we shall reveal soon, gMock
-allows you to do *so much more* with the mocks.
+allows you to do _so much more_ with the mocks.
 
 ### Setting Expectations
 
-The key to using a mock object successfully is to set the *right expectations*
+The key to using a mock object successfully is to set the _right expectations_
 on it. If you set the expectations too strict, your test will fail as the result
 of unrelated changes. If you set them too loose, bugs can slip through. You want
 to do it just right such that your test can catch exactly the kind of bugs you
@@ -317,7 +317,7 @@ without explicitly specifying the number or types of arguments. To avoid
 unintended ambiguity, this syntax may only be used for methods which are not
 overloaded
 
-Either form of the macro can be followed by some optional *clauses* that provide
+Either form of the macro can be followed by some optional _clauses_ that provide
 more information about the expectation. We'll discuss how each clause works in
 the coming sections.
 
@@ -384,7 +384,7 @@ using ::testing::Ge;
 EXPECT_CALL(turtle, Forward(Ge(100)));
 ```
 
-If you don't care about *any* arguments, rather than specify `_` for each of
+If you don't care about _any_ arguments, rather than specify `_` for each of
 them you may instead omit the parameter list:
 
 ```cpp
@@ -402,7 +402,7 @@ arguments and possibly also the
 #### Cardinalities: How Many Times Will It Be Called?
 
 The first clause we can specify following an `EXPECT_CALL()` is `Times()`. We
-call its argument a **cardinality** as it tells *how many times* the call should
+call its argument a **cardinality** as it tells _how many times_ the call should
 occur. It allows us to repeat an expectation many times without actually writing
 it as many times. More importantly, a cardinality can be "fuzzy", just like a
 matcher can be. This allows a user to express the intent of a test exactly.
@@ -419,12 +419,12 @@ list of built-in cardinalities you can use, see
 The `Times()` clause can be omitted. **If you omit `Times()`, gMock will infer
 the cardinality for you.** The rules are easy to remember:
 
-*   If **neither** `WillOnce()` **nor** `WillRepeatedly()` is in the
-    `EXPECT_CALL()`, the inferred cardinality is `Times(1)`.
-*   If there are *n* `WillOnce()`'s but **no** `WillRepeatedly()`, where *n* >=
-    1, the cardinality is `Times(n)`.
-*   If there are *n* `WillOnce()`'s and **one** `WillRepeatedly()`, where *n* >=
-    0, the cardinality is `Times(AtLeast(n))`.
+- If **neither** `WillOnce()` **nor** `WillRepeatedly()` is in the
+  `EXPECT_CALL()`, the inferred cardinality is `Times(1)`.
+- If there are _n_ `WillOnce()`'s but **no** `WillRepeatedly()`, where _n_ >=
+  1, the cardinality is `Times(n)`.
+- If there are _n_ `WillOnce()`'s and **one** `WillRepeatedly()`, where _n_ >=
+  0, the cardinality is `Times(AtLeast(n))`.
 
 **Quick quiz:** what do you think will happen if a function is expected to be
 called twice but actually called four times?
@@ -457,7 +457,7 @@ EXPECT_CALL(turtle, GetX())
      .WillOnce(Return(300));
 ```
 
-says that `turtle.GetX()` will be called *exactly three times* (gMock inferred
+says that `turtle.GetX()` will be called _exactly three times_ (gMock inferred
 this from how many `WillOnce()` clauses we've written, since we didn't
 explicitly write `Times()`), and will return 100, 200, and 300 respectively.
 
@@ -470,7 +470,7 @@ EXPECT_CALL(turtle, GetY())
      .WillRepeatedly(Return(300));
 ```
 
-says that `turtle.GetY()` will be called *at least twice* (gMock knows this as
+says that `turtle.GetY()` will be called _at least twice_ (gMock knows this as
 we've written two `WillOnce()` clauses and a `WillRepeatedly()` while having no
 explicit `Times()`), will return 100 and 200 respectively the first two times,
 and 300 from the third time on.
@@ -478,7 +478,7 @@ and 300 from the third time on.
 Of course, if you explicitly write a `Times()`, gMock will not try to infer the
 cardinality itself. What if the number you specified is larger than there are
 `WillOnce()` clauses? Well, after all `WillOnce()`s are used up, gMock will do
-the *default* action for the function every time (unless, of course, you have a
+the _default_ action for the function every time (unless, of course, you have a
 `WillRepeatedly()`.).
 
 What can we do inside `WillOnce()` besides `Return()`? You can return a
@@ -547,7 +547,7 @@ error, as the last matching expectation (#2) has been saturated. If, however,
 the third `Forward(10)` call is replaced by `Forward(20)`, then it would be OK,
 as now #1 will be the matching expectation.
 
-**Note:** Why does gMock search for a match in the *reverse* order of the
+**Note:** Why does gMock search for a match in the _reverse_ order of the
 expectations? The reason is that this allows a user to set up the default
 expectations in a mock object's constructor or the test fixture's set-up phase
 and then customize the mock by writing more specific expectations in the test
@@ -589,7 +589,7 @@ TEST(FooTest, DrawsLineSegment) {
 ```
 
 By creating an object of type `InSequence`, all expectations in its scope are
-put into a *sequence* and have to occur *sequentially*. Since we are just
+put into a _sequence_ and have to occur _sequentially_. Since we are just
 relying on the constructor and destructor of this object to do the actual work,
 its name is really irrelevant.
 
@@ -603,7 +603,7 @@ details can be found [here](cook_book.md#OrderedCalls).)
 #### All Expectations Are Sticky (Unless Said Otherwise) {#StickyExpectations}
 
 Now let's do a quick quiz to see how well you can use this mock stuff already.
-How would you test that the turtle is asked to go to the origin *exactly twice*
+How would you test that the turtle is asked to go to the origin _exactly twice_
 (you want to ignore any other instructions it receives)?
 
 After you've come up with your answer, take a look at ours and compare notes
@@ -651,8 +651,8 @@ the last (latest) `EXPECT_CALL()` statement will match, and will immediately
 lead to an "upper bound violated" error - this piece of code is not very useful!
 
 One correct way of saying that `turtle.GetX()` will return 10, 20, 30, ..., is
-to explicitly say that the expectations are *not* sticky. In other words, they
-should *retire* as soon as they are saturated:
+to explicitly say that the expectations are _not_ sticky. In other words, they
+should _retire_ as soon as they are saturated:
 
 ```cpp
 using ::testing::Return;
@@ -683,7 +683,7 @@ using ::testing::Return;
 }
 ```
 
-By the way, the other situation where an expectation may *not* be sticky is when
+By the way, the other situation where an expectation may _not_ be sticky is when
 it's in a sequence - as soon as another expectation that comes after it in the
 sequence has been used, it automatically retires (and will never be used to
 match any call).

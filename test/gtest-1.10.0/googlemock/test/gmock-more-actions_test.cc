@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file tests the built-in actions in gmock-more-actions.h.
@@ -38,6 +37,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -180,7 +180,7 @@ class Foo {
 
   std::string Binary(const std::string& str, char c) const { return str + c; }
 
-  int Ternary(int x, bool y, char z) { return value_ + x + y*z; }
+  int Ternary(int x, bool y, char z) { return value_ + x + y * z; }
 
   int SumOf4(int a, int b, int c, int d) const {
     return a + b + c + d + value_;
@@ -326,8 +326,7 @@ TEST(InvokeTest, FunctionWithUnusedParameters) {
       std::make_tuple(10, 2, 5.6, std::string("hi"));
   EXPECT_EQ(12, a1.Perform(dummy));
 
-  Action<int(int, int, bool, int*)> a2 =
-      Invoke(SumOfFirst2);
+  Action<int(int, int, bool, int*)> a2 = Invoke(SumOfFirst2);
   EXPECT_EQ(
       23, a2.Perform(std::make_tuple(20, 3, true, static_cast<int*>(nullptr))));
 }
@@ -338,8 +337,7 @@ TEST(InvokeTest, MethodWithUnusedParameters) {
   Action<int(std::string, bool, int, int)> a1 = Invoke(&foo, &Foo::SumOfLast2);
   EXPECT_EQ(12, a1.Perform(std::make_tuple(CharPtr("hi"), true, 10, 2)));
 
-  Action<int(char, double, int, int)> a2 =
-      Invoke(&foo, &Foo::SumOfLast2);
+  Action<int(char, double, int, int)> a2 = Invoke(&foo, &Foo::SumOfLast2);
   EXPECT_EQ(23, a2.Perform(std::make_tuple('a', 2.5, 20, 3)));
 }
 
@@ -397,7 +395,8 @@ TEST(InvokeMethodTest, MethodThatTakes4Arguments) {
 // Tests using Invoke() with a 5-argument method.
 TEST(InvokeMethodTest, MethodThatTakes5Arguments) {
   Foo foo;
-  Action<int(int, int, int, int, int)> a = Invoke(&foo, &Foo::SumOf5);  // NOLINT
+  Action<int(int, int, int, int, int)> a =
+      Invoke(&foo, &Foo::SumOf5);  // NOLINT
   EXPECT_EQ(12345, a.Perform(std::make_tuple(10000, 2000, 300, 40, 5)));
 }
 
@@ -552,15 +551,12 @@ TEST(SetArgRefereeActionTest, WorksWithExtraArguments) {
 // the bool provided to the constructor to true when destroyed.
 class DeletionTester {
  public:
-  explicit DeletionTester(bool* is_deleted)
-    : is_deleted_(is_deleted) {
+  explicit DeletionTester(bool* is_deleted) : is_deleted_(is_deleted) {
     // Make sure the bit is set to false.
     *is_deleted_ = false;
   }
 
-  ~DeletionTester() {
-    *is_deleted_ = true;
-  }
+  ~DeletionTester() { *is_deleted_ = true; }
 
  private:
   bool* is_deleted_;
@@ -569,7 +565,7 @@ class DeletionTester {
 TEST(DeleteArgActionTest, OneArg) {
   bool is_deleted = false;
   DeletionTester* t = new DeletionTester(&is_deleted);
-  const Action<void(DeletionTester*)> a1 = DeleteArg<0>();      // NOLINT
+  const Action<void(DeletionTester*)> a1 = DeleteArg<0>();  // NOLINT
   EXPECT_FALSE(is_deleted);
   a1.Perform(std::make_tuple(t));
   EXPECT_TRUE(is_deleted);
@@ -578,8 +574,9 @@ TEST(DeleteArgActionTest, OneArg) {
 TEST(DeleteArgActionTest, TenArgs) {
   bool is_deleted = false;
   DeletionTester* t = new DeletionTester(&is_deleted);
-  const Action<void(bool, int, int, const char*, bool,
-                    int, int, int, int, DeletionTester*)> a1 = DeleteArg<9>();
+  const Action<void(bool, int, int, const char*, bool, int, int, int, int,
+                    DeletionTester*)>
+      a1 = DeleteArg<9>();
   EXPECT_FALSE(is_deleted);
   a1.Perform(std::make_tuple(true, 5, 6, CharPtr("hi"), false, 7, 8, 9, 10, t));
   EXPECT_TRUE(is_deleted);
@@ -610,7 +607,7 @@ TEST(ThrowActionTest, ThrowsGivenExceptionInNullaryFunction) {
 // pointed to by the N-th (0-based) argument to values in range [first, last).
 TEST(SetArrayArgumentTest, SetsTheNthArray) {
   typedef void MyFunction(bool, int*, char*);
-  int numbers[] = { 1, 2, 3 };
+  int numbers[] = {1, 2, 3};
   Action<MyFunction> a = SetArrayArgument<1>(numbers, numbers + 3);
 
   int n[4] = {};
@@ -646,7 +643,7 @@ TEST(SetArrayArgumentTest, SetsTheNthArray) {
 // Tests SetArrayArgument<N>(first, last) where first == last.
 TEST(SetArrayArgumentTest, SetsTheNthArrayWithEmptyRange) {
   typedef void MyFunction(bool, int*);
-  int numbers[] = { 1, 2, 3 };
+  int numbers[] = {1, 2, 3};
   Action<MyFunction> a = SetArrayArgument<1>(numbers, numbers);
 
   int n[4] = {};
@@ -662,10 +659,10 @@ TEST(SetArrayArgumentTest, SetsTheNthArrayWithEmptyRange) {
 // (but not equal) to the argument type.
 TEST(SetArrayArgumentTest, SetsTheNthArrayWithConvertibleType) {
   typedef void MyFunction(bool, int*);
-  char chars[] = { 97, 98, 99 };
+  char chars[] = {97, 98, 99};
   Action<MyFunction> a = SetArrayArgument<1>(chars, chars + 3);
 
-  int codes[4] = { 111, 222, 333, 444 };
+  int codes[4] = {111, 222, 333, 444};
   int* pcodes = codes;
   a.Perform(std::make_tuple(true, pcodes));
   EXPECT_EQ(97, codes[0]);
@@ -694,5 +691,5 @@ TEST(ReturnPointeeTest, Works) {
   EXPECT_EQ(43, a.Perform(std::make_tuple()));
 }
 
-}  // namespace gmock_generated_actions_test
+}  // namespace gmock_more_actions_test
 }  // namespace testing

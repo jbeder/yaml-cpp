@@ -124,7 +124,9 @@ struct _Comment {
   std::string content;
 };
 
-inline _Comment Comment(const std::string& content) { return _Comment(content); }
+inline _Comment Comment(const std::string& content) {
+  return _Comment(content);
+}
 
 struct _Precision {
   _Precision(int floatPrecision_, int doublePrecision_)
@@ -139,6 +141,6 @@ inline _Precision FloatPrecision(int n) { return _Precision(n, -1); }
 inline _Precision DoublePrecision(int n) { return _Precision(-1, n); }
 
 inline _Precision Precision(int n) { return _Precision(n, n); }
-}
+}  // namespace YAML
 
 #endif  // EMITTERMANIP_H_62B23520_7C8E_11DE_8A39_0800200C9A66

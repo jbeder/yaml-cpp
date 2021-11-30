@@ -36,7 +36,6 @@
 #ifndef GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
 #define GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
 
-
 // Value-parameterized tests allow you to test your code with different
 // parameters without writing multiple copies of the same test.
 //
@@ -356,9 +355,7 @@ internal::ValueArray<T...> Values(T... v) {
 // }
 // INSTANTIATE_TEST_SUITE_P(BoolSequence, FlagDependentTest, Bool());
 //
-inline internal::ParamGenerator<bool> Bool() {
-  return Values(false, true);
-}
+inline internal::ParamGenerator<bool> Bool() { return Values(false, true); }
 
 // Combine() allows the user to combine two or more sequences to produce
 // values of a Cartesian product of those sequences' elements.

@@ -4,7 +4,7 @@
 
 ### When I call a method on my mock object, the method for the real object is invoked instead. What's the problem?
 
-In order for a method to be mocked, it must be *virtual*, unless you use the
+In order for a method to be mocked, it must be _virtual_, unless you use the
 [high-perf dependency injection technique](#MockingNonVirtualMethods).
 
 ### Can I mock a variadic function?
@@ -12,12 +12,12 @@ In order for a method to be mocked, it must be *virtual*, unless you use the
 You cannot mock a variadic function (i.e. a function taking ellipsis (`...`)
 arguments) directly in gMock.
 
-The problem is that in general, there is *no way* for a mock object to know how
+The problem is that in general, there is _no way_ for a mock object to know how
 many arguments are passed to the variadic method, and what the arguments' types
-are. Only the *author of the base class* knows the protocol, and we cannot look
+are. Only the _author of the base class_ knows the protocol, and we cannot look
 into his or her head.
 
-Therefore, to mock such a function, the *user* must teach the mock object how to
+Therefore, to mock such a function, the _user_ must teach the mock object how to
 figure out the number of arguments and their types. One way to do it is to
 provide overloaded versions of the function.
 
@@ -54,7 +54,7 @@ use Visual C++ 2008 SP1, you would get the warning:
 warning C4373: 'MockFoo::Bar': virtual function overrides 'Foo::Bar', previous versions of the compiler did not override when parameters only differed by const/volatile qualifiers
 ```
 
-In C++, if you *declare* a function with a `const` parameter, the `const`
+In C++, if you _declare_ a function with a `const` parameter, the `const`
 modifier is ignored. Therefore, the `Foo` base class above is equivalent to:
 
 ```cpp
@@ -64,17 +64,17 @@ class Foo {
 };
 ```
 
-In fact, you can *declare* `Bar()` with an `int` parameter, and define it with a
+In fact, you can _declare_ `Bar()` with an `int` parameter, and define it with a
 `const int` parameter. The compiler will still match them up.
 
 Since making a parameter `const` is meaningless in the method declaration, we
 recommend to remove it in both `Foo` and `MockFoo`. That should workaround the
 VC bug.
 
-Note that we are talking about the *top-level* `const` modifier here. If the
+Note that we are talking about the _top-level_ `const` modifier here. If the
 function parameter is passed by pointer or reference, declaring the pointee or
 referee as `const` is still meaningful. For example, the following two
-declarations are *not* equivalent:
+declarations are _not_ equivalent:
 
 ```cpp
 void Bar(int* p);         // Neither p nor *p is const.
@@ -136,8 +136,8 @@ If another failure is detected, gMock will do the same, including printing the
 state of relevant expectations.
 
 Sometimes an expectation's state didn't change between two failures, and you'll
-see the same description of the state twice. They are however *not* redundant,
-as they refer to *different points in time*. The fact they are the same *is*
+see the same description of the state twice. They are however _not_ redundant,
+as they refer to _different points in time_. The fact they are the same _is_
 interesting information.
 
 ### I get a heapcheck failure when using a mock object, but using a real object is fine. What can be wrong?
@@ -194,7 +194,7 @@ using ::testing::Return;
 The problem, is that they didn't pick the **best** way to express the test's
 intent.
 
-By default, expectations don't have to be matched in *any* particular order. If
+By default, expectations don't have to be matched in _any_ particular order. If
 you want them to match in a certain order, you need to be explicit. This is
 gMock's (and jMock's) fundamental philosophy: it's easy to accidentally
 over-specify your tests, and we want to make it harder to do so.

@@ -56,17 +56,17 @@ addons:
     # List of whitelisted in travis apt-sources:
     #   https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
     sources:
-    - ubuntu-toolchain-r-test
-    - llvm-toolchain-precise-3.9
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.9
     packages:
-    - g++-4.9
-    - clang-3.9
+      - g++-4.9
+      - clang-3.9
     update: true
   homebrew:
     packages:
-    - ccache
-    - gcc@4.9
-    - llvm@4
+      - ccache
+      - gcc@4.9
+      - llvm@4
     update: true
 
 notifications:

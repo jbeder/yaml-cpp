@@ -46,43 +46,43 @@ More detailed documentation for googletest is in its interior
 
 ## Features
 
-*   An [xUnit](https://en.wikipedia.org/wiki/XUnit) test framework.
-*   Test discovery.
-*   A rich set of assertions.
-*   User-defined assertions.
-*   Death tests.
-*   Fatal and non-fatal failures.
-*   Value-parameterized tests.
-*   Type-parameterized tests.
-*   Various options for running the tests.
-*   XML test report generation.
+- An [xUnit](https://en.wikipedia.org/wiki/XUnit) test framework.
+- Test discovery.
+- A rich set of assertions.
+- User-defined assertions.
+- Death tests.
+- Fatal and non-fatal failures.
+- Value-parameterized tests.
+- Type-parameterized tests.
+- Various options for running the tests.
+- XML test report generation.
 
 ## Platforms
 
 Google test has been used on a variety of platforms:
 
-*   Linux
-*   Mac OS X
-*   Windows
-*   Cygwin
-*   MinGW
-*   Windows Mobile
-*   Symbian
-*   PlatformIO
+- Linux
+- Mac OS X
+- Windows
+- Cygwin
+- MinGW
+- Windows Mobile
+- Symbian
+- PlatformIO
 
 ## Who Is Using Google Test?
 
 In addition to many internal projects at Google, Google Test is also used by the
 following notable projects:
 
-*   The [Chromium projects](http://www.chromium.org/) (behind the Chrome browser
-    and Chrome OS).
-*   The [LLVM](http://llvm.org/) compiler.
-*   [Protocol Buffers](https://github.com/google/protobuf), Google's data
-    interchange format.
-*   The [OpenCV](http://opencv.org/) computer vision library.
-*   [tiny-dnn](https://github.com/tiny-dnn/tiny-dnn): header only,
-    dependency-free deep learning framework in C++11.
+- The [Chromium projects](http://www.chromium.org/) (behind the Chrome browser
+  and Chrome OS).
+- The [LLVM](http://llvm.org/) compiler.
+- [Protocol Buffers](https://github.com/google/protobuf), Google's data
+  interchange format.
+- The [OpenCV](http://opencv.org/) computer vision library.
+- [tiny-dnn](https://github.com/tiny-dnn/tiny-dnn): header only,
+  dependency-free deep learning framework in C++11.
 
 ## Related Open Source Projects
 
@@ -120,11 +120,11 @@ Patches for fixing them are welcome!
 These are the base requirements to build and use Google Test from a source
 package:
 
-*   [Bazel](https://bazel.build/) or [CMake](https://cmake.org/). NOTE: Bazel is
-    the build system that googletest is using internally and tests against.
-    CMake is community-supported.
+- [Bazel](https://bazel.build/) or [CMake](https://cmake.org/). NOTE: Bazel is
+  the build system that googletest is using internally and tests against.
+  CMake is community-supported.
 
-*   a C++11-standard-compliant compiler
+- a C++11-standard-compliant compiler
 
 ## Contributing change
 

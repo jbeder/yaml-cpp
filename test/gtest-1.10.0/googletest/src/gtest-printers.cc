@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Test - The Google C++ Testing and Mocking Framework
 //
 // This file implements a universal value printer that can print a
@@ -42,11 +41,14 @@
 // defines Foo.
 
 #include "gtest/gtest-printers.h"
+
 #include <stdio.h>
+
 #include <cctype>
 #include <cwchar>
 #include <ostream>  // NOLINT
 #include <string>
+
 #include "gtest/internal/gtest-port.h"
 #include "src/gtest-internal-inl.h"
 
@@ -96,7 +98,7 @@ void PrintBytesInObjectToImpl(const unsigned char* obj_bytes, size_t count,
     PrintByteSegmentInObjectTo(obj_bytes, 0, kChunkSize, os);
     *os << " ... ";
     // Rounds up to 2-byte boundary.
-    const size_t resume_pos = (count - kChunkSize + 1)/2*2;
+    const size_t resume_pos = (count - kChunkSize + 1) / 2 * 2;
     PrintByteSegmentInObjectTo(obj_bytes, resume_pos, count - resume_pos, os);
   }
   *os << ">";
@@ -125,18 +127,12 @@ namespace internal {
 //   - as is if it's a printable ASCII (e.g. 'a', '2', ' '),
 //   - as a hexadecimal escape sequence (e.g. '\x7F'), or
 //   - as a special escape sequence (e.g. '\r', '\n').
-enum CharFormat {
-  kAsIs,
-  kHexEscape,
-  kSpecialEscape
-};
+enum CharFormat { kAsIs, kHexEscape, kSpecialEscape };
 
 // Returns true if c is a printable ASCII character.  We test the
 // value of c directly instead of calling isprint(), which is buggy on
 // Windows Mobile.
-inline bool IsPrintableAscii(wchar_t c) {
-  return 0x20 <= c && c <= 0x7E;
-}
+inline bool IsPrintableAscii(wchar_t c) { return 0x20 <= c && c <= 0x7E; }
 
 // Prints a wide or narrow char c as a character literal without the
 // quotes, escaping it when necessary; returns how c was formatted.
@@ -227,8 +223,7 @@ void PrintCharAndCodeTo(Char c, ostream* os) {
   // To aid user debugging, we also print c's code in decimal, unless
   // it's 0 (in which case c was printed as '\\0', making the code
   // obvious).
-  if (c == 0)
-    return;
+  if (c == 0) return;
   *os << " (" << static_cast<int>(c);
 
   // For more convenience, we print c's code again in hexadecimal,
@@ -251,21 +246,17 @@ void PrintTo(signed char c, ::std::ostream* os) {
 
 // Prints a wchar_t as a symbol if it is printable or as its internal
 // code otherwise and also as its code.  L'\0' is printed as "L'\\0'".
-void PrintTo(wchar_t wc, ostream* os) {
-  PrintCharAndCodeTo<wchar_t>(wc, os);
-}
+void PrintTo(wchar_t wc, ostream* os) { PrintCharAndCodeTo<wchar_t>(wc, os); }
 
 // Prints the given array of characters to the ostream.  CharType must be either
 // char or wchar_t.
 // The array starts at begin, the length is len, it may include '\0' characters
 // and may not be NUL-terminated.
 template <typename CharType>
-GTEST_ATTRIBUTE_NO_SANITIZE_MEMORY_
-GTEST_ATTRIBUTE_NO_SANITIZE_ADDRESS_
-GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
-GTEST_ATTRIBUTE_NO_SANITIZE_THREAD_
-static CharFormat PrintCharsAsStringTo(
-    const CharType* begin, size_t len, ostream* os) {
+GTEST_ATTRIBUTE_NO_SANITIZE_MEMORY_ GTEST_ATTRIBUTE_NO_SANITIZE_ADDRESS_
+    GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
+        GTEST_ATTRIBUTE_NO_SANITIZE_THREAD_ static CharFormat
+        PrintCharsAsStringTo(const CharType* begin, size_t len, ostream* os) {
   const char* const kQuoteBegin = sizeof(CharType) == 1 ? "\"" : "L\"";
   *os << kQuoteBegin;
   bool is_previous_hex = false;
@@ -291,12 +282,11 @@ static CharFormat PrintCharsAsStringTo(
 // Prints a (const) char/wchar_t array of 'len' elements, starting at address
 // 'begin'.  CharType must be either char or wchar_t.
 template <typename CharType>
-GTEST_ATTRIBUTE_NO_SANITIZE_MEMORY_
-GTEST_ATTRIBUTE_NO_SANITIZE_ADDRESS_
-GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
-GTEST_ATTRIBUTE_NO_SANITIZE_THREAD_
-static void UniversalPrintCharArray(
-    const CharType* begin, size_t len, ostream* os) {
+GTEST_ATTRIBUTE_NO_SANITIZE_MEMORY_ GTEST_ATTRIBUTE_NO_SANITIZE_ADDRESS_
+    GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
+        GTEST_ATTRIBUTE_NO_SANITIZE_THREAD_ static void
+        UniversalPrintCharArray(const CharType* begin, size_t len,
+                                ostream* os) {
   // The code
   //   const char kFoo[] = "foo";
   // generates an array of 4, not 3, elements, with the last one being '\0'.
@@ -359,28 +349,28 @@ void PrintTo(const wchar_t* s, ostream* os) {
 namespace {
 
 bool ContainsUnprintableControlCodes(const char* str, size_t length) {
-  const unsigned char *s = reinterpret_cast<const unsigned char *>(str);
+  const unsigned char* s = reinterpret_cast<const unsigned char*>(str);
 
   for (size_t i = 0; i < length; i++) {
     unsigned char ch = *s++;
     if (std::iscntrl(ch)) {
-        switch (ch) {
+      switch (ch) {
         case '\t':
         case '\n':
         case '\r':
           break;
         default:
           return true;
-        }
       }
+    }
   }
   return false;
 }
 
-bool IsUTF8TrailByte(unsigned char t) { return 0x80 <= t && t<= 0xbf; }
+bool IsUTF8TrailByte(unsigned char t) { return 0x80 <= t && t <= 0xbf; }
 
 bool IsValidUTF8(const char* str, size_t length) {
-  const unsigned char *s = reinterpret_cast<const unsigned char *>(str);
+  const unsigned char* s = reinterpret_cast<const unsigned char*>(str);
 
   for (size_t i = 0; i < length;) {
     unsigned char lead = s[i++];
@@ -393,15 +383,13 @@ bool IsValidUTF8(const char* str, size_t length) {
     } else if (lead <= 0xdf && (i + 1) <= length && IsUTF8TrailByte(s[i])) {
       ++i;  // 2-byte character
     } else if (0xe0 <= lead && lead <= 0xef && (i + 2) <= length &&
-               IsUTF8TrailByte(s[i]) &&
-               IsUTF8TrailByte(s[i + 1]) &&
+               IsUTF8TrailByte(s[i]) && IsUTF8TrailByte(s[i + 1]) &&
                // check for non-shortest form and surrogate
                (lead != 0xe0 || s[i] >= 0xa0) &&
                (lead != 0xed || s[i] < 0xa0)) {
       i += 2;  // 3-byte character
     } else if (0xf0 <= lead && lead <= 0xf4 && (i + 3) <= length &&
-               IsUTF8TrailByte(s[i]) &&
-               IsUTF8TrailByte(s[i + 1]) &&
+               IsUTF8TrailByte(s[i]) && IsUTF8TrailByte(s[i + 1]) &&
                IsUTF8TrailByte(s[i + 2]) &&
                // check for non-shortest form
                (lead != 0xf0 || s[i] >= 0x90) &&

@@ -7,10 +7,10 @@
 #pragma once
 #endif
 
+#include <sstream>
+#include <string>
 #include <type_traits>
 #include <utility>
-#include <string>
-#include <sstream>
 
 namespace YAML {
 template <typename>
@@ -103,7 +103,7 @@ struct disable_if_c<true, T> {};
 
 template <class Cond, class T = void>
 struct disable_if : public disable_if_c<Cond::value, T> {};
-}
+}  // namespace YAML
 
 template <typename S, typename T>
 struct is_streamable {
@@ -117,7 +117,7 @@ struct is_streamable {
   static const bool value = decltype(test<S, T>(0))::value;
 };
 
-template<typename Key, bool Streamable>
+template <typename Key, bool Streamable>
 struct streamable_to_string {
   static std::string impl(const Key& key) {
     std::stringstream ss;
@@ -126,10 +126,8 @@ struct streamable_to_string {
   }
 };
 
-template<typename Key>
+template <typename Key>
 struct streamable_to_string<Key, false> {
-  static std::string impl(const Key&) {
-    return "";
-  }
+  static std::string impl(const Key&) { return ""; }
 };
 #endif  // TRAITS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

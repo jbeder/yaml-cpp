@@ -33,7 +33,7 @@
 #include "gtest/internal/gtest-port.h"
 
 #if GTEST_OS_MAC
-# include <time.h>
+#include <time.h>
 #endif  // GTEST_OS_MAC
 
 #include <list>
@@ -41,8 +41,8 @@
 #include <utility>  // For std::pair and std::make_pair.
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
+#include "gtest/gtest.h"
 #include "src/gtest-internal-inl.h"
 
 using std::make_pair;
@@ -226,8 +226,8 @@ TEST(GtestCheckSyntaxTest, WorksWithSwitch) {
   }
 
   switch (0)
-    case 0:
-      GTEST_CHECK_(true) << "Check failed in switch case";
+  case 0:
+    GTEST_CHECK_(true) << "Check failed in switch case";
 }
 
 // Verifies behavior of FormatFileLocation.
@@ -269,7 +269,7 @@ TEST(FormatCompilerIndependentFileLocationTest, FormatsUknownFileAndLine) {
 }
 
 #if GTEST_OS_LINUX || GTEST_OS_MAC || GTEST_OS_QNX || GTEST_OS_FUCHSIA || \
-    GTEST_OS_DRAGONFLY || GTEST_OS_FREEBSD || GTEST_OS_GNU_KFREEBSD || \
+    GTEST_OS_DRAGONFLY || GTEST_OS_FREEBSD || GTEST_OS_GNU_KFREEBSD ||    \
     GTEST_OS_NETBSD || GTEST_OS_OPENBSD
 void* ThreadFunc(void* data) {
   internal::Mutex* mutex = static_cast<internal::Mutex*>(data);
@@ -280,12 +280,12 @@ void* ThreadFunc(void* data) {
 
 TEST(GetThreadCountTest, ReturnsCorrectValue) {
   const size_t starting_count = GetThreadCount();
-  pthread_t       thread_id;
+  pthread_t thread_id;
 
   internal::Mutex mutex;
   {
     internal::MutexLock lock(&mutex);
-    pthread_attr_t  attr;
+    pthread_attr_t attr;
     ASSERT_EQ(0, pthread_attr_init(&attr));
     ASSERT_EQ(0, pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE));
 
@@ -302,8 +302,7 @@ TEST(GetThreadCountTest, ReturnsCorrectValue) {
   // joining a thread, causing flakiness in this test. To counter that, we
   // wait for up to .5 seconds for the OS to report the correct value.
   for (int i = 0; i < 5; ++i) {
-    if (GetThreadCount() == starting_count)
-      break;
+    if (GetThreadCount() == starting_count) break;
 
     SleepMilliseconds(100);
   }
@@ -320,13 +319,13 @@ TEST(GtestCheckDeathTest, DiesWithCorrectOutputOnFailure) {
   const bool a_false_condition = false;
   const char regex[] =
 #ifdef _MSC_VER
-     "googletest-port-test\\.cc\\(\\d+\\):"
+      "googletest-port-test\\.cc\\(\\d+\\):"
 #elif GTEST_USES_POSIX_RE
-     "googletest-port-test\\.cc:[0-9]+"
+      "googletest-port-test\\.cc:[0-9]+"
 #else
-     "googletest-port-test\\.cc:\\d+"
+      "googletest-port-test\\.cc:\\d+"
 #endif  // _MSC_VER
-     ".*a_false_condition.*Extra info.*";
+      ".*a_false_condition.*Extra info.*";
 
   EXPECT_DEATH_IF_SUPPORTED(GTEST_CHECK_(a_false_condition) << "Extra info",
                             regex);
@@ -335,10 +334,12 @@ TEST(GtestCheckDeathTest, DiesWithCorrectOutputOnFailure) {
 #if GTEST_HAS_DEATH_TEST
 
 TEST(GtestCheckDeathTest, LivesSilentlyOnSuccess) {
-  EXPECT_EXIT({
-      GTEST_CHECK_(true) << "Extra info";
-      ::std::cerr << "Success\n";
-      exit(0); },
+  EXPECT_EXIT(
+      {
+        GTEST_CHECK_(true) << "Extra info";
+        ::std::cerr << "Success\n";
+        exit(0);
+      },
       ::testing::ExitedWithCode(0), "Success");
 }
 
@@ -349,21 +350,21 @@ TEST(GtestCheckDeathTest, LivesSilentlyOnSuccess) {
 // For simplicity, we only cover the most important platforms here.
 TEST(RegexEngineSelectionTest, SelectsCorrectRegexEngine) {
 #if !GTEST_USES_PCRE
-# if GTEST_HAS_POSIX_RE
+#if GTEST_HAS_POSIX_RE
 
   EXPECT_TRUE(GTEST_USES_POSIX_RE);
 
-# else
+#else
 
   EXPECT_TRUE(GTEST_USES_SIMPLE_RE);
 
-# endif
+#endif
 #endif  // !GTEST_USES_PCRE
 }
 
 #if GTEST_USES_POSIX_RE
 
-# if GTEST_HAS_TYPED_TEST
+#if GTEST_HAS_TYPED_TEST
 
 template <typename Str>
 class RETest : public ::testing::Test {};
@@ -388,9 +389,9 @@ TYPED_TEST(RETest, ImplicitConstructorWorks) {
 
 // Tests that RE's constructors reject invalid regular expressions.
 TYPED_TEST(RETest, RejectsInvalidRegex) {
-  EXPECT_NONFATAL_FAILURE({
-    const RE invalid(TypeParam("?"));
-  }, "\"?\" is not a valid POSIX Extended regular expression.");
+  EXPECT_NONFATAL_FAILURE(
+      { const RE invalid(TypeParam("?")); },
+      "\"?\" is not a valid POSIX Extended regular expression.");
 }
 
 // Tests RE::FullMatch().
@@ -420,7 +421,7 @@ TYPED_TEST(RETest, PartialMatchWorks) {
   EXPECT_FALSE(RE::PartialMatch(TypeParam("zza"), re));
 }
 
-# endif  // GTEST_HAS_TYPED_TEST
+#endif  // GTEST_HAS_TYPED_TEST
 
 #elif GTEST_USES_SIMPLE_RE
 
@@ -786,8 +787,7 @@ TEST(MatchRegexAtHeadTest, WorksWhenRegexStartsWithRepetition) {
   EXPECT_TRUE(MatchRegexAtHead("a?b", "ab"));
 }
 
-TEST(MatchRegexAtHeadTest,
-     WorksWhenRegexStartsWithRepetionOfEscapeSequence) {
+TEST(MatchRegexAtHeadTest, WorksWhenRegexStartsWithRepetionOfEscapeSequence) {
   EXPECT_FALSE(MatchRegexAtHead("\\.+a", "abc"));
   EXPECT_FALSE(MatchRegexAtHead("\\s?b", "  b"));
 
@@ -843,17 +843,14 @@ TEST(RETest, ImplicitConstructorWorks) {
 
 // Tests that RE's constructors reject invalid regular expressions.
 TEST(RETest, RejectsInvalidRegex) {
-  EXPECT_NONFATAL_FAILURE({
-    const RE normal(NULL);
-  }, "NULL is not a valid simple regular expression");
+  EXPECT_NONFATAL_FAILURE({ const RE normal(NULL); },
+                          "NULL is not a valid simple regular expression");
 
-  EXPECT_NONFATAL_FAILURE({
-    const RE normal(".*(\\w+");
-  }, "'(' is unsupported");
+  EXPECT_NONFATAL_FAILURE({ const RE normal(".*(\\w+"); },
+                          "'(' is unsupported");
 
-  EXPECT_NONFATAL_FAILURE({
-    const RE invalid("^?");
-  }, "'?' can only follow a repeatable token");
+  EXPECT_NONFATAL_FAILURE({ const RE invalid("^?"); },
+                          "'?' can only follow a repeatable token");
 }
 
 // Tests RE::FullMatch().
@@ -995,12 +992,13 @@ TEST(ThreadWithParamTest, ConstructorExecutesThreadFunc) {
 TEST(MutexDeathTest, AssertHeldShouldAssertWhenNotLocked) {
   // AssertHeld() is flaky only in the presence of multiple threads accessing
   // the lock. In this case, the test is robust.
-  EXPECT_DEATH_IF_SUPPORTED({
-    Mutex m;
-    { MutexLock lock(&m); }
-    m.AssertHeld();
-  },
-  "thread .*hold");
+  EXPECT_DEATH_IF_SUPPORTED(
+      {
+        Mutex m;
+        { MutexLock lock(&m); }
+        m.AssertHeld();
+      },
+      "thread .*hold");
 }
 
 TEST(MutexTest, AssertHeldShouldNotAssertWhenLocked) {
@@ -1011,8 +1009,8 @@ TEST(MutexTest, AssertHeldShouldNotAssertWhenLocked) {
 
 class AtomicCounterWithMutex {
  public:
-  explicit AtomicCounterWithMutex(Mutex* mutex) :
-    value_(0), mutex_(mutex), random_(42) {}
+  explicit AtomicCounterWithMutex(Mutex* mutex)
+      : value_(0), mutex_(mutex), random_(42) {}
 
   void Increment() {
     MutexLock lock(mutex_);
@@ -1041,7 +1039,7 @@ class AtomicCounterWithMutex {
       SleepMilliseconds(static_cast<int>(random_.Generate(30)));
       ::InterlockedIncrement(&dummy);
 #else
-# error "Memory barrier not implemented on this platform."
+#error "Memory barrier not implemented on this platform."
 #endif  // GTEST_HAS_PTHREAD
     }
     value_ = temp + 1;
@@ -1051,12 +1049,11 @@ class AtomicCounterWithMutex {
  private:
   volatile int value_;
   Mutex* const mutex_;  // Protects value_.
-  Random       random_;
+  Random random_;
 };
 
 void CountingThreadFunc(pair<AtomicCounterWithMutex*, int> param) {
-  for (int i = 0; i < param.second; ++i)
-      param.first->Increment();
+  for (int i = 0; i < param.second; ++i) param.first->Increment();
 }
 
 // Tests that the mutex only lets one thread at a time to lock it.
@@ -1072,14 +1069,12 @@ TEST(MutexTest, OnlyOneThreadCanLockAtATime) {
   // Creates and runs kThreadCount threads that increment locked_counter
   // kCycleCount times each.
   for (int i = 0; i < kThreadCount; ++i) {
-    counting_threads[i].reset(new ThreadType(&CountingThreadFunc,
-                                             make_pair(&locked_counter,
-                                                       kCycleCount),
-                                             &threads_can_start));
+    counting_threads[i].reset(new ThreadType(
+        &CountingThreadFunc, make_pair(&locked_counter, kCycleCount),
+        &threads_can_start));
   }
   threads_can_start.Notify();
-  for (int i = 0; i < kThreadCount; ++i)
-    counting_threads[i]->Join();
+  for (int i = 0; i < kThreadCount; ++i) counting_threads[i]->Join();
 
   // If the mutex lets more than one thread to increment the counter at a
   // time, they are likely to encounter a race condition and have some
@@ -1089,7 +1084,7 @@ TEST(MutexTest, OnlyOneThreadCanLockAtATime) {
 }
 
 template <typename T>
-void RunFromThread(void (func)(T), T param) {
+void RunFromThread(void(func)(T), T param) {
   ThreadWithParam<T> thread(func, param, nullptr);
   thread.Join();
 }

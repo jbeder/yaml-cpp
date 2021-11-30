@@ -15,7 +15,8 @@
 
 namespace YAML {
 class CollectionStack;
-template <int> class DepthGuard; // depthguard.h
+template <int>
+class DepthGuard;  // depthguard.h
 class EventHandler;
 class Node;
 class Scanner;

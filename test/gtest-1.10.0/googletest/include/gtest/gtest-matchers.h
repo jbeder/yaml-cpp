@@ -108,8 +108,7 @@ class MatchResultListener {
   GTEST_DISALLOW_COPY_AND_ASSIGN_(MatchResultListener);
 };
 
-inline MatchResultListener::~MatchResultListener() {
-}
+inline MatchResultListener::~MatchResultListener() {}
 
 // An instance of a subclass of this knows how to describe itself as a
 // matcher.
@@ -208,27 +207,39 @@ class MatcherInterfaceAdapter : public MatcherInterface<const T&> {
 
 struct AnyEq {
   template <typename A, typename B>
-  bool operator()(const A& a, const B& b) const { return a == b; }
+  bool operator()(const A& a, const B& b) const {
+    return a == b;
+  }
 };
 struct AnyNe {
   template <typename A, typename B>
-  bool operator()(const A& a, const B& b) const { return a != b; }
+  bool operator()(const A& a, const B& b) const {
+    return a != b;
+  }
 };
 struct AnyLt {
   template <typename A, typename B>
-  bool operator()(const A& a, const B& b) const { return a < b; }
+  bool operator()(const A& a, const B& b) const {
+    return a < b;
+  }
 };
 struct AnyGt {
   template <typename A, typename B>
-  bool operator()(const A& a, const B& b) const { return a > b; }
+  bool operator()(const A& a, const B& b) const {
+    return a > b;
+  }
 };
 struct AnyLe {
   template <typename A, typename B>
-  bool operator()(const A& a, const B& b) const { return a <= b; }
+  bool operator()(const A& a, const B& b) const {
+    return a <= b;
+  }
 };
 struct AnyGe {
   template <typename A, typename B>
-  bool operator()(const A& a, const B& b) const { return a >= b; }
+  bool operator()(const A& a, const B& b) const {
+    return a >= b;
+  }
 };
 
 // A match result listener that ignores the explanation.
@@ -287,9 +298,7 @@ class MatcherBase {
   // Returns the describer for this matcher object; retains ownership
   // of the describer, which is only guaranteed to be alive when
   // this matcher object is alive.
-  const MatcherDescriberInterface* GetDescriber() const {
-    return impl_.get();
-  }
+  const MatcherDescriberInterface* GetDescriber() const { return impl_.get(); }
 
  protected:
   MatcherBase() {}
@@ -536,9 +545,13 @@ class ComparisonBase {
 
  private:
   template <typename T>
-  static const T& Unwrap(const T& v) { return v; }
+  static const T& Unwrap(const T& v) {
+    return v;
+  }
   template <typename T>
-  static const T& Unwrap(std::reference_wrapper<T> v) { return v; }
+  static const T& Unwrap(std::reference_wrapper<T> v) {
+    return v;
+  }
 
   template <typename Lhs, typename = Rhs>
   class Impl : public MatcherInterface<Lhs> {
@@ -553,7 +566,7 @@ class ComparisonBase {
       UniversalPrint(Unwrap(rhs_), os);
     }
     void DescribeNegationTo(::std::ostream* os) const override {
-      *os << D::NegatedDesc() <<  " ";
+      *os << D::NegatedDesc() << " ";
       UniversalPrint(Unwrap(rhs_), os);
     }
 
@@ -567,7 +580,7 @@ template <typename Rhs>
 class EqMatcher : public ComparisonBase<EqMatcher<Rhs>, Rhs, AnyEq> {
  public:
   explicit EqMatcher(const Rhs& rhs)
-      : ComparisonBase<EqMatcher<Rhs>, Rhs, AnyEq>(rhs) { }
+      : ComparisonBase<EqMatcher<Rhs>, Rhs, AnyEq>(rhs) {}
   static const char* Desc() { return "is equal to"; }
   static const char* NegatedDesc() { return "isn't equal to"; }
 };
@@ -575,7 +588,7 @@ template <typename Rhs>
 class NeMatcher : public ComparisonBase<NeMatcher<Rhs>, Rhs, AnyNe> {
  public:
   explicit NeMatcher(const Rhs& rhs)
-      : ComparisonBase<NeMatcher<Rhs>, Rhs, AnyNe>(rhs) { }
+      : ComparisonBase<NeMatcher<Rhs>, Rhs, AnyNe>(rhs) {}
   static const char* Desc() { return "isn't equal to"; }
   static const char* NegatedDesc() { return "is equal to"; }
 };
@@ -583,7 +596,7 @@ template <typename Rhs>
 class LtMatcher : public ComparisonBase<LtMatcher<Rhs>, Rhs, AnyLt> {
  public:
   explicit LtMatcher(const Rhs& rhs)
-      : ComparisonBase<LtMatcher<Rhs>, Rhs, AnyLt>(rhs) { }
+      : ComparisonBase<LtMatcher<Rhs>, Rhs, AnyLt>(rhs) {}
   static const char* Desc() { return "is <"; }
   static const char* NegatedDesc() { return "isn't <"; }
 };
@@ -591,7 +604,7 @@ template <typename Rhs>
 class GtMatcher : public ComparisonBase<GtMatcher<Rhs>, Rhs, AnyGt> {
  public:
   explicit GtMatcher(const Rhs& rhs)
-      : ComparisonBase<GtMatcher<Rhs>, Rhs, AnyGt>(rhs) { }
+      : ComparisonBase<GtMatcher<Rhs>, Rhs, AnyGt>(rhs) {}
   static const char* Desc() { return "is >"; }
   static const char* NegatedDesc() { return "isn't >"; }
 };
@@ -599,7 +612,7 @@ template <typename Rhs>
 class LeMatcher : public ComparisonBase<LeMatcher<Rhs>, Rhs, AnyLe> {
  public:
   explicit LeMatcher(const Rhs& rhs)
-      : ComparisonBase<LeMatcher<Rhs>, Rhs, AnyLe>(rhs) { }
+      : ComparisonBase<LeMatcher<Rhs>, Rhs, AnyLe>(rhs) {}
   static const char* Desc() { return "is <="; }
   static const char* NegatedDesc() { return "isn't <="; }
 };
@@ -607,7 +620,7 @@ template <typename Rhs>
 class GeMatcher : public ComparisonBase<GeMatcher<Rhs>, Rhs, AnyGe> {
  public:
   explicit GeMatcher(const Rhs& rhs)
-      : ComparisonBase<GeMatcher<Rhs>, Rhs, AnyGe>(rhs) { }
+      : ComparisonBase<GeMatcher<Rhs>, Rhs, AnyGe>(rhs) {}
   static const char* Desc() { return "is >="; }
   static const char* NegatedDesc() { return "isn't >="; }
 };
@@ -692,12 +705,16 @@ inline PolymorphicMatcher<internal::MatchesRegexMatcher> ContainsRegex(
 // Note: if the parameter of Eq() were declared as const T&, Eq("foo")
 // wouldn't compile.
 template <typename T>
-inline internal::EqMatcher<T> Eq(T x) { return internal::EqMatcher<T>(x); }
+inline internal::EqMatcher<T> Eq(T x) {
+  return internal::EqMatcher<T>(x);
+}
 
 // Constructs a Matcher<T> from a 'value' of type T.  The constructed
 // matcher matches any value that's equal to 'value'.
 template <typename T>
-Matcher<T>::Matcher(T value) { *this = Eq(value); }
+Matcher<T>::Matcher(T value) {
+  *this = Eq(value);
+}
 
 // Creates a monomorphic matcher that matches anything with type Lhs
 // and equal to rhs.  A user may need to use this instead of Eq(...)
@@ -712,7 +729,9 @@ Matcher<T>::Matcher(T value) { *this = Eq(value); }
 // can always write Matcher<T>(Lt(5)) to be explicit about the type,
 // for example.
 template <typename Lhs, typename Rhs>
-inline Matcher<Lhs> TypedEq(const Rhs& rhs) { return Eq(rhs); }
+inline Matcher<Lhs> TypedEq(const Rhs& rhs) {
+  return Eq(rhs);
+}
 
 // Creates a polymorphic matcher that matches anything >= x.
 template <typename Rhs>

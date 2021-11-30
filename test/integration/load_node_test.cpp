@@ -46,9 +46,12 @@ TEST(LoadNodeTest, NumericConversion) {
   EXPECT_EQ(1, +Load("1").as<uint8_t>());
   // Throw exception: convert a negative number to an unsigned number.
   EXPECT_THROW(Load("-128").as<unsigned>(), TypedBadConversion<unsigned int>);
-  EXPECT_THROW(Load("-128").as<unsigned short>(), TypedBadConversion<unsigned short>);
-  EXPECT_THROW(Load("-128").as<unsigned long>(), TypedBadConversion<unsigned long>);
-  EXPECT_THROW(Load("-128").as<unsigned long long>(), TypedBadConversion<unsigned long long>);
+  EXPECT_THROW(Load("-128").as<unsigned short>(),
+               TypedBadConversion<unsigned short>);
+  EXPECT_THROW(Load("-128").as<unsigned long>(),
+               TypedBadConversion<unsigned long>);
+  EXPECT_THROW(Load("-128").as<unsigned long long>(),
+               TypedBadConversion<unsigned long long>);
   EXPECT_THROW(Load("-128").as<uint8_t>(), TypedBadConversion<unsigned char>);
 }
 
@@ -77,11 +80,20 @@ TEST(LoadNodeTest, Binary) {
 TEST(LoadNodeTest, BinaryWithWhitespaces) {
   Node node = Load(
       "binaryText: !binary |-\n"
-      "  TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieS\n"
-      "  B0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIG\n"
-      "  x1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbi\n"
-      "  B0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZG\n"
-      "  dlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS\n"
+      "  "
+      "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieS\n"
+      "  "
+      "B0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIG"
+      "\n"
+      "  "
+      "x1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbi"
+      "\n"
+      "  "
+      "B0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZG"
+      "\n"
+      "  "
+      "dlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS"
+      "\n"
       "  4K");
   EXPECT_EQ(Binary(reinterpret_cast<const unsigned char*>(
                        "Man is distinguished, not only by his reason, "
@@ -247,8 +259,8 @@ struct ParserExceptionTestCase {
 TEST(NodeTest, IncompleteJson) {
   std::vector<ParserExceptionTestCase> tests = {
       {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
-      {"JSON map with colon but no value", "{\"access\":",
-       ErrorMsg::END_OF_MAP_FLOW},
+      {"JSON map with colon but no value",
+       "{\"access\":", ErrorMsg::END_OF_MAP_FLOW},
       {"JSON map with unclosed value quote", "{\"access\":\"",
        ErrorMsg::END_OF_MAP_FLOW},
       {"JSON map without end brace", "{\"access\":\"abc\"",
@@ -284,7 +296,7 @@ TEST(NodeTest, SpecialFlow) {
       {"{:a}", NodeType::Map, 1, "{:a: ~}"},
       {"{,}", NodeType::Map, 1, "{~: ~}"},
       {"{a:,}", NodeType::Map, 1, "{a: ~}"},
-      //testcase for the trailing TAB of scalar
+      // testcase for the trailing TAB of scalar
       {"key\t: value\t", NodeType::Map, 1, "key: value"},
       {"key\t: value\t #comment", NodeType::Map, 1, "key: value"},
       {"{key\t: value\t}", NodeType::Map, 1, "{key: value}"},
@@ -302,8 +314,8 @@ TEST(NodeTest, SpecialFlow) {
 
 TEST(NodeTest, IncorrectFlow) {
   std::vector<ParserExceptionTestCase> tests = {
-    {"Incorrect yaml: \"{:]\"", "{:]", ErrorMsg::FLOW_END},
-    {"Incorrect yaml: \"[:}\"", "[:}", ErrorMsg::FLOW_END},
+      {"Incorrect yaml: \"{:]\"", "{:]", ErrorMsg::FLOW_END},
+      {"Incorrect yaml: \"[:}\"", "[:}", ErrorMsg::FLOW_END},
   };
   for (const ParserExceptionTestCase test : tests) {
     try {
@@ -335,9 +347,9 @@ TEST(NodeTest, LoadQuotedNull) {
 }
 
 TEST(NodeTest, LoadTagWithParenthesis) {
-    Node node = Load("!Complex(Tag) foo");
-    EXPECT_EQ(node.Tag(), "!Complex(Tag)");
-    EXPECT_EQ(node.as<std::string>(), "foo");
+  Node node = Load("!Complex(Tag) foo");
+  EXPECT_EQ(node.Tag(), "!Complex(Tag)");
+  EXPECT_EQ(node.as<std::string>(), "foo");
 }
 
 TEST(NodeTest, LoadTagWithNullScalar) {

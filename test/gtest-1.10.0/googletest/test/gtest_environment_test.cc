@@ -30,8 +30,9 @@
 //
 // Tests using global test environments.
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "gtest/gtest.h"
 #include "src/gtest-internal-inl.h"
 
@@ -41,9 +42,7 @@ GTEST_DECLARE_string_(filter);
 
 namespace {
 
-enum FailureType {
-  NO_FAILURE, NON_FATAL_FAILURE, FATAL_FAILURE
-};
+enum FailureType { NO_FAILURE, NON_FATAL_FAILURE, FATAL_FAILURE };
 
 // For testing using global test environments.
 class MyEnvironment : public testing::Environment {
@@ -83,9 +82,7 @@ class MyEnvironment : public testing::Environment {
 
   // We call this function to set the type of failure SetUp() should
   // generate.
-  void set_failure_in_set_up(FailureType type) {
-    failure_in_set_up_ = type;
-  }
+  void set_failure_in_set_up(FailureType type) { failure_in_set_up_ = type; }
 
   // Was SetUp() run?
   bool set_up_was_run() const { return set_up_was_run_; }
@@ -104,9 +101,7 @@ bool test_was_run;
 
 // The sole purpose of this TEST is to enable us to check whether it
 // was run.
-TEST(FooTest, Bar) {
-  test_was_run = true;
-}
+TEST(FooTest, Bar) { test_was_run = true; }
 
 // Prints the message and aborts the program if condition is false.
 void Check(bool condition, const char* msg) {
@@ -130,7 +125,7 @@ int RunAllTests(MyEnvironment* env, FailureType failure) {
 
 }  // namespace
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
 
   // Registers a global test environment, and verifies that the

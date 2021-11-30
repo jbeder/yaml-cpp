@@ -29,15 +29,15 @@ class EmitFromEvents : public EventHandler {
 
   void OnNull(const Mark& mark, anchor_t anchor) override;
   void OnAlias(const Mark& mark, anchor_t anchor) override;
-  void OnScalar(const Mark& mark, const std::string& tag,
-                        anchor_t anchor, const std::string& value) override;
+  void OnScalar(const Mark& mark, const std::string& tag, anchor_t anchor,
+                const std::string& value) override;
 
   void OnSequenceStart(const Mark& mark, const std::string& tag,
-                               anchor_t anchor, EmitterStyle::value style) override;
+                       anchor_t anchor, EmitterStyle::value style) override;
   void OnSequenceEnd() override;
 
-  void OnMapStart(const Mark& mark, const std::string& tag,
-                          anchor_t anchor, EmitterStyle::value style) override;
+  void OnMapStart(const Mark& mark, const std::string& tag, anchor_t anchor,
+                  EmitterStyle::value style) override;
   void OnMapEnd() override;
 
  private:
@@ -52,6 +52,6 @@ class EmitFromEvents : public EventHandler {
   };
   std::stack<State::value> m_stateStack;
 };
-}
+}  // namespace YAML
 
 #endif  // EMITFROMEVENTS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

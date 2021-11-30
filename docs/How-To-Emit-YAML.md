@@ -1,8 +1,6 @@
-## Contents ##
+## Contents
 
-
-
-# Basic Emitting #
+# Basic Emitting
 
 The model for emitting YAML is `std::ostream` manipulators. A `YAML::Emitter` objects acts as an output stream, and its output can be retrieved through the `c_str()` function (as in `std::string`). For a simple example:
 
@@ -13,13 +11,13 @@ int main()
 {
    YAML::Emitter out;
    out << "Hello, World!";
-   
+
    std::cout << "Here's the output YAML:\n" << out.c_str(); // prints "Hello, World!"
    return 0;
 }
 ```
 
-# Simple Lists and Maps #
+# Simple Lists and Maps
 
 A `YAML::Emitter` object acts as a state machine, and we use manipulators to move it between states. Here's a simple sequence:
 
@@ -80,7 +78,7 @@ children:
   - Malia
 ```
 
-# Using Manipulators #
+# Using Manipulators
 
 To deviate from standard formatting, you can use manipulators to modify the output format. For example,
 
@@ -93,10 +91,11 @@ produces
 
 ```yaml
 |
-A
- B
-  C
+  A
+   B
+    C
 ```
+
 and
 
 ```cpp
@@ -125,7 +124,7 @@ out << YAML::EndMap;
 produces
 
 ```yaml
-method: least squares  # should we change this method?
+method: least squares # should we change this method?
 ```
 
 And so do aliases/anchors:
@@ -151,7 +150,8 @@ produces
 - *fred
 ```
 
-# STL Containers, and Other Overloads #
+# STL Containers, and Other Overloads
+
 We overload `operator <<` for `std::vector`, `std::list`, and `std::map`, so you can write stuff like:
 
 ```cpp
@@ -176,8 +176,7 @@ produces
 
 ```yaml
 - [1, 4, 9, 16]
--
-  Daniel: 26
+- Daniel: 26
   Jesse: 24
 ```
 
@@ -191,13 +190,14 @@ YAML::Emitter& operator << (YAML::Emitter& out, const Vec3& v) {
 	return out;
 }
 ```
+
 and it'll play nicely with everything else.
 
-# Using Existing Nodes #
+# Using Existing Nodes
 
 We also overload `operator << ` for `YAML::Node`s in both APIs, so you can output existing Nodes. Of course, Nodes in the old API are read-only, so it's tricky to emit them if you want to modify them. So use the new API!
 
-# Output Encoding #
+# Output Encoding
 
 The output is always UTF-8. By default, yaml-cpp will output as much as it can without escaping any characters. If you want to restrict the output to ASCII, use the manipulator `YAML::EscapeNonAscii`:
 
@@ -205,7 +205,7 @@ The output is always UTF-8. By default, yaml-cpp will output as much as it can w
 emitter.SetOutputCharset(YAML::EscapeNonAscii);
 ```
 
-# Lifetime of Manipulators #
+# Lifetime of Manipulators
 
 Manipulators affect the **next** output item in the stream. If that item is a `BeginSeq` or `BeginMap`, the manipulator lasts until the corresponding `EndSeq` or `EndMap`. (However, within that sequence or map, you can override the manipulator locally, etc.; in effect, there's a "manipulator stack" behind the scenes.)
 
@@ -217,7 +217,7 @@ out.SetIndent(4);
 out.SetMapStyle(YAML::Flow);
 ```
 
-# When Something Goes Wrong #
+# When Something Goes Wrong
 
 If something goes wrong when you're emitting a document, it must be something like forgetting a `YAML::EndSeq`, or a misplaced `YAML::Key`. In this case, emitting silently fails (no more output is emitted) and an error flag is set. For example:
 

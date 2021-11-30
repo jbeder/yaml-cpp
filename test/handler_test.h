@@ -29,4 +29,4 @@ class HandlerTest : public ::testing::Test {
   StrictMock<MockEventHandler> handler;
   NiceMock<MockEventHandler> nice_handler;
 };
-}
+}  // namespace YAML

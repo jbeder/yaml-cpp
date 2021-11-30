@@ -23,7 +23,7 @@ using shared_node_ref = std::shared_ptr<node_ref>;
 using shared_node_data = std::shared_ptr<node_data>;
 using shared_memory_holder = std::shared_ptr<memory_holder>;
 using shared_memory = std::shared_ptr<memory>;
-}
-}
+}  // namespace detail
+}  // namespace YAML
 
 #endif  // VALUE_PTR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -16,13 +16,13 @@ environment:
       CMAKE_PLATFORM: x64
 
 before_build:
-   - cmd: mkdir build
-   - cmd: cd build
-   - cmd: cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_GENERATOR_PLATFORM=%CMAKE_PLATFORM%
-   - cmd: cd ..
+  - cmd: mkdir build
+  - cmd: cd build
+  - cmd: cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_GENERATOR_PLATFORM=%CMAKE_PLATFORM%
+  - cmd: cd ..
 
 build_script:
-   - cmake --build build
+  - cmake --build build
 test_script:
-   - cmd: cd build
-   - ctest
+  - cmd: cd build
+  - ctest

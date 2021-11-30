@@ -7,8 +7,8 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/noexcept.h"
 #include "stream.h"
+#include "yaml-cpp/noexcept.h"
 #include <cstddef>
 
 namespace YAML {

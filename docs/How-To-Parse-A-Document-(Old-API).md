@@ -1,9 +1,8 @@
 _The following describes the old API. For the new API, see the [Tutorial](https://github.com/jbeder/yaml-cpp/wiki/Tutorial)._
 
-## Contents ##
+## Contents
 
-
-# Basic Parsing #
+# Basic Parsing
 
 The parser accepts streams, not file names, so you need to first load the file. Since a YAML file can contain many documents, you can grab them one-by-one. A simple way to parse a YAML file might be:
 
@@ -25,7 +24,7 @@ int main()
 }
 ```
 
-# Reading From the Document #
+# Reading From the Document
 
 Suppose we have a document consisting only of a scalar. We can read that scalar like this:
 
@@ -85,9 +84,9 @@ std::cout << "Found entry with name '" << name << "' and age '" << age << "'\n";
 
 One thing to be keep in mind: reading a map by key (as immediately above) requires looping through all entries until we find the right key, which is an O(n) operation. So if you're reading the entire map this way, it'll be O(n^2). For small n, this isn't a big deal, but I wouldn't recommend reading maps with a very large number of entries (>100, say) this way.
 
-## Optional Keys ##
+## Optional Keys
 
-If you try to access a key that doesn't exist, `yaml-cpp` throws an exception (see [When Something Goes Wrong](https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)#When_Something_Goes_Wrong). If you have optional keys, it's often easier to use `FindValue` instead of `operator[]`:
+If you try to access a key that doesn't exist, `yaml-cpp` throws an exception (see [When Something Goes Wrong](<https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)#When_Something_Goes_Wrong>). If you have optional keys, it's often easier to use `FindValue` instead of `operator[]`:
 
 ```
 YAML::Node doc;    // already parsed
@@ -100,7 +99,7 @@ if(const YAML::Node *pName = doc.FindValue("name")) {
 }
 ```
 
-# Getting More Complicated #
+# Getting More Complicated
 
 The above three methods can be combined to read from an arbitrary document. But we can make life a lot easier. Suppose we're reading 3-vectors (i.e., vectors with three components), so we've got a structure looking like this:
 
@@ -127,7 +126,7 @@ doc >> v;
 std::cout << "Here's the vector: (" << v.x << ", " << v.y << ", " << v.z << ")\n";
 ```
 
-# A Complete Example #
+# A Complete Example
 
 Here's a complete example of how to parse a complex YAML file:
 
@@ -221,7 +220,7 @@ int main()
 }
 ```
 
-# When Something Goes Wrong #
+# When Something Goes Wrong
 
 ... we throw an exception (all exceptions are derived from `YAML::Exception`). If there's a parsing exception (i.e., a malformed YAML document), we throw a `YAML::ParserException`:
 
@@ -248,7 +247,7 @@ If you make a programming error (say, trying to read a scalar from a sequence no
                                                // YAML::NodeType::Map
 ```
 
-# Note about copying `YAML::Node` #
+# Note about copying `YAML::Node`
 
 Currently `YAML::Node` is non-copyable, so you need to do something like
 

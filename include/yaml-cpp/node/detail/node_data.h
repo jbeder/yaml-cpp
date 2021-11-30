@@ -108,7 +108,7 @@ class YAML_CPP_API node_data {
   std::string m_scalar;
 
   // sequence
-  using node_seq = std::vector<node *>;
+  using node_seq = std::vector<node*>;
   node_seq m_sequence;
 
   mutable std::size_t m_seqSize;
@@ -121,7 +121,7 @@ class YAML_CPP_API node_data {
   using kv_pairs = std::list<kv_pair>;
   mutable kv_pairs m_undefinedPairs;
 };
-}
-}
+}  // namespace detail
+}  // namespace YAML
 
 #endif  // VALUE_DETAIL_NODE_DATA_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -93,9 +93,9 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   // add non-specific tags
   if (tag.empty())
     tag = (token.type == Token::NON_PLAIN_SCALAR ? "!" : "?");
-  
-  if (token.type == Token::PLAIN_SCALAR 
-      && tag.compare("?") == 0 && IsNullString(token.value)) {
+
+  if (token.type == Token::PLAIN_SCALAR && tag.compare("?") == 0 &&
+      IsNullString(token.value)) {
     eventHandler.OnNull(mark, anchor);
     m_scanner.pop();
     return;

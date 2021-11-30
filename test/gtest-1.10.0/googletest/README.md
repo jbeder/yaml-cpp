@@ -54,18 +54,18 @@ incompatible libraries (eg debug/release), etc. are avoided. This is
 particularly useful on Windows. Making GoogleTest's source code available to the
 main build can be done a few different ways:
 
-*   Download the GoogleTest source code manually and place it at a known
-    location. This is the least flexible approach and can make it more difficult
-    to use with continuous integration systems, etc.
-*   Embed the GoogleTest source code as a direct copy in the main project's
-    source tree. This is often the simplest approach, but is also the hardest to
-    keep up to date. Some organizations may not permit this method.
-*   Add GoogleTest as a git submodule or equivalent. This may not always be
-    possible or appropriate. Git submodules, for example, have their own set of
-    advantages and drawbacks.
-*   Use CMake to download GoogleTest as part of the build's configure step. This
-    is just a little more complex, but doesn't have the limitations of the other
-    methods.
+- Download the GoogleTest source code manually and place it at a known
+  location. This is the least flexible approach and can make it more difficult
+  to use with continuous integration systems, etc.
+- Embed the GoogleTest source code as a direct copy in the main project's
+  source tree. This is often the simplest approach, but is also the hardest to
+  keep up to date. Some organizations may not permit this method.
+- Add GoogleTest as a git submodule or equivalent. This may not always be
+  possible or appropriate. Git submodules, for example, have their own set of
+  advantages and drawbacks.
+- Use CMake to download GoogleTest as part of the build's configure step. This
+  is just a little more complex, but doesn't have the limitations of the other
+  methods.
 
 The last of the above methods is implemented with a small piece of CMake code in
 a separate file (e.g. `CMakeLists.txt.in`) which is copied to the build area and
@@ -199,14 +199,14 @@ Google Test is compact, so most users can build and link it as a static library
 for the simplicity. You can choose to use Google Test as a shared library (known
 as a DLL on Windows) if you prefer.
 
-To compile *gtest* as a shared library, add
+To compile _gtest_ as a shared library, add
 
     -DGTEST_CREATE_SHARED_LIBRARY=1
 
 to the compiler flags. You'll also need to tell the linker to produce a shared
 library instead - consult your linker's manual for how to do it.
 
-To compile your *tests* that use the gtest shared library, add
+To compile your _tests_ that use the gtest shared library, add
 
     -DGTEST_LINKED_AS_SHARED_LIBRARY=1
 

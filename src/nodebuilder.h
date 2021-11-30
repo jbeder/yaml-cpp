@@ -40,15 +40,15 @@ class NodeBuilder : public EventHandler {
 
   void OnNull(const Mark& mark, anchor_t anchor) override;
   void OnAlias(const Mark& mark, anchor_t anchor) override;
-  void OnScalar(const Mark& mark, const std::string& tag,
-                        anchor_t anchor, const std::string& value) override;
+  void OnScalar(const Mark& mark, const std::string& tag, anchor_t anchor,
+                const std::string& value) override;
 
   void OnSequenceStart(const Mark& mark, const std::string& tag,
-                               anchor_t anchor, EmitterStyle::value style) override;
+                       anchor_t anchor, EmitterStyle::value style) override;
   void OnSequenceEnd() override;
 
-  void OnMapStart(const Mark& mark, const std::string& tag,
-                          anchor_t anchor, EmitterStyle::value style) override;
+  void OnMapStart(const Mark& mark, const std::string& tag, anchor_t anchor,
+                  EmitterStyle::value style) override;
   void OnMapEnd() override;
 
  private:
@@ -61,7 +61,7 @@ class NodeBuilder : public EventHandler {
   detail::shared_memory_holder m_pMemory;
   detail::node* m_pRoot;
 
-  using Nodes = std::vector<detail::node *>;
+  using Nodes = std::vector<detail::node*>;
   Nodes m_stack;
   Nodes m_anchors;
 

@@ -31,8 +31,8 @@
 // Tests for Google Test itself.  This verifies that the basic constructs of
 // Google Test work.
 
-#include "gtest/gtest.h"
 #include "googletest-param-test-test.h"
+#include "gtest/gtest.h"
 
 using ::testing::Values;
 using ::testing::internal::ParamGenerator;
@@ -46,8 +46,7 @@ ParamGenerator<int> extern_gen_2 = Values(33);
 // and instantiated in another. The test is defined in
 // googletest-param-test-test.cc and ExternalInstantiationTest fixture class is
 // defined in gtest-param-test_test.h.
-INSTANTIATE_TEST_SUITE_P(MultiplesOf33,
-                         ExternalInstantiationTest,
+INSTANTIATE_TEST_SUITE_P(MultiplesOf33, ExternalInstantiationTest,
                          Values(33, 66));
 
 // Tests that a parameterized test case can be instantiated
@@ -55,7 +54,5 @@ INSTANTIATE_TEST_SUITE_P(MultiplesOf33,
 // in googletest-param-test-test.cc and
 // InstantiationInMultipleTranslationUnitsTest fixture is defined in
 // gtest-param-test_test.h
-INSTANTIATE_TEST_SUITE_P(Sequence2,
-                         InstantiationInMultipleTranslationUnitsTest,
-                         Values(42*3, 42*4, 42*5));
-
+INSTANTIATE_TEST_SUITE_P(Sequence2, InstantiationInMultipleTranslationUnitsTest,
+                         Values(42 * 3, 42 * 4, 42 * 5));

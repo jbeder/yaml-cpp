@@ -39,132 +39,148 @@ SYNOPSIS
 
 import os
 import re
+
 import gtest_test_utils
 
+IS_LINUX = os.name == "posix" and os.uname()[0] == "Linux"
+IS_WINDOWS = os.name == "nt"
 
-IS_LINUX = os.name == 'posix' and os.uname()[0] == 'Linux'
-IS_WINDOWS = os.name == 'nt'
+PROGRAM_PATH = gtest_test_utils.GetTestExecutablePath("gtest_help_test_")
+FLAG_PREFIX = "--gtest_"
+DEATH_TEST_STYLE_FLAG = FLAG_PREFIX + "death_test_style"
+STREAM_RESULT_TO_FLAG = FLAG_PREFIX + "stream_result_to"
+UNKNOWN_FLAG = FLAG_PREFIX + "unknown_flag_for_testing"
+LIST_TESTS_FLAG = FLAG_PREFIX + "list_tests"
+INCORRECT_FLAG_VARIANTS = [
+    re.sub("^--", "-", LIST_TESTS_FLAG),
+    re.sub("^--", "/", LIST_TESTS_FLAG),
+    re.sub("_", "-", LIST_TESTS_FLAG),
+]
+INTERNAL_FLAG_FOR_TESTING = FLAG_PREFIX + "internal_flag_for_testing"
 
-PROGRAM_PATH = gtest_test_utils.GetTestExecutablePath('gtest_help_test_')
-FLAG_PREFIX = '--gtest_'
-DEATH_TEST_STYLE_FLAG = FLAG_PREFIX + 'death_test_style'
-STREAM_RESULT_TO_FLAG = FLAG_PREFIX + 'stream_result_to'
-UNKNOWN_FLAG = FLAG_PREFIX + 'unknown_flag_for_testing'
-LIST_TESTS_FLAG = FLAG_PREFIX + 'list_tests'
-INCORRECT_FLAG_VARIANTS = [re.sub('^--', '-', LIST_TESTS_FLAG),
-                           re.sub('^--', '/', LIST_TESTS_FLAG),
-                           re.sub('_', '-', LIST_TESTS_FLAG)]
-INTERNAL_FLAG_FOR_TESTING = FLAG_PREFIX + 'internal_flag_for_testing'
-
-SUPPORTS_DEATH_TESTS = "DeathTest" in gtest_test_utils.Subprocess(
-    [PROGRAM_PATH, LIST_TESTS_FLAG]).output
+SUPPORTS_DEATH_TESTS = (
+    "DeathTest" in gtest_test_utils.Subprocess([PROGRAM_PATH, LIST_TESTS_FLAG]).output
+)
 
 # The help message must match this regex.
 HELP_REGEX = re.compile(
-    FLAG_PREFIX + r'list_tests.*' +
-    FLAG_PREFIX + r'filter=.*' +
-    FLAG_PREFIX + r'also_run_disabled_tests.*' +
-    FLAG_PREFIX + r'repeat=.*' +
-    FLAG_PREFIX + r'shuffle.*' +
-    FLAG_PREFIX + r'random_seed=.*' +
-    FLAG_PREFIX + r'color=.*' +
-    FLAG_PREFIX + r'print_time.*' +
-    FLAG_PREFIX + r'output=.*' +
-    FLAG_PREFIX + r'break_on_failure.*' +
-    FLAG_PREFIX + r'throw_on_failure.*' +
-    FLAG_PREFIX + r'catch_exceptions=0.*',
-    re.DOTALL)
+    FLAG_PREFIX
+    + r"list_tests.*"
+    + FLAG_PREFIX
+    + r"filter=.*"
+    + FLAG_PREFIX
+    + r"also_run_disabled_tests.*"
+    + FLAG_PREFIX
+    + r"repeat=.*"
+    + FLAG_PREFIX
+    + r"shuffle.*"
+    + FLAG_PREFIX
+    + r"random_seed=.*"
+    + FLAG_PREFIX
+    + r"color=.*"
+    + FLAG_PREFIX
+    + r"print_time.*"
+    + FLAG_PREFIX
+    + r"output=.*"
+    + FLAG_PREFIX
+    + r"break_on_failure.*"
+    + FLAG_PREFIX
+    + r"throw_on_failure.*"
+    + FLAG_PREFIX
+    + r"catch_exceptions=0.*",
+    re.DOTALL,
+)
 
 
 def RunWithFlag(flag):
-  """Runs gtest_help_test_ with the given flag.
+    """Runs gtest_help_test_ with the given flag.
 
-  Returns:
-    the exit code and the text output as a tuple.
-  Args:
-    flag: the command-line flag to pass to gtest_help_test_, or None.
-  """
+    Returns:
+      the exit code and the text output as a tuple.
+    Args:
+      flag: the command-line flag to pass to gtest_help_test_, or None.
+    """
 
-  if flag is None:
-    command = [PROGRAM_PATH]
-  else:
-    command = [PROGRAM_PATH, flag]
-  child = gtest_test_utils.Subprocess(command)
-  return child.exit_code, child.output
+    if flag is None:
+        command = [PROGRAM_PATH]
+    else:
+        command = [PROGRAM_PATH, flag]
+    child = gtest_test_utils.Subprocess(command)
+    return child.exit_code, child.output
 
 
 class GTestHelpTest(gtest_test_utils.TestCase):
-  """Tests the --help flag and its equivalent forms."""
+    """Tests the --help flag and its equivalent forms."""
 
-  def TestHelpFlag(self, flag):
-    """Verifies correct behavior when help flag is specified.
+    def TestHelpFlag(self, flag):
+        """Verifies correct behavior when help flag is specified.
 
-    The right message must be printed and the tests must
-    skipped when the given flag is specified.
+        The right message must be printed and the tests must
+        skipped when the given flag is specified.
 
-    Args:
-      flag:  A flag to pass to the binary or None.
-    """
+        Args:
+          flag:  A flag to pass to the binary or None.
+        """
 
-    exit_code, output = RunWithFlag(flag)
-    self.assertEquals(0, exit_code)
-    self.assert_(HELP_REGEX.search(output), output)
+        exit_code, output = RunWithFlag(flag)
+        self.assertEquals(0, exit_code)
+        self.assert_(HELP_REGEX.search(output), output)
 
-    if IS_LINUX:
-      self.assert_(STREAM_RESULT_TO_FLAG in output, output)
-    else:
-      self.assert_(STREAM_RESULT_TO_FLAG not in output, output)
+        if IS_LINUX:
+            self.assert_(STREAM_RESULT_TO_FLAG in output, output)
+        else:
+            self.assert_(STREAM_RESULT_TO_FLAG not in output, output)
 
-    if SUPPORTS_DEATH_TESTS and not IS_WINDOWS:
-      self.assert_(DEATH_TEST_STYLE_FLAG in output, output)
-    else:
-      self.assert_(DEATH_TEST_STYLE_FLAG not in output, output)
+        if SUPPORTS_DEATH_TESTS and not IS_WINDOWS:
+            self.assert_(DEATH_TEST_STYLE_FLAG in output, output)
+        else:
+            self.assert_(DEATH_TEST_STYLE_FLAG not in output, output)
 
-  def TestNonHelpFlag(self, flag):
-    """Verifies correct behavior when no help flag is specified.
+    def TestNonHelpFlag(self, flag):
+        """Verifies correct behavior when no help flag is specified.
 
-    Verifies that when no help flag is specified, the tests are run
-    and the help message is not printed.
+        Verifies that when no help flag is specified, the tests are run
+        and the help message is not printed.
 
-    Args:
-      flag:  A flag to pass to the binary or None.
-    """
+        Args:
+          flag:  A flag to pass to the binary or None.
+        """
 
-    exit_code, output = RunWithFlag(flag)
-    self.assert_(exit_code != 0)
-    self.assert_(not HELP_REGEX.search(output), output)
+        exit_code, output = RunWithFlag(flag)
+        self.assert_(exit_code != 0)
+        self.assert_(not HELP_REGEX.search(output), output)
 
-  def testPrintsHelpWithFullFlag(self):
-    self.TestHelpFlag('--help')
+    def testPrintsHelpWithFullFlag(self):
+        self.TestHelpFlag("--help")
 
-  def testPrintsHelpWithShortFlag(self):
-    self.TestHelpFlag('-h')
+    def testPrintsHelpWithShortFlag(self):
+        self.TestHelpFlag("-h")
 
-  def testPrintsHelpWithQuestionFlag(self):
-    self.TestHelpFlag('-?')
+    def testPrintsHelpWithQuestionFlag(self):
+        self.TestHelpFlag("-?")
 
-  def testPrintsHelpWithWindowsStyleQuestionFlag(self):
-    self.TestHelpFlag('/?')
+    def testPrintsHelpWithWindowsStyleQuestionFlag(self):
+        self.TestHelpFlag("/?")
 
-  def testPrintsHelpWithUnrecognizedGoogleTestFlag(self):
-    self.TestHelpFlag(UNKNOWN_FLAG)
+    def testPrintsHelpWithUnrecognizedGoogleTestFlag(self):
+        self.TestHelpFlag(UNKNOWN_FLAG)
 
-  def testPrintsHelpWithIncorrectFlagStyle(self):
-    for incorrect_flag in INCORRECT_FLAG_VARIANTS:
-      self.TestHelpFlag(incorrect_flag)
+    def testPrintsHelpWithIncorrectFlagStyle(self):
+        for incorrect_flag in INCORRECT_FLAG_VARIANTS:
+            self.TestHelpFlag(incorrect_flag)
 
-  def testRunsTestsWithoutHelpFlag(self):
-    """Verifies that when no help flag is specified, the tests are run
-    and the help message is not printed."""
+    def testRunsTestsWithoutHelpFlag(self):
+        """Verifies that when no help flag is specified, the tests are run
+        and the help message is not printed."""
 
-    self.TestNonHelpFlag(None)
+        self.TestNonHelpFlag(None)
 
-  def testRunsTestsWithGtestInternalFlag(self):
-    """Verifies that the tests are run and no help message is printed when
-    a flag starting with Google Test prefix and 'internal_' is supplied."""
+    def testRunsTestsWithGtestInternalFlag(self):
+        """Verifies that the tests are run and no help message is printed when
+        a flag starting with Google Test prefix and 'internal_' is supplied."""
 
-    self.TestNonHelpFlag(INTERNAL_FLAG_FOR_TESTING)
+        self.TestNonHelpFlag(INTERNAL_FLAG_FOR_TESTING)
 
 
-if __name__ == '__main__':
-  gtest_test_utils.Main()
+if __name__ == "__main__":
+    gtest_test_utils.Main()

@@ -21,6 +21,6 @@ YAML_CPP_API bool IsNull(const Node& node);  // old API only
 YAML_CPP_API bool IsNullString(const std::string& str);
 
 extern YAML_CPP_API _Null Null;
-}
+}  // namespace YAML
 
 #endif  // NULL_H_62B23520_7C8E_11DE_8A39_0800200C9A66

@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file defines some utilities useful for implementing Google
@@ -37,8 +36,10 @@
 #include "gmock/internal/gmock-internal-utils.h"
 
 #include <ctype.h>
+
 #include <ostream>  // NOLINT
 #include <string>
+
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
 #include "gtest/gtest.h"
@@ -76,12 +77,11 @@ GTEST_API_ std::string ConvertIdentifierNameToWords(const char* id_name) {
     // We don't care about the current locale as the input is
     // guaranteed to be a valid C++ identifier name.
     const bool starts_new_word = IsUpper(*p) ||
-        (!IsAlpha(prev_char) && IsLower(*p)) ||
-        (!IsDigit(prev_char) && IsDigit(*p));
+                                 (!IsAlpha(prev_char) && IsLower(*p)) ||
+                                 (!IsDigit(prev_char) && IsDigit(*p));
 
     if (IsAlNum(*p)) {
-      if (starts_new_word && result != "")
-        result += ' ';
+      if (starts_new_word && result != "") result += ' ';
       result += ToLower(*p);
     }
   }
@@ -95,12 +95,9 @@ class GoogleTestFailureReporter : public FailureReporterInterface {
  public:
   void ReportFailure(FailureType type, const char* file, int line,
                      const std::string& message) override {
-    AssertHelper(type == kFatal ?
-                 TestPartResult::kFatalFailure :
-                 TestPartResult::kNonFatalFailure,
-                 file,
-                 line,
-                 message.c_str()) = Message();
+    AssertHelper(type == kFatal ? TestPartResult::kFatalFailure
+                                : TestPartResult::kNonFatalFailure,
+                 file, line, message.c_str()) = Message();
     if (type == kFatal) {
       posix::Abort();
     }
@@ -148,8 +145,7 @@ GTEST_API_ bool LogIsVisible(LogSeverity severity) {
 // conservative.
 GTEST_API_ void Log(LogSeverity severity, const std::string& message,
                     int stack_frames_to_skip) {
-  if (!LogIsVisible(severity))
-    return;
+  if (!LogIsVisible(severity)) return;
 
   // Ensures that logs from different threads don't interleave.
   MutexLock l(&g_log_mutex);
@@ -178,8 +174,8 @@ GTEST_API_ void Log(LogSeverity severity, const std::string& message,
       std::cout << "\n";
     }
     std::cout << "Stack trace:\n"
-         << ::testing::internal::GetCurrentOsStackTraceExceptTop(
-             ::testing::UnitTest::GetInstance(), actual_to_skip);
+              << ::testing::internal::GetCurrentOsStackTraceExceptTop(
+                     ::testing::UnitTest::GetInstance(), actual_to_skip);
   }
   std::cout << ::std::flush;
 }

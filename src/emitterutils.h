@@ -49,7 +49,7 @@ bool WriteTag(ostream_wrapper& out, const std::string& str, bool verbatim);
 bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
                         const std::string& tag);
 bool WriteBinary(ostream_wrapper& out, const Binary& binary);
-}
-}
+}  // namespace Utils
+}  // namespace YAML
 
 #endif  // EMITTERUTILS_H_62B23520_7C8E_11DE_8A39_0800200C9A66

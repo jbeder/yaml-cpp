@@ -12,15 +12,17 @@
 #include "yaml-cpp/node/detail/node_ref.h"
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/type.h"
-#include <set>
 #include <atomic>
+#include <set>
 
 namespace YAML {
 namespace detail {
 class node {
  private:
   struct less {
-    bool operator ()(const node* l, const node* r) const {return l->m_index < r->m_index;}
+    bool operator()(const node* l, const node* r) const {
+      return l->m_index < r->m_index;
+    }
   };
 
  public:

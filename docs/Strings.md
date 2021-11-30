@@ -1,4 +1,4 @@
-# Encodings and `yaml-cpp` #
+# Encodings and `yaml-cpp`
 
 `yaml-cpp` will parse any file as specified by the [YAML 1.2 spec](http://www.yaml.org/spec/1.2/spec.html#id2570322). Internally, it stores all strings in UTF-8, and representation is done with UTF-8. This means that in
 

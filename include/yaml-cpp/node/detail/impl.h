@@ -77,7 +77,7 @@ struct remove_idx<
     } else {
       sequence.erase(sequence.begin() + key);
       if (seqSize > key) {
-          --seqSize;
+        --seqSize;
       }
       return true;
     }
@@ -229,7 +229,7 @@ inline node& node_data::convert_to_node(const T& rhs,
   pMemory->merge(*value.m_pMemory);
   return *value.m_pNode;
 }
-}
-}
+}  // namespace detail
+}  // namespace YAML
 
 #endif  // NODE_DETAIL_IMPL_H_62B23520_7C8E_11DE_8A39_0800200C9A66

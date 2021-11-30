@@ -9,9 +9,9 @@ compiler and the standard library:
 
 1.  any identifier that starts with an `_` followed by an upper-case letter, and
 2.  any identifier that contains two consecutive underscores (i.e. `__`)
-    *anywhere* in its name.
+    _anywhere_ in its name.
 
-User code is *prohibited* from using such identifiers.
+User code is _prohibited_ from using such identifiers.
 
 Now let's look at what this means for `TEST` and `TEST_F`.
 
@@ -57,8 +57,7 @@ the rule.
 
 ## Why does googletest support `EXPECT_EQ(NULL, ptr)` and `ASSERT_EQ(NULL, ptr)` but not `EXPECT_NE(NULL, ptr)` and `ASSERT_NE(NULL, ptr)`?
 
-First of all you can use `EXPECT_NE(nullptr, ptr)` and `ASSERT_NE(nullptr,
-ptr)`. This is the preferred syntax in the style guide because nullptr does not
+First of all you can use `EXPECT_NE(nullptr, ptr)` and `ASSERT_NE(nullptr, ptr)`. This is the preferred syntax in the style guide because nullptr does not
 have the type problems that NULL does. Which is why NULL does not work.
 
 Due to some peculiarity of C++, it requires some non-trivial template meta
@@ -67,8 +66,8 @@ and `ASSERT_XX()` macros. Therefore we only do it where it's most needed
 (otherwise we make the implementation of googletest harder to maintain and more
 error-prone than necessary).
 
-The `EXPECT_EQ()` macro takes the *expected* value as its first argument and the
-*actual* value as the second. It's reasonable that someone wants to write
+The `EXPECT_EQ()` macro takes the _expected_ value as its first argument and the
+_actual_ value as the second. It's reasonable that someone wants to write
 `EXPECT_EQ(NULL, some_expression)`, and this indeed was requested several times.
 Therefore we implemented it.
 
@@ -98,27 +97,27 @@ value-parameterized tests can get it done. It's really up to you the user to
 decide which is more convenient for you, depending on your particular case. Some
 rough guidelines:
 
-*   Typed tests can be easier to write if instances of the different
-    implementations can be created the same way, modulo the type. For example,
-    if all these implementations have a public default constructor (such that
-    you can write `new TypeParam`), or if their factory functions have the same
-    form (e.g. `CreateInstance<TypeParam>()`).
-*   Value-parameterized tests can be easier to write if you need different code
-    patterns to create different implementations' instances, e.g. `new Foo` vs
-    `new Bar(5)`. To accommodate for the differences, you can write factory
-    function wrappers and pass these function pointers to the tests as their
-    parameters.
-*   When a typed test fails, the default output includes the name of the type,
-    which can help you quickly identify which implementation is wrong.
-    Value-parameterized tests only show the number of the failed iteration by
-    default. You will need to define a function that returns the iteration name
-    and pass it as the third parameter to INSTANTIATE_TEST_SUITE_P to have more
-    useful output.
-*   When using typed tests, you need to make sure you are testing against the
-    interface type, not the concrete types (in other words, you want to make
-    sure `implicit_cast<MyInterface*>(my_concrete_impl)` works, not just that
-    `my_concrete_impl` works). It's less likely to make mistakes in this area
-    when using value-parameterized tests.
+- Typed tests can be easier to write if instances of the different
+  implementations can be created the same way, modulo the type. For example,
+  if all these implementations have a public default constructor (such that
+  you can write `new TypeParam`), or if their factory functions have the same
+  form (e.g. `CreateInstance<TypeParam>()`).
+- Value-parameterized tests can be easier to write if you need different code
+  patterns to create different implementations' instances, e.g. `new Foo` vs
+  `new Bar(5)`. To accommodate for the differences, you can write factory
+  function wrappers and pass these function pointers to the tests as their
+  parameters.
+- When a typed test fails, the default output includes the name of the type,
+  which can help you quickly identify which implementation is wrong.
+  Value-parameterized tests only show the number of the failed iteration by
+  default. You will need to define a function that returns the iteration name
+  and pass it as the third parameter to INSTANTIATE_TEST_SUITE_P to have more
+  useful output.
+- When using typed tests, you need to make sure you are testing against the
+  interface type, not the concrete types (in other words, you want to make
+  sure `implicit_cast<MyInterface*>(my_concrete_impl)` works, not just that
+  `my_concrete_impl` works). It's less likely to make mistakes in this area
+  when using value-parameterized tests.
 
 I hope I didn't confuse you more. :-) If you don't mind, I'd suggest you to give
 both approaches a try. Practice is a much better way to grasp the subtle
@@ -127,7 +126,7 @@ can much more easily decide which one to use the next time.
 
 ## I got some run-time errors about invalid proto descriptors when using `ProtocolMessageEquals`. Help!
 
-**Note:** `ProtocolMessageEquals` and `ProtocolMessageEquiv` are *deprecated*
+**Note:** `ProtocolMessageEquals` and `ProtocolMessageEquiv` are _deprecated_
 now. Please use `EqualsProto`, etc instead.
 
 `ProtocolMessageEquals` and `ProtocolMessageEquiv` were redefined recently and
@@ -162,11 +161,11 @@ macro.
 
 Actually, the bug is in `htonl()`.
 
-According to `'man htonl'`, `htonl()` is a *function*, which means it's valid to
+According to `'man htonl'`, `htonl()` is a _function_, which means it's valid to
 use `htonl` as a function pointer. However, in opt mode `htonl()` is defined as
-a *macro*, which breaks this usage.
+a _macro_, which breaks this usage.
 
-Worse, the macro definition of `htonl()` uses a `gcc` extension and is *not*
+Worse, the macro definition of `htonl()` uses a `gcc` extension and is _not_
 standard C++. That hacky implementation has some ad hoc limitations. In
 particular, it prevents you from writing `Foo<sizeof(htonl(x))>()`, where `Foo`
 is a template that has an integral argument.
@@ -200,7 +199,7 @@ class Foo {
 };
 ```
 
-You also need to define it *outside* of the class body in `foo.cc`:
+You also need to define it _outside_ of the class body in `foo.cc`:
 
 ```c++
 const int Foo::kBar;  // No initializer here.
@@ -309,45 +308,45 @@ When you need to write per-test set-up and tear-down logic, you have the choice
 between using the test fixture constructor/destructor or `SetUp()/TearDown()`.
 The former is usually preferred, as it has the following benefits:
 
-*   By initializing a member variable in the constructor, we have the option to
-    make it `const`, which helps prevent accidental changes to its value and
-    makes the tests more obviously correct.
-*   In case we need to subclass the test fixture class, the subclass'
-    constructor is guaranteed to call the base class' constructor *first*, and
-    the subclass' destructor is guaranteed to call the base class' destructor
-    *afterward*. With `SetUp()/TearDown()`, a subclass may make the mistake of
-    forgetting to call the base class' `SetUp()/TearDown()` or call them at the
-    wrong time.
+- By initializing a member variable in the constructor, we have the option to
+  make it `const`, which helps prevent accidental changes to its value and
+  makes the tests more obviously correct.
+- In case we need to subclass the test fixture class, the subclass'
+  constructor is guaranteed to call the base class' constructor _first_, and
+  the subclass' destructor is guaranteed to call the base class' destructor
+  _afterward_. With `SetUp()/TearDown()`, a subclass may make the mistake of
+  forgetting to call the base class' `SetUp()/TearDown()` or call them at the
+  wrong time.
 
 You may still want to use `SetUp()/TearDown()` in the following cases:
 
-*   C++ does not allow virtual function calls in constructors and destructors.
-    You can call a method declared as virtual, but it will not use dynamic
-    dispatch, it will use the definition from the class the constructor of which
-    is currently executing. This is because calling a virtual method before the
-    derived class constructor has a chance to run is very dangerous - the
-    virtual method might operate on uninitialized data. Therefore, if you need
-    to call a method that will be overridden in a derived class, you have to use
-    `SetUp()/TearDown()`.
-*   In the body of a constructor (or destructor), it's not possible to use the
-    `ASSERT_xx` macros. Therefore, if the set-up operation could cause a fatal
-    test failure that should prevent the test from running, it's necessary to
-    use `abort` <!-- GOOGLETEST_CM0015 DO NOT DELETE --> and abort the whole test executable,
-    or to use `SetUp()` instead of a constructor.
-*   If the tear-down operation could throw an exception, you must use
-    `TearDown()` as opposed to the destructor, as throwing in a destructor leads
-    to undefined behavior and usually will kill your program right away. Note
-    that many standard libraries (like STL) may throw when exceptions are
-    enabled in the compiler. Therefore you should prefer `TearDown()` if you
-    want to write portable tests that work with or without exceptions.
-*   The googletest team is considering making the assertion macros throw on
-    platforms where exceptions are enabled (e.g. Windows, Mac OS, and Linux
-    client-side), which will eliminate the need for the user to propagate
-    failures from a subroutine to its caller. Therefore, you shouldn't use
-    googletest assertions in a destructor if your code could run on such a
-    platform.
+- C++ does not allow virtual function calls in constructors and destructors.
+  You can call a method declared as virtual, but it will not use dynamic
+  dispatch, it will use the definition from the class the constructor of which
+  is currently executing. This is because calling a virtual method before the
+  derived class constructor has a chance to run is very dangerous - the
+  virtual method might operate on uninitialized data. Therefore, if you need
+  to call a method that will be overridden in a derived class, you have to use
+  `SetUp()/TearDown()`.
+- In the body of a constructor (or destructor), it's not possible to use the
+  `ASSERT_xx` macros. Therefore, if the set-up operation could cause a fatal
+  test failure that should prevent the test from running, it's necessary to
+  use `abort` <!-- GOOGLETEST_CM0015 DO NOT DELETE --> and abort the whole test executable,
+  or to use `SetUp()` instead of a constructor.
+- If the tear-down operation could throw an exception, you must use
+  `TearDown()` as opposed to the destructor, as throwing in a destructor leads
+  to undefined behavior and usually will kill your program right away. Note
+  that many standard libraries (like STL) may throw when exceptions are
+  enabled in the compiler. Therefore you should prefer `TearDown()` if you
+  want to write portable tests that work with or without exceptions.
+- The googletest team is considering making the assertion macros throw on
+  platforms where exceptions are enabled (e.g. Windows, Mac OS, and Linux
+  client-side), which will eliminate the need for the user to propagate
+  failures from a subroutine to its caller. Therefore, you shouldn't use
+  googletest assertions in a destructor if your code could run on such a
+  platform.
 
-## The compiler complains "no matching function to call" when I use ASSERT_PRED*. How do I fix it?
+## The compiler complains "no matching function to call" when I use ASSERT_PRED\*. How do I fix it?
 
 If the predicate function you use in `ASSERT_PRED*` or `EXPECT_PRED*` is
 overloaded or a template, the compiler will have trouble figuring out which
@@ -469,7 +468,6 @@ C++ is case-sensitive. Did you spell it as `Setup()`?
 Similarly, sometimes people spell `SetUpTestSuite()` as `SetupTestSuite()` and
 wonder why it's never called.
 
-
 ## I have several test suites which share the same test fixture logic, do I have to define a new test fixture class for each of them? This seems pretty tedious.
 
 You don't have to. Instead of
@@ -536,9 +534,9 @@ wherever `*statement*` is valid. So basically `*statement*` can be any C++
 statement that makes sense in the current context. In particular, it can
 reference global and/or local variables, and can be:
 
-*   a simple function call (often the case),
-*   a complex expression, or
-*   a compound statement.
+- a simple function call (often the case),
+- a complex expression, or
+- a compound statement.
 
 Some examples are shown here:
 
@@ -580,19 +578,19 @@ TEST(MyDeathTest, CompoundStatement) {
 
 gtest-death-test_test.cc contains more examples if you are interested.
 
-## I have a fixture class `FooTest`, but `TEST_F(FooTest, Bar)` gives me error ``"no matching function for call to `FooTest::FooTest()'"``. Why?
+## I have a fixture class `FooTest`, but `TEST_F(FooTest, Bar)` gives me error `` "no matching function for call to `FooTest::FooTest()'" ``. Why?
 
 Googletest needs to be able to create objects of your test fixture class, so it
 must have a default constructor. Normally the compiler will define one for you.
 However, there are cases where you have to define your own:
 
-*   If you explicitly declare a non-default constructor for class `FooTest`
-    (`DISALLOW_EVIL_CONSTRUCTORS()` does this), then you need to define a
-    default constructor, even if it would be empty.
-*   If `FooTest` has a const non-static data member, then you have to define the
-    default constructor *and* initialize the const member in the initializer
-    list of the constructor. (Early versions of `gcc` doesn't force you to
-    initialize the const member. It's a bug that has been fixed in `gcc 4`.)
+- If you explicitly declare a non-default constructor for class `FooTest`
+  (`DISALLOW_EVIL_CONSTRUCTORS()` does this), then you need to define a
+  default constructor, even if it would be empty.
+- If `FooTest` has a const non-static data member, then you have to define the
+  default constructor _and_ initialize the const member in the initializer
+  list of the constructor. (Early versions of `gcc` doesn't force you to
+  initialize the const member. It's a bug that has been fixed in `gcc 4`.)
 
 ## Why does ASSERT_DEATH complain about previous threads that were already joined?
 
@@ -607,7 +605,7 @@ The new NPTL thread library doesn't suffer from this problem, as it doesn't
 create a manager thread. However, if you don't control which machine your test
 runs on, you shouldn't depend on this.
 
-## Why does googletest require the entire test suite, instead of individual tests, to be named *DeathTest when it uses ASSERT_DEATH?
+## Why does googletest require the entire test suite, instead of individual tests, to be named \*DeathTest when it uses ASSERT_DEATH?
 
 googletest does not interleave tests from different test suites. That is, it
 runs all tests in one test suite first, and then runs all tests in the next test
@@ -668,7 +666,7 @@ there is an `std::ostream& operator<<(std::ostream&, const FooType&)` function
 defined such that we can print a value of `FooType`.
 
 In addition, if `FooType` is declared in a name space, the `<<` operator also
-needs to be defined in the *same* name space. See https://abseil.io/tips/49 for details.
+needs to be defined in the _same_ name space. See https://abseil.io/tips/49 for details.
 
 ## How do I suppress the memory leak messages on Windows?
 
@@ -695,15 +693,15 @@ production code doesn't link in the for-test logic at all (the
 [`testonly`](https://docs.bazel.build/versions/master/be/common-definitions.html#common.testonly) attribute for BUILD targets helps to ensure
 that), there is no danger in accidentally running it.
 
-However, if you *really*, *really*, *really* have no choice, and if you follow
+However, if you _really_, _really_, _really_ have no choice, and if you follow
 the rule of ending your test program names with `_test`, you can use the
-*horrible* hack of sniffing your executable name (`argv[0]` in `main()`) to know
+_horrible_ hack of sniffing your executable name (`argv[0]` in `main()`) to know
 whether the code is under test.
 
 ## How do I temporarily disable a test?
 
 If you have a broken test that you cannot fix right away, you can add the
-DISABLED_ prefix to its name. This will exclude it from execution. This is
+DISABLED\_ prefix to its name. This will exclude it from execution. This is
 better than commenting out the code or using #if 0, as disabled tests are still
 compiled (and thus won't rot).
 

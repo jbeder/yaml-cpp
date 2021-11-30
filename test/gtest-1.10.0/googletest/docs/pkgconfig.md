@@ -4,11 +4,11 @@ GoogleTest comes with pkg-config files that can be used to determine all
 necessary flags for compiling and linking to GoogleTest (and GoogleMock).
 Pkg-config is a standardised plain-text format containing
 
-*   the includedir (-I) path
-*   necessary macro (-D) definitions
-*   further required flags (-pthread)
-*   the library (-L) path
-*   the library (-l) to link to
+- the includedir (-I) path
+- necessary macro (-D) definitions
+- further required flags (-pthread)
+- the library (-L) path
+- the library (-l) to link to
 
 All current build systems support pkg-config in one way or another. For all
 examples here we assume you want to compile the sample

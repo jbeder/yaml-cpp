@@ -315,9 +315,11 @@ inline void Node::push_back(const Node& rhs) {
   m_pMemory->merge(*rhs.m_pMemory);
 }
 
-template<typename Key>
+template <typename Key>
 std::string key_to_string(const Key& key) {
-  return streamable_to_string<Key, is_streamable<std::stringstream, Key>::value>().impl(key);
+  return streamable_to_string<Key,
+                              is_streamable<std::stringstream, Key>::value>()
+      .impl(key);
 }
 
 // indexing

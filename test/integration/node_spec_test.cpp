@@ -424,8 +424,8 @@ TEST(NodeSpecTest, Ex5_5_CommentIndicator) {
 TEST(NodeSpecTest, Ex5_6_NodePropertyIndicators) {
   Node doc = Load(ex5_6);
   EXPECT_EQ(2, doc.size());
-  EXPECT_TRUE(doc["anchored"].as<std::string>() ==
-              "value");  // TODO: assert tag
+  EXPECT_TRUE(doc["anchored"].as<std::string>() == "value");  // TODO: assert
+                                                              // tag
   EXPECT_EQ("value", doc["alias"].as<std::string>());
 }
 
@@ -1132,5 +1132,5 @@ TEST(NodeSpecTest, FlowMapNotClosed) {
   EXPECT_THROW_PARSER_EXCEPTION(Load("{x:"), ErrorMsg::UNKNOWN_TOKEN);
 }
 
-}
-}
+}  // namespace
+}  // namespace YAML

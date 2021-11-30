@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // GOOGLETEST_CM0001 DO NOT DELETE
 
 #ifndef GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
@@ -192,9 +191,9 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
   typedef ::testing::internal::TypeList<Types>::type GTEST_TYPE_PARAMS_( \
       CaseName);                                                         \
   typedef ::testing::internal::NameGeneratorSelector<__VA_ARGS__>::type  \
-      GTEST_NAME_GENERATOR_(CaseName)
+  GTEST_NAME_GENERATOR_(CaseName)
 
-# define TYPED_TEST(CaseName, TestName)                                       \
+#define TYPED_TEST(CaseName, TestName)                                        \
   template <typename gtest_TypeParam_>                                        \
   class GTEST_TEST_CLASS_NAME_(CaseName, TestName)                            \
       : public CaseName<gtest_TypeParam_> {                                   \
@@ -204,8 +203,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
     virtual void TestBody();                                                  \
   };                                                                          \
   static bool gtest_##CaseName##_##TestName##_registered_                     \
-        GTEST_ATTRIBUTE_UNUSED_ =                                             \
-      ::testing::internal::TypeParameterizedTest<                             \
+      GTEST_ATTRIBUTE_UNUSED_ = ::testing::internal::TypeParameterizedTest<   \
           CaseName,                                                           \
           ::testing::internal::TemplateSel<GTEST_TEST_CLASS_NAME_(CaseName,   \
                                                                   TestName)>, \
@@ -260,7 +258,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
 // #included in multiple translation units linked together.
 #define TYPED_TEST_SUITE_P(SuiteName)              \
   static ::testing::internal::TypedTestSuitePState \
-      GTEST_TYPED_TEST_SUITE_P_STATE_(SuiteName)
+  GTEST_TYPED_TEST_SUITE_P_STATE_(SuiteName)
 
 // Legacy API is deprecated but still available
 #ifndef GTEST_REMOVE_LEGACY_TEST_CASEAPI_

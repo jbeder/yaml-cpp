@@ -36,33 +36,33 @@ import errno
 import os
 import re
 import sys
-from xml.dom import minidom, Node
+from xml.dom import Node, minidom
 
 import gtest_test_utils
 import gtest_xml_test_utils
 
-GTEST_FILTER_FLAG = '--gtest_filter'
-GTEST_LIST_TESTS_FLAG = '--gtest_list_tests'
-GTEST_OUTPUT_FLAG = '--gtest_output'
-GTEST_DEFAULT_OUTPUT_FILE = 'test_detail.xml'
-GTEST_PROGRAM_NAME = 'gtest_xml_output_unittest_'
+GTEST_FILTER_FLAG = "--gtest_filter"
+GTEST_LIST_TESTS_FLAG = "--gtest_list_tests"
+GTEST_OUTPUT_FLAG = "--gtest_output"
+GTEST_DEFAULT_OUTPUT_FILE = "test_detail.xml"
+GTEST_PROGRAM_NAME = "gtest_xml_output_unittest_"
 
 # The flag indicating stacktraces are not supported
-NO_STACKTRACE_SUPPORT_FLAG = '--no_stacktrace_support'
+NO_STACKTRACE_SUPPORT_FLAG = "--no_stacktrace_support"
 
 # The environment variables for test sharding.
-TOTAL_SHARDS_ENV_VAR = 'GTEST_TOTAL_SHARDS'
-SHARD_INDEX_ENV_VAR = 'GTEST_SHARD_INDEX'
-SHARD_STATUS_FILE_ENV_VAR = 'GTEST_SHARD_STATUS_FILE'
+TOTAL_SHARDS_ENV_VAR = "GTEST_TOTAL_SHARDS"
+SHARD_INDEX_ENV_VAR = "GTEST_SHARD_INDEX"
+SHARD_STATUS_FILE_ENV_VAR = "GTEST_SHARD_STATUS_FILE"
 
 SUPPORTS_STACK_TRACES = NO_STACKTRACE_SUPPORT_FLAG not in sys.argv
 
 if SUPPORTS_STACK_TRACES:
-  STACK_TRACE_TEMPLATE = '\nStack trace:\n*'
+    STACK_TRACE_TEMPLATE = "\nStack trace:\n*"
 else:
-  STACK_TRACE_TEMPLATE = ''
-  # unittest.main() can't handle unknown flags
-  sys.argv.remove(NO_STACKTRACE_SUPPORT_FLAG)
+    STACK_TRACE_TEMPLATE = ""
+    # unittest.main() can't handle unknown flags
+    sys.argv.remove(NO_STACKTRACE_SUPPORT_FLAG)
 
 EXPECTED_NON_EMPTY_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="24" failures="4" disabled="2" errors="0" time="*" timestamp="*" name="AllTests" ad_hoc_property="42">
@@ -171,7 +171,7 @@ Invalid characters in brackets []%(stack)s]]></failure>
     <testcase name="HasTypeParamAttribute" type_param="*" status="run" result="completed" time="*" timestamp="*" classname="Single/TypeParameterizedTestSuite/1" />
   </testsuite>
 </testsuites>""" % {
-    'stack': STACK_TRACE_TEMPLATE
+    "stack": STACK_TRACE_TEMPLATE
 }
 
 EXPECTED_FILTERED_TEST_XML = """<?xml version="1.0" encoding="UTF-8"?>
@@ -207,183 +207,219 @@ EXPECTED_EMPTY_XML = """<?xml version="1.0" encoding="UTF-8"?>
 
 GTEST_PROGRAM_PATH = gtest_test_utils.GetTestExecutablePath(GTEST_PROGRAM_NAME)
 
-SUPPORTS_TYPED_TESTS = 'TypedTest' in gtest_test_utils.Subprocess(
-    [GTEST_PROGRAM_PATH, GTEST_LIST_TESTS_FLAG], capture_stderr=False).output
+SUPPORTS_TYPED_TESTS = (
+    "TypedTest"
+    in gtest_test_utils.Subprocess(
+        [GTEST_PROGRAM_PATH, GTEST_LIST_TESTS_FLAG], capture_stderr=False
+    ).output
+)
 
 
 class GTestXMLOutputUnitTest(gtest_xml_test_utils.GTestXMLTestCase):
-  """
-  Unit test for Google Test's XML output functionality.
-  """
-
-  # This test currently breaks on platforms that do not support typed and
-  # type-parameterized tests, so we don't run it under them.
-  if SUPPORTS_TYPED_TESTS:
-    def testNonEmptyXmlOutput(self):
-      """
-      Runs a test program that generates a non-empty XML output, and
-      tests that the XML output is expected.
-      """
-      self._TestXmlOutput(GTEST_PROGRAM_NAME, EXPECTED_NON_EMPTY_XML, 1)
-
-  def testEmptyXmlOutput(self):
-    """Verifies XML output for a Google Test binary without actual tests.
-
-    Runs a test program that generates an empty XML output, and
-    tests that the XML output is expected.
+    """
+    Unit test for Google Test's XML output functionality.
     """
 
-    self._TestXmlOutput('gtest_no_test_unittest', EXPECTED_EMPTY_XML, 0)
+    # This test currently breaks on platforms that do not support typed and
+    # type-parameterized tests, so we don't run it under them.
+    if SUPPORTS_TYPED_TESTS:
 
-  def testTimestampValue(self):
-    """Checks whether the timestamp attribute in the XML output is valid.
+        def testNonEmptyXmlOutput(self):
+            """
+            Runs a test program that generates a non-empty XML output, and
+            tests that the XML output is expected.
+            """
+            self._TestXmlOutput(GTEST_PROGRAM_NAME, EXPECTED_NON_EMPTY_XML, 1)
 
-    Runs a test program that generates an empty XML output, and checks if
-    the timestamp attribute in the testsuites tag is valid.
-    """
-    actual = self._GetXmlOutput('gtest_no_test_unittest', [], {}, 0)
-    date_time_str = actual.documentElement.getAttributeNode('timestamp').value
-    # datetime.strptime() is only available in Python 2.5+ so we have to
-    # parse the expected datetime manually.
-    match = re.match(r'(\d+)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)', date_time_str)
-    self.assertTrue(
-        re.match,
-        'XML datettime string %s has incorrect format' % date_time_str)
-    date_time_from_xml = datetime.datetime(
-        year=int(match.group(1)), month=int(match.group(2)),
-        day=int(match.group(3)), hour=int(match.group(4)),
-        minute=int(match.group(5)), second=int(match.group(6)))
+    def testEmptyXmlOutput(self):
+        """Verifies XML output for a Google Test binary without actual tests.
 
-    time_delta = abs(datetime.datetime.now() - date_time_from_xml)
-    # timestamp value should be near the current local time
-    self.assertTrue(time_delta < datetime.timedelta(seconds=600),
-                    'time_delta is %s' % time_delta)
-    actual.unlink()
+        Runs a test program that generates an empty XML output, and
+        tests that the XML output is expected.
+        """
 
-  def testDefaultOutputFile(self):
-    """
-    Confirms that Google Test produces an XML output file with the expected
-    default name if no name is explicitly specified.
-    """
-    output_file = os.path.join(gtest_test_utils.GetTempDir(),
-                               GTEST_DEFAULT_OUTPUT_FILE)
-    gtest_prog_path = gtest_test_utils.GetTestExecutablePath(
-        'gtest_no_test_unittest')
-    try:
-      os.remove(output_file)
-    except OSError:
-      e = sys.exc_info()[1]
-      if e.errno != errno.ENOENT:
-        raise
+        self._TestXmlOutput("gtest_no_test_unittest", EXPECTED_EMPTY_XML, 0)
 
-    p = gtest_test_utils.Subprocess(
-        [gtest_prog_path, '%s=xml' % GTEST_OUTPUT_FLAG],
-        working_dir=gtest_test_utils.GetTempDir())
-    self.assert_(p.exited)
-    self.assertEquals(0, p.exit_code)
-    self.assert_(os.path.isfile(output_file))
+    def testTimestampValue(self):
+        """Checks whether the timestamp attribute in the XML output is valid.
 
-  def testSuppressedXmlOutput(self):
-    """
-    Tests that no XML file is generated if the default XML listener is
-    shut down before RUN_ALL_TESTS is invoked.
-    """
+        Runs a test program that generates an empty XML output, and checks if
+        the timestamp attribute in the testsuites tag is valid.
+        """
+        actual = self._GetXmlOutput("gtest_no_test_unittest", [], {}, 0)
+        date_time_str = actual.documentElement.getAttributeNode("timestamp").value
+        # datetime.strptime() is only available in Python 2.5+ so we have to
+        # parse the expected datetime manually.
+        match = re.match(r"(\d+)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)", date_time_str)
+        self.assertTrue(
+            re.match, "XML datettime string %s has incorrect format" % date_time_str
+        )
+        date_time_from_xml = datetime.datetime(
+            year=int(match.group(1)),
+            month=int(match.group(2)),
+            day=int(match.group(3)),
+            hour=int(match.group(4)),
+            minute=int(match.group(5)),
+            second=int(match.group(6)),
+        )
 
-    xml_path = os.path.join(gtest_test_utils.GetTempDir(),
-                            GTEST_PROGRAM_NAME + 'out.xml')
-    if os.path.isfile(xml_path):
-      os.remove(xml_path)
+        time_delta = abs(datetime.datetime.now() - date_time_from_xml)
+        # timestamp value should be near the current local time
+        self.assertTrue(
+            time_delta < datetime.timedelta(seconds=600),
+            "time_delta is %s" % time_delta,
+        )
+        actual.unlink()
 
-    command = [GTEST_PROGRAM_PATH,
-               '%s=xml:%s' % (GTEST_OUTPUT_FLAG, xml_path),
-               '--shut_down_xml']
-    p = gtest_test_utils.Subprocess(command)
-    if p.terminated_by_signal:
-      # p.signal is available only if p.terminated_by_signal is True.
-      self.assertFalse(
-          p.terminated_by_signal,
-          '%s was killed by signal %d' % (GTEST_PROGRAM_NAME, p.signal))
-    else:
-      self.assert_(p.exited)
-      self.assertEquals(1, p.exit_code,
-                        "'%s' exited with code %s, which doesn't match "
-                        'the expected exit code %s.'
-                        % (command, p.exit_code, 1))
+    def testDefaultOutputFile(self):
+        """
+        Confirms that Google Test produces an XML output file with the expected
+        default name if no name is explicitly specified.
+        """
+        output_file = os.path.join(
+            gtest_test_utils.GetTempDir(), GTEST_DEFAULT_OUTPUT_FILE
+        )
+        gtest_prog_path = gtest_test_utils.GetTestExecutablePath(
+            "gtest_no_test_unittest"
+        )
+        try:
+            os.remove(output_file)
+        except OSError:
+            e = sys.exc_info()[1]
+            if e.errno != errno.ENOENT:
+                raise
 
-    self.assert_(not os.path.isfile(xml_path))
+        p = gtest_test_utils.Subprocess(
+            [gtest_prog_path, "%s=xml" % GTEST_OUTPUT_FLAG],
+            working_dir=gtest_test_utils.GetTempDir(),
+        )
+        self.assert_(p.exited)
+        self.assertEquals(0, p.exit_code)
+        self.assert_(os.path.isfile(output_file))
 
-  def testFilteredTestXmlOutput(self):
-    """Verifies XML output when a filter is applied.
+    def testSuppressedXmlOutput(self):
+        """
+        Tests that no XML file is generated if the default XML listener is
+        shut down before RUN_ALL_TESTS is invoked.
+        """
 
-    Runs a test program that executes only some tests and verifies that
-    non-selected tests do not show up in the XML output.
-    """
+        xml_path = os.path.join(
+            gtest_test_utils.GetTempDir(), GTEST_PROGRAM_NAME + "out.xml"
+        )
+        if os.path.isfile(xml_path):
+            os.remove(xml_path)
 
-    self._TestXmlOutput(GTEST_PROGRAM_NAME, EXPECTED_FILTERED_TEST_XML, 0,
-                        extra_args=['%s=SuccessfulTest.*' % GTEST_FILTER_FLAG])
+        command = [
+            GTEST_PROGRAM_PATH,
+            "%s=xml:%s" % (GTEST_OUTPUT_FLAG, xml_path),
+            "--shut_down_xml",
+        ]
+        p = gtest_test_utils.Subprocess(command)
+        if p.terminated_by_signal:
+            # p.signal is available only if p.terminated_by_signal is True.
+            self.assertFalse(
+                p.terminated_by_signal,
+                "%s was killed by signal %d" % (GTEST_PROGRAM_NAME, p.signal),
+            )
+        else:
+            self.assert_(p.exited)
+            self.assertEquals(
+                1,
+                p.exit_code,
+                "'%s' exited with code %s, which doesn't match "
+                "the expected exit code %s." % (command, p.exit_code, 1),
+            )
 
-  def testShardedTestXmlOutput(self):
-    """Verifies XML output when run using multiple shards.
+        self.assert_(not os.path.isfile(xml_path))
 
-    Runs a test program that executes only one shard and verifies that tests
-    from other shards do not show up in the XML output.
-    """
+    def testFilteredTestXmlOutput(self):
+        """Verifies XML output when a filter is applied.
 
-    self._TestXmlOutput(
-        GTEST_PROGRAM_NAME,
-        EXPECTED_SHARDED_TEST_XML,
-        0,
-        extra_env={SHARD_INDEX_ENV_VAR: '0',
-                   TOTAL_SHARDS_ENV_VAR: '10'})
+        Runs a test program that executes only some tests and verifies that
+        non-selected tests do not show up in the XML output.
+        """
 
-  def _GetXmlOutput(self, gtest_prog_name, extra_args, extra_env,
-                    expected_exit_code):
-    """
-    Returns the xml output generated by running the program gtest_prog_name.
-    Furthermore, the program's exit code must be expected_exit_code.
-    """
-    xml_path = os.path.join(gtest_test_utils.GetTempDir(),
-                            gtest_prog_name + 'out.xml')
-    gtest_prog_path = gtest_test_utils.GetTestExecutablePath(gtest_prog_name)
+        self._TestXmlOutput(
+            GTEST_PROGRAM_NAME,
+            EXPECTED_FILTERED_TEST_XML,
+            0,
+            extra_args=["%s=SuccessfulTest.*" % GTEST_FILTER_FLAG],
+        )
 
-    command = ([gtest_prog_path, '%s=xml:%s' % (GTEST_OUTPUT_FLAG, xml_path)] +
-               extra_args)
-    environ_copy = os.environ.copy()
-    if extra_env:
-      environ_copy.update(extra_env)
-    p = gtest_test_utils.Subprocess(command, env=environ_copy)
+    def testShardedTestXmlOutput(self):
+        """Verifies XML output when run using multiple shards.
 
-    if p.terminated_by_signal:
-      self.assert_(False,
-                   '%s was killed by signal %d' % (gtest_prog_name, p.signal))
-    else:
-      self.assert_(p.exited)
-      self.assertEquals(expected_exit_code, p.exit_code,
-                        "'%s' exited with code %s, which doesn't match "
-                        'the expected exit code %s.'
-                        % (command, p.exit_code, expected_exit_code))
-    actual = minidom.parse(xml_path)
-    return actual
+        Runs a test program that executes only one shard and verifies that tests
+        from other shards do not show up in the XML output.
+        """
 
-  def _TestXmlOutput(self, gtest_prog_name, expected_xml,
-                     expected_exit_code, extra_args=None, extra_env=None):
-    """
-    Asserts that the XML document generated by running the program
-    gtest_prog_name matches expected_xml, a string containing another
-    XML document.  Furthermore, the program's exit code must be
-    expected_exit_code.
-    """
+        self._TestXmlOutput(
+            GTEST_PROGRAM_NAME,
+            EXPECTED_SHARDED_TEST_XML,
+            0,
+            extra_env={SHARD_INDEX_ENV_VAR: "0", TOTAL_SHARDS_ENV_VAR: "10"},
+        )
 
-    actual = self._GetXmlOutput(gtest_prog_name, extra_args or [],
-                                extra_env or {}, expected_exit_code)
-    expected = minidom.parseString(expected_xml)
-    self.NormalizeXml(actual.documentElement)
-    self.AssertEquivalentNodes(expected.documentElement,
-                               actual.documentElement)
-    expected.unlink()
-    actual.unlink()
+    def _GetXmlOutput(self, gtest_prog_name, extra_args, extra_env, expected_exit_code):
+        """
+        Returns the xml output generated by running the program gtest_prog_name.
+        Furthermore, the program's exit code must be expected_exit_code.
+        """
+        xml_path = os.path.join(
+            gtest_test_utils.GetTempDir(), gtest_prog_name + "out.xml"
+        )
+        gtest_prog_path = gtest_test_utils.GetTestExecutablePath(gtest_prog_name)
+
+        command = [
+            gtest_prog_path,
+            "%s=xml:%s" % (GTEST_OUTPUT_FLAG, xml_path),
+        ] + extra_args
+        environ_copy = os.environ.copy()
+        if extra_env:
+            environ_copy.update(extra_env)
+        p = gtest_test_utils.Subprocess(command, env=environ_copy)
+
+        if p.terminated_by_signal:
+            self.assert_(
+                False, "%s was killed by signal %d" % (gtest_prog_name, p.signal)
+            )
+        else:
+            self.assert_(p.exited)
+            self.assertEquals(
+                expected_exit_code,
+                p.exit_code,
+                "'%s' exited with code %s, which doesn't match "
+                "the expected exit code %s."
+                % (command, p.exit_code, expected_exit_code),
+            )
+        actual = minidom.parse(xml_path)
+        return actual
+
+    def _TestXmlOutput(
+        self,
+        gtest_prog_name,
+        expected_xml,
+        expected_exit_code,
+        extra_args=None,
+        extra_env=None,
+    ):
+        """
+        Asserts that the XML document generated by running the program
+        gtest_prog_name matches expected_xml, a string containing another
+        XML document.  Furthermore, the program's exit code must be
+        expected_exit_code.
+        """
+
+        actual = self._GetXmlOutput(
+            gtest_prog_name, extra_args or [], extra_env or {}, expected_exit_code
+        )
+        expected = minidom.parseString(expected_xml)
+        self.NormalizeXml(actual.documentElement)
+        self.AssertEquivalentNodes(expected.documentElement, actual.documentElement)
+        expected.unlink()
+        actual.unlink()
 
 
-if __name__ == '__main__':
-  os.environ['GTEST_STACK_TRACE_DEPTH'] = '1'
-  gtest_test_utils.Main()
+if __name__ == "__main__":
+    os.environ["GTEST_STACK_TRACE_DEPTH"] = "1"
+    gtest_test_utils.Main()

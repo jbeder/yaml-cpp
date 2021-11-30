@@ -2,39 +2,39 @@
 
 ## Introduction: Why googletest?
 
-*googletest* helps you write better C++ tests.
+_googletest_ helps you write better C++ tests.
 
 googletest is a testing framework developed by the Testing Technology team with
 Google's specific requirements and constraints in mind. Whether you work on
 Linux, Windows, or a Mac, if you write C++ code, googletest can help you. And it
-supports *any* kind of tests, not just unit tests.
+supports _any_ kind of tests, not just unit tests.
 
 So what makes a good test, and how does googletest fit in? We believe:
 
-1.  Tests should be *independent* and *repeatable*. It's a pain to debug a test
+1.  Tests should be _independent_ and _repeatable_. It's a pain to debug a test
     that succeeds or fails as a result of other tests. googletest isolates the
     tests by running each of them on a different object. When a test fails,
     googletest allows you to run it in isolation for quick debugging.
-2.  Tests should be well *organized* and reflect the structure of the tested
+2.  Tests should be well _organized_ and reflect the structure of the tested
     code. googletest groups related tests into test suites that can share data
     and subroutines. This common pattern is easy to recognize and makes tests
     easy to maintain. Such consistency is especially helpful when people switch
     projects and start to work on a new code base.
-3.  Tests should be *portable* and *reusable*. Google has a lot of code that is
+3.  Tests should be _portable_ and _reusable_. Google has a lot of code that is
     platform-neutral; its tests should also be platform-neutral. googletest
     works on different OSes, with different compilers, with or without
     exceptions, so googletest tests can work with a variety of configurations.
-4.  When tests fail, they should provide as much *information* about the problem
+4.  When tests fail, they should provide as much _information_ about the problem
     as possible. googletest doesn't stop at the first test failure. Instead, it
     only stops the current test and continues with the next. You can also set up
     tests that report non-fatal failures after which the current test continues.
     Thus, you can detect and fix multiple bugs in a single run-edit-compile
     cycle.
 5.  The testing framework should liberate test writers from housekeeping chores
-    and let them focus on the test *content*. googletest automatically keeps
+    and let them focus on the test _content_. googletest automatically keeps
     track of all tests defined, and doesn't require the user to enumerate them
     in order to run them.
-6.  Tests should be *fast*. With googletest, you can reuse shared resources
+6.  Tests should be _fast_. With googletest, you can reuse shared resources
     across tests and pay for the set-up/tear-down only once, without making
     tests depend on each other.
 
@@ -61,16 +61,16 @@ of _Test Case_, so it's not much of a problem here. But the term _Test Case_ as
 was used in Google Test is of contradictory sense and thus confusing.
 
 googletest recently started replacing the term _Test Case_ with _Test Suite_.
-The preferred API is *TestSuite*. The older TestCase API is being slowly
+The preferred API is _TestSuite_. The older TestCase API is being slowly
 deprecated and refactored away.
 
 So please be aware of the different definitions of the terms:
 
 <!-- mdformat off(github rendering does not support multiline tables) -->
 
-Meaning                                                                              | googletest Term         | [ISTQB](http://www.istqb.org/) Term
-:----------------------------------------------------------------------------------- | :---------------------- | :----------------------------------
-Exercise a particular program path with specific input values and verify the results | [TEST()](#simple-tests) | [Test Case][istqb test case]
+| Meaning                                                                              | googletest Term         | [ISTQB](http://www.istqb.org/) Term |
+| :----------------------------------------------------------------------------------- | :---------------------- | :---------------------------------- |
+| Exercise a particular program path with specific input values and verify the results | [TEST()](#simple-tests) | [Test Case][istqb test case]        |
 
 <!-- mdformat on -->
 
@@ -79,20 +79,20 @@ Exercise a particular program path with specific input values and verify the res
 
 ## Basic Concepts
 
-When using googletest, you start by writing *assertions*, which are statements
-that check whether a condition is true. An assertion's result can be *success*,
-*nonfatal failure*, or *fatal failure*. If a fatal failure occurs, it aborts the
+When using googletest, you start by writing _assertions_, which are statements
+that check whether a condition is true. An assertion's result can be _success_,
+_nonfatal failure_, or _fatal failure_. If a fatal failure occurs, it aborts the
 current function; otherwise the program continues normally.
 
-*Tests* use assertions to verify the tested code's behavior. If a test crashes
-or has a failed assertion, then it *fails*; otherwise it *succeeds*.
+_Tests_ use assertions to verify the tested code's behavior. If a test crashes
+or has a failed assertion, then it _fails_; otherwise it _succeeds_.
 
-A *test suite* contains one or many tests. You should group your tests into test
+A _test suite_ contains one or many tests. You should group your tests into test
 suites that reflect the structure of the tested code. When multiple tests in a
 test suite need to share common objects and subroutines, you can put them into a
-*test fixture* class.
+_test fixture_ class.
 
-A *test program* can contain multiple test suites.
+A _test program_ can contain multiple test suites.
 
 We'll now explain how to write a test program, starting at the individual
 assertion level and building up to tests and test suites.
@@ -138,10 +138,10 @@ streamed to an assertion, it will be translated to UTF-8 when printed.
 
 These assertions do basic true/false condition testing.
 
-Fatal assertion            | Nonfatal assertion         | Verifies
--------------------------- | -------------------------- | --------------------
-`ASSERT_TRUE(condition);`  | `EXPECT_TRUE(condition);`  | `condition` is true
-`ASSERT_FALSE(condition);` | `EXPECT_FALSE(condition);` | `condition` is false
+| Fatal assertion            | Nonfatal assertion         | Verifies             |
+| -------------------------- | -------------------------- | -------------------- |
+| `ASSERT_TRUE(condition);`  | `EXPECT_TRUE(condition);`  | `condition` is true  |
+| `ASSERT_FALSE(condition);` | `EXPECT_FALSE(condition);` | `condition` is false |
 
 Remember, when they fail, `ASSERT_*` yields a fatal failure and returns from the
 current function, while `EXPECT_*` yields a nonfatal failure, allowing the
@@ -154,14 +154,14 @@ containing test fails.
 
 This section describes assertions that compare two values.
 
-Fatal assertion          | Nonfatal assertion       | Verifies
------------------------- | ------------------------ | --------------
-`ASSERT_EQ(val1, val2);` | `EXPECT_EQ(val1, val2);` | `val1 == val2`
-`ASSERT_NE(val1, val2);` | `EXPECT_NE(val1, val2);` | `val1 != val2`
-`ASSERT_LT(val1, val2);` | `EXPECT_LT(val1, val2);` | `val1 < val2`
-`ASSERT_LE(val1, val2);` | `EXPECT_LE(val1, val2);` | `val1 <= val2`
-`ASSERT_GT(val1, val2);` | `EXPECT_GT(val1, val2);` | `val1 > val2`
-`ASSERT_GE(val1, val2);` | `EXPECT_GE(val1, val2);` | `val1 >= val2`
+| Fatal assertion          | Nonfatal assertion       | Verifies       |
+| ------------------------ | ------------------------ | -------------- |
+| `ASSERT_EQ(val1, val2);` | `EXPECT_EQ(val1, val2);` | `val1 == val2` |
+| `ASSERT_NE(val1, val2);` | `EXPECT_NE(val1, val2);` | `val1 != val2` |
+| `ASSERT_LT(val1, val2);` | `EXPECT_LT(val1, val2);` | `val1 < val2`  |
+| `ASSERT_LE(val1, val2);` | `EXPECT_LE(val1, val2);` | `val1 <= val2` |
+| `ASSERT_GT(val1, val2);` | `EXPECT_GT(val1, val2);` | `val1 > val2`  |
+| `ASSERT_GE(val1, val2);` | `EXPECT_GE(val1, val2);` | `val1 >= val2` |
 
 Value arguments must be comparable by the assertion's comparison operator or
 you'll get a compiler error. We used to require the arguments to support the
@@ -221,16 +221,16 @@ two `string` objects, use `EXPECT_EQ`, `EXPECT_NE`, and etc instead.
 <!-- mdformat off(github rendering does not support multiline tables) -->
 
 | Fatal assertion                | Nonfatal assertion             | Verifies                                                 |
-| --------------------------     | ------------------------------ | -------------------------------------------------------- |
-| `ASSERT_STREQ(str1,str2);`     | `EXPECT_STREQ(str1,str2);`     | the two C strings have the same content   		     |
-| `ASSERT_STRNE(str1,str2);`     | `EXPECT_STRNE(str1,str2);`     | the two C strings have different contents 		     |
+| ------------------------------ | ------------------------------ | -------------------------------------------------------- |
+| `ASSERT_STREQ(str1,str2);`     | `EXPECT_STREQ(str1,str2);`     | the two C strings have the same content                  |
+| `ASSERT_STRNE(str1,str2);`     | `EXPECT_STRNE(str1,str2);`     | the two C strings have different contents                |
 | `ASSERT_STRCASEEQ(str1,str2);` | `EXPECT_STRCASEEQ(str1,str2);` | the two C strings have the same content, ignoring case   |
 | `ASSERT_STRCASENE(str1,str2);` | `EXPECT_STRCASENE(str1,str2);` | the two C strings have different contents, ignoring case |
 
 <!-- mdformat on-->
 
 Note that "CASE" in an assertion name means that case is ignored. A `NULL`
-pointer and an empty string are considered *different*.
+pointer and an empty string are considered _different_.
 
 `*STREQ*` and `*STRNE*` also accept wide C strings (`wchar_t*`). If a comparison
 of two wide strings fails, their values will be printed as UTF-8 narrow strings.
@@ -259,10 +259,10 @@ TEST(TestSuiteName, TestName) {
 }
 ```
 
-`TEST()` arguments go from general to specific. The *first* argument is the name
-of the test suite, and the *second* argument is the test's name within the test
+`TEST()` arguments go from general to specific. The _first_ argument is the name
+of the test suite, and the _second_ argument is the test's name within the test
 case. Both names must be valid C++ identifiers, and they should not contain
-any underscores (`_`). A test's *full name* consists of its containing test suite and
+any underscores (`_`). A test's _full name_ consists of its containing test suite and
 its individual name. Tests from different test suites can have the same
 individual name.
 
@@ -304,7 +304,7 @@ for
 ## Test Fixtures: Using the Same Data Configuration for Multiple Tests {#same-data-multiple-tests}
 
 If you find yourself writing two or more tests that operate on similar data, you
-can use a *test fixture*. This allows you to reuse the same configuration of
+can use a _test fixture_. This allows you to reuse the same configuration of
 objects for several different tests.
 
 To create a fixture:
@@ -340,10 +340,9 @@ that can handle both types of tests. Using the wrong macro causes a compiler
 error.
 
 Also, you must first define a test fixture class before using it in a
-`TEST_F()`, or you'll get the compiler error "`virtual outside class
-declaration`".
+`TEST_F()`, or you'll get the compiler error "`virtual outside class declaration`".
 
-For each test defined with `TEST_F()`, googletest will create a *fresh* test
+For each test defined with `TEST_F()`, googletest will create a _fresh_ test
 fixture at runtime, immediately initialize it via `SetUp()`, run the test,
 clean up by calling `TearDown()`, and then delete the test fixture. Note that
 different tests in the same test suite have different test fixture objects, and
@@ -441,26 +440,26 @@ your defined tests in order to run them.
 
 After defining your tests, you can run them with `RUN_ALL_TESTS()`, which
 returns `0` if all the tests are successful, or `1` otherwise. Note that
-`RUN_ALL_TESTS()` runs *all tests* in your link unit--they can be from
+`RUN_ALL_TESTS()` runs _all tests_ in your link unit--they can be from
 different test suites, or even different source files.
 
 When invoked, the `RUN_ALL_TESTS()` macro:
 
-*   Saves the state of all googletest flags.
+- Saves the state of all googletest flags.
 
-*   Creates a test fixture object for the first test.
+- Creates a test fixture object for the first test.
 
-*   Initializes it via `SetUp()`.
+- Initializes it via `SetUp()`.
 
-*   Runs the test on the fixture object.
+- Runs the test on the fixture object.
 
-*   Cleans up the fixture via `TearDown()`.
+- Cleans up the fixture via `TearDown()`.
 
-*   Deletes the fixture.
+- Deletes the fixture.
 
-*   Restores the state of all googletest flags.
+- Restores the state of all googletest flags.
 
-*   Repeats the above steps for the next test, until all tests have run.
+- Repeats the above steps for the next test, until all tests have run.
 
 If a fatal failure happens the subsequent steps will be skipped.
 
@@ -552,16 +551,16 @@ in programs compiled in `UNICODE` mode as well.
 But maybe you think that writing all those main() functions is too much work? We
 agree with you completely, and that's why Google Test provides a basic
 implementation of main(). If it fits your needs, then just link your test with
-gtest\_main library and you are good to go.
+gtest_main library and you are good to go.
 
 NOTE: `ParseGUnitFlags()` is deprecated in favor of `InitGoogleTest()`.
 
 ## Known Limitations
 
-*   Google Test is designed to be thread-safe. The implementation is thread-safe
-    on systems where the `pthreads` library is available. It is currently
-    _unsafe_ to use Google Test assertions from two threads concurrently on
-    other systems (e.g. Windows). In most tests this is not an issue as usually
-    the assertions are done in the main thread. If you want to help, you can
-    volunteer to implement the necessary synchronization primitives in
-    `gtest-port.h` for your platform.
+- Google Test is designed to be thread-safe. The implementation is thread-safe
+  on systems where the `pthreads` library is available. It is currently
+  _unsafe_ to use Google Test assertions from two threads concurrently on
+  other systems (e.g. Windows). In most tests this is not an issue as usually
+  the assertions are done in the main thread. If you want to help, you can
+  volunteer to implement the necessary synchronization primitives in
+  `gtest-port.h` for your platform.

@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file tests code in gmock.cc.
@@ -35,6 +34,7 @@
 #include "gmock/gmock.h"
 
 #include <string>
+
 #include "gtest/gtest.h"
 #include "gtest/internal/custom/gtest.h"
 
@@ -176,6 +176,6 @@ TEST(WideInitGoogleMockTest, ParsesGoogleMockFlagAndUnrecognizedFlag) {
 // Makes sure Google Mock flags can be accessed in code.
 TEST(FlagTest, IsAccessibleInCode) {
   bool dummy = testing::GMOCK_FLAG(catch_leaked_mocks) &&
-      testing::GMOCK_FLAG(verbose) == "";
+               testing::GMOCK_FLAG(verbose) == "";
   (void)dummy;  // Avoids the "unused local variable" warning.
 }

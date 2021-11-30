@@ -35,7 +35,7 @@
 #define GTEST_SRC_GTEST_INTERNAL_INL_H_
 
 #ifndef _WIN32_WCE
-# include <errno.h>
+#include <errno.h>
 #endif  // !_WIN32_WCE
 #include <stddef.h>
 #include <stdlib.h>  // For strtoll/_strtoul64/malloc/free.
@@ -49,16 +49,16 @@
 #include "gtest/internal/gtest-port.h"
 
 #if GTEST_CAN_STREAM_RESULTS_
-# include <arpa/inet.h>  // NOLINT
-# include <netdb.h>  // NOLINT
+#include <arpa/inet.h>  // NOLINT
+#include <netdb.h>      // NOLINT
 #endif
 
 #if GTEST_OS_WINDOWS
-# include <windows.h>  // NOLINT
-#endif  // GTEST_OS_WINDOWS
+#include <windows.h>  // NOLINT
+#endif                // GTEST_OS_WINDOWS
 
-#include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
+#include "gtest/gtest.h"
 
 GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
@@ -122,21 +122,21 @@ GTEST_API_ std::string FormatEpochTimeInMillisAsIso8601(TimeInMillis ms);
 //
 // On success, stores the value of the flag in *value, and returns
 // true.  On failure, returns false without changing *value.
-GTEST_API_ bool ParseInt32Flag(
-    const char* str, const char* flag, Int32* value);
+GTEST_API_ bool ParseInt32Flag(const char* str, const char* flag, Int32* value);
 
 // Returns a random seed in range [1, kMaxRandomSeed] based on the
 // given --gtest_random_seed flag value.
 inline int GetRandomSeedFromFlag(Int32 random_seed_flag) {
-  const unsigned int raw_seed = (random_seed_flag == 0) ?
-      static_cast<unsigned int>(GetTimeInMillis()) :
-      static_cast<unsigned int>(random_seed_flag);
+  const unsigned int raw_seed =
+      (random_seed_flag == 0) ? static_cast<unsigned int>(GetTimeInMillis())
+                              : static_cast<unsigned int>(random_seed_flag);
 
   // Normalizes the actual seed to range [1, kMaxRandomSeed] such that
   // it's easy to type.
   const int normalized_seed =
       static_cast<int>((raw_seed - 1U) %
-                       static_cast<unsigned int>(kMaxRandomSeed)) + 1;
+                       static_cast<unsigned int>(kMaxRandomSeed)) +
+      1;
   return normalized_seed;
 }
 
@@ -269,8 +269,8 @@ GTEST_API_ Int32 Int32FromEnvOrDie(const char* env_var, Int32 default_val);
 // returns true if and only if the test should be run on this shard. The test id
 // is some arbitrary but unique non-negative integer assigned to each test
 // method. Assumes that 0 <= shard_index < total_shards.
-GTEST_API_ bool ShouldRunTestOnShard(
-    int total_shards, int shard_index, int test_id);
+GTEST_API_ bool ShouldRunTestOnShard(int total_shards, int shard_index,
+                                     int test_id);
 
 // STL container utilities.
 
@@ -282,8 +282,7 @@ inline int CountIf(const Container& c, Predicate predicate) {
   // Solaris has a non-standard signature.
   int count = 0;
   for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it) {
-    if (predicate(*it))
-      ++count;
+    if (predicate(*it)) ++count;
   }
   return count;
 }
@@ -390,7 +389,7 @@ class GTEST_API_ UnitTestOptions {
   //
   // This recursive algorithm isn't very efficient, but is clear and
   // works well enough for matching test names, which are short.
-  static bool PatternMatchesString(const char *pattern, const char *str);
+  static bool PatternMatchesString(const char* pattern, const char* str);
 
   // Returns true if and only if the user-specified filter matches the test
   // suite name and the test name.
@@ -474,7 +473,7 @@ struct TraceInfo {
 // This is the default global test part result reporter used in UnitTestImpl.
 // This class should only be used by UnitTestImpl.
 class DefaultGlobalTestPartResultReporter
-  : public TestPartResultReporterInterface {
+    : public TestPartResultReporterInterface {
  public:
   explicit DefaultGlobalTestPartResultReporter(UnitTestImpl* unit_test);
   // Implements the TestPartResultReporterInterface. Reports the test part
@@ -729,9 +728,7 @@ class GTEST_API_ UnitTestImpl {
   }
 
   // Clears the results of ad-hoc test assertions.
-  void ClearAdHocTestResult() {
-    ad_hoc_test_result_.Clear();
-  }
+  void ClearAdHocTestResult() { ad_hoc_test_result_.Clear(); }
 
   // Adds a TestProperty to the current TestResult object when invoked in a
   // context of a test or a test suite, or to the global property set. If the
@@ -739,10 +736,7 @@ class GTEST_API_ UnitTestImpl {
   // updated.
   void RecordProperty(const TestProperty& test_property);
 
-  enum ReactionToSharding {
-    HONOR_SHARDING_PROTOCOL,
-    IGNORE_SHARDING_PROTOCOL
-  };
+  enum ReactionToSharding { HONOR_SHARDING_PROTOCOL, IGNORE_SHARDING_PROTOCOL };
 
   // Matches the full name of each test against the user-specified
   // filter to decide whether the test should run, then records the
@@ -965,8 +959,9 @@ GTEST_API_ bool IsValidEscape(char ch);
 GTEST_API_ bool AtomMatchesChar(bool escaped, char pattern, char ch);
 GTEST_API_ bool ValidateRegex(const char* regex);
 GTEST_API_ bool MatchRegexAtHead(const char* regex, const char* str);
-GTEST_API_ bool MatchRepetitionAndRegexAtHead(
-    bool escaped, char ch, char repeat, const char* regex, const char* str);
+GTEST_API_ bool MatchRepetitionAndRegexAtHead(bool escaped, char ch,
+                                              char repeat, const char* regex,
+                                              const char* str);
 GTEST_API_ bool MatchRegexAnywhere(const char* regex, const char* str);
 
 #endif  // GTEST_USES_SIMPLE_RE
@@ -1000,18 +995,18 @@ bool ParseNaturalNumber(const ::std::string& str, Integer* number) {
   // BiggestConvertible is the largest integer type that system-provided
   // string-to-number conversion routines can return.
 
-# if GTEST_OS_WINDOWS && !defined(__GNUC__)
+#if GTEST_OS_WINDOWS && !defined(__GNUC__)
 
   // MSVC and C++ Builder define __int64 instead of the standard long long.
   typedef unsigned __int64 BiggestConvertible;
   const BiggestConvertible parsed = _strtoui64(str.c_str(), &end, 10);
 
-# else
+#else
 
   typedef unsigned long long BiggestConvertible;  // NOLINT
   const BiggestConvertible parsed = strtoull(str.c_str(), &end, 10);
 
-# endif  // GTEST_OS_WINDOWS && !defined(__GNUC__)
+#endif  // GTEST_OS_WINDOWS && !defined(__GNUC__)
 
   const bool parse_success = *end == '\0' && errno == 0;
 
@@ -1079,8 +1074,7 @@ class StreamingListener : public EmptyTestEventListener {
     }
 
     ~SocketWriter() override {
-      if (sockfd_ != -1)
-        CloseConnection();
+      if (sockfd_ != -1) CloseConnection();
     }
 
     // Sends a string to the socket.
@@ -1090,9 +1084,8 @@ class StreamingListener : public EmptyTestEventListener {
 
       const auto len = static_cast<size_t>(message.length());
       if (write(sockfd_, message.c_str(), len) != static_cast<ssize_t>(len)) {
-        GTEST_LOG_(WARNING)
-            << "stream_result_to: failed to stream to "
-            << host_name_ << ":" << port_num_;
+        GTEST_LOG_(WARNING) << "stream_result_to: failed to stream to "
+                            << host_name_ << ":" << port_num_;
       }
     }
 
@@ -1125,7 +1118,9 @@ class StreamingListener : public EmptyTestEventListener {
   }
 
   explicit StreamingListener(AbstractSocketWriter* socket_writer)
-      : socket_writer_(socket_writer) { Start(); }
+      : socket_writer_(socket_writer) {
+    Start();
+  }
 
   void OnTestProgramStart(const UnitTest& /* unit_test */) override {
     SendLn("event=TestProgramStart");
@@ -1148,9 +1143,9 @@ class StreamingListener : public EmptyTestEventListener {
 
   void OnTestIterationEnd(const UnitTest& unit_test,
                           int /* iteration */) override {
-    SendLn("event=TestIterationEnd&passed=" +
-           FormatBool(unit_test.Passed()) + "&elapsed_time=" +
-           StreamableToString(unit_test.elapsed_time()) + "ms");
+    SendLn("event=TestIterationEnd&passed=" + FormatBool(unit_test.Passed()) +
+           "&elapsed_time=" + StreamableToString(unit_test.elapsed_time()) +
+           "ms");
   }
 
   // Note that "event=TestCaseStart" is a wire format and has to remain
@@ -1173,8 +1168,7 @@ class StreamingListener : public EmptyTestEventListener {
 
   void OnTestEnd(const TestInfo& test_info) override {
     SendLn("event=TestEnd&passed=" +
-           FormatBool((test_info.result())->Passed()) +
-           "&elapsed_time=" +
+           FormatBool((test_info.result())->Passed()) + "&elapsed_time=" +
            StreamableToString((test_info.result())->elapsed_time()) + "ms");
   }
 
