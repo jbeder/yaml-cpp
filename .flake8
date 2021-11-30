@@ -1,0 +1,4 @@
+# Minimal black-compatible flake8 configuration
+[flake8]
+max-line-length = 88
+extend-ignore = E203, E266, E305, E501, W503

@@ -1,0 +1,17 @@
+version: 0.1
+cli:
+  version: 0.3.0-beta
+lint:
+  enabled:
+    - actionlint@1.6.4
+    - black-py@21.10b0
+    - buildifier@4.0.1
+    - clang-format@13.0.0
+    - clang-tidy@13.0.0
+    - flake8@3.9.2
+    - gitleaks@7.6.1
+    - isort@5.9.3
+    - markdownlint@0.29.0
+    - prettier@2.4.1
+    - shellcheck@0.7.2
+    - shfmt@3.4.0
