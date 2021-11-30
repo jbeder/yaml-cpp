@@ -60,6 +60,8 @@ namespace internal {
 // Returns the value of the flag, or NULL if the parsing failed.
 static const char* ParseGoogleMockFlagValue(const char* str, const char* flag,
                                             bool def_optional) {
+  size_t count = 0;
+
   // str and flag must not be NULL.
   if (str == nullptr || flag == nullptr) return nullptr;
 
