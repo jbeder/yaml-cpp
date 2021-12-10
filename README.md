@@ -21,7 +21,7 @@ If you find a bug, post an [issue](https://github.com/jbeder/yaml-cpp/issues)! I
 ```sh
 mkdir build
 cd build
-cmake [-G generator] [-YAML_BUILD_SHARED_LIBS=on|OFF] ..
+cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 ```
 
   * The `generator` option is the build system you'd like to use. Run `cmake` without arguments to see a full list of available generators.
@@ -29,7 +29,7 @@ cmake [-G generator] [-YAML_BUILD_SHARED_LIBS=on|OFF] ..
     * On OS X, you might use "Xcode".
     * On a UNIX-like system, omit the option (for a Makefile).
 
-  * `yaml-cpp` builds a static library by default, you may want to build a shared library by specifying `-YAML_BUILD_SHARED_LIBS=ON`.
+  * `yaml-cpp` builds a static library by default, you may want to build a shared library by specifying `-DYAML_BUILD_SHARED_LIBS=ON`.
 
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
