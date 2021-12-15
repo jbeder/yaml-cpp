@@ -47,3 +47,10 @@ endif()
 
 
 add_test(yaml-cpp::test yaml-cpp-tests)
+
+if (build-windows-dll)
+  add_custom_command(
+    TARGET yaml-cpp-tests
+    POST_BUILD COMMAND ${CMAKE_COMMAND} -E
+    copy_if_different "$<TARGET_FILE:yaml-cpp>" "$<TARGET_FILE_DIR:yaml-cpp-tests>")
+endif()

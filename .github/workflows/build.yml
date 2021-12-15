@@ -33,7 +33,7 @@ jobs:
             cmake --build . --parallel 4
 
           # tests are failing for unknown reasons
-        - if: matrix.os == 'ubuntu-latest'
+        - if: matrix.os != 'macos-latest'
           name: Test shared
           shell: bash
           run: cd build && ctest --output-on-failure
