@@ -10,31 +10,32 @@ jobs:
       strategy:
         matrix:
           os: [ubuntu-latest, windows-latest, macos-latest]
+          build: [static, shared]
+          generator: ["Default Generator", "MinGW Makefiles"]
+          exclude:
+          - os: macos-latest
+            build: shared
+          - os: macos-latest
+            generator: "MinGW Makefiles"
+          - os: ubuntu-latest
+            generator: "MinGW Makefiles"
+      env:
+        YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
+        CMAKE_GENERATOR: >-
+          ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v2
 
-        - name: Build static
+        - name: Get number of CPU cores
+          uses: SimenB/github-actions-cpu-cores@v1
+
+        - name: Build
           shell: bash
           run: |
-            mkdir -p build && cd build
-            cmake ..
-            cmake --build . --parallel 4
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
+            cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
 
-        - name: Test static
+        - name: Test
           shell: bash
           run: cd build && ctest --output-on-failure
-
-        - name: Build shared
-          shell: bash
-          run: |
-            rm -rf build && mkdir -p build && cd build
-            cmake .. -DYAML_BUILD_SHARED_LIBS=ON
-            cmake --build . --parallel 4
-
-          # tests are failing for unknown reasons
-        - if: matrix.os != 'macos-latest'
-          name: Test shared
-          shell: bash
-          run: cd build && ctest --output-on-failure
-          # test all ASAP
