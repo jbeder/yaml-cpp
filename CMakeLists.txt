@@ -80,6 +80,10 @@ set_property(TARGET yaml-cpp
   PROPERTY
     CXX_STANDARD_REQUIRED ON)
 
+if (NOT YAML_BUILD_SHARED_LIBS)
+  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 target_include_directories(yaml-cpp
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
