@@ -1296,8 +1296,8 @@ static void StackLowerThanAddress(const void* ptr, bool* result) {
 GTEST_ATTRIBUTE_NO_SANITIZE_ADDRESS_
 GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
 static bool StackGrowsDown() {
-  int dummy;
-  bool result;
+  int dummy{};
+  bool result{};
   StackLowerThanAddress(&dummy, &result);
   return result;
 }
