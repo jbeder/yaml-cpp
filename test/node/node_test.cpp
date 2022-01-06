@@ -40,6 +40,7 @@ class CustomAllocator : public std::allocator<T> {
 template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
 template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
 template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
+template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
 
 }  // anonymous namespace
 
@@ -432,6 +433,34 @@ TEST(NodeTest, StdMapWithCustomAllocator) {
   Node node;
   node["squares"] = squares;
   CustomMap<int,int> actualSquares = node["squares"].as<CustomMap<int,int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedMap) {
+  std::unordered_map<int, int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  std::unordered_map<int, int> actualSquares = node["squares"].as<std::unordered_map<int, int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
+  CustomUnorderedMap<int,int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  CustomUnorderedMap<int,int> actualSquares = node["squares"].as<CustomUnorderedMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
