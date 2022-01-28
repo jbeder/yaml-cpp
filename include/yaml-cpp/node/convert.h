@@ -269,11 +269,11 @@ struct convert<std::unordered_map<K, V, H, P, A>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::unordered_map<K, V, H, P, A>& rhs) {
+  static std::unordered_map<K, V, H, P, A> decode(const Node& node) {
     if (!node.IsMap())
-      return false;
+      BAD_DECODE_EXCEPTION
 
-    rhs.clear();
+    std::unordered_map<K, V, H, P, A> rhs;
     for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
@@ -281,7 +281,7 @@ struct convert<std::unordered_map<K, V, H, P, A>> {
 #else
       rhs[element.first.as<K>()] = element.second.as<V>();
 #endif
-    return true;
+    return rhs;
   }
 };
 
