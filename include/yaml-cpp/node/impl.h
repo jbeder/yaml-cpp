@@ -15,6 +15,7 @@
 #include <sstream>
 #include <string>
 
+
 namespace YAML {
 inline Node::Node()
     : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
@@ -97,10 +98,35 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    return fallback;
+    try {
+      return convert<T>::decode(node);
+    } catch (const conversion::DecodeException& e) {
+      return fallback;
+    } catch (...) {
+      std::rethrow_exception(std::current_exception());
+    }
+  }
+};
+
+//specialize for Node
+template <typename S>
+struct as_if<Node, S> {
+  explicit as_if(const Node& node_) : node(node_) {}
+  const Node& node;
+
+  Node operator()(const S& fallback) const {
+    if (!node.m_pNode)
+      return fallback;
+
+    try {
+      Node n;
+      n.reset(node);
+      return node;
+    } catch (const conversion::DecodeException& e) {
+      return fallback;
+    } catch (...) {
+      std::rethrow_exception(std::current_exception());
+    }
   }
 };
 
@@ -127,11 +153,14 @@ struct as_if<T, void> {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    throw TypedBadConversion<T>(node.Mark());
-  }
+    try {
+      return convert<T>::decode(node);
+    } catch(const conversion::DecodeException& e) {
+      throw TypedBadConversion<T>(node.Mark());
+    } catch (...) {
+      std::rethrow_exception(std::current_exception());
+    }
+  };
 };
 
 template <>
@@ -321,6 +350,16 @@ std::string key_to_string(const Key& key) {
 }
 
 // indexing
+template <typename Key>
+inline bool Node::ContainsKey(const Key& key) const {
+  EnsureNodeExists();
+  if (! IsMap())
+    return false;
+  detail::node* value =
+      static_cast<const detail::node&>(*m_pNode).get(key, m_pMemory);
+  return (bool)value;
+}
+
 template <typename Key>
 inline const Node Node::operator[](const Key& key) const {
   EnsureNodeExists();

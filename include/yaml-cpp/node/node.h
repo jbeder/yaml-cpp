@@ -99,6 +99,8 @@ class YAML_CPP_API Node {
 
   // indexing
   template <typename Key>
+  bool ContainsKey(const Key& key) const;
+  template <typename Key>
   const Node operator[](const Key& key) const;
   template <typename Key>
   Node operator[](const Key& key);
