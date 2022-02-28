@@ -381,7 +381,7 @@ struct convert<std::pair<T, U>> {
   }
 
   static std::pair<T, U> decode(const Node& node) {
-    if (!node.IsSequence() or node.size() != 2)
+    if (!node.IsSequence() || node.size() != 2)
       BAD_DECODE_EXCEPTION
 
     std::pair<T, U> rhs;
