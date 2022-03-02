@@ -30,6 +30,9 @@ cmake_dependent_option(YAML_CPP_INSTALL
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "MSVC" OFF)
+cmake_dependent_option(YAML_CPP_ENABLE_FORMAT
+  "Enable format target" ON
+  "CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 
 if (YAML_BUILD_SHARED_LIBS)
   set(yaml-cpp-type SHARED)
@@ -171,7 +174,7 @@ if(YAML_CPP_BUILD_TOOLS)
 	add_subdirectory(util)
 endif()
 
-if (YAML_CPP_CLANG_FORMAT_EXE)
+if (YAML_CPP_ENABLE_FORMAT AND YAML_CPP_CLANG_FORMAT_EXE)
   add_custom_target(format
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
     COMMAND_EXPAND_LISTS
