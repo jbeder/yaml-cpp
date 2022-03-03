@@ -14,6 +14,7 @@
 #include "yaml-cpp/node/node.h"
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 namespace YAML {
 inline Node::Node()
@@ -87,6 +88,44 @@ inline NodeType::value Node::Type() const {
 
 // access
 
+//detect the method of the new api
+template <typename>
+std::false_type has_decode_new_api(long);
+
+template <typename T>
+auto has_decode_new_api(int)
+    -> decltype( T::decode(std::declval<const Node&>()), std::true_type{});
+
+//shim to emulate constexpr-if, which is a feature of c++17
+#if __cplusplus < 201703L || (defined(_MSVC_LANG) && _MSVC_LANG < 201703L)
+#define PRE_CPP17_SHIM
+#endif
+
+#ifdef PRE_CPP17_SHIM
+template <bool AorB>
+struct static_switch;
+
+template<> //new api
+struct static_switch<true> {
+  template<class T>
+  static T call(const Node& node) {
+    return convert<T>::decode(node);
+  }
+};
+
+template<>  //old api
+struct static_switch<false> {
+  template<class T>
+  static T call(const Node& node) {
+    T t;
+    if (convert<T>::decode(node, t))
+      return t;
+    throw conversion::DecodeException();
+  }
+};
+#endif
+
+
 // template helpers
 template <typename T, typename S>
 struct as_if {
@@ -97,10 +136,47 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    return fallback;
+    try {
+#ifdef PRE_CPP17_SHIM
+      return static_switch<decltype(has_decode_new_api<convert<T>>(
+          0))::value>::template call<T>(node);
+#else
+      if constexpr (decltype(has_decodex<convert<T>>(0))::value >)
+        return convert<T>::decodex(node);
+      else {
+        T t;
+        if (convert<T>::decode(node, t))
+          return t;
+        throw conversion::DecodeException();
+      }
+#endif
+    } catch (const conversion::DecodeException& e) {
+      return fallback;
+    } catch (...) {
+      throw;
+    }
+  };
+};
+
+//specialize for Node
+template <typename S>
+struct as_if<Node, S> {
+  explicit as_if(const Node& node_) : node(node_) {}
+  const Node& node;
+
+  Node operator()(const S& fallback) const {
+    if (!node.m_pNode)
+      return fallback;
+
+    try {
+      Node n;
+      n.reset(node);
+      return node;
+    } catch (const conversion::DecodeException& e) {
+      return fallback;
+    } catch (...) {
+      throw;
+    }
   }
 };
 
@@ -127,12 +203,28 @@ struct as_if<T, void> {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    throw TypedBadConversion<T>(node.Mark());
-  }
+    try {
+#ifdef PRE_CPP17_SHIM
+      return static_switch<decltype(has_decode_new_api<convert<T>>(
+          0))::value>::template call<T>(node);
+#else
+      if constexpr (decltype(has_decodex<convert<T>>(0))::value >)
+        return convert<T>::decodex(node);
+      else {
+        T t;
+        if (convert<T>::decode(node, t))
+          return t;
+        throw conversion::DecodeException();
+      }
+#endif
+    } catch(const conversion::DecodeException& e) {
+        throw TypedBadConversion<T>(node.Mark());
+    } catch (...) {
+      throw;
+    }
+  };
 };
+#undef PRE_CPP17_SHIM
 
 template <>
 struct as_if<std::string, void> {
@@ -321,6 +413,16 @@ std::string key_to_string(const Key& key) {
 }
 
 // indexing
+template <typename Key>
+inline bool Node::ContainsKey(const Key& key) const {
+  EnsureNodeExists();
+  if (! IsMap())
+    return false;
+  detail::node* value =
+      static_cast<const detail::node&>(*m_pNode).get(key, m_pMemory);
+  return (bool)value;
+}
+
 template <typename Key>
 inline const Node Node::operator[](const Key& key) const {
   EnsureNodeExists();
