@@ -9,6 +9,7 @@
 
 #include "yaml-cpp/node/detail/node.h"
 #include "yaml-cpp/node/detail/node_data.h"
+#include "yaml-cpp/node/api_switch.h"
 
 #include <algorithm>
 #include <type_traits>
@@ -96,63 +97,11 @@ struct remove_idx<Key,
   }
 };
 
-
-//shim to emulate constexpr-if, which is a feature of c++17
-#if __cplusplus < 201703L || (defined(_MSVC_LANG) && _MSVC_LANG < 201703L)
-#define PRE_CPP17_SHIM
-#endif
-
-#ifdef PRE_CPP17_SHIM
-template <bool AorB>
-struct static_switch;
-
-template<> //new api
-struct static_switch<true> {
-  template<class T>
-  static T call(const Node& node) {
-    return convert<T>::decode(node);
-  }
-};
-
-template<>  //old api
-struct static_switch<false> {
-  template<class T>
-  static T call(const Node& node) {
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    throw conversion::DecodeException();
-  }
-};
-#endif
-
-//detect the method of the new api
-template <typename>
-std::false_type has_decode_new_api(long);
-
-template <typename T>
-auto has_decode_new_api(int)
-    -> decltype( T::decode(std::declval<const Node&>()), std::true_type{});
-
-
-
 template <typename T>
 inline bool node::equals(const T& rhs, shared_memory_holder pMemory) {
-
   try {
-#ifdef PRE_CPP17_SHIM
-    return static_switch<decltype(has_decode_new_api<convert<T>>(
-        0))::value>::template call<T>(Node(*this, pMemory)) == rhs;
-#else
-    if constexpr (decltype(has_decode_new_api<convert<T>>(0))::value >)
-      return convert<T>::decode(Node(*this, pMemory)) == rhs;
-    else {
-      T lhs;
-      if (convert<T>::decode(Node(*this, pMemory), lhs))
-        return lhs == rhs;
-      throw conversion::DecodeException();
-    }
-#endif
+    return static_api_switch<decltype(has_decode_new_api<convert<T>>(
+        0))::value>::template decode<T>(Node(*this, pMemory)) == rhs;
   } catch(const conversion::DecodeException& e) {
     //throw; //prefer to throw over returning just the inability to deserialize
     return false; //not doing this breaks upstream functionality
@@ -160,19 +109,18 @@ inline bool node::equals(const T& rhs, shared_memory_holder pMemory) {
     throw;
   }
 }
-#undef PRE_CPP17_SHIM
-
 
 inline bool node::equals(const char* rhs, shared_memory_holder pMemory) {
-  std::string lhs;
-  if (convert<std::string>::decode(Node(*this, std::move(pMemory)), lhs)) {
-    return lhs == rhs;
+  try {
+    return static_api_switch<decltype(has_decode_new_api<convert<std::string>>(
+               0))::value>::template decode<std::string>(Node(*this, std::move(pMemory))) == rhs;
+  } catch(const conversion::DecodeException& e) {
+    //throw; //prefer to throw over returning just the inability to deserialize
+    return false; //not doing this breaks upstream functionality
+  } catch (...) {
+    throw;
   }
-  return false;
 }
-
-
-
 
 // indexing
 template <typename Key>

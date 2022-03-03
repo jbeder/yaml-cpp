@@ -34,9 +34,6 @@ template <typename T>
 struct convert;
 }  // namespace YAML
 
-#define BAD_DECODE_EXCEPTION throw YAML::conversion::DecodeException();
-
-
 namespace YAML {
 namespace conversion {
 inline bool IsInfinity(const std::string& input) {
@@ -58,12 +55,17 @@ template <>
 struct convert<Node> {
   static Node encode(const Node& rhs) { return rhs; }
 
-  static Node decode(const Node& node) { //FIXME, this is dangerous
-    throw std::runtime_error("this should not have been encountered");
-    Node rhs;
+  static bool decode(const Node& node, Node& rhs) {
     rhs.reset(node);
-    return rhs;
+    return true;
   }
+
+//  static Node decode(const Node& node) {
+//    throw std::runtime_error("this should not have been encountered");
+//    Node rhs;
+//    rhs.reset(node);
+//    return rhs;
+//  }
 };
 
 // std::string
@@ -73,10 +75,9 @@ struct convert<std::string> {
 
   static std::string decode(const Node& node) {
     if (!node.IsScalar())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
     return node.Scalar();
   }
-
 };
 
 // C-strings can only be encoded
@@ -101,7 +102,7 @@ struct convert<_Null> {
 
   static _Null decode(const Node& node) {
     if (!node.IsNull())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
     return _Null();
   }
 };
@@ -166,19 +167,19 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       return Node(stream.str());                                           \
     }                                                                      \
                                                                            \
-    static type decode(const Node& node) {     \
+    static type decode(const Node& node) {                                 \
       if (node.Type() != NodeType::Scalar) {                               \
-        BAD_DECODE_EXCEPTION;                             \
+        throw YAML::conversion::DecodeException();;                        \
       }                                                                    \
       const std::string& input = node.Scalar();                            \
       std::stringstream stream(input);                                     \
       stream.unsetf(std::ios::dec);                                        \
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
-        BAD_DECODE_EXCEPTION                             \
+        throw YAML::conversion::DecodeException();                         \
       }                                                                    \
       type rhs;                                                            \
       if (conversion::ConvertStreamTo(stream, rhs)) {                      \
-        return rhs;                             \
+        return rhs;                                                        \
       }                                                                    \
       if (std::numeric_limits<type>::has_infinity) {                       \
         if (conversion::IsInfinity(input)) {                               \
@@ -194,7 +195,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
         }                                                                  \
       }                                                                    \
                                                                            \
-      BAD_DECODE_EXCEPTION                               \
+      throw YAML::conversion::DecodeException();                           \
     }                                                                      \
   }
 
@@ -245,7 +246,7 @@ struct convert<std::map<K, V, C, A>> {
 
   static std::map<K, V, C, A> decode(const Node& node) {
     if (!node.IsMap())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::map<K, V, C, A> rhs;
     for (const auto& element : node)
@@ -271,7 +272,7 @@ struct convert<std::unordered_map<K, V, H, P, A>> {
 
   static std::unordered_map<K, V, H, P, A> decode(const Node& node) {
     if (!node.IsMap())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::unordered_map<K, V, H, P, A> rhs;
     for (const auto& element : node)
@@ -297,7 +298,7 @@ struct convert<std::vector<T, A>> {
 
   static std::vector<T, A> decode(const Node& node) {
     if (!node.IsSequence())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::vector<T, A> rhs;
     for (const auto& element : node)
@@ -323,7 +324,7 @@ struct convert<std::list<T,A>> {
 
   static std::list<T,A> decode(const Node& node) {
     if (!node.IsSequence())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::list<T,A> rhs;
     for (const auto& element : node)
@@ -350,7 +351,7 @@ struct convert<std::array<T, N>> {
 
   static std::array<T, N> decode(const Node& node) {
     if (!isNodeValid(node))
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::array<T, N> rhs;
     for (auto i = 0u; i < node.size(); ++i) {
@@ -382,7 +383,7 @@ struct convert<std::pair<T, U>> {
 
   static std::pair<T, U> decode(const Node& node) {
     if (!node.IsSequence() || node.size() != 2)
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::pair<T, U> rhs;
 #if defined(__GNUC__) && __GNUC__ < 4
@@ -410,11 +411,11 @@ struct convert<Binary> {
 
   static Binary decode(const Node& node) {
     if (!node.IsScalar())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     std::vector<unsigned char> data = DecodeBase64(node.Scalar());
     if (data.empty() && !node.Scalar().empty())
-      BAD_DECODE_EXCEPTION
+      throw YAML::conversion::DecodeException();
 
     Binary rhs;
     rhs.swap(data);
