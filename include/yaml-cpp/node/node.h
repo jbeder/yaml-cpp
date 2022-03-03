@@ -143,6 +143,7 @@ YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);
 
 YAML_CPP_API Node Clone(const Node& node);
 
+//forward declare this customization point for all types
 template <typename T>
 struct convert;
 }

@@ -14,7 +14,7 @@
 #include "yaml-cpp/node/node.h"
 #include <sstream>
 #include <string>
-
+#include <type_traits>
 
 namespace YAML {
 inline Node::Node()
@@ -88,6 +88,44 @@ inline NodeType::value Node::Type() const {
 
 // access
 
+//detect the method of the new api
+template <typename>
+std::false_type has_decode_new_api(long);
+
+template <typename T>
+auto has_decode_new_api(int)
+    -> decltype( T::decode(std::declval<const Node&>()), std::true_type{});
+
+//shim to emulate constexpr-if, which is a feature of c++17
+#if __cplusplus < 201703L || (defined(_MSVC_LANG) && _MSVC_LANG < 201703L)
+#define PRE_CPP17_SHIM
+#endif
+
+#ifdef PRE_CPP17_SHIM
+template <bool AorB>
+struct static_switch;
+
+template<> //new api
+struct static_switch<true> {
+  template<class T>
+  static T call(const Node& node) {
+    return convert<T>::decode(node);
+  }
+};
+
+template<>  //old api
+struct static_switch<false> {
+  template<class T>
+  static T call(const Node& node) {
+    T t;
+    if (convert<T>::decode(node, t))
+      return t;
+    throw conversion::DecodeException();
+  }
+};
+#endif
+
+
 // template helpers
 template <typename T, typename S>
 struct as_if {
@@ -99,13 +137,25 @@ struct as_if {
       return fallback;
 
     try {
-      return convert<T>::decode(node);
+#ifdef PRE_CPP17_SHIM
+      return static_switch<decltype(has_decode_new_api<convert<T>>(
+          0))::value>::template call<T>(node);
+#else
+      if constexpr (decltype(has_decodex<convert<T>>(0))::value >)
+        return convert<T>::decodex(node);
+      else {
+        T t;
+        if (convert<T>::decode(node, t))
+          return t;
+        throw conversion::DecodeException();
+      }
+#endif
     } catch (const conversion::DecodeException& e) {
       return fallback;
     } catch (...) {
-      std::rethrow_exception(std::current_exception());
+      throw;
     }
-  }
+  };
 };
 
 //specialize for Node
@@ -125,7 +175,7 @@ struct as_if<Node, S> {
     } catch (const conversion::DecodeException& e) {
       return fallback;
     } catch (...) {
-      std::rethrow_exception(std::current_exception());
+      throw;
     }
   }
 };
@@ -154,14 +204,27 @@ struct as_if<T, void> {
       throw TypedBadConversion<T>(node.Mark());
 
     try {
-      return convert<T>::decode(node);
+#ifdef PRE_CPP17_SHIM
+      return static_switch<decltype(has_decode_new_api<convert<T>>(
+          0))::value>::template call<T>(node);
+#else
+      if constexpr (decltype(has_decodex<convert<T>>(0))::value >)
+        return convert<T>::decodex(node);
+      else {
+        T t;
+        if (convert<T>::decode(node, t))
+          return t;
+        throw conversion::DecodeException();
+      }
+#endif
     } catch(const conversion::DecodeException& e) {
-      throw TypedBadConversion<T>(node.Mark());
+        throw TypedBadConversion<T>(node.Mark());
     } catch (...) {
-      std::rethrow_exception(std::current_exception());
+      throw;
     }
   };
 };
+#undef PRE_CPP17_SHIM
 
 template <>
 struct as_if<std::string, void> {

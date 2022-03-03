@@ -96,29 +96,83 @@ struct remove_idx<Key,
   }
 };
 
+
+//shim to emulate constexpr-if, which is a feature of c++17
+#if __cplusplus < 201703L || (defined(_MSVC_LANG) && _MSVC_LANG < 201703L)
+#define PRE_CPP17_SHIM
+#endif
+
+#ifdef PRE_CPP17_SHIM
+template <bool AorB>
+struct static_switch;
+
+template<> //new api
+struct static_switch<true> {
+  template<class T>
+  static T call(const Node& node) {
+    return convert<T>::decode(node);
+  }
+};
+
+template<>  //old api
+struct static_switch<false> {
+  template<class T>
+  static T call(const Node& node) {
+    T t;
+    if (convert<T>::decode(node, t))
+      return t;
+    throw conversion::DecodeException();
+  }
+};
+#endif
+
+//detect the method of the new api
+template <typename>
+std::false_type has_decode_new_api(long);
+
+template <typename T>
+auto has_decode_new_api(int)
+    -> decltype( T::decode(std::declval<const Node&>()), std::true_type{});
+
+
+
 template <typename T>
 inline bool node::equals(const T& rhs, shared_memory_holder pMemory) {
+
   try {
-    const auto rslt = convert<T>::decode(Node(*this, pMemory));
-    return rslt == rhs;
-  } catch (const conversion::DecodeException& e) {
-    return false;
-  } catch(...) {
-    std::rethrow_exception(std::current_exception());
+#ifdef PRE_CPP17_SHIM
+    return static_switch<decltype(has_decode_new_api<convert<T>>(
+        0))::value>::template call<T>(Node(*this, pMemory)) == rhs;
+#else
+    if constexpr (decltype(has_decode_new_api<convert<T>>(0))::value >)
+      return convert<T>::decode(Node(*this, pMemory)) == rhs;
+    else {
+      T lhs;
+      if (convert<T>::decode(Node(*this, pMemory), lhs))
+        return lhs == rhs;
+      throw conversion::DecodeException();
+    }
+#endif
+  } catch(const conversion::DecodeException& e) {
+    //throw; //prefer to throw over returning just the inability to deserialize
+    return false; //not doing this breaks upstream functionality
+  } catch (...) {
+    throw;
   }
 }
+#undef PRE_CPP17_SHIM
+
 
 inline bool node::equals(const char* rhs, shared_memory_holder pMemory) {
-  try {
-    const auto rslt =
-        convert<std::string>::decode(Node(*this, std::move(pMemory)));
-    return rslt == rhs;
-  } catch (const conversion::DecodeException& e) {
-    return false;
-  } catch(...) {
-    std::rethrow_exception(std::current_exception());
+  std::string lhs;
+  if (convert<std::string>::decode(Node(*this, std::move(pMemory)), lhs)) {
+    return lhs == rhs;
   }
+  return false;
 }
+
+
+
 
 // indexing
 template <typename Key>
