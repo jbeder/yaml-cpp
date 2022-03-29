@@ -276,12 +276,12 @@ TEST(NodeTest, SpecialFlow) {
   std::vector<SingleNodeTestCase> tests = {
       {"[:]", NodeType::Sequence, 1, "[{~: ~}]"},
       {"[a:]", NodeType::Sequence, 1, "[{a: ~}]"},
-      {"[:a]", NodeType::Sequence, 1, "[:a]"},
+      {"[:a]", NodeType::Sequence, 1, "[\":a\"]"},
       {"[,]", NodeType::Sequence, 1, "[~]"},
       {"[a:,]", NodeType::Sequence, 1, "[{a: ~}]"},
       {"{:}", NodeType::Map, 1, "{~: ~}"},
       {"{a:}", NodeType::Map, 1, "{a: ~}"},
-      {"{:a}", NodeType::Map, 1, "{:a: ~}"},
+      {"{:a}", NodeType::Map, 1, "{\":a\": ~}"},
       {"{,}", NodeType::Map, 1, "{~: ~}"},
       {"{a:,}", NodeType::Map, 1, "{a: ~}"},
       //testcase for the trailing TAB of scalar
