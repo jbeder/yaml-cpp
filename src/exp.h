@@ -37,7 +37,7 @@ inline const RegEx& Blank() {
   return e;
 }
 inline const RegEx& Break() {
-  static const RegEx e = RegEx('\n') | RegEx("\r\n");
+  static const RegEx e = RegEx('\n') | RegEx("\r");
   return e;
 }
 inline const RegEx& BlankOrBreak() {
