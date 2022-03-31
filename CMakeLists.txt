@@ -29,7 +29,7 @@ cmake_dependent_option(YAML_CPP_INSTALL
   "CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
-  "MSVC" OFF)
+  "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
 
 if (YAML_BUILD_SHARED_LIBS)
   set(yaml-cpp-type SHARED)
