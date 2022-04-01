@@ -13,13 +13,19 @@ include(CMakePackageConfigHelpers)
 include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 include(GNUInstallDirs)
-include(CTest)
-
-find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIBS})
+option(YAML_CPP_FORMAT_SOURCE "Format source" ON)
+
+if (YAML_CPP_BUILD_TESTS)
+    include(CTest)
+endif()
+
+if (YAML_CPP_FORMAT_SOURCE)
+    find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
+endif()
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
@@ -178,7 +184,7 @@ if(YAML_CPP_BUILD_TOOLS)
   add_subdirectory(util)
 endif()
 
-if (YAML_CPP_CLANG_FORMAT_EXE)
+if (YAML_CPP_FORMAT_SOURCE AND YAML_CPP_CLANG_FORMAT_EXE)
   add_custom_target(format
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
     COMMAND_EXPAND_LISTS
