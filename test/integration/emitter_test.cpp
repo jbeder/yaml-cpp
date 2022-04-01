@@ -968,6 +968,14 @@ TEST_F(EmitterTest, UserType) {
   ExpectEmit("- x: 5\n  bar: hello\n- x: 3\n  bar: goodbye");
 }
 
+TEST_F(EmitterTest, UserType2) {
+  out << BeginSeq;
+  out << Foo(5, "\r");
+  out << EndSeq;
+
+  ExpectEmit("- x: 5\n  bar: \"\\r\"");
+}
+
 TEST_F(EmitterTest, UserTypeInContainer) {
   std::vector<Foo> fv;
   fv.push_back(Foo(5, "hello"));
