@@ -133,10 +133,16 @@ set_target_properties(yaml-cpp PROPERTIES
   PROJECT_LABEL "yaml-cpp ${yaml-cpp-label-postfix}"
   DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
+# FIXME(felix2012): A more common place for the cmake export would be
+# `CMAKE_INSTALL_LIBDIR`, as e.g. done in ubuntu or in this project for GTest
+set(CONFIG_EXPORT_DIR "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+set(EXPORT_TARGETS yaml-cpp)
 configure_package_config_file(
   "${PROJECT_SOURCE_DIR}/yaml-cpp-config.cmake.in"
   "${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
-  INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+  INSTALL_DESTINATION "${CONFIG_EXPORT_DIR}"
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CONFIG_EXPORT_DIR)
+unset(EXPORT_TARGETS)
 
 write_basic_package_version_file(
   "${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
@@ -145,30 +151,31 @@ write_basic_package_version_file(
 configure_file(yaml-cpp.pc.in yaml-cpp.pc @ONLY)
 
 if (YAML_CPP_INSTALL)
-	install(TARGETS yaml-cpp
+  install(TARGETS yaml-cpp
     EXPORT yaml-cpp-targets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-	install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-		FILES_MATCHING PATTERN "*.h")
+                FILES_MATCHING PATTERN "*.h")
   install(EXPORT yaml-cpp-targets
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
-	install(FILES
-		"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
-		"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+    DESTINATION "${CONFIG_EXPORT_DIR}")
+  install(FILES
+      "${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
+      "${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
+    DESTINATION "${CONFIG_EXPORT_DIR}")
   install(FILES "${PROJECT_BINARY_DIR}/yaml-cpp.pc"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/pkgconfig)
 endif()
+unset(CONFIG_EXPORT_DIR)
 
 if(YAML_CPP_BUILD_TESTS)
-	add_subdirectory(test)
+  add_subdirectory(test)
 endif()
 
 if(YAML_CPP_BUILD_TOOLS)
-	add_subdirectory(util)
+  add_subdirectory(util)
 endif()
 
 if (YAML_CPP_CLANG_FORMAT_EXE)
