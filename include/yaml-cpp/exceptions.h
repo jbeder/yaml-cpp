@@ -65,7 +65,7 @@ const char* const ZERO_INDENT_IN_BLOCK =
 const char* const CHAR_IN_BLOCK = "unexpected character in block scalar";
 const char* const AMBIGUOUS_ANCHOR =
     "cannot assign the same alias to multiple nodes";
-const char* const UNKNOWN_ANCHOR = "the referenced anchor is not defined";
+const char* const UNKNOWN_ANCHOR = "the referenced anchor is not defined: ";
 
 const char* const INVALID_NODE =
     "invalid node; this may result from using a map iterator as a sequence "

@@ -12,6 +12,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <sstream>
 #include <type_traits>
 #include <vector>
@@ -127,7 +128,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
   if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
     if (num >= (std::numeric_limits<T>::min)() &&
         num <= (std::numeric_limits<T>::max)()) {
-      rhs = (T)num;
+      rhs = static_cast<T>(num);
       return true;
     }
   }
@@ -236,6 +237,32 @@ struct convert<std::map<K, V, C, A>> {
   }
 
   static bool decode(const Node& node, std::map<K, V, C, A>& rhs) {
+    if (!node.IsMap())
+      return false;
+
+    rhs.clear();
+    for (const auto& element : node)
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[element.first.template as<K>()] = element.second.template as<V>();
+#else
+      rhs[element.first.as<K>()] = element.second.as<V>();
+#endif
+    return true;
+  }
+};
+
+// std::unordered_map
+template <typename K, typename V, typename H, typename P, typename A>
+struct convert<std::unordered_map<K, V, H, P, A>> {
+  static Node encode(const std::unordered_map<K, V, H, P, A>& rhs) {
+    Node node(NodeType::Map);
+    for (const auto& element : rhs)
+      node.force_insert(element.first, element.second);
+    return node;
+  }
+
+  static bool decode(const Node& node, std::unordered_map<K, V, H, P, A>& rhs) {
     if (!node.IsMap())
       return false;
 

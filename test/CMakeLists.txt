@@ -5,10 +5,10 @@ set(BUILD_MOCK ON CACHE BOOL "" FORCE)
 set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
 
 add_subdirectory(
-  "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.10.0"
+  "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.11.0"
   "${CMAKE_CURRENT_BINARY_DIR}/prefix")
 
-include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.10.0/googletest/include")
+include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.11.0/googletest/include")
 
 set(test-new-api-pattern "new-api/*.cpp")
 set(test-source-pattern "*.cpp" "integration/*.cpp" "node/*.cpp")
@@ -47,3 +47,10 @@ endif()
 
 
 add_test(yaml-cpp::test yaml-cpp-tests)
+
+if (build-windows-dll)
+  add_custom_command(
+    TARGET yaml-cpp-tests
+    POST_BUILD COMMAND ${CMAKE_COMMAND} -E
+    copy_if_different "$<TARGET_FILE:yaml-cpp>" "$<TARGET_FILE_DIR:yaml-cpp-tests>")
+endif()

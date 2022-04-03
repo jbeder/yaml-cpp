@@ -18,27 +18,35 @@ include(CMakePackageConfigHelpers)
 include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 include(GNUInstallDirs)
-include(CTest)
-
-find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIBS})
 option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_CPP_MAIN_PROJECT})
+option(YAML_CPP_FORMAT_SOURCE "Format source" ON)
+
+if (YAML_CPP_BUILD_TESTS)
+    include(CTest)
+endif()
+
+if (YAML_CPP_FORMAT_SOURCE)
+    find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
+endif()
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
   "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
-  "MSVC" OFF)
+  "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
 
-set(yaml-cpp-type STATIC)
-set(yaml-cpp-label-postfix "static")
 if (YAML_BUILD_SHARED_LIBS)
   set(yaml-cpp-type SHARED)
   set(yaml-cpp-label-postfix "shared")
+else()
+  set(yaml-cpp-type STATIC)
+  set(yaml-cpp-label-postfix "static")
+  add_definitions(-DYAML_CPP_STATIC_DEFINE)
 endif()
 
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
@@ -80,6 +88,10 @@ set_property(TARGET yaml-cpp
 set_property(TARGET yaml-cpp
   PROPERTY
     CXX_STANDARD_REQUIRED ON)
+
+if (NOT YAML_BUILD_SHARED_LIBS)
+  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
 
 target_include_directories(yaml-cpp
   PUBLIC
@@ -130,10 +142,16 @@ set_target_properties(yaml-cpp PROPERTIES
   PROJECT_LABEL "yaml-cpp ${yaml-cpp-label-postfix}"
   DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
+# FIXME(felix2012): A more common place for the cmake export would be
+# `CMAKE_INSTALL_LIBDIR`, as e.g. done in ubuntu or in this project for GTest
+set(CONFIG_EXPORT_DIR "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+set(EXPORT_TARGETS yaml-cpp)
 configure_package_config_file(
   "${PROJECT_SOURCE_DIR}/yaml-cpp-config.cmake.in"
   "${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
-  INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+  INSTALL_DESTINATION "${CONFIG_EXPORT_DIR}"
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CONFIG_EXPORT_DIR)
+unset(EXPORT_TARGETS)
 
 write_basic_package_version_file(
   "${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
@@ -142,33 +160,34 @@ write_basic_package_version_file(
 configure_file(yaml-cpp.pc.in yaml-cpp.pc @ONLY)
 
 if (YAML_CPP_INSTALL)
-	install(TARGETS yaml-cpp
+  install(TARGETS yaml-cpp
     EXPORT yaml-cpp-targets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-	install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-		FILES_MATCHING PATTERN "*.h")
+                FILES_MATCHING PATTERN "*.h")
   install(EXPORT yaml-cpp-targets
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
-	install(FILES
-		"${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
-		"${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/yaml-cpp")
+    DESTINATION "${CONFIG_EXPORT_DIR}")
+  install(FILES
+      "${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
+      "${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
+    DESTINATION "${CONFIG_EXPORT_DIR}")
   install(FILES "${PROJECT_BINARY_DIR}/yaml-cpp.pc"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/pkgconfig)
 endif()
+unset(CONFIG_EXPORT_DIR)
 
 if(YAML_CPP_BUILD_TESTS)
-	add_subdirectory(test)
+  add_subdirectory(test)
 endif()
 
 if(YAML_CPP_BUILD_TOOLS)
-	add_subdirectory(util)
+  add_subdirectory(util)
 endif()
 
-if (YAML_CPP_CLANG_FORMAT_EXE)
+if (YAML_CPP_FORMAT_SOURCE AND YAML_CPP_CLANG_FORMAT_EXE)
   add_custom_target(format
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
     COMMAND_EXPAND_LISTS
