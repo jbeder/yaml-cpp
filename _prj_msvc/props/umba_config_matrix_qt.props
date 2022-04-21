@@ -1,0 +1,33 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project=".\umba_qt_common.props" />
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QtMoc>
+      <Define>UNICODE;_UNICODE;WIN32;WIN64;%(PreprocessorDefinitions)</Define>
+      <IncludePath>%(AdditionalIncludeDirectories);$(ProjectDir)\..\..</IncludePath>
+    </QtMoc>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <QtMoc>
+      <Define>UNICODE;_UNICODE;WIN32;%(PreprocessorDefinitions)</Define>
+      <IncludePath>%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtMoc>
+      <Define>UNICODE;_UNICODE;WIN32;WIN64;NDEBUG;%(PreprocessorDefinitions)</Define>
+      <IncludePath>%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <QtMoc>
+      <Define>UNICODE;_UNICODE;WIN32;NDEBUG;%(PreprocessorDefinitions)</Define>
+      <IncludePath>%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+  </ItemDefinitionGroup>
+
+</Project>
