@@ -52,11 +52,11 @@ jobs:
           shell: bash
           run: |
             cd "${{ github.workspace }}"
-            bazel build ...
+            bazel build :all
 
         - name: Test
           shell: bash
           run: |
             cd "${{ github.workspace }}"
-            bazel test ...
+            bazel test :all
 
