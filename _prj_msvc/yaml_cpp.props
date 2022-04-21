@@ -1,0 +1,38 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <ClCompile Include="..\src\binary.cpp" />
+    <ClCompile Include="..\src\convert.cpp" />
+    <ClCompile Include="..\src\depthguard.cpp" />
+    <ClCompile Include="..\src\directives.cpp" />
+    <ClCompile Include="..\src\emit.cpp" />
+    <ClCompile Include="..\src\emitfromevents.cpp" />
+    <ClCompile Include="..\src\emitter.cpp" />
+    <ClCompile Include="..\src\emitterstate.cpp" />
+    <ClCompile Include="..\src\emitterutils.cpp" />
+    <ClCompile Include="..\src\exceptions.cpp" />
+    <ClCompile Include="..\src\exp.cpp" />
+    <ClCompile Include="..\src\memory.cpp" />
+    <ClCompile Include="..\src\node.cpp" />
+    <ClCompile Include="..\src\node_data.cpp" />
+    <ClCompile Include="..\src\nodebuilder.cpp" />
+    <ClCompile Include="..\src\nodeevents.cpp" />
+    <ClCompile Include="..\src\null.cpp" />
+    <ClCompile Include="..\src\ostream_wrapper.cpp" />
+    <ClCompile Include="..\src\parse.cpp" />
+    <ClCompile Include="..\src\parser.cpp" />
+    <ClCompile Include="..\src\regex_yaml.cpp" />
+    <ClCompile Include="..\src\scanner.cpp" />
+    <ClCompile Include="..\src\scanscalar.cpp" />
+    <ClCompile Include="..\src\scantag.cpp" />
+    <ClCompile Include="..\src\scantoken.cpp" />
+    <ClCompile Include="..\src\simplekey.cpp" />
+    <ClCompile Include="..\src\singledocparser.cpp" />
+    <ClCompile Include="..\src\stream.cpp" />
+    <ClCompile Include="..\src\tag.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\src\contrib\yaml-cpp.natvis" />
+  </ItemGroup>
+
+</Project>
