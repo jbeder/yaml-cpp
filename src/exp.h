@@ -117,6 +117,10 @@ inline const RegEx& ValueInJSONFlow() {
   static const RegEx e = RegEx(':');
   return e;
 }
+inline const RegEx& Ampersand() {
+  static const RegEx e = RegEx('&');
+  return e;
+}
 inline const RegEx Comment() {
   static const RegEx e = RegEx('#');
   return e;
