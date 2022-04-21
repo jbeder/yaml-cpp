@@ -2,6 +2,8 @@
 
   <!-- umba_msvcver.props must be included first -->
 
+  <Import Project=".\umba_stdcpp14.props" />
+
   <PropertyGroup>
 
     <!-- UMBA_PLATFORM_CONFIG_ROOT: x86\Release -->
