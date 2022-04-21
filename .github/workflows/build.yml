@@ -58,5 +58,5 @@ jobs:
           shell: bash
           run: |
             cd "${{ github.workspace }}"
-            bazel test :all
+            bazel test test
 
