@@ -1624,6 +1624,15 @@ NodeB:
   k: [*k0, *k1])");
 }
 
+TEST_F(EmitterTest, AnchorEncoding) {
+  Node node;
+  node["--- &$ [*$]1"] = 1;
+  out << node;
+  ExpectEmit("\"--- &$ [*$]1\": 1");
+  Node reparsed = YAML::Load(out.c_str());
+  EXPECT_EQ(reparsed["--- &$ [*$]1"].as<int>(), 1);
+}
+
 class EmitterErrorTest : public ::testing::Test {
  protected:
   void ExpectEmitError(const std::string& expectedError) {
@@ -1694,5 +1703,6 @@ TEST_F(EmitterErrorTest, InvalidAlias) {
 
   ExpectEmitError(ErrorMsg::INVALID_ALIAS);
 }
+
 }  // namespace
 }  // namespace YAML
