@@ -6,7 +6,7 @@ on:
     branches: [ master ]
   workflow_dispatch:
 jobs:
-  build:
+  cmake-build:
       strategy:
         matrix:
           os: [ubuntu-latest, windows-latest, macos-latest]
@@ -39,3 +39,24 @@ jobs:
         - name: Test
           shell: bash
           run: cd build && ctest --output-on-failure
+
+  bazel-build:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Build
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel build :all
+
+        - name: Test
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel test test
+
