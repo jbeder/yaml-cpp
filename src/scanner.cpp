@@ -7,6 +7,19 @@
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 
 namespace YAML {
+namespace {
+// IsWhitespaceToBeEaten
+// . We can eat whitespace if it's a space or tab
+// . Note: originally tabs in block context couldn't be eaten
+//         "where a simple key could be allowed
+//         (i.e., not at the beginning of a line, or following '-', '?', or
+// ':')"
+//   I think this is wrong, since tabs can be non-content whitespace; it's just
+//   that they can't contribute to indentation, so once you've seen a tab in a
+//   line, you can't start a simple key
+bool IsWhitespaceToBeEaten(char ch) { return (ch == ' ') || (ch == '\t'); }
+}  // namespace
+
 Scanner::Scanner(std::istream& in)
     : INPUT(in),
       m_tokens{},
@@ -213,27 +226,6 @@ void Scanner::ScanToNextToken() {
 ///////////////////////////////////////////////////////////////////////
 // Misc. helpers
 
-// IsWhitespaceToBeEaten
-// . We can eat whitespace if it's a space or tab
-// . Note: originally tabs in block context couldn't be eaten
-//         "where a simple key could be allowed
-//         (i.e., not at the beginning of a line, or following '-', '?', or
-// ':')"
-//   I think this is wrong, since tabs can be non-content whitespace; it's just
-//   that they can't contribute to indentation, so once you've seen a tab in a
-//   line, you can't start a simple key
-bool Scanner::IsWhitespaceToBeEaten(char ch) {
-  if (ch == ' ') {
-    return true;
-  }
-
-  if (ch == '\t') {
-    return true;
-  }
-
-  return false;
-}
-
 const RegEx& Scanner::GetValueRegex() const {
   if (InBlockContext()) {
     return Exp::Value();
@@ -269,7 +261,7 @@ Token* Scanner::PushToken(Token::TYPE type) {
   return &m_tokens.back();
 }
 
-Token::TYPE Scanner::GetStartTokenFor(IndentMarker::INDENT_TYPE type) const {
+Token::TYPE Scanner::GetStartTokenFor(IndentMarker::INDENT_TYPE type) {
   switch (type) {
     case IndentMarker::SEQ:
       return Token::BLOCK_SEQ_START;
