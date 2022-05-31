@@ -3,7 +3,7 @@
 namespace YAML {
 Directives::Directives() : version{true, 1, 2}, tags{} {}
 
-const std::string Directives::TranslateTagHandle(
+std::string Directives::TranslateTagHandle(
     const std::string& handle) const {
   auto it = tags.find(handle);
   if (it == tags.end()) {
