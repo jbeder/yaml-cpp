@@ -3,15 +3,19 @@
 namespace YAML {
 Directives::Directives() : version{true, 1, 2}, tags{} {}
 
-const std::string Directives::TranslateTagHandle(
+std::string Directives::TranslateTagHandle(
     const std::string& handle) const {
+  std::string result;
   auto it = tags.find(handle);
   if (it == tags.end()) {
     if (handle == "!!")
-      return "tag:yaml.org,2002:";
-    return handle;
+      result = "tag:yaml.org,2002:";
+    else
+      result = handle;
+  } else {
+    result = it->second;
   }
 
-  return it->second;
+  return result;
 }
 }  // namespace YAML
