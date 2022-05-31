@@ -29,31 +29,22 @@ Tag::Tag(const Token& token)
   }
 }
 
-std::string Tag::Translate(const Directives& directives) {
-  std::string result;
-
+const std::string Tag::Translate(const Directives& directives) {
   switch (type) {
     case VERBATIM:
-      result = value;
-      break;
+      return value;
     case PRIMARY_HANDLE:
-      result = directives.TranslateTagHandle("!") + value;
-      break;
+      return directives.TranslateTagHandle("!") + value;
     case SECONDARY_HANDLE:
-      result = directives.TranslateTagHandle("!!") + value;
-      break;
+      return directives.TranslateTagHandle("!!") + value;
     case NAMED_HANDLE:
-      result = directives.TranslateTagHandle("!" + handle + "!") + value;
-      break;
+      return directives.TranslateTagHandle("!" + handle + "!") + value;
     case NON_SPECIFIC:
       // TODO:
-      result = "!";
-      break;
+      return "!";
     default:
       assert(false);
-      throw std::runtime_error("yaml-cpp: internal error, bad tag type");
   }
-
-  return result;
+  throw std::runtime_error("yaml-cpp: internal error, bad tag type");
 }
 }  // namespace YAML
