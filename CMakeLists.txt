@@ -53,6 +53,12 @@ set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
 set(build-windows-dll $<AND:$<BOOL:${CMAKE_HOST_WIN32}>,${build-shared}>)
 set(not-msvc $<NOT:$<CXX_COMPILER_ID:MSVC>>)
 set(msvc-shared_rt $<BOOL:${YAML_MSVC_SHARED_RT}>)
+set(not-intel $<NOT:$<CXX_COMPILER_ID:Intel>>)
+set(not-gnu $<NOT:$<CXX_COMPILER_ID:GNU>>)
+# -Weffc++ does not work correctly for some compilers 
+set(weffcpp-compatible $<AND:${not-intel},${not-gnu},${not-msvc}>)
+# -Wshadow does not work correctly for some compilers 
+set(wshadow-compatible $<AND:${not-intel},${not-msvc}>)
 
 if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
   set(CMAKE_MSVC_RUNTIME_LIBRARY
@@ -108,7 +114,9 @@ endif()
 
 target_compile_options(yaml-cpp
   PRIVATE
-    $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
+    $<${not-msvc}:-Wall -Wextra -Wno-long-long>
+    $<${wshadow-compatible}:-Wshadow >
+    $<${weffcpp-compatible}:-Weffc++>
     $<${not-msvc}:-pedantic -pedantic-errors>
 
     $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-static}>:-MTd>
