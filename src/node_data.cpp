@@ -71,6 +71,48 @@ void node_data::set_type(NodeType::value type) {
   }
 }
 
+void node_data::seq_modify(modify_values const& f) {
+  assert(m_type == NodeType::Sequence);
+  node_seq::iterator i = m_sequence.begin(), e = m_sequence.end(), b = i, o = i;
+  for (; i != e; ++i) {
+    node* m = f(*i);
+    if (m) {
+      *o = m;
+      ++o;
+    }
+  }
+  m_sequence.resize(o - b);
+}
+
+void node_data::map_modify(modify_values const& f) {
+  assert(m_type == NodeType::Map);
+  node_map::iterator i = m_map.begin(), e = m_map.end(), b = i, o = i;
+  for (; i != e; ++i) {
+    node* m = f(i->second);
+    if (m) {
+      o->first = i->first;
+      o->second = m;
+      ++o;
+    }
+  }
+  m_map.resize(o - b);
+}
+
+void node_data::map_modify(modify_key_values const& f) {
+  assert(m_type == NodeType::Map);
+  node_map::iterator i = m_map.begin(), e = m_map.end(), b = i, o = i;
+  for (; i != e; ++i) {
+    node* k = i->first;
+    node* m = f(k->type() == NodeType::Scalar ? &k->scalar() : 0, i->second);
+    if (m) {
+      o->first = k;
+      o->second = m;
+      ++o;
+    }
+  }
+  m_map.resize(o - b);
+}
+
 void node_data::set_tag(const std::string& tag) { m_tag = tag; }
 
 void node_data::set_style(EmitterStyle::value style) { m_style = style; }

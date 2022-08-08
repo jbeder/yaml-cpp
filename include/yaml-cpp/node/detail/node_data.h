@@ -30,7 +30,7 @@ namespace detail {
 class YAML_CPP_API node_data {
  public:
   node_data();
-  node_data(const node_data&) = delete;
+  node_data(const node_data&) = default;
   node_data& operator=(const node_data&) = delete;
 
   void mark_defined();
@@ -61,6 +61,10 @@ class YAML_CPP_API node_data {
 
   // sequence
   void push_back(node& node, const shared_memory_holder& pMemory);
+  // \pre IsSequence, node in our memory
+  void seq_push_back(node& node);
+
+  // map
   void insert(node& key, node& value, const shared_memory_holder& pMemory);
 
   // indexing
@@ -79,6 +83,21 @@ class YAML_CPP_API node_data {
   template <typename Key, typename Value>
   void force_insert(const Key& key, const Value& value,
                     shared_memory_holder pMemory);
+
+  // map. \pre IsMap()
+  void map_force_insert(node& key, node& value);
+
+  void modify(modify_values const& f)
+  {
+    if (m_type == NodeType::Sequence)
+      seq_modify(f);
+    else if (m_type == NodeType::Map)
+      map_modify(f);
+  }
+
+  void seq_modify(modify_values const& f);
+  void map_modify(modify_values const& f);
+  void map_modify(modify_key_values const& f);
 
  public:
   static const std::string& empty_scalar();

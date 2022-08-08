@@ -486,6 +486,121 @@ TEST(NodeTest, SimpleAlias) {
   EXPECT_EQ(2, node.size());
 }
 
+TEST(NodeTest, SimpleAliasShallowClone) {
+  Node cloned;
+  {
+    Node node;
+    node["foo"] = "value";
+    node["bar"] = node["foo"];
+    EXPECT_EQ("value", node["foo"].as<std::string>());
+    EXPECT_EQ("value", node["bar"].as<std::string>());
+    EXPECT_EQ(node["bar"], node["foo"]);
+    EXPECT_EQ(node["bar"].id(), node["foo"].id());
+    EXPECT_EQ(2, node.size());
+    EXPECT_EQ(node["foo"].Scalar(), "value");
+    cloned = Node(node, ShallowClone());
+    EXPECT_EQ(2, cloned.size());
+    EXPECT_NE(cloned.id(), node.id());
+  }
+  EXPECT_EQ(cloned["foo"].Scalar(), "value");
+  EXPECT_EQ(cloned["bar"].id(), cloned["foo"].id());
+  cloned["foo"] = Node(cloned["foo"], ShallowClone());
+  EXPECT_EQ(cloned["foo"].Scalar(), "value");
+  EXPECT_NE(cloned["bar"].id(), cloned["foo"].id());
+}
+
+
+TEST(NodeTest, SimpleAliasUnshare) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"] = node["foo"];
+  node.UnshareSubtrees();
+  EXPECT_NE(node["bar"].id(), node["foo"].id());
+  EXPECT_FALSE(node["bar"] == node["foo"]);
+}
+
+TEST(NodeTest, SimpleAliasRemoveKey) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"] = node["foo"];
+  EXPECT_EQ(node.size(), 2);
+  EXPECT_EQ(node["foo"].Scalar(), "value");
+  node.ModifyKeyValues([](std::string const* key, detail::node *n) { return key && *key == "foo" ? 0 : n; });
+  EXPECT_EQ(node.size(), 1);
+  EXPECT_FALSE(node["foo"].IsDefined());
+}
+
+TEST(NodeTest, SimpleAliasUnshareDeep) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"] = "2";
+  node["deep"]["baralias"] = node["bar"];
+  EXPECT_EQ(node["deep"]["baralias"].id(), node["bar"].id());
+  EXPECT_EQ(node["deep"]["baralias"].Scalar(), "2");
+  node.UnshareSubtrees();
+  EXPECT_NE(node["deep"]["baralias"].id(), node["bar"].id());
+  EXPECT_EQ(node["deep"]["baralias"].Scalar(), "2");
+}
+
+TEST(NodeTest, SimpleAliasUnshareDeeper) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"]["two"] = "2";
+  node["deep"]["baralias"] = node["bar"];
+  EXPECT_EQ(node["deep"]["baralias"].id(), node["bar"].id());
+  EXPECT_EQ(node["foo"].Scalar(), "value");
+  EXPECT_EQ(node["deep"]["baralias"]["two"].Scalar(), "2");
+  EXPECT_EQ(node["deep"]["baralias"]["two"].id(), node["bar"]["two"].id());
+  node.UnshareSubtrees();
+  EXPECT_NE(node["deep"]["baralias"].id(), node["bar"].id());
+  EXPECT_EQ(node["foo"].Scalar(), "value");
+  EXPECT_NE(node["deep"]["baralias"]["two"].id(), node["bar"]["two"].id());
+  EXPECT_EQ(node["deep"]["baralias"]["two"].Scalar(), "2");
+}
+
+TEST(NodeTest, SimpleAliasDeeperClone) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"]["two"] = "2";
+  node["deep"]["baralias"] = node["bar"];
+  EXPECT_EQ(node["deep"]["baralias"].id(), node["bar"].id());
+  EXPECT_EQ(node["foo"].Scalar(), "value");
+  EXPECT_EQ(node["deep"]["baralias"]["two"].Scalar(), "2");
+  EXPECT_EQ(node["deep"]["baralias"]["two"].id(), node["bar"]["two"].id());
+  Node tree(node, DeepClone());
+  EXPECT_EQ(tree["foo"].Scalar(), "value");
+  EXPECT_NE(tree["deep"]["baralias"].id(), tree["bar"].id());
+  EXPECT_NE(tree["deep"]["baralias"]["two"].id(), tree["bar"]["two"].id());
+  EXPECT_EQ(tree["deep"]["baralias"]["two"].Scalar(), "2");
+}
+
+TEST(NodeTest, SimpleAliasSeqClone) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"]["two"] = "2";
+  node["deep"]["baralias"].push_back(node["bar"]);
+  node["deep"]["baralias"].push_back(node["bar"]);
+  EXPECT_TRUE(node["deep"]["baralias"].IsSequence());
+  EXPECT_EQ(node["deep"]["baralias"].size(), 2);
+  EXPECT_EQ(node["foo"].Scalar(), "value");
+  Node tree(node, DeepClone());
+  EXPECT_TRUE(tree["deep"]["baralias"].IsSequence());
+  EXPECT_EQ(tree["deep"]["baralias"].size(), 2);
+  EXPECT_EQ(tree["foo"].Scalar(), "value");
+  for (auto const& s : tree["deep"]["baralias"])
+    EXPECT_EQ(s["two"].Scalar(), "2");
+}
+
+TEST(NodeTest, SimpleAliasUnshareCtor) {
+  Node node;
+  node["foo"] = "value";
+  node["bar"] = node["foo"];
+  Node tree(node, UnshareSubtrees());
+  EXPECT_NE(tree["bar"].id(), tree["foo"].id());
+  EXPECT_FALSE(tree["bar"] == tree["foo"]);
+  EXPECT_TRUE(tree["bar"] == node["foo"] || tree["foo"] == node["foo"]);
+}
+
 TEST(NodeTest, AliasAsKey) {
   Node node;
   node["foo"] = "value";
