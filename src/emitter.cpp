@@ -205,7 +205,7 @@ void Emitter::EmitBeginSeq() {
 void Emitter::EmitEndSeq() {
   if (!good())
     return;
-  FlowType::value originalType = m_pState->CurGroupFlowType();
+  FlowType originalType = m_pState->CurGroupFlowType();
 
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
@@ -240,7 +240,7 @@ void Emitter::EmitBeginMap() {
 void Emitter::EmitEndMap() {
   if (!good())
     return;
-  FlowType::value originalType = m_pState->CurGroupFlowType();
+  FlowType originalType = m_pState->CurGroupFlowType();
 
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
