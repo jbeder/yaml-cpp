@@ -227,7 +227,7 @@ std::pair<uint16_t, uint16_t> EncodeUTF16SurrogatePair(int codePoint) {
   };
 }
 
-void WriteDoubleQuoteEscapeSequence(ostream_wrapper& out, int codePoint, StringEscaping::value stringEscapingStyle) {
+void WriteDoubleQuoteEscapeSequence(ostream_wrapper& out, int codePoint, StringEscaping stringEscapingStyle) {
   static const char hexDigits[] = "0123456789abcdef";
 
   out << "\\";
@@ -267,7 +267,7 @@ bool WriteAliasName(ostream_wrapper& out, const std::string& str) {
 }
 }  // namespace
 
-StringFormat::value ComputeStringFormat(const std::string& str,
+StringFormat ComputeStringFormat(const std::string& str,
                                         EMITTER_MANIP strFormat,
                                         FlowType flowType,
                                         bool escapeNonAscii) {
@@ -317,7 +317,7 @@ bool WriteSingleQuotedString(ostream_wrapper& out, const std::string& str) {
 }
 
 bool WriteDoubleQuotedString(ostream_wrapper& out, const std::string& str,
-                             StringEscaping::value stringEscaping) {
+                             StringEscaping stringEscaping) {
   out << "\"";
   int codePoint;
   for (std::string::const_iterator i = str.begin();
@@ -379,7 +379,7 @@ bool WriteLiteralString(ostream_wrapper& out, const std::string& str,
   return true;
 }
 
-bool WriteChar(ostream_wrapper& out, char ch, StringEscaping::value stringEscapingStyle) {
+bool WriteChar(ostream_wrapper& out, char ch, StringEscaping stringEscapingStyle) {
   if (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')) {
     out << ch;
   } else if (ch == '\"') {
