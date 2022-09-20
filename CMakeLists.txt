@@ -46,7 +46,6 @@ if (YAML_BUILD_SHARED_LIBS)
 else()
   set(yaml-cpp-type STATIC)
   set(yaml-cpp-label-postfix "static")
-  add_definitions(-DYAML_CPP_STATIC_DEFINE)
 endif()
 
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
@@ -127,6 +126,8 @@ target_compile_options(yaml-cpp
     $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4127 /wd4355>)
 
 target_compile_definitions(yaml-cpp
+  PUBLIC
+    $<$<NOT:$<BOOL:${YAML_BUILD_SHARED_LIBS}>>:YAML_CPP_STATIC_DEFINE>
   PRIVATE
     $<${build-windows-dll}:${PROJECT_NAME}_DLL>
     $<$<NOT:$<BOOL:${YAML_CPP_BUILD_CONTRIB}>>:YAML_CPP_NO_CONTRIB>)
