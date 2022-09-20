@@ -352,6 +352,16 @@ TEST(NodeTest, StdArrayWrongSize) {
       (node["evens"].as<std::array<int, 5>>()), ErrorMsg::BAD_CONVERSION);
 }
 
+TEST(NodeTest, StdValrray) {
+  std::valarray<int> evens{{2, 4, 6, 8, 10}};
+  Node node;
+  node["evens"] = evens;
+  std::valarray<int> actualEvens = node["evens"].as<std::valarray<int>>();
+  for (int i = 0; i < evens.size(); ++i) {
+    EXPECT_EQ(evens[i], actualEvens[i]);
+  }
+}
+
 TEST(NodeTest, StdVector) {
   std::vector<int> primes;
   primes.push_back(2);
