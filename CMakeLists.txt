@@ -106,11 +106,15 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
       CXX_STANDARD 11)
 endif()
 
+if(YAML_CPP_MAIN_PROJECT)
+  target_compile_options(yaml-cpp
+    PRIVATE
+      $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
+      $<${not-msvc}:-pedantic -pedantic-errors>)
+endif()
+
 target_compile_options(yaml-cpp
   PRIVATE
-    $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
-    $<${not-msvc}:-pedantic -pedantic-errors>
-
     $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-static}>:-MTd>
     $<$<AND:${backport-msvc-runtime},${msvc-rt-mt-static}>:-MT>
     $<$<AND:${backport-msvc-runtime},${msvc-rt-mtd-dll}>:-MDd>
