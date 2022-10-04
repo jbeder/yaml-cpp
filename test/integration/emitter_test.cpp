@@ -431,6 +431,38 @@ TEST_F(EmitterTest, BlockMapAsKey) {
   ExpectEmit("? key: value\n  next key: next value\n: total value");
 }
 
+TEST_F(EmitterTest, TaggedBlockMapAsKey) {
+  out << BeginMap;
+  out << Key;
+  out << LocalTag("innerMap");
+  out << BeginMap;
+  out << Key << "key" << Value << "value";
+  out << EndMap;
+  out << Value;
+  out << "outerValue";
+  out << EndMap;
+
+  ExpectEmit(R"(? !innerMap
+  key: value
+: outerValue)");
+}
+
+TEST_F(EmitterTest, TaggedBlockListAsKey) {
+  out << BeginMap;
+  out << Key;
+  out << LocalTag("innerList");
+  out << BeginSeq;
+  out << "listItem";
+  out << EndSeq;
+  out << Value;
+  out << "outerValue";
+  out << EndMap;
+
+  ExpectEmit(R"(? !innerList
+  - listItem
+: outerValue)");
+}
+
 TEST_F(EmitterTest, AliasAndAnchor) {
   out << BeginSeq;
   out << Anchor("fred");
@@ -520,7 +552,7 @@ TEST_F(EmitterTest, VerbatimTagInBlockMap) {
   out << Value << VerbatimTag("!waz") << "baz";
   out << EndMap;
 
-  ExpectEmit("!<!foo> bar: !<!waz> baz");
+  ExpectEmit("? !<!foo> bar\n: !<!waz> baz");
 }
 
 TEST_F(EmitterTest, VerbatimTagInFlowMap) {
