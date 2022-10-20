@@ -29,7 +29,7 @@
 namespace YAML {
 class Binary;
 struct _Null;
-template <typename T>
+template <typename T, typename Enable>
 struct convert;
 }  // namespace YAML
 
