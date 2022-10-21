@@ -128,7 +128,7 @@ inline node* node_data::get(const Key& key,
         return pNode;
       return nullptr;
     case NodeType::Scalar:
-      throw BadSubscript(m_mark, key);
+      YAML_throw<BadSubscript>(m_mark, key);
   }
 
   auto it = std::find_if(m_map.begin(), m_map.end(), [&](const kv_pair m) {
@@ -154,7 +154,7 @@ inline node& node_data::get(const Key& key, shared_memory_holder pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadSubscript(m_mark, key);
+      YAML_throw<BadSubscript>(m_mark, key);
   }
 
   auto it = std::find_if(m_map.begin(), m_map.end(), [&](const kv_pair m) {
@@ -213,7 +213,7 @@ inline void node_data::force_insert(const Key& key, const Value& value,
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      throw BadInsert();
+      YAML_throw<BadInsert>();
   }
 
   node& k = convert_to_node(key, pMemory);

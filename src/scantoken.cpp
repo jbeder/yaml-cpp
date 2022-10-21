@@ -103,7 +103,7 @@ void Scanner::ScanFlowStart() {
 // FlowEnd
 void Scanner::ScanFlowEnd() {
   if (InBlockContext())
-    throw ParserException(INPUT.mark(), ErrorMsg::FLOW_END);
+    YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::FLOW_END);
 
   // we might have a solo entry in the flow context
   if (InFlowContext()) {
@@ -123,7 +123,7 @@ void Scanner::ScanFlowEnd() {
   // check that it matches the start
   FLOW_MARKER flowType = (ch == Keys::FlowSeqEnd ? FLOW_SEQ : FLOW_MAP);
   if (m_flows.top() != flowType)
-    throw ParserException(mark, ErrorMsg::FLOW_END);
+    YAML_throw<ParserException>(mark, ErrorMsg::FLOW_END);
   m_flows.pop();
 
   Token::TYPE type = (flowType ? Token::FLOW_SEQ_END : Token::FLOW_MAP_END);
@@ -153,11 +153,11 @@ void Scanner::ScanFlowEntry() {
 void Scanner::ScanBlockEntry() {
   // we better be in the block context!
   if (InFlowContext())
-    throw ParserException(INPUT.mark(), ErrorMsg::BLOCK_ENTRY);
+    YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::BLOCK_ENTRY);
 
   // can we put it here?
   if (!m_simpleKeyAllowed)
-    throw ParserException(INPUT.mark(), ErrorMsg::BLOCK_ENTRY);
+    YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::BLOCK_ENTRY);
 
   PushIndentTo(INPUT.column(), IndentMarker::SEQ);
   m_simpleKeyAllowed = true;
@@ -174,7 +174,7 @@ void Scanner::ScanKey() {
   // handle keys differently in the block context (and manage indents)
   if (InBlockContext()) {
     if (!m_simpleKeyAllowed)
-      throw ParserException(INPUT.mark(), ErrorMsg::MAP_KEY);
+      YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::MAP_KEY);
 
     PushIndentTo(INPUT.column(), IndentMarker::MAP);
   }
@@ -202,7 +202,7 @@ void Scanner::ScanValue() {
     // handle values differently in the block context (and manage indents)
     if (InBlockContext()) {
       if (!m_simpleKeyAllowed)
-        throw ParserException(INPUT.mark(), ErrorMsg::MAP_VALUE);
+        YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::MAP_VALUE);
 
       PushIndentTo(INPUT.column(), IndentMarker::MAP);
     }
@@ -238,12 +238,12 @@ void Scanner::ScanAnchorOrAlias() {
 
   // we need to have read SOMETHING!
   if (name.empty())
-    throw ParserException(INPUT.mark(), alias ? ErrorMsg::ALIAS_NOT_FOUND
+    YAML_throw<ParserException>(INPUT.mark(), alias ? ErrorMsg::ALIAS_NOT_FOUND
                                               : ErrorMsg::ANCHOR_NOT_FOUND);
 
   // and needs to end correctly
   if (INPUT && !Exp::AnchorEnd().Matches(INPUT))
-    throw ParserException(INPUT.mark(), alias ? ErrorMsg::CHAR_IN_ALIAS
+    YAML_throw<ParserException>(INPUT.mark(), alias ? ErrorMsg::CHAR_IN_ALIAS
                                               : ErrorMsg::CHAR_IN_ANCHOR);
 
   // and we're done
@@ -320,7 +320,7 @@ void Scanner::ScanPlainScalar() {
 
   // finally, check and see if we ended on an illegal character
   // if(Exp::IllegalCharInScalar.Matches(INPUT))
-  //	throw ParserException(INPUT.mark(), ErrorMsg::CHAR_IN_SCALAR);
+  //	YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::CHAR_IN_SCALAR);
 
   Token token(Token::PLAIN_SCALAR, mark);
   token.value = scalar;
@@ -395,7 +395,7 @@ void Scanner::ScanBlockScalar() {
       params.chomp = STRIP;
     else if (Exp::Digit().Matches(ch)) {
       if (ch == '0')
-        throw ParserException(INPUT.mark(), ErrorMsg::ZERO_INDENT_IN_BLOCK);
+        YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::ZERO_INDENT_IN_BLOCK);
 
       params.indent = ch - '0';
       params.detectIndent = false;
@@ -413,7 +413,7 @@ void Scanner::ScanBlockScalar() {
 
   // if it's not a line break, then we ran into a bad character inline
   if (INPUT && !Exp::Break().Matches(INPUT))
-    throw ParserException(INPUT.mark(), ErrorMsg::CHAR_IN_BLOCK);
+    YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::CHAR_IN_BLOCK);
 
   // set the initial indentation
   if (GetTopIndent() >= 0)

@@ -15,6 +15,21 @@
 #include <string>
 
 namespace YAML {
+
+#if defined(__cpp_exceptions) || (defined(_MSC_VER) && defined(_CPPUNWIND))
+template<typename Ex, typename... Args>
+YAML_CPP_NORETURN void YAML_throw(Args&&... args) {
+	throw Ex(std::forward<Args>(args)...);
+}
+#else
+YAML_CPP_NORETURN void handle_exception(const char* what);
+
+template<typename Ex, typename... Args>
+YAML_CPP_NORETURN void YAML_throw(Args&&... args) {
+	handle_exception(Ex(std::forward<Args>(args)...).what());
+}
+#endif
+
 // error messages
 namespace ErrorMsg {
 const char* const YAML_DIRECTIVE_ARGS =
