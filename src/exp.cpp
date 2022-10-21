@@ -21,7 +21,7 @@ unsigned ParseHex(const std::string& str, const Mark& mark) {
     else if ('0' <= ch && ch <= '9')
       digit = ch - '0';
     else
-      throw ParserException(mark, ErrorMsg::INVALID_HEX);
+      YAML_throw<ParserException>(mark, ErrorMsg::INVALID_HEX);
 
     value = (value << 4) + digit;
   }
@@ -48,7 +48,7 @@ std::string Escape(Stream& in, int codeLength) {
   if ((value >= 0xD800 && value <= 0xDFFF) || value > 0x10FFFF) {
     std::stringstream msg;
     msg << ErrorMsg::INVALID_UNICODE << value;
-    throw ParserException(in.mark(), msg.str());
+    YAML_throw<ParserException>(in.mark(), msg.str());
   }
 
   // now break it up into chars
@@ -131,7 +131,7 @@ std::string Escape(Stream& in) {
   }
 
   std::stringstream msg;
-  throw ParserException(in.mark(), std::string(ErrorMsg::INVALID_ESCAPE) + ch);
+  YAML_throw<ParserException>(in.mark(), std::string(ErrorMsg::INVALID_ESCAPE) + ch);
 }
 }  // namespace Exp
 }  // namespace YAML

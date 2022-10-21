@@ -144,13 +144,13 @@ void Scanner::ScanNextToken() {
     // values starting with `,` are not allowed.
     // eg: reject `,foo`
     if (INPUT.column() == 0) {
-      throw ParserException(INPUT.mark(), ErrorMsg::UNEXPECTED_FLOW);
+      YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::UNEXPECTED_FLOW);
     }
     // if we already parsed a quoted scalar value and we are not in a flow,
     // then `,` is not a valid character.
     // eg: reject `"foo",`
     if (!m_scalarValueAllowed) {
-      throw ParserException(INPUT.mark(), ErrorMsg::UNEXPECTED_SCALAR);
+      YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::UNEXPECTED_SCALAR);
     }
     return ScanFlowEntry();
   }
@@ -207,7 +207,7 @@ void Scanner::ScanNextToken() {
   // another scalar value is an error.
   // eg: reject `"foo" "bar"`
   if (!m_scalarValueAllowed) {
-    throw ParserException(INPUT.mark(), ErrorMsg::UNEXPECTED_SCALAR);
+    YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::UNEXPECTED_SCALAR);
   }
 
   if (INPUT.peek() == '\'' || INPUT.peek() == '\"') {
@@ -221,7 +221,7 @@ void Scanner::ScanNextToken() {
   }
 
   // don't know what it is!
-  throw ParserException(INPUT.mark(), ErrorMsg::UNKNOWN_TOKEN);
+  YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::UNKNOWN_TOKEN);
 }
 
 void Scanner::ScanToNextToken() {
@@ -315,7 +315,7 @@ Token::TYPE Scanner::GetStartTokenFor(IndentMarker::INDENT_TYPE type) {
       break;
   }
   assert(false);
-  throw std::runtime_error("yaml-cpp: internal error, invalid indent type");
+  YAML_throw<std::runtime_error>("yaml-cpp: internal error, invalid indent type");
 }
 
 Scanner::IndentMarker* Scanner::PushIndentTo(int column,
@@ -424,6 +424,6 @@ void Scanner::ThrowParserException(const std::string& msg) const {
     const Token& token = m_tokens.front();
     mark = token.mark;
   }
-  throw ParserException(mark, msg);
+  YAML_throw<ParserException>(mark, msg);
 }
 }  // namespace YAML
