@@ -7,8 +7,8 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/noexcept.h"
 #include "stream.h"
+#include "yaml-cpp/noexcept.h"
 #include <cstddef>
 
 namespace YAML {
@@ -22,29 +22,24 @@ class StreamCharSource {
   StreamCharSource& operator=(StreamCharSource&&) = delete;
   ~StreamCharSource() = default;
 
-  operator bool() const;
-  char operator[](std::size_t i) const { return m_stream.CharAt(m_offset + i); }
-  bool operator!() const { return !static_cast<bool>(*this); }
+  operator bool() const { return true; }
 
-  const StreamCharSource operator+(int i) const;
+  char operator[](std::size_t i) const { return m_stream.peek(m_offset + i); }
+
+  const StreamCharSource operator+(int i) const {
+    StreamCharSource source(*this);
+    if (static_cast<int>(source.m_offset) + i >= 0)
+      source.m_offset += static_cast<std::size_t>(i);
+    else
+      source.m_offset = 0;
+    return source;
+  }
 
  private:
   std::size_t m_offset;
   const Stream& m_stream;
 };
 
-inline StreamCharSource::operator bool() const {
-  return m_stream.ReadAheadTo(m_offset);
-}
-
-inline const StreamCharSource StreamCharSource::operator+(int i) const {
-  StreamCharSource source(*this);
-  if (static_cast<int>(source.m_offset) + i >= 0)
-    source.m_offset += static_cast<std::size_t>(i);
-  else
-    source.m_offset = 0;
-  return source;
-}
 }  // namespace YAML
 
 #endif  // STREAMCHARSOURCE_H_62B23520_7C8E_11DE_8A39_0800200C9A66
