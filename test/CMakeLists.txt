@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.25)
+
 find_package(Threads REQUIRED)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -29,15 +31,17 @@ target_include_directories(yaml-cpp-tests
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/integration
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/src)
+    ${PROJECT_SOURCE_DIR}/../include
+    ${PROJECT_SOURCE_DIR}/../src)
 target_compile_options(yaml-cpp-tests
   PRIVATE
     $<$<CXX_COMPILER_ID:Clang>:-Wno-c99-extensions -Wno-variadic-macros -Wno-sign-compare>
     $<$<CXX_COMPILER_ID:GNU>:-Wno-variadic-macros -Wno-sign-compare>)
-target_link_libraries(yaml-cpp-tests
+  target_link_libraries(yaml-cpp-tests
   PRIVATE
     Threads::Threads
     yaml-cpp
+    ${PROJECT_SOURCE_DIR}/../build/libyaml-cpp.dll.a
     gmock)
 
 set_property(TARGET yaml-cpp-tests PROPERTY CXX_STANDARD_REQUIRED ON)
