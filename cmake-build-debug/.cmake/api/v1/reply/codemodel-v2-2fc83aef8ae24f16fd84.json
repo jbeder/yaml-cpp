@@ -1,0 +1,116 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-b1950dec0440cc4c0ad4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"build" : "util",
+					"jsonFile" : "directory-util-Debug-c386f56db14874d6eb16.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "util",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "YAML_CPP",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Debug-234f50f5909595eb3728.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "yaml-cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-yaml-cpp-Debug-ca9cfdd318eca33c3bf9.json",
+					"name" : "yaml-cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp-parse::@5865449b717dd869d2cd",
+					"jsonFile" : "target-yaml-cpp-parse-Debug-99280638557f5fedc14c.json",
+					"name" : "yaml-cpp-parse",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp-read::@5865449b717dd869d2cd",
+					"jsonFile" : "target-yaml-cpp-read-Debug-bc96f50b4acd6f761205.json",
+					"name" : "yaml-cpp-read",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp-sandbox::@5865449b717dd869d2cd",
+					"jsonFile" : "target-yaml-cpp-sandbox-Debug-1d6ced068962109037c2.json",
+					"name" : "yaml-cpp-sandbox",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug",
+		"source" : "/Users/gravitacia/CLionProjects/yaml-cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

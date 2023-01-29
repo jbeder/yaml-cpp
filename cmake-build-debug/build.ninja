@@ -1,0 +1,716 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: YAML_CPP
+# Configurations: Debug
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.8
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Debug
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target yaml-cpp
+
+
+#############################################
+# Order-only phony target for yaml-cpp
+
+build cmake_object_order_depends_target_yaml-cpp: phony || CMakeFiles/yaml-cpp.dir
+
+build CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilder.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/contrib/graphbuilder.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilder.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src/contrib
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilderadapter.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/contrib/graphbuilderadapter.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilderadapter.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src/contrib
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/binary.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/binary.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/binary.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/convert.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/convert.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/convert.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/depthguard.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/depthguard.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/depthguard.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/directives.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/directives.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/directives.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/emit.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/emit.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/emit.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/emitfromevents.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/emitfromevents.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/emitfromevents.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/emitter.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/emitter.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/emitter.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/emitterstate.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/emitterstate.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/emitterstate.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/emitterutils.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/emitterutils.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/emitterutils.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/exceptions.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/exceptions.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/exceptions.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/exp.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/exp.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/exp.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/memory.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/memory.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/memory.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/node.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/node.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/node.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/node_data.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/node_data.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/node_data.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/nodebuilder.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/nodebuilder.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/nodebuilder.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/nodeevents.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/nodeevents.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/nodeevents.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/null.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/null.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/null.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/ostream_wrapper.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/ostream_wrapper.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/ostream_wrapper.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/parse.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/parse.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/parse.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/parser.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/parser.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/parser.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/regex_yaml.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/regex_yaml.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/regex_yaml.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/scanner.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/scanner.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/scanner.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/scanscalar.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/scanscalar.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/scanscalar.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/scantag.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/scantag.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/scantag.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/scantoken.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/scantoken.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/scantoken.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/simplekey.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/simplekey.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/simplekey.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/singledocparser.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/singledocparser.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/singledocparser.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/stream.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/stream.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/stream.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+build CMakeFiles/yaml-cpp.dir/src/tag.cpp.o: CXX_COMPILER__yaml-cpp_Debug /Users/gravitacia/CLionProjects/yaml-cpp/src/tag.cpp || cmake_object_order_depends_target_yaml-cpp
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = CMakeFiles/yaml-cpp.dir/src/tag.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fcolor-diagnostics -Wall -Wextra -Wshadow -Weffc++ -Wno-long-long -pedantic -pedantic-errors -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include -I/Users/gravitacia/CLionProjects/yaml-cpp/src
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  OBJECT_FILE_DIR = CMakeFiles/yaml-cpp.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_PDB = libyaml-cppd.pdb
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target yaml-cpp
+
+
+#############################################
+# Link the static library libyaml-cppd.a
+
+build libyaml-cppd.a: CXX_STATIC_LIBRARY_LINKER__yaml-cpp_Debug CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilder.cpp.o CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilderadapter.cpp.o CMakeFiles/yaml-cpp.dir/src/binary.cpp.o CMakeFiles/yaml-cpp.dir/src/convert.cpp.o CMakeFiles/yaml-cpp.dir/src/depthguard.cpp.o CMakeFiles/yaml-cpp.dir/src/directives.cpp.o CMakeFiles/yaml-cpp.dir/src/emit.cpp.o CMakeFiles/yaml-cpp.dir/src/emitfromevents.cpp.o CMakeFiles/yaml-cpp.dir/src/emitter.cpp.o CMakeFiles/yaml-cpp.dir/src/emitterstate.cpp.o CMakeFiles/yaml-cpp.dir/src/emitterutils.cpp.o CMakeFiles/yaml-cpp.dir/src/exceptions.cpp.o CMakeFiles/yaml-cpp.dir/src/exp.cpp.o CMakeFiles/yaml-cpp.dir/src/memory.cpp.o CMakeFiles/yaml-cpp.dir/src/node.cpp.o CMakeFiles/yaml-cpp.dir/src/node_data.cpp.o CMakeFiles/yaml-cpp.dir/src/nodebuilder.cpp.o CMakeFiles/yaml-cpp.dir/src/nodeevents.cpp.o CMakeFiles/yaml-cpp.dir/src/null.cpp.o CMakeFiles/yaml-cpp.dir/src/ostream_wrapper.cpp.o CMakeFiles/yaml-cpp.dir/src/parse.cpp.o CMakeFiles/yaml-cpp.dir/src/parser.cpp.o CMakeFiles/yaml-cpp.dir/src/regex_yaml.cpp.o CMakeFiles/yaml-cpp.dir/src/scanner.cpp.o CMakeFiles/yaml-cpp.dir/src/scanscalar.cpp.o CMakeFiles/yaml-cpp.dir/src/scantag.cpp.o CMakeFiles/yaml-cpp.dir/src/scantoken.cpp.o CMakeFiles/yaml-cpp.dir/src/simplekey.cpp.o CMakeFiles/yaml-cpp.dir/src/singledocparser.cpp.o CMakeFiles/yaml-cpp.dir/src/stream.cpp.o CMakeFiles/yaml-cpp.dir/src/tag.cpp.o
+  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles/yaml-cpp.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = CMakeFiles/yaml-cpp.dir/yaml-cpp.pdb
+  TARGET_FILE = libyaml-cppd.a
+  TARGET_PDB = libyaml-cppd.pdb
+
+
+#############################################
+# Utility command for uninstall
+
+build uninstall: phony CMakeFiles/uninstall
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/gravitacia/CLionProjects/yaml-cpp -B/Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build CMakeFiles/install.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build install: phony CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build CMakeFiles/install/local.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build install/local: phony CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build install/strip: phony CMakeFiles/install/strip.util
+
+
+#############################################
+# Custom command for CMakeFiles/uninstall
+
+build CMakeFiles/uninstall | ${cmake_ninja_workdir}CMakeFiles/uninstall: CUSTOM_COMMAND
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/cmake_uninstall.cmake
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/gravitacia/CLionProjects/yaml-cpp/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target yaml-cpp-sandbox
+
+
+#############################################
+# Order-only phony target for yaml-cpp-sandbox
+
+build cmake_object_order_depends_target_yaml-cpp-sandbox: phony || cmake_object_order_depends_target_yaml-cpp
+
+build util/CMakeFiles/yaml-cpp-sandbox.dir/sandbox.cpp.o: CXX_COMPILER__yaml-cpp-sandbox_Debug /Users/gravitacia/CLionProjects/yaml-cpp/util/sandbox.cpp || cmake_object_order_depends_target_yaml-cpp-sandbox
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = util/CMakeFiles/yaml-cpp-sandbox.dir/sandbox.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include
+  OBJECT_DIR = util/CMakeFiles/yaml-cpp-sandbox.dir
+  OBJECT_FILE_DIR = util/CMakeFiles/yaml-cpp-sandbox.dir
+  TARGET_COMPILE_PDB = util/CMakeFiles/yaml-cpp-sandbox.dir/
+  TARGET_PDB = util/sandbox.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target yaml-cpp-sandbox
+
+
+#############################################
+# Link the executable util/sandbox
+
+build util/sandbox: CXX_EXECUTABLE_LINKER__yaml-cpp-sandbox_Debug util/CMakeFiles/yaml-cpp-sandbox.dir/sandbox.cpp.o | libyaml-cppd.a || libyaml-cppd.a
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk
+  LINK_LIBRARIES = libyaml-cppd.a
+  OBJECT_DIR = util/CMakeFiles/yaml-cpp-sandbox.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = util/CMakeFiles/yaml-cpp-sandbox.dir/
+  TARGET_FILE = util/sandbox
+  TARGET_PDB = util/sandbox.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target yaml-cpp-parse
+
+
+#############################################
+# Order-only phony target for yaml-cpp-parse
+
+build cmake_object_order_depends_target_yaml-cpp-parse: phony || cmake_object_order_depends_target_yaml-cpp
+
+build util/CMakeFiles/yaml-cpp-parse.dir/parse.cpp.o: CXX_COMPILER__yaml-cpp-parse_Debug /Users/gravitacia/CLionProjects/yaml-cpp/util/parse.cpp || cmake_object_order_depends_target_yaml-cpp-parse
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = util/CMakeFiles/yaml-cpp-parse.dir/parse.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include
+  OBJECT_DIR = util/CMakeFiles/yaml-cpp-parse.dir
+  OBJECT_FILE_DIR = util/CMakeFiles/yaml-cpp-parse.dir
+  TARGET_COMPILE_PDB = util/CMakeFiles/yaml-cpp-parse.dir/
+  TARGET_PDB = util/parse.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target yaml-cpp-parse
+
+
+#############################################
+# Link the executable util/parse
+
+build util/parse: CXX_EXECUTABLE_LINKER__yaml-cpp-parse_Debug util/CMakeFiles/yaml-cpp-parse.dir/parse.cpp.o | libyaml-cppd.a || libyaml-cppd.a
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk
+  LINK_LIBRARIES = libyaml-cppd.a
+  OBJECT_DIR = util/CMakeFiles/yaml-cpp-parse.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = util/CMakeFiles/yaml-cpp-parse.dir/
+  TARGET_FILE = util/parse
+  TARGET_PDB = util/parse.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target yaml-cpp-read
+
+
+#############################################
+# Order-only phony target for yaml-cpp-read
+
+build cmake_object_order_depends_target_yaml-cpp-read: phony || cmake_object_order_depends_target_yaml-cpp
+
+build util/CMakeFiles/yaml-cpp-read.dir/read.cpp.o: CXX_COMPILER__yaml-cpp-read_Debug /Users/gravitacia/CLionProjects/yaml-cpp/util/read.cpp || cmake_object_order_depends_target_yaml-cpp-read
+  DEFINES = -DYAML_CPP_STATIC_DEFINE
+  DEP_FILE = util/CMakeFiles/yaml-cpp-read.dir/read.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++11
+  INCLUDES = -I/Users/gravitacia/CLionProjects/yaml-cpp/include
+  OBJECT_DIR = util/CMakeFiles/yaml-cpp-read.dir
+  OBJECT_FILE_DIR = util/CMakeFiles/yaml-cpp-read.dir
+  TARGET_COMPILE_PDB = util/CMakeFiles/yaml-cpp-read.dir/
+  TARGET_PDB = util/read.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target yaml-cpp-read
+
+
+#############################################
+# Link the executable util/read
+
+build util/read: CXX_EXECUTABLE_LINKER__yaml-cpp-read_Debug util/CMakeFiles/yaml-cpp-read.dir/read.cpp.o | libyaml-cppd.a || libyaml-cppd.a
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk
+  LINK_LIBRARIES = libyaml-cppd.a
+  OBJECT_DIR = util/CMakeFiles/yaml-cpp-read.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = util/CMakeFiles/yaml-cpp-read.dir/
+  TARGET_FILE = util/read
+  TARGET_PDB = util/read.pdb
+
+
+#############################################
+# Utility command for edit_cache
+
+build util/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/util && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build util/edit_cache: phony util/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build util/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/util && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/gravitacia/CLionProjects/yaml-cpp -B/Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build util/rebuild_cache: phony util/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build util/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build util/CMakeFiles/install.util: CUSTOM_COMMAND util/all
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/util && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build util/install: phony util/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build util/CMakeFiles/install/local.util: CUSTOM_COMMAND util/all
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/util && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build util/install/local: phony util/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build util/CMakeFiles/install/strip.util: CUSTOM_COMMAND util/all
+  COMMAND = cd /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/util && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build util/install/strip: phony util/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Target aliases.
+
+build parse: phony util/parse
+
+build read: phony util/read
+
+build sandbox: phony util/sandbox
+
+build yaml-cpp: phony libyaml-cppd.a
+
+build yaml-cpp-parse: phony util/parse
+
+build yaml-cpp-read: phony util/read
+
+build yaml-cpp-sandbox: phony util/sandbox
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug
+
+build all: phony libyaml-cppd.a util/all
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/util
+
+build util/all: phony util/sandbox util/parse util/read
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Phony target to force glob verification run.
+
+build /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/CMakeFiles/VerifyGlobs.cmake_force: phony
+
+
+#############################################
+# Re-run CMake to check if globbed directories changed.
+
+build /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/CMakeFiles/cmake.verify_globs: VERIFY_GLOBS | /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/CMakeFiles/VerifyGlobs.cmake_force
+  pool = console
+  restat = 1
+
+
+#############################################
+# Re-run CMake if any of its inputs changed.
+
+build build.ninja: RERUN_CMAKE /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/CMakeFiles/cmake.verify_globs | /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXCompiler.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXCompilerABI.cpp /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCompilerIdDetection.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDependentOption.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompileFeatures.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompilerABI.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompilerId.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeFindBinUtils.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeParseImplicitIncludeInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeParseImplicitLinkInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeParseLibraryArchitecture.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystem.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeTestCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeTestCompilerCommon.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckCXXCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckCXXSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/ADSP-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Borland-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Cray-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GHS-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IAR-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Intel-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/MSVC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/PGI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/PathScale-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/SCO-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/TI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Watcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckFlagCommonConfig.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/FeatureTesting.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Determine-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/WriteBasicConfigVersionFile.cmake /Users/gravitacia/CLionProjects/yaml-cpp/CMakeLists.txt /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/CMakeFiles/VerifyGlobs.cmake /Users/gravitacia/CLionProjects/yaml-cpp/cmake_uninstall.cmake.in /Users/gravitacia/CLionProjects/yaml-cpp/util/CMakeLists.txt /Users/gravitacia/CLionProjects/yaml-cpp/yaml-cpp-config.cmake.in /Users/gravitacia/CLionProjects/yaml-cpp/yaml-cpp.pc.in CMakeCache.txt CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake
+  pool = console
+
+
+#############################################
+# A missing CMake input file is not an error.
+
+build /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXCompiler.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXCompilerABI.cpp /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeCompilerIdDetection.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDependentOption.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompileFeatures.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompilerABI.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineCompilerId.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeDetermineSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeFindBinUtils.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeParseImplicitIncludeInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeParseImplicitLinkInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeParseLibraryArchitecture.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystem.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeTestCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CMakeTestCompilerCommon.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckCXXCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/CheckCXXSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/ADSP-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Borland-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Cray-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GHS-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IAR-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Intel-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/MSVC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/PGI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/PathScale-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/SCO-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/TI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/Watcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckFlagCommonConfig.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Internal/FeatureTesting.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Determine-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.24/Modules/WriteBasicConfigVersionFile.cmake /Users/gravitacia/CLionProjects/yaml-cpp/CMakeLists.txt /Users/gravitacia/CLionProjects/yaml-cpp/cmake-build-debug/CMakeFiles/VerifyGlobs.cmake /Users/gravitacia/CLionProjects/yaml-cpp/cmake_uninstall.cmake.in /Users/gravitacia/CLionProjects/yaml-cpp/util/CMakeLists.txt /Users/gravitacia/CLionProjects/yaml-cpp/yaml-cpp-config.cmake.in /Users/gravitacia/CLionProjects/yaml-cpp/yaml-cpp.pc.in CMakeCache.txt CMakeFiles/3.24.2/CMakeCXXCompiler.cmake CMakeFiles/3.24.2/CMakeSystem.cmake: phony
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all
