@@ -14,6 +14,7 @@
 #include <sstream>
 #include <string>
 #include <type_traits>
+#include <iomanip>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/dll.h"
