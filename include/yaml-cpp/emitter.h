@@ -178,7 +178,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
     }
   }
 
-  if ((float)((int) value ) == value ){
+  if (static_cast<float>(static_cast<int>(value)) == value){
     stream << std::fixed << std::setprecision(1) << value;
   }else if (!special) {
     stream << value;
