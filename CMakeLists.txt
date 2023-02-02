@@ -24,7 +24,13 @@ option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
 option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIBS})
 option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_CPP_MAIN_PROJECT})
 option(YAML_CPP_FORMAT_SOURCE "Format source" ON)
-
+cmake_dependent_option(YAML_CPP_BUILD_TESTS
+  "Enable yaml-cpp tests" ON
+  "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
+cmake_dependent_option(YAML_MSVC_SHARED_RT
+  "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
+  "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
+  
 if (YAML_CPP_BUILD_TESTS)
     include(CTest)
 endif()
@@ -32,13 +38,6 @@ endif()
 if (YAML_CPP_FORMAT_SOURCE)
     find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 endif()
-
-cmake_dependent_option(YAML_CPP_BUILD_TESTS
-  "Enable yaml-cpp tests" ON
-  "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
-cmake_dependent_option(YAML_MSVC_SHARED_RT
-  "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
-  "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
 
 if (YAML_BUILD_SHARED_LIBS)
   set(yaml-cpp-type SHARED)
