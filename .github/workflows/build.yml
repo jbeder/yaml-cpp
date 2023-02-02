@@ -40,7 +40,7 @@ jobs:
           shell: bash
           env:
             YAML_CPP_BUILD_TESTS: 'on'
-          run: cd build && ctest --output-on-failure
+          run: cd build && ctest --output-on-failure -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
 
   bazel-build:
       strategy:
