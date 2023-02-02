@@ -26,7 +26,7 @@ option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_C
 option(YAML_CPP_FORMAT_SOURCE "Format source" ON)
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" ON
-  "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
+  "BUILD_TESTING;YAML_CPP_MAIN_PROJECT" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
