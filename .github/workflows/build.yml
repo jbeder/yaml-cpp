@@ -21,6 +21,7 @@ jobs:
             generator: "MinGW Makefiles"
       env:
         YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
+        YAML_CPP_BUILD_TESTS: 'ON'
         CMAKE_GENERATOR: >-
           ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
       runs-on: ${{ matrix.os }}
@@ -33,14 +34,12 @@ jobs:
         - name: Build
           shell: bash
           run: |
-            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
             cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
 
         - name: Test
           shell: bash
-          env:
-            YAML_CPP_BUILD_TESTS: 'on'
-          run: cd build && ctest --output-on-failure -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
+          run: cd build && ctest --output-on-failure
 
   bazel-build:
       strategy:
