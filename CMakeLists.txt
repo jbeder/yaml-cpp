@@ -31,10 +31,6 @@ cmake_dependent_option(YAML_CPP_BUILD_TESTS
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
   "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
-  
-message(WARNING "YAML_CPP_MAIN_PROJECT: ${YAML_CPP_MAIN_PROJECT}")
-message(WARNING "BUILD_TESTING: ${BUILD_TESTING}")
-message(WARNING "YAML_CPP_BUILD_TESTS: ${YAML_CPP_BUILD_TESTS}")
  
 if (YAML_CPP_FORMAT_SOURCE)
     find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
