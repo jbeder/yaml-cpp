@@ -35,12 +35,15 @@ jobs:
         - name: Build
           shell: bash
           run: |
-            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
             cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
 
         - name: Test
           shell: bash
-          run: cd build && ctest --output-on-failure
+          run: |
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
+            cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
+            ctest --output-on-failure
 
   bazel-build:
       strategy:
