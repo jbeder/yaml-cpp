@@ -8,6 +8,7 @@ on:
 jobs:
   cmake-build:
       strategy:
+        fail-fast: false
         matrix:
           os: [ubuntu-latest, windows-latest, macos-latest]
           build: [static, shared]
