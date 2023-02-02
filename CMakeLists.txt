@@ -18,6 +18,7 @@ include(CMakePackageConfigHelpers)
 include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 include(GNUInstallDirs)
+include(CTest)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
@@ -25,7 +26,7 @@ option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ${BUILD_SHARED_LIB
 option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_CPP_MAIN_PROJECT})
 option(YAML_CPP_FORMAT_SOURCE "Format source" ON)
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
-  "Enable yaml-cpp tests" ON
+  "Enable yaml-cpp tests" OFF
   "BUILD_TESTING;YAML_CPP_MAIN_PROJECT" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
   "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
@@ -34,11 +35,7 @@ cmake_dependent_option(YAML_MSVC_SHARED_RT
 message(WARN "YAML_CPP_MAIN_PROJECT: ${YAML_CPP_MAIN_PROJECT}")
 message(WARN "BUILD_TESTING: ${BUILD_TESTING}")
 message(WARN "YAML_CPP_BUILD_TESTS: ${YAML_CPP_BUILD_TESTS}")
-  
-if (YAML_CPP_BUILD_TESTS)
-    include(CTest)
-endif()
-
+ 
 if (YAML_CPP_FORMAT_SOURCE)
     find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 endif()
