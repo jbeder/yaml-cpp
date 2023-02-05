@@ -47,7 +47,7 @@ jobs:
         - name: Run Tests
           shell: bash
           run: |
-            cd build && ctest --output-on-failure --verbose
+            cd build && ctest -D Debug --output-on-failure --verbose
 
   bazel-build:
       strategy:
