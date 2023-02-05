@@ -179,7 +179,6 @@ endif()
 unset(CONFIG_EXPORT_DIR)
 
 if(YAML_CPP_BUILD_TESTS)
-  enable_testing()
   add_subdirectory(test)
 endif()
 
