@@ -323,6 +323,38 @@ TEST(NodeTest, IteratorOnConstUndefinedNode) {
   }
   EXPECT_EQ(0, count);
 }
+  
+TEST(NodeTest, InteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+  
+TEST(NodeTest, ConstInteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (const_iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
 
 TEST(NodeTest, SimpleSubkeys) {
   Node node;
