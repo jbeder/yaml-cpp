@@ -18,6 +18,7 @@ include(CMakePackageConfigHelpers)
 include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 include(GNUInstallDirs)
+include(CTest)
 
 option(YAML_CPP_BUILD_CONTRIB "Enable yaml-cpp contrib in library" ON)
 option(YAML_CPP_BUILD_TOOLS "Enable parse tools" ON)
@@ -178,7 +179,6 @@ endif()
 unset(CONFIG_EXPORT_DIR)
 
 if(YAML_CPP_BUILD_TESTS)
-  include(CTest)
   add_subdirectory(test)
 endif()
 
