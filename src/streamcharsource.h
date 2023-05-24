@@ -7,18 +7,20 @@
 #pragma once
 #endif
 
+#include "yaml-cpp/noexcept.h"
+#include "stream.h"
 #include <cstddef>
 
 namespace YAML {
+
 class StreamCharSource {
  public:
   StreamCharSource(const Stream& stream) : m_offset(0), m_stream(stream) {}
-  StreamCharSource(const StreamCharSource& source)
-      : m_offset(source.m_offset), m_stream(source.m_stream) {}
-  StreamCharSource(StreamCharSource&&) = default;
+  StreamCharSource(const StreamCharSource& source) = default;
+  StreamCharSource(StreamCharSource&&) YAML_CPP_NOEXCEPT = default;
   StreamCharSource& operator=(const StreamCharSource&) = delete;
   StreamCharSource& operator=(StreamCharSource&&) = delete;
-  ~StreamCharSource() {}
+  ~StreamCharSource() = default;
 
   operator bool() const;
   char operator[](std::size_t i) const { return m_stream.CharAt(m_offset + i); }
@@ -38,7 +40,7 @@ inline StreamCharSource::operator bool() const {
 inline const StreamCharSource StreamCharSource::operator+(int i) const {
   StreamCharSource source(*this);
   if (static_cast<int>(source.m_offset) + i >= 0)
-    source.m_offset += i;
+    source.m_offset += static_cast<std::size_t>(i);
   else
     source.m_offset = 0;
   return source;

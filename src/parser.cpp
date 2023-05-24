@@ -15,11 +15,9 @@ Parser::Parser() : m_pScanner{}, m_pDirectives{} {}
 
 Parser::Parser(std::istream& in) : Parser() { Load(in); }
 
-Parser::~Parser() {}
+Parser::~Parser() = default;
 
-Parser::operator bool() const {
-  return m_pScanner.get() && !m_pScanner->empty();
-}
+Parser::operator bool() const { return m_pScanner && !m_pScanner->empty(); }
 
 void Parser::Load(std::istream& in) {
   m_pScanner.reset(new Scanner(in));
@@ -27,7 +25,7 @@ void Parser::Load(std::istream& in) {
 }
 
 bool Parser::HandleNextDocument(EventHandler& eventHandler) {
-  if (!m_pScanner.get())
+  if (!m_pScanner)
     return false;
 
   ParseDirectives();
@@ -43,11 +41,7 @@ bool Parser::HandleNextDocument(EventHandler& eventHandler) {
 void Parser::ParseDirectives() {
   bool readDirective = false;
 
-  while (1) {
-    if (m_pScanner->empty()) {
-      break;
-    }
-
+  while (!m_pScanner->empty()) {
     Token& token = m_pScanner->peek();
     if (token.type != Token::DIRECTIVE) {
       break;
@@ -113,15 +107,11 @@ void Parser::HandleTagDirective(const Token& token) {
 }
 
 void Parser::PrintTokens(std::ostream& out) {
-  if (!m_pScanner.get()) {
+  if (!m_pScanner) {
     return;
   }
 
-  while (1) {
-    if (m_pScanner->empty()) {
-      break;
-    }
-
+  while (!m_pScanner->empty()) {
     out << m_pScanner->peek() << "\n";
     m_pScanner->pop();
   }

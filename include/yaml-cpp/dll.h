@@ -1,33 +1,61 @@
 #ifndef DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
 #define DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
 
-#if defined(_MSC_VER) ||                                            \
-    (defined(__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || \
-     (__GNUC__ >= 4))  // GCC supports "pragma once" correctly since 3.4
-#pragma once
+// Definition YAML_CPP_STATIC_DEFINE using to building YAML-CPP as static
+// library (definition created by CMake or defined manually)
+
+// Definition yaml_cpp_EXPORTS using to building YAML-CPP as dll/so library
+// (definition created by CMake or defined manually)
+
+#ifdef YAML_CPP_STATIC_DEFINE
+#  define YAML_CPP_API
+#  define YAML_CPP_NO_EXPORT
+#else
+#  if defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
+#    ifndef YAML_CPP_API
+#      ifdef yaml_cpp_EXPORTS
+         /* We are building this library */
+#        pragma message( "Defining YAML_CPP_API for DLL export" )
+#        define YAML_CPP_API __declspec(dllexport)
+#      else
+         /* We are using this library */
+#        pragma message( "Defining YAML_CPP_API for DLL import" )
+#        define YAML_CPP_API __declspec(dllimport)
+#      endif
+#    endif
+#    ifndef YAML_CPP_NO_EXPORT
+#      define YAML_CPP_NO_EXPORT
+#    endif
+#  else /* No _MSC_VER */
+#    ifndef YAML_CPP_API
+#      ifdef yaml_cpp_EXPORTS
+         /* We are building this library */
+#        define YAML_CPP_API __attribute__((visibility("default")))
+#      else
+         /* We are using this library */
+#        define YAML_CPP_API __attribute__((visibility("default")))
+#      endif
+#    endif
+#    ifndef YAML_CPP_NO_EXPORT
+#      define YAML_CPP_NO_EXPORT __attribute__((visibility("hidden")))
+#    endif
+#  endif /* _MSC_VER */
+#endif   /* YAML_CPP_STATIC_DEFINE */
+
+#ifndef YAML_CPP_DEPRECATED
+#  ifdef _MSC_VER
+#    define YAML_CPP_DEPRECATED __declspec(deprecated)
+#  else
+#    define YAML_CPP_DEPRECATED __attribute__ ((__deprecated__))
+#  endif
 #endif
 
-// The following ifdef block is the standard way of creating macros which make
-// exporting from a DLL simpler. All files within this DLL are compiled with the
-// yaml_cpp_EXPORTS symbol defined on the command line. This symbol should not
-// be defined on any project that uses this DLL. This way any other project
-// whose source files include this file see YAML_CPP_API functions as being
-// imported from a DLL, whereas this DLL sees symbols defined with this macro as
-// being exported.
-#undef YAML_CPP_API
+#ifndef YAML_CPP_DEPRECATED_EXPORT
+#  define YAML_CPP_DEPRECATED_EXPORT YAML_CPP_API YAML_CPP_DEPRECATED
+#endif
 
-#ifdef YAML_CPP_DLL      // Using or Building YAML-CPP DLL (definition defined
-                         // manually)
-#ifdef yaml_cpp_EXPORTS  // Building YAML-CPP DLL (definition created by CMake
-                         // or defined manually)
-//	#pragma message( "Defining YAML_CPP_API for DLL export" )
-#define YAML_CPP_API __declspec(dllexport)
-#else  // yaml_cpp_EXPORTS
-//	#pragma message( "Defining YAML_CPP_API for DLL import" )
-#define YAML_CPP_API __declspec(dllimport)
-#endif  // yaml_cpp_EXPORTS
-#else   // YAML_CPP_DLL
-#define YAML_CPP_API
-#endif  // YAML_CPP_DLL
+#ifndef YAML_CPP_DEPRECATED_NO_EXPORT
+#  define YAML_CPP_DEPRECATED_NO_EXPORT YAML_CPP_NO_EXPORT YAML_CPP_DEPRECATED
+#endif
 
-#endif  // DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+#endif /* DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66 */

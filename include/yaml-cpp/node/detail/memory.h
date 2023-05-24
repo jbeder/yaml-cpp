@@ -27,7 +27,7 @@ class YAML_CPP_API memory {
   void merge(const memory& rhs);
 
  private:
-  typedef std::set<shared_node> Nodes;
+  using Nodes = std::set<shared_node>;
   Nodes m_nodes;
 };
 

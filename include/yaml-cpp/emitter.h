@@ -50,6 +50,7 @@ class YAML_CPP_API Emitter {
   bool SetOutputCharset(EMITTER_MANIP value);
   bool SetStringFormat(EMITTER_MANIP value);
   bool SetBoolFormat(EMITTER_MANIP value);
+  bool SetNullFormat(EMITTER_MANIP value);
   bool SetIntBase(EMITTER_MANIP value);
   bool SetSeqFormat(EMITTER_MANIP value);
   bool SetMapFormat(EMITTER_MANIP value);
@@ -58,6 +59,7 @@ class YAML_CPP_API Emitter {
   bool SetPostCommentIndent(std::size_t n);
   bool SetFloatPrecision(std::size_t n);
   bool SetDoublePrecision(std::size_t n);
+  void RestoreGlobalModifiedSettings();
 
   // local setters
   Emitter& SetLocalValue(EMITTER_MANIP value);
@@ -123,6 +125,7 @@ class YAML_CPP_API Emitter {
   void SpaceOrIndentTo(bool requireSpace, std::size_t indent);
 
   const char* ComputeFullBoolName(bool b) const;
+  const char* ComputeNullName() const;
   bool CanEmitNewline() const;
 
  private:
@@ -164,13 +167,12 @@ inline Emitter& Emitter::WriteStreamable(T value) {
         std::isnan(value)) {
       special = true;
       stream << ".nan";
-    } else if (std::numeric_limits<T>::has_infinity) {
-      if (value == std::numeric_limits<T>::infinity()) {
-        special = true;
-        stream << ".inf";
-      } else if (value == -std::numeric_limits<T>::infinity()) {
-        special = true;
+    } else if (std::numeric_limits<T>::has_infinity && std::isinf(value)) {
+      special = true;
+      if (std::signbit(value)) {
         stream << "-.inf";
+      } else {
+        stream << ".inf";
       }
     }
   }

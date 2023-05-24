@@ -78,4 +78,4 @@ const std::string ScanTagSuffix(Stream& INPUT) {
 
   return tag;
 }
-}
+}  // namespace YAML

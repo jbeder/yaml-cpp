@@ -39,7 +39,7 @@ class YAML_CPP_API Binary {
       rhs.clear();
       rhs.resize(m_unownedSize);
       std::copy(m_unownedData, m_unownedData + m_unownedSize, rhs.begin());
-      m_unownedData = 0;
+      m_unownedData = nullptr;
       m_unownedSize = 0;
     } else {
       m_data.swap(rhs);

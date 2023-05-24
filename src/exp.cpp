@@ -12,8 +12,7 @@ namespace YAML {
 namespace Exp {
 unsigned ParseHex(const std::string& str, const Mark& mark) {
   unsigned value = 0;
-  for (std::size_t i = 0; i < str.size(); i++) {
-    char ch = str[i];
+  for (char ch : str) {
     int digit = 0;
     if ('a' <= ch && ch <= 'f')
       digit = ch - 'a' + 10;
@@ -55,14 +54,16 @@ std::string Escape(Stream& in, int codeLength) {
   // now break it up into chars
   if (value <= 0x7F)
     return Str(value);
-  else if (value <= 0x7FF)
+
+  if (value <= 0x7FF)
     return Str(0xC0 + (value >> 6)) + Str(0x80 + (value & 0x3F));
-  else if (value <= 0xFFFF)
+
+  if (value <= 0xFFFF)
     return Str(0xE0 + (value >> 12)) + Str(0x80 + ((value >> 6) & 0x3F)) +
            Str(0x80 + (value & 0x3F));
-  else
-    return Str(0xF0 + (value >> 18)) + Str(0x80 + ((value >> 12) & 0x3F)) +
-           Str(0x80 + ((value >> 6) & 0x3F)) + Str(0x80 + (value & 0x3F));
+
+  return Str(0xF0 + (value >> 18)) + Str(0x80 + ((value >> 12) & 0x3F)) +
+         Str(0x80 + ((value >> 6) & 0x3F)) + Str(0x80 + (value & 0x3F));
 }
 
 // Escape
@@ -104,7 +105,7 @@ std::string Escape(Stream& in) {
     case 'e':
       return "\x1B";
     case ' ':
-      return "\x20";
+      return R"( )";
     case '\"':
       return "\"";
     case '\'':
@@ -132,5 +133,5 @@ std::string Escape(Stream& in) {
   std::stringstream msg;
   throw ParserException(in.mark(), std::string(ErrorMsg::INVALID_ESCAPE) + ch);
 }
-}
-}
+}  // namespace Exp
+}  // namespace YAML

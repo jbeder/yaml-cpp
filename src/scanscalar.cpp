@@ -47,7 +47,8 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
       if (INPUT.column() == 0 && Exp::DocIndicator().Matches(INPUT)) {
         if (params.onDocIndicator == BREAK) {
           break;
-        } else if (params.onDocIndicator == THROW) {
+        }
+        if (params.onDocIndicator == THROW) {
           throw ParserException(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
         }
       }
@@ -203,7 +204,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
   // post-processing
   if (params.trimTrailingSpaces) {
-    std::size_t pos = scalar.find_last_not_of(' ');
+    std::size_t pos = scalar.find_last_not_of(" \t");
     if (lastEscapedChar != std::string::npos) {
       if (pos < lastEscapedChar || pos == std::string::npos) {
         pos = lastEscapedChar;
@@ -247,4 +248,4 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
 
   return scalar;
 }
-}
+}  // namespace YAML

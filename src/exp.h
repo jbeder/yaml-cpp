@@ -37,7 +37,7 @@ inline const RegEx& Blank() {
   return e;
 }
 inline const RegEx& Break() {
-  static const RegEx e = RegEx('\n') | RegEx("\r\n");
+  static const RegEx e = RegEx('\n') | RegEx("\r\n") | RegEx('\r');
   return e;
 }
 inline const RegEx& BlankOrBreak() {
@@ -110,11 +110,15 @@ inline const RegEx& Value() {
   return e;
 }
 inline const RegEx& ValueInFlow() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",}", REGEX_OR));
+  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",]}", REGEX_OR));
   return e;
 }
 inline const RegEx& ValueInJSONFlow() {
   static const RegEx e = RegEx(':');
+  return e;
+}
+inline const RegEx& Ampersand() {
+  static const RegEx e = RegEx('&');
   return e;
 }
 inline const RegEx Comment() {
@@ -155,7 +159,7 @@ inline const RegEx& PlainScalar() {
 inline const RegEx& PlainScalarInFlow() {
   static const RegEx e =
       !(BlankOrBreak() | RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OR) |
-        (RegEx("-:", REGEX_OR) + Blank()));
+        (RegEx("-:", REGEX_OR) + (Blank() | RegEx())));
   return e;
 }
 inline const RegEx& EndScalar() {

@@ -7,6 +7,7 @@ namespace {
 TEST(LoadNodeTest, Reassign) {
   Node node = Load("foo");
   node = Node();
+  EXPECT_TRUE(node.IsNull());
 }
 
 TEST(LoadNodeTest, FallbackValues) {
@@ -20,17 +21,35 @@ TEST(LoadNodeTest, FallbackValues) {
 }
 
 TEST(LoadNodeTest, NumericConversion) {
-  Node node = Load("[1.5, 1, .nan, .inf, -.inf, 0x15, 015]");
-  EXPECT_EQ(1.5f, node[0].as<float>());
-  EXPECT_EQ(1.5, node[0].as<double>());
-  EXPECT_THROW(node[0].as<int>(), TypedBadConversion<int>);
-  EXPECT_EQ(1, node[1].as<int>());
-  EXPECT_EQ(1.0f, node[1].as<float>());
-  EXPECT_NE(node[2].as<float>(), node[2].as<float>());
-  EXPECT_EQ(std::numeric_limits<float>::infinity(), node[3].as<float>());
-  EXPECT_EQ(-std::numeric_limits<float>::infinity(), node[4].as<float>());
-  EXPECT_EQ(21, node[5].as<int>());
-  EXPECT_EQ(13, node[6].as<int>());
+  EXPECT_EQ(1.5f, Load("1.5").as<float>());
+  EXPECT_EQ(1.5, Load("1.5").as<double>());
+  EXPECT_THROW(Load("1.5").as<int>(), TypedBadConversion<int>);
+  EXPECT_EQ(1, Load("1").as<int>());
+  EXPECT_EQ(1.0f, Load("1").as<float>());
+  EXPECT_NE(Load(".nan").as<float>(), Load(".nan").as<float>());
+  EXPECT_EQ(std::numeric_limits<float>::infinity(), Load(".inf").as<float>());
+  EXPECT_EQ(-std::numeric_limits<float>::infinity(), Load("-.inf").as<float>());
+  EXPECT_EQ(21, Load("0x15").as<int>());
+  EXPECT_EQ(13, Load("015").as<int>());
+  EXPECT_EQ(-128, +Load("-128").as<int8_t>());
+  EXPECT_EQ(127, +Load("127").as<int8_t>());
+  EXPECT_THROW(Load("128").as<int8_t>(), TypedBadConversion<signed char>);
+  EXPECT_EQ(255, +Load("255").as<uint8_t>());
+  EXPECT_THROW(Load("256").as<uint8_t>(), TypedBadConversion<unsigned char>);
+  // test as<char>/as<uint8_t> with ‘a’,"ab",'1',"127"
+  EXPECT_EQ('a', Load("a").as<char>());
+  EXPECT_THROW(Load("ab").as<char>(), TypedBadConversion<char>);
+  EXPECT_EQ('1', Load("1").as<char>());
+  EXPECT_THROW(Load("127").as<char>(), TypedBadConversion<char>);
+  EXPECT_THROW(Load("a").as<uint8_t>(), TypedBadConversion<unsigned char>);
+  EXPECT_THROW(Load("ab").as<uint8_t>(), TypedBadConversion<unsigned char>);
+  EXPECT_EQ(1, +Load("1").as<uint8_t>());
+  // Throw exception: convert a negative number to an unsigned number.
+  EXPECT_THROW(Load("-128").as<unsigned>(), TypedBadConversion<unsigned int>);
+  EXPECT_THROW(Load("-128").as<unsigned short>(), TypedBadConversion<unsigned short>);
+  EXPECT_THROW(Load("-128").as<unsigned long>(), TypedBadConversion<unsigned long>);
+  EXPECT_THROW(Load("-128").as<unsigned long long>(), TypedBadConversion<unsigned long long>);
+  EXPECT_THROW(Load("-128").as<uint8_t>(), TypedBadConversion<unsigned char>);
 }
 
 TEST(LoadNodeTest, Binary) {
@@ -235,6 +254,57 @@ TEST(NodeTest, IncompleteJson) {
       {"JSON map without end brace", "{\"access\":\"abc\"",
        ErrorMsg::END_OF_MAP_FLOW},
   };
+  for (const ParserExceptionTestCase& test : tests) {
+    try {
+      Load(test.input);
+      FAIL() << "Expected exception " << test.expected_exception << " for "
+             << test.name << ", input: " << test.input;
+    } catch (const ParserException& e) {
+      EXPECT_EQ(test.expected_exception, e.msg);
+    }
+  }
+}
+
+struct SingleNodeTestCase {
+  std::string input;
+  NodeType::value nodeType;
+  int nodeSize;
+  std::string expected_content;
+};
+
+TEST(NodeTest, SpecialFlow) {
+  std::vector<SingleNodeTestCase> tests = {
+      {"[:]", NodeType::Sequence, 1, "[{~: ~}]"},
+      {"[a:]", NodeType::Sequence, 1, "[{a: ~}]"},
+      {"[:a]", NodeType::Sequence, 1, "[:a]"},
+      {"[,]", NodeType::Sequence, 1, "[~]"},
+      {"[a:,]", NodeType::Sequence, 1, "[{a: ~}]"},
+      {"{:}", NodeType::Map, 1, "{~: ~}"},
+      {"{a:}", NodeType::Map, 1, "{a: ~}"},
+      {"{:a}", NodeType::Map, 1, "{:a: ~}"},
+      {"{,}", NodeType::Map, 1, "{~: ~}"},
+      {"{a:,}", NodeType::Map, 1, "{a: ~}"},
+      //testcase for the trailing TAB of scalar
+      {"key\t: value\t", NodeType::Map, 1, "key: value"},
+      {"key\t: value\t #comment", NodeType::Map, 1, "key: value"},
+      {"{key\t: value\t}", NodeType::Map, 1, "{key: value}"},
+      {"{key\t: value\t #comment\n}", NodeType::Map, 1, "{key: value}"},
+  };
+  for (const SingleNodeTestCase& test : tests) {
+    Node node = Load(test.input);
+    Emitter emitter;
+    emitter << node;
+    EXPECT_EQ(test.nodeType, node.Type());
+    EXPECT_EQ(test.nodeSize, node.size());
+    EXPECT_EQ(test.expected_content, std::string(emitter.c_str()));
+  }
+}
+
+TEST(NodeTest, IncorrectFlow) {
+  std::vector<ParserExceptionTestCase> tests = {
+    {"Incorrect yaml: \"{:]\"", "{:]", ErrorMsg::FLOW_END},
+    {"Incorrect yaml: \"[:}\"", "[:}", ErrorMsg::FLOW_END},
+  };
   for (const ParserExceptionTestCase test : tests) {
     try {
       Load(test.input);
@@ -249,12 +319,45 @@ TEST(NodeTest, IncompleteJson) {
 TEST(NodeTest, LoadTildeAsNull) {
   Node node = Load("~");
   ASSERT_TRUE(node.IsNull());
+  EXPECT_EQ(node.as<std::string>(), "null");
+  EXPECT_EQ(node.as<std::string>("~"), "null");
 }
-    
+
+TEST(NodeTest, LoadNullWithStrTag) {
+  Node node = Load("!!str null");
+  EXPECT_EQ(node.Tag(), "tag:yaml.org,2002:str");
+  EXPECT_EQ(node.as<std::string>(), "null");
+}
+
+TEST(NodeTest, LoadQuotedNull) {
+  Node node = Load("\"null\"");
+  EXPECT_EQ(node.as<std::string>(), "null");
+}
+
 TEST(NodeTest, LoadTagWithParenthesis) {
     Node node = Load("!Complex(Tag) foo");
     EXPECT_EQ(node.Tag(), "!Complex(Tag)");
     EXPECT_EQ(node.as<std::string>(), "foo");
+}
+
+TEST(NodeTest, LoadTagWithNullScalar) {
+  Node node = Load("!2");
+  EXPECT_TRUE(node.IsNull());
+}
+
+TEST(LoadNodeTest, BlockCRNLEncoded) {
+  Node node = Load(
+      "blockText: |\r\n"
+      "  some arbitrary text \r\n"
+      "  spanning some \r\n"
+      "  lines, that are split \r\n"
+      "  by CR and NL\r\n"
+      "followup: 1");
+  EXPECT_EQ(
+      "some arbitrary text \nspanning some \nlines, that are split \nby CR and "
+      "NL\n",
+      node["blockText"].as<std::string>());
+  EXPECT_EQ(1, node["followup"].as<int>());
 }
 
 }  // namespace

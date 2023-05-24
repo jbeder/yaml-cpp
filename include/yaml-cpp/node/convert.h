@@ -8,10 +8,14 @@
 #endif
 
 #include <array>
+#include <cmath>
 #include <limits>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <sstream>
+#include <type_traits>
+#include <valarray>
 #include <vector>
 
 #include "yaml-cpp/binary.h"
@@ -20,6 +24,7 @@
 #include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/type.h"
 #include "yaml-cpp/null.h"
+
 
 namespace YAML {
 class Binary;
@@ -71,12 +76,17 @@ struct convert<std::string> {
 // C-strings can only be encoded
 template <>
 struct convert<const char*> {
-  static Node encode(const char*& rhs) { return Node(rhs); }
+  static Node encode(const char* rhs) { return Node(rhs); }
+};
+
+template <>
+struct convert<char*> {
+  static Node encode(const char* rhs) { return Node(rhs); }
 };
 
 template <std::size_t N>
-struct convert<const char[N]> {
-  static Node encode(const char(&rhs)[N]) { return Node(rhs); }
+struct convert<char[N]> {
+  static Node encode(const char* rhs) { return Node(rhs); }
 };
 
 template <>
@@ -88,43 +98,98 @@ struct convert<_Null> {
   }
 };
 
-#define YAML_DEFINE_CONVERT_STREAMABLE(type, negative_op)                \
-  template <>                                                            \
-  struct convert<type> {                                                 \
-    static Node encode(const type& rhs) {                                \
-      std::stringstream stream;                                          \
-      stream.precision(std::numeric_limits<type>::max_digits10);         \
-      stream << rhs;                                                     \
-      return Node(stream.str());                                         \
-    }                                                                    \
-                                                                         \
-    static bool decode(const Node& node, type& rhs) {                    \
-      if (node.Type() != NodeType::Scalar)                               \
-        return false;                                                    \
-      const std::string& input = node.Scalar();                          \
-      std::stringstream stream(input);                                   \
-      stream.unsetf(std::ios::dec);                                      \
-      if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) \
-        return true;                                                     \
-      if (std::numeric_limits<type>::has_infinity) {                     \
-        if (conversion::IsInfinity(input)) {                             \
-          rhs = std::numeric_limits<type>::infinity();                   \
-          return true;                                                   \
-        } else if (conversion::IsNegativeInfinity(input)) {              \
-          rhs = negative_op std::numeric_limits<type>::infinity();       \
-          return true;                                                   \
-        }                                                                \
-      }                                                                  \
-                                                                         \
-      if (std::numeric_limits<type>::has_quiet_NaN) {                    \
-        if (conversion::IsNaN(input)) {                                  \
-          rhs = std::numeric_limits<type>::quiet_NaN();                  \
-          return true;                                                   \
-        }                                                                \
-      }                                                                  \
-                                                                         \
-      return false;                                                      \
-    }                                                                    \
+namespace conversion {
+template <typename T>
+typename std::enable_if< std::is_floating_point<T>::value, void>::type
+inner_encode(const T& rhs, std::stringstream& stream){
+  if (std::isnan(rhs)) {
+    stream << ".nan";
+  } else if (std::isinf(rhs)) {
+    if (std::signbit(rhs)) {
+      stream << "-.inf";
+    } else {
+      stream << ".inf";
+    }
+  } else {
+    stream << rhs;
+  }
+}
+
+template <typename T>
+typename std::enable_if<!std::is_floating_point<T>::value, void>::type
+inner_encode(const T& rhs, std::stringstream& stream){
+  stream << rhs;
+}
+
+template <typename T>
+typename std::enable_if<(std::is_same<T, unsigned char>::value ||
+                         std::is_same<T, signed char>::value), bool>::type
+ConvertStreamTo(std::stringstream& stream, T& rhs) {
+  int num;
+  if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
+    if (num >= (std::numeric_limits<T>::min)() &&
+        num <= (std::numeric_limits<T>::max)()) {
+      rhs = static_cast<T>(num);
+      return true;
+    }
+  }
+  return false;
+}
+
+template <typename T>
+typename std::enable_if<!(std::is_same<T, unsigned char>::value ||
+                          std::is_same<T, signed char>::value), bool>::type
+ConvertStreamTo(std::stringstream& stream, T& rhs) {
+  if ((stream >> std::noskipws >> rhs) && (stream >> std::ws).eof()) {
+    return true;
+  }
+  return false;
+}
+}
+
+#define YAML_DEFINE_CONVERT_STREAMABLE(type, negative_op)                  \
+  template <>                                                              \
+  struct convert<type> {                                                   \
+                                                                           \
+    static Node encode(const type& rhs) {                                  \
+      std::stringstream stream;                                            \
+      stream.precision(std::numeric_limits<type>::max_digits10);           \
+      conversion::inner_encode(rhs, stream);                               \
+      return Node(stream.str());                                           \
+    }                                                                      \
+                                                                           \
+    static bool decode(const Node& node, type& rhs) {                      \
+      if (node.Type() != NodeType::Scalar) {                               \
+        return false;                                                      \
+      }                                                                    \
+      const std::string& input = node.Scalar();                            \
+      std::stringstream stream(input);                                     \
+      stream.unsetf(std::ios::dec);                                        \
+      if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
+        return false;                                                      \
+      }                                                                    \
+      if (conversion::ConvertStreamTo(stream, rhs)) {                      \
+        return true;                                                       \
+      }                                                                    \
+      if (std::numeric_limits<type>::has_infinity) {                       \
+        if (conversion::IsInfinity(input)) {                               \
+          rhs = std::numeric_limits<type>::infinity();                     \
+          return true;                                                     \
+        } else if (conversion::IsNegativeInfinity(input)) {                \
+          rhs = negative_op std::numeric_limits<type>::infinity();         \
+          return true;                                                     \
+        }                                                                  \
+      }                                                                    \
+                                                                           \
+      if (std::numeric_limits<type>::has_quiet_NaN) {                      \
+        if (conversion::IsNaN(input)) {                                    \
+          rhs = std::numeric_limits<type>::quiet_NaN();                    \
+          return true;                                                     \
+        }                                                                  \
+      }                                                                    \
+                                                                           \
+      return false;                                                        \
+    }                                                                      \
   }
 
 #define YAML_DEFINE_CONVERT_STREAMABLE_SIGNED(type) \
@@ -163,81 +228,104 @@ struct convert<bool> {
 };
 
 // std::map
-template <typename K, typename V>
-struct convert<std::map<K, V>> {
-  static Node encode(const std::map<K, V>& rhs) {
+template <typename K, typename V, typename C, typename A>
+struct convert<std::map<K, V, C, A>> {
+  static Node encode(const std::map<K, V, C, A>& rhs) {
     Node node(NodeType::Map);
-    for (typename std::map<K, V>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.force_insert(it->first, it->second);
+    for (const auto& element : rhs)
+      node.force_insert(element.first, element.second);
     return node;
   }
 
-  static bool decode(const Node& node, std::map<K, V>& rhs) {
+  static bool decode(const Node& node, std::map<K, V, C, A>& rhs) {
     if (!node.IsMap())
       return false;
 
     rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs[it->first.template as<K>()] = it->second.template as<V>();
+      rhs[element.first.template as<K>()] = element.second.template as<V>();
 #else
-      rhs[it->first.as<K>()] = it->second.as<V>();
+      rhs[element.first.as<K>()] = element.second.as<V>();
+#endif
+    return true;
+  }
+};
+
+// std::unordered_map
+template <typename K, typename V, typename H, typename P, typename A>
+struct convert<std::unordered_map<K, V, H, P, A>> {
+  static Node encode(const std::unordered_map<K, V, H, P, A>& rhs) {
+    Node node(NodeType::Map);
+    for (const auto& element : rhs)
+      node.force_insert(element.first, element.second);
+    return node;
+  }
+
+  static bool decode(const Node& node, std::unordered_map<K, V, H, P, A>& rhs) {
+    if (!node.IsMap())
+      return false;
+
+    rhs.clear();
+    for (const auto& element : node)
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[element.first.template as<K>()] = element.second.template as<V>();
+#else
+      rhs[element.first.as<K>()] = element.second.as<V>();
 #endif
     return true;
   }
 };
 
 // std::vector
-template <typename T>
-struct convert<std::vector<T>> {
-  static Node encode(const std::vector<T>& rhs) {
+template <typename T, typename A>
+struct convert<std::vector<T, A>> {
+  static Node encode(const std::vector<T, A>& rhs) {
     Node node(NodeType::Sequence);
-    for (typename std::vector<T>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.push_back(*it);
+    for (const auto& element : rhs)
+      node.push_back(element);
     return node;
   }
 
-  static bool decode(const Node& node, std::vector<T>& rhs) {
+  static bool decode(const Node& node, std::vector<T, A>& rhs) {
     if (!node.IsSequence())
       return false;
 
     rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs.push_back(it->template as<T>());
+      rhs.push_back(element.template as<T>());
 #else
-      rhs.push_back(it->as<T>());
+      rhs.push_back(element.as<T>());
 #endif
     return true;
   }
 };
 
 // std::list
-template <typename T>
-struct convert<std::list<T>> {
-  static Node encode(const std::list<T>& rhs) {
+template <typename T, typename A>
+struct convert<std::list<T,A>> {
+  static Node encode(const std::list<T,A>& rhs) {
     Node node(NodeType::Sequence);
-    for (typename std::list<T>::const_iterator it = rhs.begin();
-         it != rhs.end(); ++it)
-      node.push_back(*it);
+    for (const auto& element : rhs)
+      node.push_back(element);
     return node;
   }
 
-  static bool decode(const Node& node, std::list<T>& rhs) {
+  static bool decode(const Node& node, std::list<T,A>& rhs) {
     if (!node.IsSequence())
       return false;
 
     rhs.clear();
-    for (const_iterator it = node.begin(); it != node.end(); ++it)
+    for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
-      rhs.push_back(it->template as<T>());
+      rhs.push_back(element.template as<T>());
 #else
-      rhs.push_back(it->as<T>());
+      rhs.push_back(element.as<T>());
 #endif
     return true;
   }
@@ -275,6 +363,37 @@ struct convert<std::array<T, N>> {
     return node.IsSequence() && node.size() == N;
   }
 };
+
+
+// std::valarray
+template <typename T>
+struct convert<std::valarray<T>> {
+  static Node encode(const std::valarray<T>& rhs) {
+    Node node(NodeType::Sequence);
+    for (const auto& element : rhs) {
+      node.push_back(element);
+    }
+    return node;
+  }
+
+  static bool decode(const Node& node, std::valarray<T>& rhs) {
+    if (!node.IsSequence()) {
+      return false;
+    }
+
+    rhs.resize(node.size());
+    for (auto i = 0u; i < node.size(); ++i) {
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[i] = node[i].template as<T>();
+#else
+      rhs[i] = node[i].as<T>();
+#endif
+    }
+    return true;
+  }
+};
+
 
 // std::pair
 template <typename T, typename U>

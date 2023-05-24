@@ -7,12 +7,18 @@
 #pragma once
 #endif
 
+#include "yaml-cpp/noexcept.h"
 #include <memory>
 #include <utility>
 #include <vector>
 
 namespace YAML {
-class SettingChangeBase;
+
+class SettingChangeBase {
+ public:
+  virtual ~SettingChangeBase() = default;
+  virtual void pop() = 0;
+};
 
 template <typename T>
 class Setting {
@@ -28,12 +34,6 @@ class Setting {
   T m_value;
 };
 
-class SettingChangeBase {
- public:
-  virtual ~SettingChangeBase() {}
-  virtual void pop() = 0;
-};
-
 template <typename T>
 class SettingChange : public SettingChangeBase {
  public:
@@ -46,7 +46,7 @@ class SettingChange : public SettingChangeBase {
   SettingChange& operator=(const SettingChange&) = delete;
   SettingChange& operator=(SettingChange&&) = delete;
 
-  virtual void pop() { m_pCurSetting->restore(m_oldSetting); }
+  void pop() override { m_pCurSetting->restore(m_oldSetting); }
 
  private:
   Setting<T>* m_pCurSetting;
@@ -64,27 +64,9 @@ class SettingChanges {
  public:
   SettingChanges() : m_settingChanges{} {}
   SettingChanges(const SettingChanges&) = delete;
-  SettingChanges(SettingChanges&&) = default;
+  SettingChanges(SettingChanges&&) YAML_CPP_NOEXCEPT = default;
   SettingChanges& operator=(const SettingChanges&) = delete;
-  ~SettingChanges() { clear(); }
-
-  void clear() {
-    restore();
-    m_settingChanges.clear();
-  }
-
-  void restore() {
-    for (setting_changes::const_iterator it = m_settingChanges.begin();
-         it != m_settingChanges.end(); ++it)
-      (*it)->pop();
-  }
-
-  void push(std::unique_ptr<SettingChangeBase> pSettingChange) {
-    m_settingChanges.push_back(std::move(pSettingChange));
-  }
-
-  // like std::unique_ptr - assignment is transfer of ownership
-  SettingChanges& operator=(SettingChanges&& rhs) {
+  SettingChanges& operator=(SettingChanges&& rhs) YAML_CPP_NOEXCEPT {
     if (this == &rhs)
       return *this;
 
@@ -93,9 +75,24 @@ class SettingChanges {
 
     return *this;
   }
+  ~SettingChanges() { clear(); }
+
+  void clear() YAML_CPP_NOEXCEPT {
+    restore();
+    m_settingChanges.clear();
+  }
+
+  void restore() YAML_CPP_NOEXCEPT {
+    for (const auto& setting : m_settingChanges)
+      setting->pop();
+  }
+
+  void push(std::unique_ptr<SettingChangeBase> pSettingChange) {
+    m_settingChanges.push_back(std::move(pSettingChange));
+  }
 
  private:
-  typedef std::vector<std::unique_ptr<SettingChangeBase>> setting_changes;
+  using setting_changes = std::vector<std::unique_ptr<SettingChangeBase>>;
   setting_changes m_settingChanges;
 };
 }  // namespace YAML

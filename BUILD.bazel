@@ -1,0 +1,21 @@
+yaml_cpp_defines = select({
+    # On Windows, ensure static linking is used.
+    "@platforms//os:windows": ["YAML_CPP_STATIC_DEFINE", "YAML_CPP_NO_CONTRIB"],
+    "//conditions:default": [],
+})
+
+cc_library(
+    name = "yaml-cpp_internal",
+    visibility = ["//:__subpackages__"],
+    strip_include_prefix = "src",
+    hdrs = glob(["src/**/*.h"]),
+)
+
+cc_library(
+    name = "yaml-cpp",
+    visibility = ["//visibility:public"],
+    includes = ["include"],
+    hdrs = glob(["include/**/*.h"]),
+    srcs = glob(["src/**/*.cpp", "src/**/*.h"]),
+    defines = yaml_cpp_defines,
+)

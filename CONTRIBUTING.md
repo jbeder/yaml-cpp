@@ -17,7 +17,7 @@ Commit messages should be in the imperative mood, as described in the [Git contr
 
 # Tests
 
-Please verify the tests pass by running the target `tests/run_tests`.
+Please verify the tests pass by running the target `test/yaml-cpp-tests`.
 
 If you are adding functionality, add tests accordingly.
 

@@ -16,11 +16,7 @@ std::string tolower(const std::string& str) {
 
 template <typename T>
 bool IsEntirely(const std::string& str, T func) {
-  for (std::size_t i = 0; i < str.size(); i++)
-    if (!func(str[i]))
-      return false;
-
-  return true;
+  return std::all_of(str.begin(), str.end(), [=](char ch) { return func(ch); });
 }
 
 // IsFlexibleCase
@@ -39,7 +35,7 @@ bool IsFlexibleCase(const std::string& str) {
   std::string rest = str.substr(1);
   return firstcaps && (IsEntirely(rest, IsLower) || IsEntirely(rest, IsUpper));
 }
-}
+}  // namespace
 
 namespace YAML {
 bool convert<bool>::decode(const Node& node, bool& rhs) {
@@ -52,19 +48,22 @@ bool convert<bool>::decode(const Node& node, bool& rhs) {
   static const struct {
     std::string truename, falsename;
   } names[] = {
-      {"y", "n"}, {"yes", "no"}, {"true", "false"}, {"on", "off"},
+      {"y", "n"},
+      {"yes", "no"},
+      {"true", "false"},
+      {"on", "off"},
   };
 
   if (!IsFlexibleCase(node.Scalar()))
     return false;
 
-  for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
-    if (names[i].truename == tolower(node.Scalar())) {
+  for (const auto& name : names) {
+    if (name.truename == tolower(node.Scalar())) {
       rhs = true;
       return true;
     }
 
-    if (names[i].falsename == tolower(node.Scalar())) {
+    if (name.falsename == tolower(node.Scalar())) {
       rhs = false;
       return true;
     }
@@ -72,4 +71,4 @@ bool convert<bool>::decode(const Node& node, bool& rhs) {
 
   return false;
 }
-}
+}  // namespace YAML

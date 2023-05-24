@@ -1,0 +1,72 @@
+name: Github PR
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+permissions: read-all
+jobs:
+  cmake-build:
+      strategy:
+        fail-fast: false
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+          build: [static, shared]
+          generator: ["Default Generator", "MinGW Makefiles"]
+          exclude:
+          - os: macos-latest
+            build: shared
+          - os: macos-latest
+            generator: "MinGW Makefiles"
+          - os: ubuntu-latest
+            generator: "MinGW Makefiles"
+      env:
+        YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
+        YAML_CPP_BUILD_TESTS: 'ON'
+        CMAKE_GENERATOR: >-
+          ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Get number of CPU cores
+          uses: SimenB/github-actions-cpu-cores@v1
+
+        - name: Build
+          shell: bash
+          run: |
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
+            cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
+            
+        - name: Build Tests
+          shell: bash
+          run: |
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
+            cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
+
+        - name: Run Tests
+          shell: bash
+          run: |
+            cd build && ctest -C Debug --output-on-failure --verbose
+
+  bazel-build:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Build
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel build :all
+
+        - name: Test
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel test test
+
