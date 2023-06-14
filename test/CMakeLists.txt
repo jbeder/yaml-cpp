@@ -46,7 +46,7 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
 endif()
 
 
-add_test(yaml-cpp::test yaml-cpp-tests)
+add_test(NAME yaml-cpp::test COMMAND yaml-cpp-tests)
 
 if (build-windows-dll)
   add_custom_command(

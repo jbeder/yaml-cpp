@@ -323,6 +323,38 @@ TEST(NodeTest, IteratorOnConstUndefinedNode) {
   }
   EXPECT_EQ(0, count);
 }
+  
+TEST(NodeTest, InteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+  
+TEST(NodeTest, ConstInteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (const_iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
 
 TEST(NodeTest, SimpleSubkeys) {
   Node node;
@@ -350,6 +382,16 @@ TEST(NodeTest, StdArrayWrongSize) {
   node["evens"] = evens;
   EXPECT_THROW_REPRESENTATION_EXCEPTION(
       (node["evens"].as<std::array<int, 5>>()), ErrorMsg::BAD_CONVERSION);
+}
+
+TEST(NodeTest, StdValrray) {
+  std::valarray<int> evens{{2, 4, 6, 8, 10}};
+  Node node;
+  node["evens"] = evens;
+  std::valarray<int> actualEvens = node["evens"].as<std::valarray<int>>();
+  for (int i = 0; i < evens.size(); ++i) {
+    EXPECT_EQ(evens[i], actualEvens[i]);
+  }
 }
 
 TEST(NodeTest, StdVector) {
