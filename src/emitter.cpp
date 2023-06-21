@@ -205,7 +205,7 @@ void Emitter::EmitBeginSeq() {
 void Emitter::EmitEndSeq() {
   if (!good())
     return;
-  FlowType::value originalType = m_pState->CurGroupFlowType();
+  FlowType originalType = m_pState->CurGroupFlowType();
 
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
@@ -240,7 +240,7 @@ void Emitter::EmitBeginMap() {
 void Emitter::EmitEndMap() {
   if (!good())
     return;
-  FlowType::value originalType = m_pState->CurGroupFlowType();
+  FlowType originalType = m_pState->CurGroupFlowType();
 
   if (m_pState->CurGroupChildCount() == 0)
     m_pState->ForceFlow();
@@ -703,7 +703,7 @@ void Emitter::StartedScalar() { m_pState->StartedScalar(); }
 // *******************************************************************************************
 // overloads of Write
 
-StringEscaping::value GetStringEscapingStyle(const EMITTER_MANIP emitterManip) {
+StringEscaping GetStringEscapingStyle(const EMITTER_MANIP emitterManip) {
   switch (emitterManip) {
     case EscapeNonAscii:
       return StringEscaping::NonAscii;
@@ -719,9 +719,9 @@ Emitter& Emitter::Write(const std::string& str) {
   if (!good())
     return *this;
 
-  StringEscaping::value stringEscaping = GetStringEscapingStyle(m_pState->GetOutputCharset());
+  StringEscaping stringEscaping = GetStringEscapingStyle(m_pState->GetOutputCharset());
 
-  const StringFormat::value strFormat =
+  const StringFormat strFormat =
       Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
                                  m_pState->CurGroupFlowType(), stringEscaping == StringEscaping::NonAscii);
 
