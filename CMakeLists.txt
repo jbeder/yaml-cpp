@@ -168,6 +168,7 @@ if (YAML_CPP_INSTALL)
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
                 FILES_MATCHING PATTERN "*.h")
   install(EXPORT yaml-cpp-targets
+    NAMESPACE yaml-cpp::
     DESTINATION "${CONFIG_EXPORT_DIR}")
   install(FILES
       "${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
