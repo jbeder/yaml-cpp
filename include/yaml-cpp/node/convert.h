@@ -18,6 +18,10 @@
 #include <valarray>
 #include <vector>
 
+#if __cplusplus >= 201703L
+#include <string_view>
+#endif
+
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/iterator.h"
@@ -88,6 +92,20 @@ template <std::size_t N>
 struct convert<char[N]> {
   static Node encode(const char* rhs) { return Node(rhs); }
 };
+
+#if __cplusplus >= 201703L
+template <>
+struct convert<std::string_view> {
+  static Node encode(std::string_view rhs) { return Node(std::string(rhs)); }
+
+  static bool decode(const Node& node, std::string_view& rhs) {
+    if (!node.IsScalar())
+      return false;
+    rhs = node.Scalar();
+    return true;
+  }
+};
+#endif
 
 template <>
 struct convert<_Null> {
