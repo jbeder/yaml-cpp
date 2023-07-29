@@ -139,7 +139,7 @@ inline const RegEx& URI() {
   return e;
 }
 inline const RegEx& Tag() {
-  static const RegEx e = Word() | RegEx("#;/?:@&=+$_.~*'()", REGEX_OR) |
+  static const RegEx e = Word() | RegEx(" #;/?:@&=+$_.~*'()", REGEX_OR) |
                          (RegEx('%') + Hex() + Hex());
   return e;
 }
