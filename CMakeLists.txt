@@ -146,12 +146,12 @@ set_target_properties(yaml-cpp PROPERTIES
   PROJECT_LABEL "yaml-cpp ${yaml-cpp-label-postfix}"
   DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
-set(EXPORT_TARGETS yaml-cpp)
+set(EXPORT_TARGETS yaml-cpp::yaml-cpp)
 configure_package_config_file(
   "${PROJECT_SOURCE_DIR}/yaml-cpp-config.cmake.in"
   "${PROJECT_BINARY_DIR}/yaml-cpp-config.cmake"
   INSTALL_DESTINATION "${YAML_CPP_INSTALL_CMAKEDIR}"
-  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR YAML_BUILD_SHARED_LIBS)
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR)
 unset(EXPORT_TARGETS)
 
 write_basic_package_version_file(
