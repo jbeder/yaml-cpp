@@ -33,7 +33,7 @@ target_include_directories(yaml-cpp-tests
 target_compile_options(yaml-cpp-tests
   PRIVATE
     $<$<CXX_COMPILER_ID:Clang>:-Wno-c99-extensions -Wno-variadic-macros -Wno-sign-compare>
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-variadic-macros -Wno-sign-compare>)
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-variadic-macros -Wno-sign-compare -Wno-narrowing>)
 target_link_libraries(yaml-cpp-tests
   PRIVATE
     Threads::Threads
