@@ -465,6 +465,9 @@ TEST(LoadNodeTest, IncorrectSeqEnd) {
   EXPECT_THROW(Load("[foo]_bar"), ParserException);
 }
 
+TEST(LoadNodeTest, NonUniqueMapKey) {
+  EXPECT_THROW(Load("{a: A, b: B, a: A}"), NonUniqueMapKey);
+}
 
 }  // namespace
 }  // namespace YAML

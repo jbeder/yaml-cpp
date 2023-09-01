@@ -90,6 +90,7 @@ const char* const INVALID_ALIAS = "invalid alias";
 const char* const INVALID_TAG = "invalid tag";
 const char* const BAD_FILE = "bad file";
 const char* const UNEXPECTED_TOKEN_AFTER_DOC = "unexpected token after end of document";
+const char* const NON_UNIQUE_MAP_KEY = "map keys must be unique";
 
 template <typename T>
 inline const std::string KEY_NOT_FOUND_WITH_KEY(
@@ -301,6 +302,16 @@ class YAML_CPP_API BadFile : public Exception {
   BadFile(const BadFile&) = default;
   ~BadFile() YAML_CPP_NOEXCEPT override;
 };
+
+class YAML_CPP_API NonUniqueMapKey : public RepresentationException {
+ public:
+  template <typename Key>
+  NonUniqueMapKey(const Mark& mark_, const Key& key)
+      : RepresentationException(mark_, ErrorMsg::NON_UNIQUE_MAP_KEY) {}
+  NonUniqueMapKey(const NonUniqueMapKey&) = default;
+  ~NonUniqueMapKey() YAML_CPP_NOEXCEPT override;
+};
+
 }  // namespace YAML
 
 #if defined(_MSC_VER)
