@@ -17,9 +17,8 @@
 #include <type_traits>
 #include <valarray>
 #include <vector>
-#include <version>
 
-#ifdef __cpp_lib_string_view
+#if __cplusplus >= 201703L
 #include <string_view>
 #endif
 
@@ -94,7 +93,7 @@ struct convert<char[N]> {
   static Node encode(const char* rhs) { return Node(rhs); }
 };
 
-#ifdef __cpp_lib_string_view
+#if __cplusplus >= 201703L
 template <>
 struct convert<std::string_view> {
   static Node encode(std::string_view rhs) { return Node(std::string(rhs)); }
