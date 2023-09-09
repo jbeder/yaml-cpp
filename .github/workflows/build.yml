@@ -12,6 +12,7 @@ jobs:
         fail-fast: false
         matrix:
           os: [ubuntu-latest, windows-latest, macos-latest]
+          cxx_standard: [11, 17, 20]
           build: [static, shared]
           generator: ["Default Generator", "MinGW Makefiles"]
           exclude:
@@ -36,13 +37,13 @@ jobs:
         - name: Build
           shell: bash
           run: |
-            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
             cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
             
         - name: Build Tests
           shell: bash
           run: |
-            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
+            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=${{ env.YAML_CPP_BUILD_TESTS }}
             cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
 
         - name: Run Tests
