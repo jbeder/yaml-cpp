@@ -18,7 +18,7 @@
 #include <valarray>
 #include <vector>
 
-#if __cplusplus >= 201703L
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
 #include <string_view>
 #endif
 
@@ -93,7 +93,7 @@ struct convert<char[N]> {
   static Node encode(const char* rhs) { return Node(rhs); }
 };
 
-#if __cplusplus >= 201703L
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
 template <>
 struct convert<std::string_view> {
   static Node encode(std::string_view rhs) { return Node(std::string(rhs)); }
