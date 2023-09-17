@@ -1,0 +1,14 @@
+"""
+yaml-cpp is a YAML parser and emitter in c++ matching the YAML specification.
+"""
+
+module(
+    name = "yaml-cpp",
+    compatibility_level = 1,
+    version = "0.8.0",
+)
+
+bazel_dep(name = "platforms", version = "0.0.7")
+bazel_dep(name = "rules_cc", version = "0.0.8")
+
+bazel_dep(name = "googletest", version = "1.14.0", dev_dependency = True)

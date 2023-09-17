@@ -64,3 +64,22 @@ jobs:
             cd "${{ github.workspace }}"
             bazel test test
 
+  bzlmod-build:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Build
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel build --enable_bzlmod :all
+
+        - name: Test
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel test --enable_bzlmod test
