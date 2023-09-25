@@ -199,7 +199,7 @@ if (YAML_CPP_FORMAT_SOURCE AND YAML_CPP_CLANG_FORMAT_EXE)
 endif()
 
 # uninstall target
-if(NOT YAML_CPP_DISABLE_UNINSTALL AND NOT TARGET uninstall)
+if(YAML_CPP_INSTALL AND NOT YAML_CPP_DISABLE_UNINSTALL AND NOT TARGET uninstall)
   configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
