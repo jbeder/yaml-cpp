@@ -9,7 +9,6 @@ jobs:
   # See: https://blog.bazel.build/2023/02/15/github-archive-checksum.html
   bazel-release-archive:
     runs-on: ubuntu-latest
-    continue-on-error: true
     permissions:
       contents: write
     steps:
