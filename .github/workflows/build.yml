@@ -6,6 +6,9 @@ on:
     branches: [ master ]
   workflow_dispatch:
 permissions: read-all
+defaults:
+  run:
+    shell: bash
 jobs:
   cmake-build:
       strategy:
@@ -26,23 +29,59 @@ jobs:
         YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
         CMAKE_GENERATOR: >-
           ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
+        CMAKE_INSTALL_PREFIX: "${{ github.workspace }}/install-prefix"
+        CMAKE_BUILD_TYPE: Debug
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
 
-        - name: Get number of CPU cores
-          uses: SimenB/github-actions-cpu-cores@v1
-
-        - name: Build Tests
-          shell: bash
+        - name: Configure
           run: |
-            cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DCMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} -DYAML_CPP_BUILD_TESTS=ON
-            cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
+            cmake \
+              ${{ env.CMAKE_GENERATOR }} \
+              -S "${{ github.workspace }}" \
+              -B build \
+              -D CMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} \
+              -D CMAKE_INSTALL_PREFIX="${{ env.CMAKE_INSTALL_PREFIX }}" \
+              -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -D YAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} \
+              -D YAML_CPP_BUILD_TESTS=ON
+
+        - name: Build
+          run: |
+            cmake \
+              --build build \
+              --config ${{ env.CMAKE_BUILD_TYPE }} \
+              --verbose \
+              --parallel
 
         - name: Run Tests
           shell: bash
           run: |
-            cd build && ctest -C Debug --output-on-failure --verbose
+            ctest \
+              --test-dir build \
+              --build-config ${{ env.CMAKE_BUILD_TYPE }} \
+              --output-on-failure \
+              --verbose
+
+        - name: Install
+          run: cmake --install build --config ${{ env.CMAKE_BUILD_TYPE }}
+
+        - name: Configure CMake package test
+          run: |
+            cmake \
+              ${{ env.CMAKE_GENERATOR }} \
+              -S "${{ github.workspace }}/test/cmake" \
+              -B consumer-build \
+              -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -D CMAKE_PREFIX_PATH="${{ env.CMAKE_INSTALL_PREFIX }}"
+
+        - name: Build CMake package test
+          run: |
+            cmake \
+              --build consumer-build \
+              --config ${{ env.CMAKE_BUILD_TYPE }} \
+              --verbose
 
   bazel-build:
       strategy:
@@ -50,16 +89,14 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
 
         - name: Build
-          shell: bash
           run: |
             cd "${{ github.workspace }}"
             bazel build :all
 
         - name: Test
-          shell: bash
           run: |
             cd "${{ github.workspace }}"
             bazel test test

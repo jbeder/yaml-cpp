@@ -11,12 +11,20 @@ set_and_check(YAML_CPP_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
 set_and_check(YAML_CPP_LIBRARY_DIR "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
 
 # Are we building shared libraries?
-set(YAML_CPP_SHARED_LIBS_BUILT "@PACKAGE_YAML_BUILD_SHARED_LIBS@")
+set(YAML_CPP_SHARED_LIBS_BUILT @YAML_BUILD_SHARED_LIBS@)
 
 # Our library dependencies (contains definitions for IMPORTED targets)
-include(@PACKAGE_CONFIG_EXPORT_DIR@/yaml-cpp-targets.cmake)
+include("${CMAKE_CURRENT_LIST_DIR}/yaml-cpp-targets.cmake")
 
 # These are IMPORTED targets created by yaml-cpp-targets.cmake
 set(YAML_CPP_LIBRARIES "@EXPORT_TARGETS@")
 
-check_required_components(@EXPORT_TARGETS@)
+add_library(yaml-cpp INTERFACE IMPORTED)
+target_link_libraries(yaml-cpp INTERFACE yaml-cpp::yaml-cpp)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.17)
+  set_target_properties(yaml-cpp PROPERTIES 
+    DEPRECATION "The target yaml-cpp is deprecated and will be removed in version 0.10.0. Use the yaml-cpp::yaml-cpp target instead."
+  )
+endif()
+
+check_required_components(yaml-cpp)
