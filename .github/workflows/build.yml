@@ -17,6 +17,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
           cxx_standard: [11, 17, 20]
           build: [static, shared]
+          googletest: [build, system]
           generator: ["Default Generator", "MinGW Makefiles"]
           exclude:
           - os: macos-latest
@@ -25,14 +26,26 @@ jobs:
             generator: "MinGW Makefiles"
           - os: ubuntu-latest
             generator: "MinGW Makefiles"
+          - os: macos-latest
+            googletest: system
+          - os: windows-latest
+            googletest: system
       env:
         YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
+        YAML_USE_SYSTEM_GTEST: ${{ matrix.googletest == 'system' && 'ON' || 'OFF' }}
         CMAKE_GENERATOR: >-
           ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
         CMAKE_INSTALL_PREFIX: "${{ github.workspace }}/install-prefix"
         CMAKE_BUILD_TYPE: Debug
       runs-on: ${{ matrix.os }}
       steps:
+
+        - uses: awalsh128/cache-apt-pkgs-action@latest
+          if: matrix.os == 'ubuntu-latest'
+          with:
+            packages: googletest libgmock-dev libgtest-dev
+            version: 1.0
+
         - uses: actions/checkout@v3
 
         - name: Configure
@@ -45,6 +58,7 @@ jobs:
               -D CMAKE_INSTALL_PREFIX="${{ env.CMAKE_INSTALL_PREFIX }}" \
               -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
               -D YAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} \
+              -D YAML_USE_SYSTEM_GTEST=${{ env.YAML_USE_SYSTEM_GTEST }} \
               -D YAML_CPP_BUILD_TESTS=ON
 
         - name: Build
