@@ -15,5 +15,7 @@ else()
 endif()
 
 add_executable(main main.cpp)
-set_target_properties(main PROPERTIES CXX_STANDARD 11)
+if (NOT DEFINED CMAKE_CXX_STANDARD)
+  set_target_properties(main PROPERTIES CXX_STANDARD 11)
+endif()
 target_link_libraries(main PRIVATE ${YAML_CPP_LIBRARIES})
