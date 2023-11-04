@@ -173,6 +173,43 @@ TEST(LoadNodeTest, CloneAlias) {
   EXPECT_EQ(clone[0], clone);
 }
 
+TEST(LoadNodeTest, MergeKeyA) {
+  Node node = Load(
+      "{x: &foo {a : 1,b : 1,c : 1}, y: &bar {d: 2, e : 2, f : 2, a : 2}, z: "
+      "&stuff { << : *foo, b : 3} }");
+  EXPECT_EQ(NodeType::Map, node["z"].Type());
+  EXPECT_FALSE(node["z"]["<<"]);
+  EXPECT_EQ(1, node["z"]["a"].as<int>());
+  EXPECT_EQ(3, node["z"]["b"].as<int>());
+  EXPECT_EQ(1, node["z"]["c"].as<int>());
+}
+
+TEST(LoadNodeTest, MergeKeyB) {
+  Node node = Load(
+      "{x: &foo {a : 1,b : 1,c : 1}, y: &bar {d: 2, e : 2, f : 2, a : 2}, z: "
+      "&stuff { << : *foo, b : 3}, w: { << : [*stuff, *bar], c: 4 }, v: { '<<' "
+      ": *foo } , u : {!!merge << : *bar} }");
+  EXPECT_EQ(NodeType::Map, node["z"].Type());
+  EXPECT_EQ(NodeType::Map, node["w"].Type());
+  EXPECT_FALSE(node["z"]["<<"]);
+  EXPECT_EQ(1, node["z"]["a"].as<int>());
+  EXPECT_EQ(3, node["z"]["b"].as<int>());
+  EXPECT_EQ(1, node["z"]["c"].as<int>());
+
+  EXPECT_EQ(1, node["w"]["a"].as<int>());
+  EXPECT_EQ(3, node["w"]["b"].as<int>());
+  EXPECT_EQ(4, node["w"]["c"].as<int>());
+  EXPECT_EQ(2, node["w"]["d"].as<int>());
+  EXPECT_EQ(2, node["w"]["e"].as<int>());
+  EXPECT_EQ(2, node["w"]["f"].as<int>());
+
+  EXPECT_TRUE(node["v"]["<<"]);
+  EXPECT_EQ(1, node["v"]["<<"]["a"].as<int>());
+
+  EXPECT_FALSE(node["u"]["<<"]);
+  EXPECT_EQ(2, node["u"]["d"].as<int>());
+}
+
 TEST(LoadNodeTest, ForceInsertIntoMap) {
   Node node;
   node["a"] = "b";

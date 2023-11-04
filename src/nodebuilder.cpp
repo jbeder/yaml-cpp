@@ -15,6 +15,7 @@ NodeBuilder::NodeBuilder()
       m_stack{},
       m_anchors{},
       m_keys{},
+      m_mergeDicts{},
       m_mapDepth(0) {
   m_anchors.push_back(nullptr);  // since the anchors start at 1
 }
@@ -71,8 +72,24 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
   m_mapDepth++;
 }
 
+void MergeMapCollection(detail::node& map_to, detail::node& map_from,
+                        detail::shared_memory_holder& pMemory) {
+  const detail::node& const_map_to = map_to;
+  for (auto j = map_from.begin(); j != map_from.end(); j++) {
+    detail::node* s = const_map_to.get(*j->first, pMemory);
+    if (s == nullptr) {
+      map_to.insert(*j->first, *j->second, pMemory);
+    }
+  }
+}
+
 void NodeBuilder::OnMapEnd() {
   assert(m_mapDepth > 0);
+  detail::node& collection = *m_stack.back();
+  for (detail::node* n : m_mergeDicts) {
+    MergeMapCollection(collection, *n, m_pMemory);
+  }
+  m_mergeDicts.clear();
   m_mapDepth--;
   Pop();
 }
@@ -107,15 +124,40 @@ void NodeBuilder::Pop() {
   m_stack.pop_back();
 
   detail::node& collection = *m_stack.back();
-
   if (collection.type() == NodeType::Sequence) {
     collection.push_back(node, m_pMemory);
   } else if (collection.type() == NodeType::Map) {
     assert(!m_keys.empty());
     PushedKey& key = m_keys.back();
     if (key.second) {
-      collection.insert(*key.first, node, m_pMemory);
-      m_keys.pop_back();
+      detail::node& nk = *key.first;
+      if (nk.type() == NodeType::Scalar &&
+          ((nk.tag() == "tag:yaml.org,2002:merge" && nk.scalar() == "<<") ||
+           (nk.tag() == "?" && nk.scalar() == "<<"))) {
+        if (node.type() == NodeType::Map) {
+          m_mergeDicts.emplace_back(&node);
+          m_keys.pop_back();
+        } else if (node.type() == NodeType::Sequence) {
+          for (auto i = node.begin(); i != node.end(); i++) {
+            auto v = *i;
+            if ((*v).type() == NodeType::Map) {
+              m_mergeDicts.emplace_back(&(*v));
+            } else {
+              throw ParserException(
+                  node.mark(),
+                  ErrorMsg::MERGE_KEY_NEEDS_SINGLE_OR_SEQUENCE_OF_MAPS);
+            }
+          }
+          m_keys.pop_back();
+        } else {
+          throw ParserException(
+              node.mark(),
+              ErrorMsg::MERGE_KEY_NEEDS_SINGLE_OR_SEQUENCE_OF_MAPS);
+        }
+      } else {
+        collection.insert(*key.first, node, m_pMemory);
+        m_keys.pop_back();
+      }
     } else {
       key.second = true;
     }
