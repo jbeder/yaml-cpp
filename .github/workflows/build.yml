@@ -37,6 +37,7 @@ jobs:
           ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
         CMAKE_INSTALL_PREFIX: "${{ github.workspace }}/install-prefix"
         CMAKE_BUILD_TYPE: Debug
+        CMAKE_CXX_FLAGS_DEBUG: ${{ matrix.googletest == 'build' && '-g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC' || '-g' }} 
       runs-on: ${{ matrix.os }}
       steps:
 
@@ -57,6 +58,7 @@ jobs:
               -D CMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} \
               -D CMAKE_INSTALL_PREFIX="${{ env.CMAKE_INSTALL_PREFIX }}" \
               -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -D CMAKE_CXX_FLAGS_DEBUG="${{ env.CMAKE_CXX_FLAGS_DEBUG }}" \
               -D YAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} \
               -D YAML_USE_SYSTEM_GTEST=${{ env.YAML_USE_SYSTEM_GTEST }} \
               -D YAML_CPP_BUILD_TESTS=ON
