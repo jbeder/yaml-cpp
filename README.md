@@ -31,6 +31,17 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 
   * `yaml-cpp` builds a static library by default, you may want to build a shared library by specifying `-DYAML_BUILD_SHARED_LIBS=ON`.
 
+  * [Debug mode of the GNU standard C++
+    library](https://gcc.gnu.org/onlinedocs/libstdc++/manual/debug_mode.html)
+    can be used when both `yaml-cpp` and client code is compiled with the
+    `_GLIBCXX_DEBUG` flag (e.g. by calling CMake with `-D
+    CMAKE_CXX_FLAGS_DEBUG='-g -D_GLIBCXX_DEBUG'` option).
+
+    Note that for `yaml-cpp` unit tests to run successfully, the _GoogleTest_
+    library also must be built with this flag, i.e. the system one cannot be
+    used (the _YAML_USE_SYSTEM_GTEST_ CMake option must be _OFF_, which is the
+    default).
+
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
 #### 2. Build it!
