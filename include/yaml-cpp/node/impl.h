@@ -15,6 +15,11 @@
 #include <sstream>
 #include <string>
 
+#if __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
+#include <optional>
+#define YAML_CPP_HAS_DECODE_DISPATCHER
+#endif
+
 namespace YAML {
 inline Node::Node()
     : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
@@ -88,6 +93,18 @@ inline NodeType::value Node::Type() const {
 // access
 
 // template helpers
+#ifdef YAML_CPP_HAS_DECODE_DISPATCHER
+template <typename T, typename Enable = void>
+struct decode_dispatcher {
+  static std::optional<T> dispatch(const Node& node) {
+    T t;
+    if (convert<T>::decode(node, t))
+      return {t};
+    return std::nullopt;
+  }
+};
+#endif
+
 template <typename T, typename S>
 struct as_if {
   explicit as_if(const Node& node_) : node(node_) {}
@@ -97,10 +114,14 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
+#ifdef YAML_CPP_HAS_DECODE_DISPATCHER
+    return decode_dispatcher<T>::dispatch(node).value_or(fallback);
+#else
     T t;
     if (convert<T>::decode(node, t))
       return t;
     return fallback;
+#endif
   }
 };
 
@@ -127,9 +148,15 @@ struct as_if<T, void> {
     if (!node.m_pNode)
       throw TypedBadConversion<T>(node.Mark());
 
+#ifdef YAML_CPP_HAS_DECODE_DISPATCHER
+    auto t = decode_dispatcher<T>::dispatch(node);
+    if (t)
+      return *t;
+#else
     T t;
     if (convert<T>::decode(node, t))
       return t;
+#endif
     throw TypedBadConversion<T>(node.Mark());
   }
 };
