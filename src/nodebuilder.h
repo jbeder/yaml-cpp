@@ -67,7 +67,7 @@ class NodeBuilder : public EventHandler {
 
   using PushedKey = std::pair<detail::node*, bool>;
   std::vector<PushedKey> m_keys;
-  Nodes m_mergeDicts;
+  std::vector<Nodes> m_mergeDicts;
   std::size_t m_mapDepth;
 };
 }  // namespace YAML

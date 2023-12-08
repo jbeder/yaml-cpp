@@ -70,6 +70,7 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
   node.set_tag(tag);
   node.set_style(style);
   m_mapDepth++;
+  m_mergeDicts.emplace_back();
 }
 
 void MergeMapCollection(detail::node& map_to, detail::node& map_from,
@@ -86,11 +87,12 @@ void MergeMapCollection(detail::node& map_to, detail::node& map_from,
 void NodeBuilder::OnMapEnd() {
   assert(m_mapDepth > 0);
   detail::node& collection = *m_stack.back();
-  for (detail::node* n : m_mergeDicts) {
+  auto& toMerge = *m_mergeDicts.rbegin();
+  for (detail::node* n : toMerge) {
     MergeMapCollection(collection, *n, m_pMemory);
   }
-  m_mergeDicts.clear();
   m_mapDepth--;
+  m_mergeDicts.pop_back();
   Pop();
 }
 
@@ -135,13 +137,13 @@ void NodeBuilder::Pop() {
           ((nk.tag() == "tag:yaml.org,2002:merge" && nk.scalar() == "<<") ||
            (nk.tag() == "?" && nk.scalar() == "<<"))) {
         if (node.type() == NodeType::Map) {
-          m_mergeDicts.emplace_back(&node);
+          m_mergeDicts.rbegin()->emplace_back(&node);
           m_keys.pop_back();
         } else if (node.type() == NodeType::Sequence) {
           for (auto i = node.begin(); i != node.end(); i++) {
             auto v = *i;
             if ((*v).type() == NodeType::Map) {
-              m_mergeDicts.emplace_back(&(*v));
+              m_mergeDicts.rbegin()->emplace_back(&(*v));
             } else {
               throw ParserException(
                   node.mark(),

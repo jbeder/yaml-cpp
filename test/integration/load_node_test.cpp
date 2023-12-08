@@ -188,7 +188,7 @@ TEST(LoadNodeTest, MergeKeyB) {
   Node node = Load(
       "{x: &foo {a : 1,b : 1,c : 1}, y: &bar {d: 2, e : 2, f : 2, a : 2}, z: "
       "&stuff { << : *foo, b : 3}, w: { << : [*stuff, *bar], c: 4 }, v: { '<<' "
-      ": *foo } , u : {!!merge << : *bar} }");
+      ": *foo } , u : {!!merge << : *bar}, t: {!!merge << : *bar, h: 3} }");
   EXPECT_EQ(NodeType::Map, node["z"].Type());
   EXPECT_EQ(NodeType::Map, node["w"].Type());
   EXPECT_FALSE(node["z"]["<<"]);
@@ -208,6 +208,10 @@ TEST(LoadNodeTest, MergeKeyB) {
 
   EXPECT_FALSE(node["u"]["<<"]);
   EXPECT_EQ(2, node["u"]["d"].as<int>());
+
+  EXPECT_FALSE(node["t"]["<<"]);
+  EXPECT_EQ(2, node["t"]["d"].as<int>());
+  EXPECT_EQ(3, node["t"]["h"].as<int>());
 }
 
 TEST(LoadNodeTest, ForceInsertIntoMap) {
