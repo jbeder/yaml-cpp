@@ -12,7 +12,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - run: git archive $GITHUB_REF -o "yaml-cpp-${GITHUB_REF:10}.tar.gz"
       - run: gh release upload ${GITHUB_REF:10} "yaml-cpp-${GITHUB_REF:10}.tar.gz"
         env:
