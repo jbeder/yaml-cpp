@@ -44,7 +44,7 @@ jobs:
         - uses: awalsh128/cache-apt-pkgs-action@latest
           if: matrix.os == 'ubuntu-latest'
           with:
-            packages: googletest libgmock-dev libgtest-dev
+            packages: cppcheck googletest libgmock-dev libgtest-dev
             version: 1.0
 
         - uses: actions/checkout@v3
