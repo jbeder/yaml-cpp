@@ -38,7 +38,7 @@ cmake_dependent_option(YAML_MSVC_SHARED_RT
 set(YAML_CPP_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/yaml-cpp"
   CACHE STRING "Path to install the CMake package to")
 
-if (YAML_CPP_BUILD_TESTS && CMAKE_VERSION VERSION_GREATER_EQUAL "3.10")
+if (YAML_CPP_BUILD_TESTS AND CMAKE_VERSION VERSION_GREATER_EQUAL "3.10")
   find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
   if (CMAKE_CXX_CPPCHECK)
     option(YAML_CPP_CHECK "Run cppcheck static code analysis" ON)
