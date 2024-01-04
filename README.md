@@ -56,9 +56,11 @@ You can use for example FetchContent :
 ```cmake
 include(FetchContent)
 
-FetchContent_Declare(yaml-cpp
+FetchContent_Declare(
+  yaml-cpp
   GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-  GIT_TAG 1b50109f7bea60bd382d8ea7befce3d2bd67da5f)  # The latest yaml-cpp commit at the time of writing.
+  GIT_TAG <tag_name> # Can be a tag (yaml-cpp-x.x.x), a commit hash, or a branch name (master)
+)
 FetchContent_GetProperties(yaml-cpp)
 
 if(NOT yaml-cpp_POPULATED)
