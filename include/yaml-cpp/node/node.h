@@ -99,6 +99,8 @@ class YAML_CPP_API Node {
 
   // indexing
   template <typename Key>
+  bool ContainsKey(const Key& key) const;
+  template <typename Key>
   const Node operator[](const Key& key) const;
   template <typename Key>
   Node operator[](const Key& key);
@@ -141,6 +143,7 @@ YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);
 
 YAML_CPP_API Node Clone(const Node& node);
 
+//forward declare this customization point for all types
 template <typename T>
 struct convert;
 }

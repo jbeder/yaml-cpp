@@ -178,11 +178,12 @@ struct convert<Vec3> {
     return node;
   }
 
-  static bool decode(const Node& node, Vec3& rhs) {
+  static Vec3 decode(const Node& node) {
     if(!node.IsSequence() || node.size() != 3) {
-      return false;
+      throw YAML::conversion::DecodeException("");
     }
 
+    Vec3 rhs;
     rhs.x = node[0].as<double>();
     rhs.y = node[1].as<double>();
     rhs.z = node[2].as<double>();
@@ -197,5 +198,50 @@ Then you could use `Vec3` wherever you could use any other type:
 ```cpp
 YAML::Node node = YAML::Load("start: [1, 3, 0]");
 Vec3 v = node["start"].as<Vec3>();
-node["end"] = Vec3(2, -1, 0);
+node["end"] = Vec3{2, -1, 0};
+```
+
+Observe that in the above example the custom type is, decalred as 
+a struct, explicit default constructable and all its members are
+exposed. For non default constructable types like
+
+```cpp
+class NonDefCtorVec3 : public Vec3 {
+  using Vec3::x;
+  using Vec3::y;
+  using Vec3::z;
+ public:
+  NonDefCtorVec3(double x, double y, double z)
+      : Vec3() { this->x=x; this->y=y; this->z=z;
+  };
+};
+```
+a new API is available, that freshens up the signature of the 'convert<T>::decode'
+method and introduces the abortion of the deserialization process by throwing
+an `DecodeException`.
+
+```cpp
+namespace YAML {
+template <>
+struct convert<NonDefCtorVec3> {
+  static Node encode(const NonDefCtorVec3& rhs) {
+    return convert<Vec3>::encode(rhs);
+  }
+
+  static NonDefCtorVec3 decode(const Node& node) {
+    if (!node.IsSequence() || node.size() != 3) {
+      throw YAML::conversion::DecodeException();
+    }
+    return {node[0].as<double>(), node[1].as<double>(), node[2].as<double>()};
+  }
+};
+}
+```
+
+The behavior is exactly the same
+
+```cpp
+YAML::Node node = YAML::Load("start: [1, 3, 0]");
+NonDefCtorVec3 v = node["start"].as<NonDefCtorVec3>();
+node["end"] = NonDefCtorVec3(2, -1, 0);
 ```

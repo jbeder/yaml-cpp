@@ -17,6 +17,7 @@
 #include <type_traits>
 #include <valarray>
 #include <vector>
+#include <stdexcept>
 
 #if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
 #include <string_view>
@@ -33,6 +34,7 @@
 namespace YAML {
 class Binary;
 struct _Null;
+
 template <typename T>
 struct convert;
 }  // namespace YAML
@@ -62,6 +64,13 @@ struct convert<Node> {
     rhs.reset(node);
     return true;
   }
+
+//  static Node decode(const Node& node) {
+//    throw std::runtime_error("this should not have been encountered");
+//    Node rhs;
+//    rhs.reset(node);
+//    return rhs;
+//  }
 };
 
 // std::string
@@ -69,11 +78,10 @@ template <>
 struct convert<std::string> {
   static Node encode(const std::string& rhs) { return Node(rhs); }
 
-  static bool decode(const Node& node, std::string& rhs) {
+  static std::string decode(const Node& node) {
     if (!node.IsScalar())
-      return false;
-    rhs = node.Scalar();
-    return true;
+      throw YAML::conversion::DecodeException();
+    return node.Scalar();
   }
 };
 
@@ -111,8 +119,10 @@ template <>
 struct convert<_Null> {
   static Node encode(const _Null& /* rhs */) { return Node(); }
 
-  static bool decode(const Node& node, _Null& /* rhs */) {
-    return node.IsNull();
+  static _Null decode(const Node& node) {
+    if (!node.IsNull())
+      throw YAML::conversion::DecodeException();
+    return _Null();
   }
 };
 
@@ -176,37 +186,35 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       return Node(stream.str());                                           \
     }                                                                      \
                                                                            \
-    static bool decode(const Node& node, type& rhs) {                      \
+    static type decode(const Node& node) {                                 \
       if (node.Type() != NodeType::Scalar) {                               \
-        return false;                                                      \
+        throw YAML::conversion::DecodeException();;                        \
       }                                                                    \
       const std::string& input = node.Scalar();                            \
       std::stringstream stream(input);                                     \
       stream.unsetf(std::ios::dec);                                        \
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
-        return false;                                                      \
+        throw YAML::conversion::DecodeException();                         \
       }                                                                    \
+      type rhs;                                                            \
       if (conversion::ConvertStreamTo(stream, rhs)) {                      \
-        return true;                                                       \
+        return rhs;                                                        \
       }                                                                    \
       if (std::numeric_limits<type>::has_infinity) {                       \
         if (conversion::IsInfinity(input)) {                               \
-          rhs = std::numeric_limits<type>::infinity();                     \
-          return true;                                                     \
+          return std::numeric_limits<type>::infinity();                    \
         } else if (conversion::IsNegativeInfinity(input)) {                \
-          rhs = negative_op std::numeric_limits<type>::infinity();         \
-          return true;                                                     \
+          return negative_op std::numeric_limits<type>::infinity();        \
         }                                                                  \
       }                                                                    \
                                                                            \
       if (std::numeric_limits<type>::has_quiet_NaN) {                      \
         if (conversion::IsNaN(input)) {                                    \
-          rhs = std::numeric_limits<type>::quiet_NaN();                    \
-          return true;                                                     \
+          return std::numeric_limits<type>::quiet_NaN();                   \
         }                                                                  \
       }                                                                    \
                                                                            \
-      return false;                                                        \
+      throw YAML::conversion::DecodeException();                           \
     }                                                                      \
   }
 
@@ -242,7 +250,7 @@ template <>
 struct convert<bool> {
   static Node encode(bool rhs) { return rhs ? Node("true") : Node("false"); }
 
-  YAML_CPP_API static bool decode(const Node& node, bool& rhs);
+  YAML_CPP_API static bool decode(const Node& node);
 };
 
 // std::map
@@ -255,11 +263,11 @@ struct convert<std::map<K, V, C, A>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::map<K, V, C, A>& rhs) {
+  static std::map<K, V, C, A> decode(const Node& node) {
     if (!node.IsMap())
-      return false;
+      throw YAML::conversion::DecodeException();
 
-    rhs.clear();
+    std::map<K, V, C, A> rhs;
     for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
@@ -267,7 +275,7 @@ struct convert<std::map<K, V, C, A>> {
 #else
       rhs[element.first.as<K>()] = element.second.as<V>();
 #endif
-    return true;
+    return rhs;
   }
 };
 
@@ -281,11 +289,11 @@ struct convert<std::unordered_map<K, V, H, P, A>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::unordered_map<K, V, H, P, A>& rhs) {
+  static std::unordered_map<K, V, H, P, A> decode(const Node& node) {
     if (!node.IsMap())
-      return false;
+      throw YAML::conversion::DecodeException();
 
-    rhs.clear();
+    std::unordered_map<K, V, H, P, A> rhs;
     for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
@@ -293,7 +301,7 @@ struct convert<std::unordered_map<K, V, H, P, A>> {
 #else
       rhs[element.first.as<K>()] = element.second.as<V>();
 #endif
-    return true;
+    return rhs;
   }
 };
 
@@ -307,11 +315,11 @@ struct convert<std::vector<T, A>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::vector<T, A>& rhs) {
+  static std::vector<T, A> decode(const Node& node) {
     if (!node.IsSequence())
-      return false;
+      throw YAML::conversion::DecodeException();
 
-    rhs.clear();
+    std::vector<T, A> rhs;
     for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
@@ -319,7 +327,7 @@ struct convert<std::vector<T, A>> {
 #else
       rhs.push_back(element.as<T>());
 #endif
-    return true;
+    return rhs;
   }
 };
 
@@ -333,11 +341,11 @@ struct convert<std::list<T,A>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::list<T,A>& rhs) {
+  static std::list<T,A> decode(const Node& node) {
     if (!node.IsSequence())
-      return false;
+      throw YAML::conversion::DecodeException();
 
-    rhs.clear();
+    std::list<T,A> rhs;
     for (const auto& element : node)
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
@@ -345,7 +353,7 @@ struct convert<std::list<T,A>> {
 #else
       rhs.push_back(element.as<T>());
 #endif
-    return true;
+    return rhs;
   }
 };
 
@@ -360,11 +368,11 @@ struct convert<std::array<T, N>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::array<T, N>& rhs) {
-    if (!isNodeValid(node)) {
-      return false;
-    }
+  static std::array<T, N> decode(const Node& node) {
+    if (!isNodeValid(node))
+      throw YAML::conversion::DecodeException();
 
+    std::array<T, N> rhs;
     for (auto i = 0u; i < node.size(); ++i) {
 #if defined(__GNUC__) && __GNUC__ < 4
       // workaround for GCC 3:
@@ -373,7 +381,7 @@ struct convert<std::array<T, N>> {
       rhs[i] = node[i].as<T>();
 #endif
     }
-    return true;
+    return rhs;
   }
 
  private:
@@ -423,12 +431,11 @@ struct convert<std::pair<T, U>> {
     return node;
   }
 
-  static bool decode(const Node& node, std::pair<T, U>& rhs) {
-    if (!node.IsSequence())
-      return false;
-    if (node.size() != 2)
-      return false;
+  static std::pair<T, U> decode(const Node& node) {
+    if (!node.IsSequence() || node.size() != 2)
+      throw YAML::conversion::DecodeException();
 
+    std::pair<T, U> rhs;
 #if defined(__GNUC__) && __GNUC__ < 4
     // workaround for GCC 3:
     rhs.first = node[0].template as<T>();
@@ -441,7 +448,7 @@ struct convert<std::pair<T, U>> {
 #else
     rhs.second = node[1].as<U>();
 #endif
-    return true;
+    return rhs;
   }
 };
 
@@ -452,16 +459,17 @@ struct convert<Binary> {
     return Node(EncodeBase64(rhs.data(), rhs.size()));
   }
 
-  static bool decode(const Node& node, Binary& rhs) {
+  static Binary decode(const Node& node) {
     if (!node.IsScalar())
-      return false;
+      throw YAML::conversion::DecodeException();
 
     std::vector<unsigned char> data = DecodeBase64(node.Scalar());
     if (data.empty() && !node.Scalar().empty())
-      return false;
+      throw YAML::conversion::DecodeException();
 
+    Binary rhs;
     rhs.swap(data);
-    return true;
+    return rhs;
   }
 };
 }
