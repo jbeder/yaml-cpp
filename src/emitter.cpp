@@ -213,7 +213,8 @@ void Emitter::EmitEndSeq() {
   if (m_pState->CurGroupFlowType() == FlowType::Flow) {
     if (m_stream.comment())
       m_stream << "\n";
-    m_stream << IndentTo(m_pState->CurIndent());
+    if (originalType == FlowType::Block || m_pState->HasBegunNode())
+      m_stream << IndentTo(m_pState->CurIndent());
     if (originalType == FlowType::Block) {
       m_stream << "[";
     } else {
