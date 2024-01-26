@@ -97,7 +97,7 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t;
+    T t = fallback;
     if (convert<T>::decode(node, t))
       return t;
     return fallback;
