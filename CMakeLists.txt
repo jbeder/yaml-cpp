@@ -91,7 +91,9 @@ set_property(TARGET yaml-cpp
     CXX_STANDARD_REQUIRED ON)
 
 if (NOT YAML_BUILD_SHARED_LIBS)
-  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+  if (NOT PSP AND NOT PS3)
+    set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+  endif()
 endif()
 
 target_include_directories(yaml-cpp
