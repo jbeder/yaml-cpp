@@ -1,3 +1,5 @@
 build/
 /tags
 /bazel-*
+cmake-build-debug/
+.idea/
