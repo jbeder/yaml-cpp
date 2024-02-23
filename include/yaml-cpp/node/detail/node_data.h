@@ -90,7 +90,7 @@ class YAML_CPP_API node_data {
   void reset_sequence();
   void reset_map();
 
-  void insert_map_pair(node& key, node& value);
+  void insert_map_pair(node& key, node& value, bool force = false);
   void convert_to_map(const shared_memory_holder& pMemory);
   void convert_sequence_to_map(const shared_memory_holder& pMemory);
 
