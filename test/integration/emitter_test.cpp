@@ -176,6 +176,17 @@ TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
   ]])");
 }
 
+TEST_F(EmitterTest, EmptyFlowSeqInMap) {
+  out << BeginMap;
+  out << Key << Flow << BeginSeq << EndSeq;
+  out << Value << 1;
+  out << Key << 2;
+  out << Value << Flow << BeginSeq << EndSeq;
+  out << EndMap;
+
+  ExpectEmit("[]: 1\n2: []");
+}
+
 TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
   out << Flow;
   out << BeginSeq;
@@ -382,6 +393,20 @@ TEST_F(EmitterTest, ScalarFormat) {
       "crazy\tsymbols that we like");
 }
 
+TEST_F(EmitterTest, LiteralWithoutTrailingSpaces) {
+  out << YAML::BeginMap;
+  out << YAML::Key << "key";
+  out << YAML::Value << YAML::Literal;
+  out << "expect that with two newlines\n\n"
+         "no spaces are emitted in the empty line";
+  out << YAML::EndMap;
+
+  ExpectEmit(
+      "key: |\n"
+      "  expect that with two newlines\n\n"
+      "  no spaces are emitted in the empty line");
+}
+
 TEST_F(EmitterTest, AutoLongKeyScalar) {
   out << BeginMap;
   out << Key << Literal << "multi-line\nscalar";
@@ -415,6 +440,38 @@ TEST_F(EmitterTest, BlockMapAsKey) {
   out << EndMap;
 
   ExpectEmit("? key: value\n  next key: next value\n: total value");
+}
+
+TEST_F(EmitterTest, TaggedBlockMapAsKey) {
+  out << BeginMap;
+  out << Key;
+  out << LocalTag("innerMap");
+  out << BeginMap;
+  out << Key << "key" << Value << "value";
+  out << EndMap;
+  out << Value;
+  out << "outerValue";
+  out << EndMap;
+
+  ExpectEmit(R"(? !innerMap
+  key: value
+: outerValue)");
+}
+
+TEST_F(EmitterTest, TaggedBlockListAsKey) {
+  out << BeginMap;
+  out << Key;
+  out << LocalTag("innerList");
+  out << BeginSeq;
+  out << "listItem";
+  out << EndSeq;
+  out << Value;
+  out << "outerValue";
+  out << EndMap;
+
+  ExpectEmit(R"(? !innerList
+  - listItem
+: outerValue)");
 }
 
 TEST_F(EmitterTest, AliasAndAnchor) {
@@ -506,7 +563,7 @@ TEST_F(EmitterTest, VerbatimTagInBlockMap) {
   out << Value << VerbatimTag("!waz") << "baz";
   out << EndMap;
 
-  ExpectEmit("!<!foo> bar: !<!waz> baz");
+  ExpectEmit("? !<!foo> bar\n: !<!waz> baz");
 }
 
 TEST_F(EmitterTest, VerbatimTagInFlowMap) {
@@ -952,6 +1009,14 @@ TEST_F(EmitterTest, UserType) {
   out << EndSeq;
 
   ExpectEmit("- x: 5\n  bar: hello\n- x: 3\n  bar: goodbye");
+}
+
+TEST_F(EmitterTest, UserType2) {
+  out << BeginSeq;
+  out << Foo(5, "\r");
+  out << EndSeq;
+
+  ExpectEmit("- x: 5\n  bar: \"\\r\"");
 }
 
 TEST_F(EmitterTest, UserTypeInContainer) {
@@ -1602,6 +1667,15 @@ NodeB:
   k: [*k0, *k1])");
 }
 
+TEST_F(EmitterTest, AnchorEncoding) {
+  Node node;
+  node["--- &$ [*$]1"] = 1;
+  out << node;
+  ExpectEmit("\"--- &$ [*$]1\": 1");
+  Node reparsed = YAML::Load(out.c_str());
+  EXPECT_EQ(reparsed["--- &$ [*$]1"].as<int>(), 1);
+}
+
 class EmitterErrorTest : public ::testing::Test {
  protected:
   void ExpectEmitError(const std::string& expectedError) {
@@ -1672,5 +1746,6 @@ TEST_F(EmitterErrorTest, InvalidAlias) {
 
   ExpectEmitError(ErrorMsg::INVALID_ALIAS);
 }
+
 }  // namespace
 }  // namespace YAML

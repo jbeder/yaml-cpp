@@ -345,5 +345,20 @@ TEST(NodeTest, LoadTagWithNullScalar) {
   EXPECT_TRUE(node.IsNull());
 }
 
+TEST(LoadNodeTest, BlockCRNLEncoded) {
+  Node node = Load(
+      "blockText: |\r\n"
+      "  some arbitrary text \r\n"
+      "  spanning some \r\n"
+      "  lines, that are split \r\n"
+      "  by CR and NL\r\n"
+      "followup: 1");
+  EXPECT_EQ(
+      "some arbitrary text \nspanning some \nlines, that are split \nby CR and "
+      "NL\n",
+      node["blockText"].as<std::string>());
+  EXPECT_EQ(1, node["followup"].as<int>());
+}
+
 }  // namespace
 }  // namespace YAML

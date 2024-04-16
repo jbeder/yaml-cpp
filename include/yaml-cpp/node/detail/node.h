@@ -169,7 +169,7 @@ class node {
   using nodes = std::set<node*, less>;
   nodes m_dependencies;
   size_t m_index;
-  static std::atomic<size_t> m_amount;
+  static YAML_CPP_API std::atomic<size_t> m_amount;
 };
 }  // namespace detail
 }  // namespace YAML

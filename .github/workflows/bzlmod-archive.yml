@@ -1,0 +1,19 @@
+name: Bazel Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  # A release archive is required for bzlmod
+  # See: https://blog.bazel.build/2023/02/15/github-archive-checksum.html
+  bazel-release-archive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - run: git archive $GITHUB_REF -o "yaml-cpp-${GITHUB_REF:10}.tar.gz"
+      - run: gh release upload ${GITHUB_REF:10} "yaml-cpp-${GITHUB_REF:10}.tar.gz"
+        env:
+          GH_TOKEN: ${{ github.token }}

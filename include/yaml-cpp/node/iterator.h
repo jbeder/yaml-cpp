@@ -15,6 +15,7 @@
 #include <utility>
 #include <vector>
 
+// Assert in place so gcc + libc++ combination properly builds
 static_assert(std::is_constructible<YAML::Node, const YAML::Node&>::value, "Node must be copy constructable");
 
 namespace YAML {

@@ -1,0 +1,138 @@
+name: Github PR
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+permissions: read-all
+defaults:
+  run:
+    shell: bash
+jobs:
+  cmake-build:
+      strategy:
+        fail-fast: false
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+          cxx_standard: [11, 17, 20]
+          build: [static, shared]
+          googletest: [build, system]
+          generator: ["Default Generator", "MinGW Makefiles"]
+          exclude:
+          - os: macos-latest
+            build: shared
+          - os: macos-latest
+            generator: "MinGW Makefiles"
+          - os: ubuntu-latest
+            generator: "MinGW Makefiles"
+          - os: macos-latest
+            googletest: system
+          - os: windows-latest
+            googletest: system
+      env:
+        YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
+        YAML_USE_SYSTEM_GTEST: ${{ matrix.googletest == 'system' && 'ON' || 'OFF' }}
+        CMAKE_GENERATOR: >-
+          ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
+        CMAKE_INSTALL_PREFIX: "${{ github.workspace }}/install-prefix"
+        CMAKE_BUILD_TYPE: Debug
+        CMAKE_CXX_FLAGS_DEBUG: ${{ matrix.googletest == 'build' && '-g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC' || '-g' }} 
+      runs-on: ${{ matrix.os }}
+      steps:
+
+        - uses: awalsh128/cache-apt-pkgs-action@latest
+          if: matrix.os == 'ubuntu-latest'
+          with:
+            packages: googletest libgmock-dev libgtest-dev
+            version: 1.0
+
+        - uses: actions/checkout@v4
+
+        - name: Configure
+          run: |
+            cmake \
+              ${{ env.CMAKE_GENERATOR }} \
+              -S "${{ github.workspace }}" \
+              -B build \
+              -D CMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} \
+              -D CMAKE_INSTALL_PREFIX="${{ env.CMAKE_INSTALL_PREFIX }}" \
+              -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -D CMAKE_CXX_FLAGS_DEBUG="${{ env.CMAKE_CXX_FLAGS_DEBUG }}" \
+              -D YAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} \
+              -D YAML_USE_SYSTEM_GTEST=${{ env.YAML_USE_SYSTEM_GTEST }} \
+              -D YAML_CPP_BUILD_TESTS=ON
+
+        - name: Build
+          run: |
+            cmake \
+              --build build \
+              --config ${{ env.CMAKE_BUILD_TYPE }} \
+              --verbose \
+              --parallel
+
+        - name: Run Tests
+          shell: bash
+          run: |
+            ctest \
+              --test-dir build \
+              --build-config ${{ env.CMAKE_BUILD_TYPE }} \
+              --output-on-failure \
+              --verbose
+
+        - name: Install
+          run: cmake --install build --config ${{ env.CMAKE_BUILD_TYPE }}
+
+        - name: Configure CMake package test
+          run: |
+            cmake \
+              ${{ env.CMAKE_GENERATOR }} \
+              -S "${{ github.workspace }}/test/cmake" \
+              -B consumer-build \
+              -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -D CMAKE_PREFIX_PATH="${{ env.CMAKE_INSTALL_PREFIX }}"
+
+        - name: Build CMake package test
+          run: |
+            cmake \
+              --build consumer-build \
+              --config ${{ env.CMAKE_BUILD_TYPE }} \
+              --verbose
+
+  bazel-build:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Build
+          run: |
+            cd "${{ github.workspace }}"
+            bazel build :all
+
+        - name: Test
+          run: |
+            cd "${{ github.workspace }}"
+            bazel test test
+
+  bzlmod-build:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Build
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel build --enable_bzlmod :all
+
+        - name: Test
+          shell: bash
+          run: |
+            cd "${{ github.workspace }}"
+            bazel test --enable_bzlmod test

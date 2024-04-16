@@ -40,6 +40,7 @@ class CustomAllocator : public std::allocator<T> {
 template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
 template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
 template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
+template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
 
 }  // anonymous namespace
 
@@ -322,6 +323,47 @@ TEST(NodeTest, IteratorOnConstUndefinedNode) {
   }
   EXPECT_EQ(0, count);
 }
+  
+TEST(NodeTest, InteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+  
+TEST(NodeTest, ConstInteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (const_iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+
+#if __cplusplus >= 201703L
+TEST(NodeTest, StdStringViewAsKey) {
+  Node node;
+  std::string_view key = "username";
+  node[key] = "monkey";
+  EXPECT_EQ("monkey", node[key].as<std::string>());
+}
+#endif
 
 TEST(NodeTest, SimpleSubkeys) {
   Node node;
@@ -349,6 +391,16 @@ TEST(NodeTest, StdArrayWrongSize) {
   node["evens"] = evens;
   EXPECT_THROW_REPRESENTATION_EXCEPTION(
       (node["evens"].as<std::array<int, 5>>()), ErrorMsg::BAD_CONVERSION);
+}
+
+TEST(NodeTest, StdValrray) {
+  std::valarray<int> evens{{2, 4, 6, 8, 10}};
+  Node node;
+  node["evens"] = evens;
+  std::valarray<int> actualEvens = node["evens"].as<std::valarray<int>>();
+  for (int i = 0; i < evens.size(); ++i) {
+    EXPECT_EQ(evens[i], actualEvens[i]);
+  }
 }
 
 TEST(NodeTest, StdVector) {
@@ -432,6 +484,34 @@ TEST(NodeTest, StdMapWithCustomAllocator) {
   Node node;
   node["squares"] = squares;
   CustomMap<int,int> actualSquares = node["squares"].as<CustomMap<int,int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedMap) {
+  std::unordered_map<int, int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  std::unordered_map<int, int> actualSquares = node["squares"].as<std::unordered_map<int, int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
+  CustomUnorderedMap<int,int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  CustomUnorderedMap<int,int> actualSquares = node["squares"].as<CustomUnorderedMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 

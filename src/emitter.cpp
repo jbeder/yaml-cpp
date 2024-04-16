@@ -213,7 +213,8 @@ void Emitter::EmitEndSeq() {
   if (m_pState->CurGroupFlowType() == FlowType::Flow) {
     if (m_stream.comment())
       m_stream << "\n";
-    m_stream << IndentTo(m_pState->CurIndent());
+    if (originalType == FlowType::Block || m_pState->HasBegunNode())
+      m_stream << IndentTo(m_pState->CurIndent());
     if (originalType == FlowType::Block) {
       m_stream << "[";
     } else {
@@ -533,7 +534,8 @@ void Emitter::BlockMapPrepareNode(EmitterNodeType::value child) {
     if (m_pState->GetMapKeyFormat() == LongKey)
       m_pState->SetLongKey();
     if (child == EmitterNodeType::BlockSeq ||
-        child == EmitterNodeType::BlockMap)
+        child == EmitterNodeType::BlockMap ||
+        child == EmitterNodeType::Property)
       m_pState->SetLongKey();
 
     if (m_pState->CurGroupLongKey())
