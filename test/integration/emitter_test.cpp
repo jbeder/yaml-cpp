@@ -176,6 +176,17 @@ TEST_F(EmitterTest, EmptyFlowSeqWithBegunContent) {
   ]])");
 }
 
+TEST_F(EmitterTest, EmptyFlowSeqInMap) {
+  out << BeginMap;
+  out << Key << Flow << BeginSeq << EndSeq;
+  out << Value << 1;
+  out << Key << 2;
+  out << Value << Flow << BeginSeq << EndSeq;
+  out << EndMap;
+
+  ExpectEmit("[]: 1\n2: []");
+}
+
 TEST_F(EmitterTest, EmptyFlowMapWithBegunContent) {
   out << Flow;
   out << BeginSeq;

@@ -28,6 +28,7 @@ option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_C
 option(YAML_CPP_FORMAT_SOURCE "Format source" ${YAML_CPP_MAIN_PROJECT})
 option(YAML_CPP_DISABLE_UNINSTALL  "Disable uninstallation of yaml-cpp" OFF)
 option(YAML_USE_SYSTEM_GTEST "Use system googletest if found" OFF)
+option(YAML_ENABLE_PIC "Use Position-Independent Code " ON)
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" OFF
@@ -96,7 +97,7 @@ if(YAML_BUILD_SHARED_LIBS)
     VISIBILITY_INLINES_HIDDEN ON
   )
 else()
-  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ${YAML_ENABLE_PIC})
 endif()
 
 target_include_directories(yaml-cpp
