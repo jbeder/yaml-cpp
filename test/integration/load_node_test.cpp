@@ -1,6 +1,7 @@
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 
 #include "gtest/gtest.h"
+#include <algorithm>
 
 namespace YAML {
 namespace {
@@ -182,6 +183,20 @@ TEST(LoadNodeTest, MergeKeyA) {
   EXPECT_EQ(1, node["z"]["a"].as<int>());
   EXPECT_EQ(3, node["z"]["b"].as<int>());
   EXPECT_EQ(1, node["z"]["c"].as<int>());
+}
+
+TEST(LoadNodeTest, MergeKeyAIterator) {
+  Node node = Load(
+      "{x: &foo {a : 1,b : 1,c : 1}, y: &bar {d: 2, e : 2, f : 2, a : 2}, z: "
+      "&stuff { << : *foo, b : 3} }");
+  EXPECT_EQ(NodeType::Map, node["z"].Type());
+
+  const auto& z = node["z"];
+  size_t z_b_keys = std::count_if(z.begin(), z.end(), [&](const detail::iterator_value & kv)
+  {
+    return kv.first.as<std::string>() == "b";
+  });
+  ASSERT_EQ(z_b_keys, 1);
 }
 
 TEST(LoadNodeTest, MergeKeyB) {

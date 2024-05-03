@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 
 #include "nodebuilder.h"
@@ -75,12 +76,20 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
 
 void MergeMapCollection(detail::node& map_to, detail::node& map_from,
                         detail::shared_memory_holder& pMemory) {
-  const detail::node& const_map_to = map_to;
   for (auto j = map_from.begin(); j != map_from.end(); j++) {
-    detail::node* s = const_map_to.get(*j->first, pMemory);
-    if (s == nullptr) {
-      map_to.insert(*j->first, *j->second, pMemory);
-    }
+    const auto from_key = j->first;
+    /// NOTE: const_map_to.get(*j->first) cannot be used here, since it
+    /// compares only the shared_ptr's, while we need to compare the key
+    /// itself.
+    ///
+    /// NOTE: get() also iterates over elements
+    bool found = std::any_of(map_to.begin(), map_to.end(), [&](const detail::node_iterator_value<detail::node> & kv)
+    {
+        const auto key_node = kv.first;
+        return key_node->scalar() == from_key->scalar();
+    });
+    if (!found)
+      map_to.insert(*from_key, *j->second, pMemory);
   }
 }
 
