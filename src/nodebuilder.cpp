@@ -97,8 +97,9 @@ void NodeBuilder::OnMapEnd() {
   assert(m_mapDepth > 0);
   detail::node& collection = *m_stack.back();
   auto& toMerge = *m_mergeDicts.rbegin();
-  for (detail::node* n : toMerge) {
-    MergeMapCollection(collection, *n, m_pMemory);
+  /// The elements for merging should be traversed in reverse order to prefer last values.
+  for (auto it = toMerge.rbegin(); it != toMerge.rend(); ++it) {
+    MergeMapCollection(collection, **it, m_pMemory);
   }
   m_mapDepth--;
   m_mergeDicts.pop_back();

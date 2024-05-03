@@ -199,6 +199,23 @@ TEST(LoadNodeTest, MergeKeyAIterator) {
   ASSERT_EQ(z_b_keys, 1);
 }
 
+TEST(LoadNodeTest, MergeKeyTwoOverrides) {
+  Node node = Load(R"(
+trait1: &t1
+  foo: 1
+
+trait2: &t2
+  foo: 2
+
+merged:
+  <<: *t1
+  <<: *t2
+)");
+  EXPECT_EQ(NodeType::Map, node["merged"].Type());
+  EXPECT_FALSE(node["merged"]["<<"]);
+  EXPECT_EQ(2, node["merged"]["foo"].as<int>());
+}
+
 TEST(LoadNodeTest, MergeKeyB) {
   Node node = Load(
       "{x: &foo {a : 1,b : 1,c : 1}, y: &bar {d: 2, e : 2, f : 2, a : 2}, z: "
@@ -211,7 +228,7 @@ TEST(LoadNodeTest, MergeKeyB) {
   EXPECT_EQ(3, node["z"]["b"].as<int>());
   EXPECT_EQ(1, node["z"]["c"].as<int>());
 
-  EXPECT_EQ(1, node["w"]["a"].as<int>());
+  EXPECT_EQ(2, node["w"]["a"].as<int>());
   EXPECT_EQ(3, node["w"]["b"].as<int>());
   EXPECT_EQ(4, node["w"]["c"].as<int>());
   EXPECT_EQ(2, node["w"]["d"].as<int>());
