@@ -360,5 +360,9 @@ TEST(LoadNodeTest, BlockCRNLEncoded) {
   EXPECT_EQ(1, node["followup"].as<int>());
 }
 
+TEST(LoadNodeTest, NonUniqueMapKey) {
+  EXPECT_THROW(Load("{a: A, b: B, a: A}"), NonUniqueMapKey);
+}
+
 }  // namespace
 }  // namespace YAML
