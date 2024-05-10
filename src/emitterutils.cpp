@@ -176,11 +176,11 @@ bool IsValidPlainScalar(const std::string& str, FlowType::value flowType,
   static const RegEx& disallowed_flow =
       Exp::EndScalarInFlow() | (Exp::BlankOrBreak() + Exp::Comment()) |
       Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
-      Exp::Tab();
+      Exp::Tab() | Exp::Ampersand();
   static const RegEx& disallowed_block =
       Exp::EndScalar() | (Exp::BlankOrBreak() + Exp::Comment()) |
       Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
-      Exp::Tab();
+      Exp::Tab() | Exp::Ampersand();
   const RegEx& disallowed =
       flowType == FlowType::Flow ? disallowed_flow : disallowed_block;
 
@@ -366,13 +366,13 @@ bool WriteDoubleQuotedString(ostream_wrapper& out, const std::string& str,
 bool WriteLiteralString(ostream_wrapper& out, const std::string& str,
                         std::size_t indent) {
   out << "|\n";
-  out << IndentTo(indent);
   int codePoint;
   for (std::string::const_iterator i = str.begin();
        GetNextCodePointAndAdvance(codePoint, i, str.end());) {
     if (codePoint == '\n') {
-      out << "\n" << IndentTo(indent);
+      out << "\n";
     } else {
+      out<< IndentTo(indent);
       WriteCodePoint(out, codePoint);
     }
   }

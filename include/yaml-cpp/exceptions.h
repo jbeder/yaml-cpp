@@ -65,7 +65,7 @@ const char* const ZERO_INDENT_IN_BLOCK =
 const char* const CHAR_IN_BLOCK = "unexpected character in block scalar";
 const char* const AMBIGUOUS_ANCHOR =
     "cannot assign the same alias to multiple nodes";
-const char* const UNKNOWN_ANCHOR = "the referenced anchor is not defined";
+const char* const UNKNOWN_ANCHOR = "the referenced anchor is not defined: ";
 
 const char* const INVALID_NODE =
     "invalid node; this may result from using a map iterator as a sequence "
@@ -87,6 +87,8 @@ const char* const INVALID_ANCHOR = "invalid anchor";
 const char* const INVALID_ALIAS = "invalid alias";
 const char* const INVALID_TAG = "invalid tag";
 const char* const BAD_FILE = "bad file";
+const char* const MERGE_KEY_NEEDS_SINGLE_OR_SEQUENCE_OF_MAPS =
+    "merge key needs either single map or sequence of maps";
 
 template <typename T>
 inline const std::string KEY_NOT_FOUND_WITH_KEY(
