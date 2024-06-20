@@ -69,7 +69,7 @@ class node_iterator_base {
   using value_type = node_iterator_value<V>;
   using difference_type = std::ptrdiff_t;
   using pointer = node_iterator_value<V>*;
-  using reference = node_iterator_value<V>;
+  using reference = node_iterator_value<V>&;
   using SeqIter = typename node_iterator_type<V>::seq;
   using MapIter = typename node_iterator_type<V>::map;
 

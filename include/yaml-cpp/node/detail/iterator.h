@@ -41,7 +41,7 @@ class iterator_base {
   using value_type = V;
   using difference_type = std::ptrdiff_t;
   using pointer = V*;
-  using reference = V;
+  using reference = V&;
 
  public:
   iterator_base() : m_iterator(), m_pMemory() {}
