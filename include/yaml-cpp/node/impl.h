@@ -50,7 +50,7 @@ inline Node::Node(Zombie)
 inline Node::Node(Zombie, const std::string& key)
     : m_isValid(false), m_invalidKey(key), m_pMemory{}, m_pNode(nullptr) {}
 
-inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
+inline Node::Node(detail::node& node, detail::shared_memory_holder const& pMemory)
     : m_isValid(true), m_invalidKey{}, m_pMemory(pMemory), m_pNode(&node) {}
 
 inline Node::~Node() = default;
@@ -190,6 +190,8 @@ inline void Node::SetStyle(EmitterStyle::value style) {
   EnsureNodeExists();
   m_pNode->set_style(style);
 }
+
+inline void* Node::id() const YAML_CPP_NOEXCEPT { return m_pNode ? m_pNode->id() : nullptr; }
 
 // assignment
 inline bool Node::is(const Node& rhs) const {
@@ -371,11 +373,21 @@ inline bool Node::remove(const Node& key) {
   return m_pNode->remove(*key.m_pNode, m_pMemory);
 }
 
+inline void Node::seq_push_back(const Node& rhs) {
+  m_pMemory->merge(*rhs.m_pMemory);
+  m_pNode->seq_push_back(*rhs.m_pNode);
+}
+
 // map
 template <typename Key, typename Value>
 inline void Node::force_insert(const Key& key, const Value& value) {
   EnsureNodeExists();
   m_pNode->force_insert(key, value, m_pMemory);
+}
+inline void Node::map_force_insert(Node const& key, Node const& value) {
+  m_pMemory->merge(*key.m_pMemory);
+  m_pMemory->merge(*value.m_pMemory);
+  m_pNode->map_force_insert(*key.m_pNode, *value.m_pNode);
 }
 
 // free functions
