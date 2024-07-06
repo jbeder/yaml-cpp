@@ -21,6 +21,7 @@
 #include "yaml-cpp/emittermanip.h"
 #include "yaml-cpp/null.h"
 #include "yaml-cpp/ostream_wrapper.h"
+#include "yaml-cpp/fp_to_string.h"
 
 namespace YAML {
 class Binary;
@@ -180,7 +181,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   }
 
   if (!special) {
-    stream << value;
+    stream << fp_to_string(value, stream.precision());
   }
   m_stream << stream.str();
 
