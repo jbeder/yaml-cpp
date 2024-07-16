@@ -9,12 +9,12 @@ namespace {
  */
 template <typename T>
 static std::string convert_with_stringstream(T v, size_t precision = 0) {
-    std::stringstream ss;
-    if (precision > 0) {
-        ss << std::setprecision(precision);
-    }
-    ss << v;
-    return ss.str();
+  std::stringstream ss;
+  if (precision > 0) {
+    ss << std::setprecision(precision);
+  }
+  ss << v;
+  return ss.str();
 }
 
 // Caution: Test involving 'convert_with_stringstream' are based on std::stringstream
