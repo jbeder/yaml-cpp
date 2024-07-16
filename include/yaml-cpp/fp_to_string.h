@@ -26,13 +26,13 @@ namespace fp_formatting {
  *
  * Example:
  * std::array<char, 20> buffer;
- * auto ct = convertToChars(buffer.begin(), buffer.end(), 23, 3);
+ * auto ct = ConvertToChars(buffer.begin(), buffer.end(), 23, 3);
  * assert(ct = 3);
  * assert(buffer[0] == '0');
  * assert(buffer[1] == '2');
  * assert(buffer[2] == '3');
  */
-inline auto convertToChars(char* begin, char* end, size_t value, int width=1) -> int {
+inline auto ConvertToChars(char* begin, char* end, size_t value, int width=1) -> int {
     assert(width >= 1);
     assert(end >= begin);       // end must be after begin
     assert(end-begin >= width); // Buffer must be large enough
@@ -62,7 +62,7 @@ inline auto convertToChars(char* begin, char* end, size_t value, int width=1) ->
  * converts a value 'v' to a string. Uses dragonbox for formatting.
  */
 template <typename T>
-auto fp_to_string(T v, int precision = 0) -> std::string {
+auto FpToString(T v, int precision = 0) -> std::string {
 //    assert(precision > 0);
     // hardcoded constant, at which exponent should switch to a scientific notation
     int const lowerExponentThreshold = -5;
@@ -81,7 +81,7 @@ auto fp_to_string(T v, int precision = 0) -> std::string {
     auto r = jkj::dragonbox::to_decimal(v);
 
     auto digits    = std::array<char, 20>{}; // max digits of size_t is 20.
-    auto digits_ct = convertToChars(digits.data(), digits.data() + digits.size(), r.significand);
+    auto digits_ct = ConvertToChars(digits.data(), digits.data() + digits.size(), r.significand);
 
     // check if requested precision is lower than
     // required digits for exact representation
@@ -136,7 +136,7 @@ auto fp_to_string(T v, int precision = 0) -> std::string {
         *(output_ptr++) = 'e';
         *(output_ptr++) = (exponent>=0)?'+':'-';
         auto exp_digits = std::array<char, 20>{};
-        auto exp_digits_ct = convertToChars(exp_digits.data(), exp_digits.data() + exp_digits.size(), std::abs(exponent), /*.precision=*/ 2);
+        auto exp_digits_ct = ConvertToChars(exp_digits.data(), exp_digits.data() + exp_digits.size(), std::abs(exponent), /*.precision=*/ 2);
         for (int i{0}; i < exp_digits_ct; ++i) {
             *(output_ptr++) = exp_digits[i];
         }
@@ -184,18 +184,18 @@ auto fp_to_string(T v, int precision = 0) -> std::string {
 }
 }
 
-inline auto fp_to_string(float v, size_t precision = 0) -> std::string {
-    return detail::fp_formatting::fp_to_string(v, precision);
+inline auto FpToString(float v, size_t precision = 0) -> std::string {
+    return detail::fp_formatting::FpToString(v, precision);
 }
 
-inline auto fp_to_string(double v, size_t precision = 0) -> std::string {
-    return detail::fp_formatting::fp_to_string(v, precision);
+inline auto FpToString(double v, size_t precision = 0) -> std::string {
+    return detail::fp_formatting::FpToString(v, precision);
 }
 
 /**
  * dragonbox only works for floats/doubles not long double
  */
-inline auto fp_to_string(long double v, size_t precision = std::numeric_limits<long double>::max_digits10) -> std::string {
+inline auto FpToString(long double v, size_t precision = std::numeric_limits<long double>::max_digits10) -> std::string {
     std::stringstream ss;
     ss.precision(precision);
     ss.imbue(std::locale("C"));

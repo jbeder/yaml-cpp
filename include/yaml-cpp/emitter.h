@@ -181,7 +181,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   }
 
   if (!special) {
-    stream << fp_to_string(value, stream.precision());
+    stream << FpToString(value, stream.precision());
   }
   m_stream << stream.str();
 
