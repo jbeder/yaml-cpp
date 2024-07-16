@@ -32,7 +32,7 @@ namespace fp_formatting {
  * assert(buffer[1] == '2');
  * assert(buffer[2] == '3');
  */
-inline auto ConvertToChars(char* begin, char* end, size_t value, int width=1) -> int {
+inline int ConvertToChars(char* begin, char* end, size_t value, int width=1) {
   assert(width >= 1);
   assert(end >= begin);     // end must be after begin
   assert(end-begin >= width); // Buffer must be large enough
@@ -62,7 +62,7 @@ inline auto ConvertToChars(char* begin, char* end, size_t value, int width=1) ->
  * converts a value 'v' to a string. Uses dragonbox for formatting.
  */
 template <typename T>
-auto FpToString(T v, int precision = 0) -> std::string {
+std::string FpToString(T v, int precision = 0) {
 //  assert(precision > 0);
   // hardcoded constant, at which exponent should switch to a scientific notation
   int const lowerExponentThreshold = -5;
@@ -184,18 +184,18 @@ auto FpToString(T v, int precision = 0) -> std::string {
 }
 }
 
-inline auto FpToString(float v, size_t precision = 0) -> std::string {
+inline std::string FpToString(float v, size_t precision = 0) {
   return detail::fp_formatting::FpToString(v, precision);
 }
 
-inline auto FpToString(double v, size_t precision = 0) -> std::string {
+inline std::string FpToString(double v, size_t precision = 0) {
   return detail::fp_formatting::FpToString(v, precision);
 }
 
 /**
  * dragonbox only works for floats/doubles not long double
  */
-inline auto FpToString(long double v, size_t precision = std::numeric_limits<long double>::max_digits10) -> std::string {
+inline std::string FpToString(long double v, size_t precision = std::numeric_limits<long double>::max_digits10) {
   std::stringstream ss;
   ss.imbue(std::locale("C"));
   ss.precision(precision);
