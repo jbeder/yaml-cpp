@@ -130,7 +130,7 @@ inner_encode(const T& rhs, std::stringstream& stream){
       stream << ".inf";
     }
   } else {
-    stream << fp_to_string(rhs, stream.precision());
+    stream << FpToString(rhs, stream.precision());
   }
 }
 
