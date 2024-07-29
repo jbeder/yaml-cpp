@@ -6,6 +6,10 @@
 // This file is an adjusted copy of https://github.com/jk-jeon/dragonbox
 // Junekey Jeon agreed to license this file under MIT license explicitly for
 // usage in yaml-cpp.
+//
+// Changes to the original dragonbox library:
+// - Added additional license information and information at top
+// - Wrapped the 'jkj' namespace in an additional 'YAML' namespace
 
 #ifndef JKJ_HEADER_DRAGONBOX
 #define JKJ_HEADER_DRAGONBOX
