@@ -1,14 +1,12 @@
 // SPDX-FileCopyrightText: 2024 Simon Gene Gottlieb
 // SPDX-License-Identifier: MIT
 
-#ifndef YAML_H_FP_TO_STRING
-#define YAML_H_FP_TO_STRING
-
 #include "contrib/dragonbox.h"
 
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <limits>
 #include <sstream>
 #include <tuple>
 
@@ -32,7 +30,7 @@ namespace fp_formatting {
  * assert(buffer[1] == '2');
  * assert(buffer[2] == '3');
  */
-inline int ConvertToChars(char* begin, char* end, size_t value, int width=1) {
+int ConvertToChars(char* begin, char* end, size_t value, int width=1) {
   assert(width >= 1);
   assert(end >= begin);     // end must be after begin
   assert(end-begin >= width); // Buffer must be large enough
@@ -184,24 +182,26 @@ std::string FpToString(T v, int precision = 0) {
 }
 }
 
-inline std::string FpToString(float v, size_t precision = 0) {
+std::string FpToString(float v, size_t precision) {
   return detail::fp_formatting::FpToString(v, precision);
 }
 
-inline std::string FpToString(double v, size_t precision = 0) {
+std::string FpToString(double v, size_t precision) {
   return detail::fp_formatting::FpToString(v, precision);
 }
 
 /**
  * dragonbox only works for floats/doubles not long double
  */
-inline std::string FpToString(long double v, size_t precision = std::numeric_limits<long double>::max_digits10) {
+std::string FpToString(long double v, size_t precision) {
   std::stringstream ss;
   ss.imbue(std::locale("C"));
+  if (precision == 0) {
+     precision = std::numeric_limits<long double>::max_digits10;
+  }
   ss.precision(precision);
   ss << v;
   return ss.str();
 }
 
 }
-#endif
