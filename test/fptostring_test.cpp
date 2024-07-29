@@ -1,4 +1,4 @@
-#include "yaml-cpp/fp_to_string.h"
+#include "yaml-cpp/fptostring.h"
 #include "gtest/gtest.h"
 
 namespace YAML {

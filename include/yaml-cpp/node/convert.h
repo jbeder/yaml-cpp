@@ -28,7 +28,7 @@
 #include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/type.h"
 #include "yaml-cpp/null.h"
-#include "yaml-cpp/fp_to_string.h"
+#include "yaml-cpp/fptostring.h"
 
 
 namespace YAML {

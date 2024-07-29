@@ -21,7 +21,7 @@
 #include "yaml-cpp/emittermanip.h"
 #include "yaml-cpp/null.h"
 #include "yaml-cpp/ostream_wrapper.h"
-#include "yaml-cpp/fp_to_string.h"
+#include "yaml-cpp/fptostring.h"
 
 namespace YAML {
 class Binary;
