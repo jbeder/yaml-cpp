@@ -4,13 +4,7 @@
 #ifndef YAML_H_FP_TO_STRING
 #define YAML_H_FP_TO_STRING
 
-#include "contrib/dragonbox.h"
-
-#include <array>
-#include <cassert>
-#include <cmath>
-#include <sstream>
-#include <tuple>
+#include <string>
 
 namespace YAML {
 // "precision = 0" refers to shortest known unique representation of the value
