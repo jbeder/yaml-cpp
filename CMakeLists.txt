@@ -197,6 +197,7 @@ if (YAML_CPP_FORMAT_SOURCE AND YAML_CPP_CLANG_FORMAT_EXE)
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
     COMMAND_EXPAND_LISTS
     COMMENT "Running clang-format"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     VERBATIM)
 endif()
 
