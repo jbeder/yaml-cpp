@@ -13,7 +13,7 @@
 #include <vector>
 
 namespace YAML {
-const std::string TokenNames[] = {
+constexpr const char* TokenNames[] = {
     "DIRECTIVE",        "DOC_START",      "DOC_END",       "BLOCK_SEQ_START",
     "BLOCK_MAP_START",  "BLOCK_SEQ_END",  "BLOCK_MAP_END", "BLOCK_ENTRY",
     "FLOW_SEQ_START",   "FLOW_MAP_START", "FLOW_SEQ_END",  "FLOW_MAP_END",
