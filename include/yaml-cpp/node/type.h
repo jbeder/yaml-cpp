@@ -8,8 +8,8 @@
 #endif
 
 namespace YAML {
-namespace NodeType {
-enum value { Undefined, Null, Scalar, Sequence, Map };
+struct NodeType {
+  enum value { Undefined, Null, Scalar, Sequence, Map };
 };
 }
 

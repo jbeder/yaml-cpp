@@ -8,8 +8,8 @@
 #endif
 
 namespace YAML {
-namespace EmitterStyle {
-enum value { Default, Block, Flow };
+struct EmitterStyle {
+  enum value { Default, Block, Flow };
 };
 }
 
