@@ -14,6 +14,7 @@
 #include <sstream>
 #include <string>
 #include <type_traits>
+#include <iomanip>
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/dll.h"
@@ -179,7 +180,9 @@ inline Emitter& Emitter::WriteStreamable(T value) {
     }
   }
 
-  if (!special) {
+  if (static_cast<float>(static_cast<int>(value)) == value){
+    stream << std::fixed << std::setprecision(1) << value;
+  }else if (!special) {
     stream << value;
   }
   m_stream << stream.str();
