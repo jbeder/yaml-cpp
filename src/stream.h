@@ -9,20 +9,16 @@
 
 #include "yaml-cpp/mark.h"
 #include <cstddef>
+#include <cstdint>
 #include <deque>
-#include <ios>
 #include <iostream>
-#include <set>
 #include <string>
 
 namespace YAML {
 
-class StreamCharSource;
-
+// Converts arbitrary UTF-* encoding on input to UTF-8
 class Stream {
  public:
-  friend class StreamCharSource;
-
   Stream(std::istream& input);
   Stream(const Stream&) = delete;
   Stream(Stream&&) = delete;
@@ -30,15 +26,15 @@ class Stream {
   Stream& operator=(Stream&&) = delete;
   ~Stream();
 
-  operator bool() const;
-  bool operator!() const { return !static_cast<bool>(*this); }
+  static char eof() { return 0x04; }
 
-  char peek() const;
+  char peek(std::size_t i = 0) const;
   char get();
   std::string get(int n);
   void eat(int n = 1);
 
-  static char eof() { return 0x04; }
+  bool isEmpty() const;
+  operator bool() const;
 
   const Mark mark() const { return m_mark; }
   int pos() const { return m_mark.pos; }
@@ -47,36 +43,25 @@ class Stream {
   void ResetColumn() { m_mark.column = 0; }
 
  private:
-  enum CharacterSet { utf8, utf16le, utf16be, utf32le, utf32be };
+  uint_fast8_t CheckBOM(const uint8_t* buffer, std::size_t size);
+  bool prepare(std::size_t i) const;
+  bool StreamInUtf8() const;
+  bool StreamInUtf16() const;
+  bool StreamInUtf32() const;
+  bool GetNextByte(uint8_t& byte) const;
 
+ private:
   std::istream& m_input;
+  uint8_t* const m_pPrefetched;
+  mutable std::size_t m_nPrefetchedAvailable;
+  mutable std::size_t m_nPrefetchedUsed;
+
+  mutable std::deque<char> m_readahead;
   Mark m_mark;
 
-  CharacterSet m_charSet;
-  mutable std::deque<char> m_readahead;
-  unsigned char* const m_pPrefetched;
-  mutable size_t m_nPrefetchedAvailable;
-  mutable size_t m_nPrefetchedUsed;
-
-  void AdvanceCurrent();
-  char CharAt(size_t i) const;
-  bool ReadAheadTo(size_t i) const;
-  bool _ReadAheadTo(size_t i) const;
-  void StreamInUtf8() const;
-  void StreamInUtf16() const;
-  void StreamInUtf32() const;
-  unsigned char GetNextByte() const;
+  enum { utf8, utf16le, utf16be, utf32le, utf32be } m_charSet;
 };
 
-// CharAt
-// . Unchecked access
-inline char Stream::CharAt(size_t i) const { return m_readahead[i]; }
-
-inline bool Stream::ReadAheadTo(size_t i) const {
-  if (m_readahead.size() > i)
-    return true;
-  return _ReadAheadTo(i);
-}
 }  // namespace YAML
 
 #endif  // STREAM_H_62B23520_7C8E_11DE_8A39_0800200C9A66
