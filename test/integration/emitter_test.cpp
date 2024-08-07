@@ -104,9 +104,11 @@ TEST_F(EmitterTest, NumberPrecision) {
   out << 3.1425926f;
   out << 53.5893;
   out << 2384626.4338;
+  out << 1999926.4338;
+  out << 9999926.4338;
   out << EndSeq;
 
-  ExpectEmit("- 3.14\n- 54\n- 2.4e+06");
+  ExpectEmit("- 3.14\n- 54\n- 2.4e+06\n- 2e+06\n- 1e+07");
 }
 
 TEST_F(EmitterTest, SimpleSeq) {
