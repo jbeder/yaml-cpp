@@ -50,6 +50,14 @@
 #  endif
 #endif
 
+#ifndef YAML_CPP_NORETURN
+#  ifdef _MSC_VER
+#    define YAML_CPP_NORETURN __declspec(noreturn)
+#  else
+#    define YAML_CPP_NORETURN __attribute__ ((noreturn))
+#  endif
+#endif
+
 #ifndef YAML_CPP_DEPRECATED_EXPORT
 #  define YAML_CPP_DEPRECATED_EXPORT YAML_CPP_API YAML_CPP_DEPRECATED
 #endif
