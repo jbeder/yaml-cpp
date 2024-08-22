@@ -360,5 +360,21 @@ TEST(LoadNodeTest, BlockCRNLEncoded) {
   EXPECT_EQ(1, node["followup"].as<int>());
 }
 
+TEST(LoadNodeTest, BlockCREncoded) {
+  Node node = Load(
+      "blockText: |\r"
+      "  some arbitrary text \r"
+      "  spanning some \r"
+      "  lines, that are split \r"
+      "  by CR and NL\r"
+      "followup: 1");
+  EXPECT_EQ(
+      "some arbitrary text \nspanning some \nlines, that are split \nby CR and "
+      "NL\n",
+      node["blockText"].as<std::string>());
+  EXPECT_EQ(1, node["followup"].as<int>());
+}
+
+
 }  // namespace
 }  // namespace YAML

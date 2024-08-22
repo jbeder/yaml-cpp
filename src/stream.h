@@ -53,6 +53,7 @@ class Stream {
   Mark m_mark;
 
   CharacterSet m_charSet;
+  char m_lineEndingSymbol{}; // 0 means it is not determined yet, must be '\n' or '\r'
   mutable std::deque<char> m_readahead;
   unsigned char* const m_pPrefetched;
   mutable size_t m_nPrefetchedAvailable;
