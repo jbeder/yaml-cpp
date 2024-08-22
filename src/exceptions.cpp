@@ -17,4 +17,5 @@ BadPushback::~BadPushback() YAML_CPP_NOEXCEPT = default;
 BadInsert::~BadInsert() YAML_CPP_NOEXCEPT = default;
 EmitterException::~EmitterException() YAML_CPP_NOEXCEPT = default;
 BadFile::~BadFile() YAML_CPP_NOEXCEPT = default;
+NonUniqueMapKey::~NonUniqueMapKey() YAML_CPP_NOEXCEPT = default;
 }  // namespace YAML
