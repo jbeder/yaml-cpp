@@ -15,11 +15,9 @@
 #    ifndef YAML_CPP_API
 #      ifdef yaml_cpp_EXPORTS
          /* We are building this library */
-#        pragma message( "Defining YAML_CPP_API for DLL export" )
 #        define YAML_CPP_API __declspec(dllexport)
 #      else
          /* We are using this library */
-#        pragma message( "Defining YAML_CPP_API for DLL import" )
 #        define YAML_CPP_API __declspec(dllimport)
 #      endif
 #    endif
