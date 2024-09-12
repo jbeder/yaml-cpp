@@ -334,6 +334,69 @@ TEST(NodeTest, LoadQuotedNull) {
   EXPECT_EQ(node.as<std::string>(), "null");
 }
 
+TEST(NodeTest, LoadNonClosedQuotedString) {
+  EXPECT_THROW(Load(R"("foo)"), ParserException);
+}
+
+TEST(NodeTest, LoadWrongQuotedString) {
+  EXPECT_THROW(Load(R"("foo" [)"), ParserException);
+  EXPECT_THROW(Load(R"("foo", [)"), ParserException);
+}
+
+TEST(NodeTest, LoadUnquotedQuotedStrings) {
+  Node node = Load(R"(foo,"bar")");
+  EXPECT_EQ(node.as<std::string>(), "foo,\"bar\"");
+
+  node = Load(R"(foo,bar)");
+  EXPECT_EQ(node.as<std::string>(), "foo,bar");
+
+  node = Load(R"(foo,)");
+  EXPECT_EQ(node.as<std::string>(), "foo,");
+
+  node = Load(R"(foo "bar")");
+  EXPECT_EQ(node.as<std::string>(), "foo \"bar\"");
+}
+
+TEST(NodeTest, LoadCommaSeparatedStrings) {
+  EXPECT_THROW(Load(R"("foo","bar")"), ParserException);
+  EXPECT_THROW(Load(R"("foo",bar)"), ParserException);
+  EXPECT_THROW(Load(R"(,)"), ParserException);
+  EXPECT_THROW(Load(R"("foo",)"), ParserException);
+  EXPECT_THROW(Load(R"("foo","")"), ParserException);
+  EXPECT_THROW(Load(R"("foo",)"), ParserException);
+  EXPECT_THROW(Load(R"(,"foo")"), ParserException);
+  EXPECT_THROW(Load(R"(,foo)"), ParserException);
+
+  const char *doc_ok = R"(
+top
+, aa
+)";
+  EXPECT_NO_THROW(Load(doc_ok));
+
+  const char *doc_ok_2 = R"(
+top
+, "aa"
+)";
+  EXPECT_NO_THROW(Load(doc_ok_2));
+
+  const char *doc_fail = R"(
+"top"
+, "aa"
+)";
+  EXPECT_THROW(Load(doc_fail), ParserException);
+
+  const char *doc_fail_2 = R"(
+"top"
+, aa
+)";
+  EXPECT_THROW(Load(doc_fail_2), ParserException);
+}
+
+TEST(NodeTest, LoadSameLineStrings) {
+  EXPECT_THROW(Load(R"("foo" "bar")"), ParserException);
+  EXPECT_THROW(Load(R"("foo" bar)"), ParserException);
+}
+
 TEST(NodeTest, LoadTagWithParenthesis) {
     Node node = Load("!Complex(Tag) foo");
     EXPECT_EQ(node.Tag(), "!Complex(Tag)");
