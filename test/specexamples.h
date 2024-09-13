@@ -687,6 +687,9 @@ const char *ex7_24 =
     "- *anchor\n"
     "- !!str";
 
+const char *ex7_25 =
+    ",";
+
 const char *ex8_1 =
     "- | # Empty header\n"
     " literal\n"
