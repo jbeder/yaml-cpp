@@ -366,30 +366,31 @@ TEST(NodeTest, LoadCommaSeparatedStrings) {
   EXPECT_THROW(Load(R"("foo",)"), ParserException);
   EXPECT_THROW(Load(R"(,"foo")"), ParserException);
   EXPECT_THROW(Load(R"(,foo)"), ParserException);
+}
 
-  const char *doc_ok = R"(
-top
-, aa
-)";
-  EXPECT_NO_THROW(Load(doc_ok));
-
-  const char *doc_ok_2 = R"(
-top
-, "aa"
-)";
-  EXPECT_NO_THROW(Load(doc_ok_2));
-
-  const char *doc_fail = R"(
-"top"
-, "aa"
-)";
-  EXPECT_THROW(Load(doc_fail), ParserException);
-
-  const char *doc_fail_2 = R"(
-"top"
-, aa
-)";
-  EXPECT_THROW(Load(doc_fail_2), ParserException);
+struct NewLineStringsTestCase {
+  std::string input;
+  std::string expected_content;
+  bool should_throw;
+};
+TEST(NodeTest, LoadNewLineStrings) {
+  std::vector<NewLineStringsTestCase> tests = {
+      {"foo\n, bar", "foo , bar", false},
+      {"foo\n, \"bar\"", "foo , \"bar\"", false},
+      {"\"foo\"\n, \"bar\"", "", true},
+      {"\"foo\"\n, bar", "", true},
+  };
+  for (const NewLineStringsTestCase& test : tests) {
+    if (test.should_throw) {
+      EXPECT_THROW(Load(test.input), ParserException);
+    } else {
+      Node node = Load(test.input);
+      Emitter emitter;
+      emitter << node;
+      EXPECT_EQ(NodeType::Scalar, node.Type());
+      EXPECT_EQ(test.expected_content, std::string(emitter.c_str()));
+    }
+  }
 }
 
 TEST(NodeTest, LoadSameLineStrings) {
