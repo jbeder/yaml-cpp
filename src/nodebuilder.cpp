@@ -74,7 +74,7 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
   m_mergeDicts.emplace_back();
 }
 
-void MergeMapCollection(detail::node& map_to, detail::node& map_from,
+static void MergeMapCollection(detail::node& map_to, detail::node& map_from,
                         detail::shared_memory_holder& pMemory) {
   for (auto j = map_from.begin(); j != map_from.end(); j++) {
     const auto from_key = j->first;
