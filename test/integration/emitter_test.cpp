@@ -629,6 +629,17 @@ TEST_F(EmitterTest, LocalTagWithScalar) {
   ExpectEmit("!foo bar");
 }
 
+TEST_F(EmitterTest, LocalTagRetainedAfterLoadingNode) {
+  Node n = Node("hello");
+  out << LocalTag("foo") << n;
+  std::string expected = "!foo hello";
+  ExpectEmit(expected);
+  Node yamlNode = Load(out.c_str());
+  Emitter emitter;
+  emitter << yamlNode;
+  EXPECT_EQ(expected, emitter.c_str());
+}
+
 TEST_F(EmitterTest, ComplexDoc) {
   out << BeginMap;
   out << Key << "receipt";

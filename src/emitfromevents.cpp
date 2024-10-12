@@ -116,8 +116,13 @@ void EmitFromEvents::BeginNode() {
 }
 
 void EmitFromEvents::EmitProps(const std::string& tag, anchor_t anchor) {
-  if (!tag.empty() && tag != "?" && tag != "!")
-    m_emitter << VerbatimTag(tag);
+  if (!tag.empty() && tag != "?" && tag != "!"){
+      if (tag[0] == '!') {
+        m_emitter << LocalTag(std::string(tag.begin()+1, tag.end()));
+      } else {
+        m_emitter << VerbatimTag(tag);
+      }
+  }
   if (anchor)
     m_emitter << Anchor(ToString(anchor));
 }
