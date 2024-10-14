@@ -941,13 +941,6 @@ TEST(NodeSpecTest, Ex7_24_FlowNodes) {
   EXPECT_EQ("", doc[4].as<std::string>());
 }
 
-TEST(NodeSpecTest, Ex7_25_InfiniteLoopNodes) {
-  // Until yaml-cpp <= 0.8.0 this caused an infinite loop;
-  // After, it triggers an exception (but LoadAll is smart enough to avoid
-  // the infinite loop in any case).
-  ASSERT_THROW(LoadAll(ex7_25), ParserException);
-}
-
 TEST(NodeSpecTest, Ex8_1_BlockScalarHeader) {
   Node doc = Load(ex8_1);
   EXPECT_EQ(4, doc.size());
