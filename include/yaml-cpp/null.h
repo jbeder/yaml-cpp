@@ -8,7 +8,7 @@
 #endif
 
 #include "yaml-cpp/dll.h"
-#include <string>
+#include <cstddef>
 
 namespace YAML {
 class Node;
@@ -18,7 +18,7 @@ inline bool operator==(const _Null&, const _Null&) { return true; }
 inline bool operator!=(const _Null&, const _Null&) { return false; }
 
 YAML_CPP_API bool IsNull(const Node& node);  // old API only
-YAML_CPP_API bool IsNullString(const std::string& str);
+YAML_CPP_API bool IsNullString(const char* str, std::size_t size);
 
 extern YAML_CPP_API _Null Null;
 }
