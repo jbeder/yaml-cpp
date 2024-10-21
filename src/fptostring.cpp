@@ -1,6 +1,3 @@
-// SPDX-FileCopyrightText: 2024 Simon Gene Gottlieb
-// SPDX-License-Identifier: MIT
-
 #include "yaml-cpp/fptostring.h"
 #include "contrib/dragonbox.h"
 
