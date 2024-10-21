@@ -1,8 +1,5 @@
-// SPDX-FileCopyrightText: 2024 Simon Gene Gottlieb
-// SPDX-License-Identifier: MIT
-
-#ifndef YAML_H_FP_TO_STRING
-#define YAML_H_FP_TO_STRING
+#ifndef YAML_H_FPTOSTRING
+#define YAML_H_FPTOSTRING
 
 #include "yaml-cpp/dll.h"
 
