@@ -15,10 +15,10 @@ namespace fp_formatting {
 /**
  * Converts a integer into its ASCII digits.
  *
- * @param begin/end - a buffer, must be at least 20bytes long
- * @param value   - input value
- * @param width   - minimum number of digits, fill with '0' to the left. Must be equal or smaller than the buffer size.
- * @return      - number of digits filled into the buffer.
+ * @param begin/end - a buffer, must be at least 20bytes long.
+ * @param value     - input value.
+ * @param width     - minimum number of digits, fill with '0' to the left. Must be equal or smaller than the buffer size.
+ * @return          - number of digits filled into the buffer (or -1 if preconditions are not meet)
  *
  * Example:
  * std::array<char, 20> buffer;
@@ -29,10 +29,26 @@ namespace fp_formatting {
  * assert(buffer[2] == '3');
  */
 int ConvertToChars(char* begin, char* end, size_t value, int width=1) {
+  // precondition of this function (will trigger in debug build)
   assert(width >= 1);
-  assert(end >= begin);     // end must be after begin
+  assert(end >= begin);       // end must be after begin
   assert(end-begin >= width); // Buffer must be large enough
-  assert(end-begin >= 20);  // 2^64 has 20digits, so at least 20 digits must be available
+  assert(end-begin >= 20);    // 2^64 has 20digits, so at least 20 digits must be available
+
+  // defensive programming, abort if precondition are not met (will trigger in release build)
+  if (width < 1) {
+    return -1;
+  }
+  if (end < begin) {
+    return -1;
+  }
+  if (end-begin < width) {
+    return -1;
+  }
+  if (end-begin < 20) {
+    return -1;
+  }
+
 
   // count number of digits, and fill digits array accordingly
   int digits_ct{};
@@ -59,8 +75,7 @@ int ConvertToChars(char* begin, char* end, size_t value, int width=1) {
  */
 template <typename T>
 std::string FpToString(T v, int precision = 0) {
-//  assert(precision > 0);
-  // hardcoded constant, at which exponent should switch to a scientific notation
+  // hard coded constant, at which exponent should switch to a scientific notation
   int const lowerExponentThreshold = -5;
   int const upperExponentThreshold =  (precision==0)?6:precision;
   if (precision == 0) {
@@ -70,6 +85,7 @@ std::string FpToString(T v, int precision = 0) {
   // dragonbox/to_decimal does not handle value 0, inf, NaN
   if (v == 0 || std::isinf(v) || std::isnan(v)) {
     std::stringstream ss;
+    ss.imbue(std::locale("C"));
     ss << v;
     return ss.str();
   }
@@ -78,6 +94,14 @@ std::string FpToString(T v, int precision = 0) {
 
   auto digits  = std::array<char, 20>{}; // max digits of size_t is 20.
   auto digits_ct = ConvertToChars(digits.data(), digits.data() + digits.size(), r.significand);
+
+  // defensive programming, ConvertToChars arguments are invalid
+  if (digits_ct == -1) {
+    std::stringstream ss;
+    ss.imbue(std::locale("C"));
+    ss << v;
+    return ss.str();
+  }
 
   // check if requested precision is lower than
   // required digits for exact representation
@@ -133,6 +157,15 @@ std::string FpToString(T v, int precision = 0) {
     *(output_ptr++) = (exponent>=0)?'+':'-';
     auto exp_digits = std::array<char, 20>{};
     auto exp_digits_ct = ConvertToChars(exp_digits.data(), exp_digits.data() + exp_digits.size(), std::abs(exponent), /*.precision=*/ 2);
+
+    // defensive programming, ConvertToChars arguments are invalid
+    if (exp_digits_ct == -1) {
+      std::stringstream ss;
+      ss.imbue(std::locale("C"));
+      ss << v;
+      return ss.str();
+    }
+
     for (int i{0}; i < exp_digits_ct; ++i) {
       *(output_ptr++) = exp_digits[i];
     }
