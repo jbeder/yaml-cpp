@@ -194,7 +194,7 @@ std::string FpToString(T v, int precision = 0) {
 
     if (digits_iter != digits_end) {
       *(output_ptr++) = '.';
-      // print 0 afer decimal point, to fill until first digits
+      // print 0 after decimal point, to fill until first digits
       int const after_decimal_zeros = -digits_ct - r.exponent;
       for (int i{0}; i < after_decimal_zeros; ++i) {
          *(output_ptr++) = '0';
