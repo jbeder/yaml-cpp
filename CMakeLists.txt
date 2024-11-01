@@ -91,8 +91,13 @@ set_property(TARGET yaml-cpp
   PROPERTY
     CXX_STANDARD_REQUIRED ON)
 
-if (NOT YAML_BUILD_SHARED_LIBS)
-      set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ${YAML_ENABLE_PIC})
+if(YAML_BUILD_SHARED_LIBS)
+  set_target_properties(yaml-cpp PROPERTIES
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN ON
+  )
+else()
+  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ${YAML_ENABLE_PIC})
 endif()
 
 target_include_directories(yaml-cpp
