@@ -191,6 +191,14 @@ TEST(NodeTest, MapElementRemoval) {
   EXPECT_TRUE(!node["foo"]);
 }
 
+TEST(NodeTest, MissingKey) {
+  Node node;
+  node["foo"] = "value";
+  EXPECT_TRUE(!node["bar"]);
+  EXPECT_EQ(NodeType::Undefined, node["bar"].Type());
+  EXPECT_THROW(node["bar"].as<std::string>(), InvalidNode);
+}
+
 TEST(NodeTest, MapIntegerElementRemoval) {
   Node node;
   node[1] = "hello";
