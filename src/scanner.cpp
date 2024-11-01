@@ -189,7 +189,7 @@ void Scanner::ScanNextToken() {
   }
 
   // don't know what it is!
-  throw ParserException(INPUT.mark(), ErrorMsg::UNKNOWN_TOKEN);
+  YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::UNKNOWN_TOKEN);
 }
 
 void Scanner::ScanToNextToken() {
@@ -410,6 +410,6 @@ void Scanner::ThrowParserException(const std::string& msg) const {
     const Token& token = m_tokens.front();
     mark = token.mark;
   }
-  throw ParserException(mark, msg);
+  YAML_throw<ParserException>(mark, msg);
 }
 }  // namespace YAML
