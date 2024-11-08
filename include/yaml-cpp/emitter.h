@@ -15,6 +15,10 @@
 #include <string>
 #include <type_traits>
 
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+#include <string_view>
+#endif
+
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/dll.h"
 #include "yaml-cpp/emitterdef.h"
@@ -68,6 +72,7 @@ class YAML_CPP_API Emitter {
   Emitter& SetLocalPrecision(const _Precision& precision);
 
   // overloads of write
+  Emitter& Write(const char* str, std::size_t size);
   Emitter& Write(const std::string& str);
   Emitter& Write(bool b);
   Emitter& Write(char ch);
@@ -201,6 +206,11 @@ inline void Emitter::SetStreamablePrecision<double>(std::stringstream& stream) {
 }
 
 // overloads of insertion
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+inline Emitter& operator<<(Emitter& emitter, const std::string_view& v) {
+  return emitter.Write(v.data(), v.size());
+}
+#endif
 inline Emitter& operator<<(Emitter& emitter, const std::string& v) {
   return emitter.Write(v);
 }
