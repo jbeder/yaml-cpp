@@ -1,0 +1,14 @@
+cc_test(
+    name = "test",
+    srcs = glob([
+        "*.cpp",
+        "*.h",
+    ]),
+    deps = [
+        "//:yaml-cpp",
+        "//:yaml-cpp_internal",
+        "//test:mock_event_handler",
+        "//test:specexamples",
+        "@googletest//:gtest_main",
+    ],
+)
