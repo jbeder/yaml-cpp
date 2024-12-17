@@ -20,6 +20,9 @@ jobs:
           googletest: [build, system]
           generator: ["Default Generator", "MinGW Makefiles"]
           exclude:
+          - os: ubuntu-latest
+            cxx_standard: 11
+            googletest: system
           - os: macos-latest
             build: shared
           - os: macos-latest
