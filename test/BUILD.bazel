@@ -1,14 +1,28 @@
+package(default_visibility = ["//test:__subpackages__"])
+
+cc_library(
+    name = "mock_event_handler",
+    hdrs = ["mock_event_handler.h"],
+    strip_include_prefix = "//test",
+)
+
+cc_library(
+    name = "specexamples",
+    hdrs = ["specexamples.h"],
+    strip_include_prefix = "//test",
+)
+
 cc_test(
     name = "test",
     srcs = glob([
         "*.cpp",
-        "*.h",
-        "integrations/*.cpp",
         "node/*.cpp",
     ]),
     deps = [
+        ":mock_event_handler",
+        ":specexamples",
         "//:yaml-cpp",
         "//:yaml-cpp_internal",
-        "@com_google_googletest//:gtest_main",
+        "@googletest//:gtest_main",
     ],
 )
