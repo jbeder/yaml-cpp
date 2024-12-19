@@ -716,33 +716,33 @@ StringEscaping::value GetStringEscapingStyle(const EMITTER_MANIP emitterManip) {
   }
 }
 
-Emitter& Emitter::Write(const std::string& str) {
+Emitter& Emitter::Write(const char* str, std::size_t size) {
   if (!good())
     return *this;
 
   StringEscaping::value stringEscaping = GetStringEscapingStyle(m_pState->GetOutputCharset());
 
   const StringFormat::value strFormat =
-      Utils::ComputeStringFormat(str, m_pState->GetStringFormat(),
+      Utils::ComputeStringFormat(str, size, m_pState->GetStringFormat(),
                                  m_pState->CurGroupFlowType(), stringEscaping == StringEscaping::NonAscii);
 
-  if (strFormat == StringFormat::Literal || str.size() > 1024)
+  if (strFormat == StringFormat::Literal || size > 1024)
     m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
 
   PrepareNode(EmitterNodeType::Scalar);
 
   switch (strFormat) {
     case StringFormat::Plain:
-      m_stream << str;
+      m_stream.write(str, size);
       break;
     case StringFormat::SingleQuoted:
-      Utils::WriteSingleQuotedString(m_stream, str);
+      Utils::WriteSingleQuotedString(m_stream, str, size);
       break;
     case StringFormat::DoubleQuoted:
-      Utils::WriteDoubleQuotedString(m_stream, str, stringEscaping);
+      Utils::WriteDoubleQuotedString(m_stream, str, size, stringEscaping);
       break;
     case StringFormat::Literal:
-      Utils::WriteLiteralString(m_stream, str,
+      Utils::WriteLiteralString(m_stream, str, size,
                                 m_pState->CurIndent() + m_pState->GetIndent());
       break;
   }
@@ -750,6 +750,10 @@ Emitter& Emitter::Write(const std::string& str) {
   StartedScalar();
 
   return *this;
+}
+
+Emitter& Emitter::Write(const std::string& str) {
+  return Write(str.data(), str.size());
 }
 
 std::size_t Emitter::GetFloatPrecision() const {
@@ -865,7 +869,7 @@ Emitter& Emitter::Write(const _Alias& alias) {
 
   PrepareNode(EmitterNodeType::Scalar);
 
-  if (!Utils::WriteAlias(m_stream, alias.content)) {
+  if (!Utils::WriteAlias(m_stream, alias.content.data(), alias.content.size())) {
     m_pState->SetError(ErrorMsg::INVALID_ALIAS);
     return *this;
   }
@@ -888,7 +892,7 @@ Emitter& Emitter::Write(const _Anchor& anchor) {
 
   PrepareNode(EmitterNodeType::Property);
 
-  if (!Utils::WriteAnchor(m_stream, anchor.content)) {
+  if (!Utils::WriteAnchor(m_stream, anchor.content.data(), anchor.content.size())) {
     m_pState->SetError(ErrorMsg::INVALID_ANCHOR);
     return *this;
   }
@@ -937,7 +941,7 @@ Emitter& Emitter::Write(const _Comment& comment) {
 
   if (m_stream.col() > 0)
     m_stream << Indentation(m_pState->GetPreCommentIndent());
-  Utils::WriteComment(m_stream, comment.content,
+  Utils::WriteComment(m_stream, comment.content.data(), comment.content.size(),
                       m_pState->GetPostCommentIndent());
 
   m_pState->SetNonContent();

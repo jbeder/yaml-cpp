@@ -46,6 +46,26 @@ TEST_F(EmitterTest, SimpleScalar) {
   ExpectEmit("Hello, World!");
 }
 
+TEST_F(EmitterTest, SimpleStdStringScalar) {
+  out << std::string("Hello, std string");
+
+  ExpectEmit("Hello, std string");
+}
+
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+TEST_F(EmitterTest, SimpleStdStringViewScalar) {
+  out << std::string_view("Hello, std string view");
+
+  ExpectEmit("Hello, std string view");
+}
+
+TEST_F(EmitterTest, UnterminatedStdStringViewScalar) {
+  out << std::string_view("HelloUnterminated", 5);
+
+  ExpectEmit("Hello");
+}
+#endif
+
 TEST_F(EmitterTest, SimpleQuotedScalar) {
   Node n(Load("\"test\""));
   out << n;
