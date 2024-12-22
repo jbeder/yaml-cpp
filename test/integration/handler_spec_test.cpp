@@ -1682,5 +1682,15 @@ TEST_F(HandlerSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(ex8_22);
 }
+
+TEST_F(HandlerSpecTest, InvalidDocStart1) {
+  EXPECT_THROW_PARSER_EXCEPTION(IgnoreParse("----\nbaz: 1"),
+                                ErrorMsg::BLOCK_ENTRY);
+}
+TEST_F(HandlerSpecTest, InvalidDocStart2) {
+  EXPECT_THROW_PARSER_EXCEPTION(IgnoreParse("----\n# foo\nbaz: 1"),
+                                ErrorMsg::BLOCK_ENTRY);
+}
+
 }  // namespace
 }  // namespace YAML

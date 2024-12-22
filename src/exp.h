@@ -82,7 +82,7 @@ inline const RegEx& Utf8_ByteOrderMark() {
 // actual tags
 
 inline const RegEx& DocStart() {
-  static const RegEx e = RegEx("---") + (BlankOrBreak() | RegEx());
+  static const RegEx e = RegEx("---");
   return e;
 }
 inline const RegEx& DocEnd() {
