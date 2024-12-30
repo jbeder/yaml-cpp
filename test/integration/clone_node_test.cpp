@@ -10,7 +10,6 @@ struct ComparableMark {
       : pos(pos), line(line), column(column) {}
 };
 
-
 bool operator==(const YAML::Mark& a, const ComparableMark& b) {
   return a.pos == b.pos && a.line == b.line && a.column == b.column;
 }
@@ -25,10 +24,8 @@ void PrintTo(const ComparableMark& mark, std::ostream* os) {
 }
 
 namespace YAML {
-  void PrintTo(const Mark& mark, std::ostream* os) {
-    PrintMark(mark, os);
-  }
-}
+void PrintTo(const Mark& mark, std::ostream* os) { PrintMark(mark, os); }
+}  // namespace YAML
 
 TEST(CloneNodeTest, PreserveMark) {
   std::string yaml_str = R"(
@@ -63,15 +60,10 @@ sequence: [1, 2, 3]
       }
     }
 
-    EXPECT_THAT(
-      key_marks,
-      testing::UnorderedElementsAre(
-        ComparableMark(1, 1, 0),
-        ComparableMark(15, 2, 0),
-        ComparableMark(35, 3, 0),
-        ComparableMark(48, 4, 0)
-      )
-    );
+    EXPECT_THAT(key_marks,
+                testing::UnorderedElementsAre(
+                    ComparableMark(1, 1, 0), ComparableMark(15, 2, 0),
+                    ComparableMark(35, 3, 0), ComparableMark(48, 4, 0)));
 
     ASSERT_TRUE(sequence_key);
     EXPECT_EQ(sequence_key[0].Mark(), ComparableMark(49, 4, 1));

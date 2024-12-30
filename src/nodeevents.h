@@ -52,8 +52,8 @@ class NodeEvents {
   };
 
   void Setup(const detail::node& node);
-  void Emit(const detail::node& node, EventHandler& handler,
-            AliasManager& am, bool preserveMarks) const;
+  void Emit(const detail::node& node, EventHandler& handler, AliasManager& am,
+            bool preserveMarks) const;
   bool IsAliased(const detail::node& node) const;
 
  private:
