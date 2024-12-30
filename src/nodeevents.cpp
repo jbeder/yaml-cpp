@@ -69,19 +69,19 @@ void NodeEvents::Emit(const detail::node& node, EventHandler& handler,
     case NodeType::Undefined:
       break;
     case NodeType::Null:
-      handler.OnNull(Mark(), anchor);
+      handler.OnNull(node.mark(), anchor);
       break;
     case NodeType::Scalar:
-      handler.OnScalar(Mark(), node.tag(), anchor, node.scalar());
+      handler.OnScalar(node.mark(), node.tag(), anchor, node.scalar());
       break;
     case NodeType::Sequence:
-      handler.OnSequenceStart(Mark(), node.tag(), anchor, node.style());
+      handler.OnSequenceStart(node.mark(), node.tag(), anchor, node.style());
       for (auto element : node)
         Emit(*element, handler, am);
       handler.OnSequenceEnd();
       break;
     case NodeType::Map:
-      handler.OnMapStart(Mark(), node.tag(), anchor, node.style());
+      handler.OnMapStart(node.mark(), node.tag(), anchor, node.style());
       for (auto element : node) {
         Emit(*element.first, handler, am);
         Emit(*element.second, handler, am);
