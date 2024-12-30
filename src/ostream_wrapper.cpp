@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <cstring>
-#include <iostream>
+#include <ostream>
 
 namespace YAML {
 ostream_wrapper::ostream_wrapper()
