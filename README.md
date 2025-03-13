@@ -68,7 +68,7 @@ target_link_libraries(YOUR_LIBRARY PUBLIC yaml-cpp::yaml-cpp) # The library or e
 
 ## Recent Releases
 
-[yaml-cpp 0.8.0](https://github.com/jbeder/yaml-cpp/releases/tag/yaml-cpp-0.8.0) released!
+[yaml-cpp 0.8.0](https://github.com/jbeder/yaml-cpp/releases/tag/0.8.0) released!
 
 [yaml-cpp 0.3.0](https://github.com/jbeder/yaml-cpp/releases/tag/release-0.3.0) is still available if you want the old API.
 
