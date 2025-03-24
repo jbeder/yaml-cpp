@@ -11,9 +11,9 @@ if(YAML_USE_SYSTEM_GTEST)
   endif()
 else()
     add_subdirectory(
-      "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.11.0"
+      "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0"
       "${CMAKE_CURRENT_BINARY_DIR}/prefix")
-    include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.11.0/googletest/include")
+    include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0/googletest/include")
 endif()
 
 set(test-new-api-pattern "new-api/*.cpp")
