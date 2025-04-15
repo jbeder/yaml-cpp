@@ -33,7 +33,7 @@ class YAML_CPP_API memory {
 
 class YAML_CPP_API memory_holder {
  public:
-  memory_holder() : m_pMemory(new memory) {}
+  memory_holder() : m_pMemory(std::make_shared<memory>()) {}
 
   node& create_node() { return m_pMemory->create_node(); }
   void merge(memory_holder& rhs);
