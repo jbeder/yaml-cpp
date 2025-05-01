@@ -1,3 +1,5 @@
+#include <iomanip>
+
 #include "yaml-cpp/fptostring.h"
 #include "gtest/gtest.h"
 
