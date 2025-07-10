@@ -41,7 +41,11 @@ void EmitFromEvents::OnScalar(const Mark&, const std::string& tag,
                               anchor_t anchor, const std::string& value) {
   BeginNode();
   EmitProps(tag, anchor);
-  m_emitter << value;
+  if (tag != "!") {
+    m_emitter << value;
+  } else {
+    m_emitter.Write(value, EMITTER_MANIP::DoubleQuoted);
+  }
 }
 
 void EmitFromEvents::OnSequenceStart(const Mark&, const std::string& tag,

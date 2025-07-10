@@ -716,15 +716,17 @@ StringEscaping::value GetStringEscapingStyle(const EMITTER_MANIP emitterManip) {
   }
 }
 
-Emitter& Emitter::Write(const char* str, std::size_t size) {
+Emitter& Emitter::Write(const char* str, std::size_t size,
+                        EMITTER_MANIP emitterManip) {
   if (!good())
     return *this;
 
-  StringEscaping::value stringEscaping = GetStringEscapingStyle(m_pState->GetOutputCharset());
+  StringEscaping::value stringEscaping =
+      GetStringEscapingStyle(m_pState->GetOutputCharset());
 
-  const StringFormat::value strFormat =
-      Utils::ComputeStringFormat(str, size, m_pState->GetStringFormat(),
-                                 m_pState->CurGroupFlowType(), stringEscaping == StringEscaping::NonAscii);
+  const StringFormat::value strFormat = Utils::ComputeStringFormat(
+      str, size, emitterManip, m_pState->CurGroupFlowType(),
+      stringEscaping == StringEscaping::NonAscii);
 
   if (strFormat == StringFormat::Literal || size > 1024)
     m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
@@ -750,6 +752,14 @@ Emitter& Emitter::Write(const char* str, std::size_t size) {
   StartedScalar();
 
   return *this;
+}
+
+Emitter& Emitter::Write(const char* str, std::size_t size) {
+  return Write(str, size, m_pState->GetStringFormat());
+}
+
+Emitter& Emitter::Write(const std::string& str, EMITTER_MANIP emitterManip) {
+  return Write(str.data(), str.size(), emitterManip);
 }
 
 Emitter& Emitter::Write(const std::string& str) {
