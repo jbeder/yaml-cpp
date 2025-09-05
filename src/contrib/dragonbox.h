@@ -936,10 +936,15 @@ namespace jkj {
                                   "jkj::dragonbox: exponent range is too wide");
                     return false;
                 }
+                template <template <std::size_t> class Info, std::int_least32_t min_exponent,
+                std::int_least32_t max_exponent, std::size_t current_tier>
+                constexpr bool is_in_range_v =
+                    min_exponent >= Info<current_tier>::min_exponent &&
+                    max_exponent <= Info<current_tier>::max_exponent;
 
                 template <template <stdr::size_t> class Info, stdr::int_least32_t min_exponent,
                           stdr::int_least32_t max_exponent, stdr::size_t current_tier = 0,
-                          bool = is_in_range<Info, min_exponent, max_exponent, current_tier>(0)>
+                          bool = is_in_range_v<Info, min_exponent, max_exponent, current_tier>>
                 struct compute_impl;
 
                 template <template <stdr::size_t> class Info, stdr::int_least32_t min_exponent,
