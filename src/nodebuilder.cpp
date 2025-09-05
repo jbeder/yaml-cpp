@@ -10,7 +10,7 @@ namespace YAML {
 struct Mark;
 
 NodeBuilder::NodeBuilder()
-    : m_pMemory(new detail::memory_holder),
+    : m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pRoot(nullptr),
       m_stack{},
       m_anchors{},
