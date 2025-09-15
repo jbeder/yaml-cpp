@@ -77,7 +77,7 @@ void Parser::HandleYamlDirective(const Token& token) {
   }
 
   std::stringstream str(token.params[0]);
-  str.imbue(std::locale("C"));
+  str.imbue(std::locale::classic());
   str >> m_pDirectives->version.major;
   str.get();
   str >> m_pDirectives->version.minor;

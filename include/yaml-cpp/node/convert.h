@@ -172,7 +172,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
                                                                            \
     static Node encode(const type& rhs) {                                  \
       std::stringstream stream;                                            \
-      stream.imbue(std::locale("C"));                                       \
+      stream.imbue(std::locale::classic());                                \
       stream.precision(std::numeric_limits<type>::max_digits10);           \
       conversion::inner_encode(rhs, stream);                               \
       return Node(stream.str());                                           \
@@ -184,7 +184,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       }                                                                    \
       const std::string& input = node.Scalar();                            \
       std::stringstream stream(input);                                     \
-      stream.imbue(std::locale("C"));                                       \
+      stream.imbue(std::locale::classic());                                \
       stream.unsetf(std::ios::dec);                                        \
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
         return false;                                                      \
