@@ -85,7 +85,7 @@ std::string FpToString(T v, int precision = 0) {
   // dragonbox/to_decimal does not handle value 0, inf, NaN
   if (v == 0 || std::isinf(v) || std::isnan(v)) {
     std::stringstream ss;
-    ss.imbue(std::locale("C"));
+    ss.imbue(std::locale::classic());
     ss << v;
     return ss.str();
   }
@@ -98,7 +98,7 @@ std::string FpToString(T v, int precision = 0) {
   // defensive programming, ConvertToChars arguments are invalid
   if (digits_ct == -1) {
     std::stringstream ss;
-    ss.imbue(std::locale("C"));
+    ss.imbue(std::locale::classic());
     ss << v;
     return ss.str();
   }
@@ -161,7 +161,7 @@ std::string FpToString(T v, int precision = 0) {
     // defensive programming, ConvertToChars arguments are invalid
     if (exp_digits_ct == -1) {
       std::stringstream ss;
-      ss.imbue(std::locale("C"));
+      ss.imbue(std::locale::classic());
       ss << v;
       return ss.str();
     }
@@ -226,7 +226,7 @@ std::string FpToString(double v, size_t precision) {
  */
 std::string FpToString(long double v, size_t precision) {
   std::stringstream ss;
-  ss.imbue(std::locale("C"));
+  ss.imbue(std::locale::classic());
   if (precision == 0) {
      precision = std::numeric_limits<long double>::max_digits10;
   }
