@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+                          
+    <UMBA_LOCAL_LIBS_ROOT>$(ProjectDir)\..\_libs</UMBA_LOCAL_LIBS_ROOT>
+    <UMBA_LOCAL_PRETTY_HEADERS>$(UMBA_LOCAL_LIBS_ROOT)\pretty_headers;$(UMBA_LOCAL_LIBS_ROOT)\_pretty_headers;$(UMBA_LOCAL_LIBS_ROOT)\std_headers;$(UMBA_LOCAL_LIBS_ROOT)\_std_headers;$(UMBA_LOCAL_LIBS_ROOT)\qt_headers;$(UMBA_LOCAL_LIBS_ROOT)\_qt_headers;$(UMBA_LOCAL_LIBS_ROOT)\qt5_headers;$(UMBA_LOCAL_LIBS_ROOT)\_qt5_headers;$(UMBA_LOCAL_LIBS_ROOT)\qt6_headers;$(UMBA_LOCAL_LIBS_ROOT)\_qt6_headers</UMBA_LOCAL_PRETTY_HEADERS>
+    <UMBA_LOCAL_INC_DIRS>$(UMBA_LOCAL_LIBS_ROOT);$(UMBA_LOCAL_PRETTY_HEADERS);$(ProjectDir)\..\src;$(UMBA_LOCAL_LIBS_ROOT)\sfmt\inc;$(UMBA_LOCAL_LIBS_ROOT)\mem_pools\inc</UMBA_LOCAL_INC_DIRS>
+
+    <UMBA_OUTDIR>$(SolutionDir)\.out\$(UMBA_TOOLSET_PLATFORM_CONFIG_ROOT)</UMBA_OUTDIR>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutDir>$(UMBA_OUTDIR)\</OutDir>
+    <IntDir>$(UMBA_OUTDIR)\_$(ProjectName)\</IntDir>
+  </PropertyGroup>
+
+
+</Project>
