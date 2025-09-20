@@ -73,7 +73,9 @@ class YAML_CPP_API Emitter {
   Emitter& SetLocalPrecision(const _Precision& precision);
 
   // overloads of write
+  Emitter& Write(const char* str, std::size_t size, EMITTER_MANIP emitterManip);
   Emitter& Write(const char* str, std::size_t size);
+  Emitter& Write(const std::string& str, EMITTER_MANIP emitterManip);
   Emitter& Write(const std::string& str);
   Emitter& Write(bool b);
   Emitter& Write(char ch);
