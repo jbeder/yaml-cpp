@@ -1,0 +1,45 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- 
+      Set up user/system environment vars:
+      UMBA_LLVM_PROJECT_ROOT=G:\llvm-project
+      UMBA_LLVM_BUILT_ROOT=G:\llvm
+    -->
+
+  <PropertyGroup>
+      <UMBA_LLVM_TOOLSET>$(UMBA_MSVCVER)</UMBA_LLVM_TOOLSET>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LLVM_LIB_ROOT>$(UMBA_LLVM_BUILT_ROOT)\$(UMBA_LLVM_TOOLSET)</LLVM_LIB_ROOT>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- 
+      $(UMBA_LLVM_BUILT_ROOT) \ $(UMBA_LLVM_TOOLSET) \ $(PlatformShortName) \artifacts\tools\clang\include
+      G:\llvm                 \ msvc2019             \ x64                  \artifacts\tools\clang\include \clang\AST 
+      $(LLVM_LIB_ROOT)                               \ $(PlatformShortName) \artifacts\tools\clang\include
+      $(LLVM_LIB_ROOT)\$(UMBA_LLVM_TOOLSET)\$(PlatformShortName)\artifacts\tools\clang\include
+
+      G:\llvm-project\llvm\include\llvm\ADT\ 
+    -->
+    <UMBA_LLVM_CLANG_TOOLSET_PLATFORM_CONFIG_ARTIFACTS_INC>$(LLVM_LIB_ROOT)\$(PlatformShortName)\include;$(LLVM_LIB_ROOT)\$(PlatformShortName)\tools\clang\include</UMBA_LLVM_CLANG_TOOLSET_PLATFORM_CONFIG_ARTIFACTS_INC>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- 
+      G:\llvm-project\llvm\include\
+      G:\llvm\msvc2019\x64\artifacts\tools\clang\include   clang\AST\ 
+
+      llvm/Frontend/OpenMP/OMP.inc
+      G:\llvm\msvc2019\x64\include   llvm\Frontend\OpenMP\OMP.inc
+
+
+    -->
+    <LLVM_CLANG_INC>$(UMBA_LLVM_PROJECT_ROOT)\llvm\include;$(UMBA_LLVM_PROJECT_ROOT)\clang\include;$(UMBA_LLVM_CLANG_TOOLSET_PLATFORM_CONFIG_ARTIFACTS_INC)</LLVM_CLANG_INC>
+    <LLVM_CLANG_TOOLS_EXTRA_ROOT>$(UMBA_LLVM_PROJECT_ROOT)\clang-tools-extra</LLVM_CLANG_TOOLS_EXTRA_ROOT>
+    <LLVM_LIB>$(LLVM_LIB_ROOT)\$(PlatformShortName)\$(Configuration)\lib</LLVM_LIB>
+    <LLVM_BIN>$(LLVM_LIB_ROOT)\$(PlatformShortName)\$(Configuration)\bin</LLVM_BIN>
+  </PropertyGroup>
+
+</Project>

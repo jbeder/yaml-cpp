@@ -1,0 +1,51 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Condition="'$(UMBA_MSVCVER)'=='msvc2017'">
+    <UMBA_QT_ROOT>$(MSVC2017_QTROOT)\msvc2017</UMBA_QT_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UMBA_MSVCVER)'=='msvc2019'">
+    <UMBA_QT_ROOT>$(MSVC2019_QTROOT)\msvc2017</UMBA_QT_ROOT>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <QTDIR>$(UMBA_QT_ROOT)\msvc2017</QTDIR>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <QTDIR>$(UMBA_QT_ROOT)\msvc2017</QTDIR>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QTDIR>$(UMBA_QT_ROOT)\msvc2017_64</QTDIR>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QTDIR>$(UMBA_QT_ROOT)\msvc2017_64</QTDIR>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <QT_BIN_PATH>$(QTDIR)\bin</QT_BIN_PATH>
+    <QT_DLL_PATH>$(QTDIR)\bin</QT_DLL_PATH>
+    <QT_LIB_PATH>$(QTDIR)\lib</QT_LIB_PATH>
+    <QT_INC_PATH>$(QTDIR)\include</QT_INC_PATH>
+  </PropertyGroup>
+
+  <PropertyGroup>
+
+    <QWT_ROOT_PATH>$(MSVC2017_QWT_ROOT)</QWT_ROOT_PATH>
+
+    <!-- For compatibility with old version -->
+    <QWT_ROOT>$(QWT_ROOT_PATH)</QWT_ROOT>
+
+    <QWT_LIB_PATH>$(QWT_ROOT_PATH)\$(PlatformShortName)\lib</QWT_LIB_PATH>
+    <QWT_DLL_PATH>$(QWT_ROOT_PATH)\$(PlatformShortName)\lib</QWT_DLL_PATH>
+    <QWT_INC_PATH>$(QWT_ROOT_PATH)\$(PlatformShortName)\include</QWT_INC_PATH>
+
+    <!-- For compatibility with old version -->
+    <QWT_LIB>$(QWT_LIB_PATH)</QWT_LIB>
+    <QWT_INC>$(QWT_INC_PATH)</QWT_INC>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LocalDebuggerEnvironment>PATH=$(QWT_DLL_PATH);$(QT_DLL_PATH);$(PATH);$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+  </PropertyGroup>
+
+</Project>
