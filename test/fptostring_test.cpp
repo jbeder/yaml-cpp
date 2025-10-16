@@ -1,3 +1,7 @@
+#include <cmath>
+#include <limits>
+#include <type_traits>
+
 #include "yaml-cpp/fptostring.h"
 #include "gtest/gtest.h"
 
@@ -7,14 +11,23 @@ namespace {
 /**
  * Helper function, that converts double to string as std::stringstream would do
  */
-template <typename T>
+template <typename T, typename std::enable_if<std::is_floating_point<T>::value,
+                                              bool>::type = true>
 static std::string convert_with_stringstream(T v, size_t precision = 0) {
   std::stringstream ss;
   if (precision > 0) {
     ss << std::setprecision(precision);
   }
   ss << v;
-  return ss.str();
+  std::string result = ss.str();
+  // Check if already in scientific notation or already has a decimal point
+  // This logic mimics the logic in FpToString
+  if (std::isfinite(v) && result.find('e') == std::string::npos &&
+      result.find('.') == std::string::npos) {
+    // Add .0 to whole numbers not in scientific notation
+    result += ".0";
+  }
+  return result;
 }
 
 // Caution: Test involving 'convert_with_stringstream' are based on std::stringstream
@@ -51,13 +64,13 @@ TEST(FpToStringTest, conversion_double) {
   EXPECT_EQ(convert_with_stringstream(1e9), FpToString(1e9));
 
   // Print by default values below 1e6 without scientific notation
-  EXPECT_EQ("1", FpToString(1.));
-  EXPECT_EQ("1", FpToString(1e0));
-  EXPECT_EQ("10", FpToString(1e1));
-  EXPECT_EQ("100", FpToString(1e2));
-  EXPECT_EQ("1000", FpToString(1e3));
-  EXPECT_EQ("10000", FpToString(1e4));
-  EXPECT_EQ("100000", FpToString(1e5));
+  EXPECT_EQ("1.0", FpToString(1.));
+  EXPECT_EQ("1.0", FpToString(1e0));
+  EXPECT_EQ("10.0", FpToString(1e1));
+  EXPECT_EQ("100.0", FpToString(1e2));
+  EXPECT_EQ("1000.0", FpToString(1e3));
+  EXPECT_EQ("10000.0", FpToString(1e4));
+  EXPECT_EQ("100000.0", FpToString(1e5));
   EXPECT_EQ("1e+06", FpToString(1e6));
   EXPECT_EQ("1e+07", FpToString(1e7));
   EXPECT_EQ("1e+08", FpToString(1e8));
@@ -77,8 +90,8 @@ TEST(FpToStringTest, conversion_double) {
   EXPECT_EQ(convert_with_stringstream(1e-9), FpToString(1e-9));
 
   // Print by default values above 1e-5 without scientific notation
-  EXPECT_EQ("1", FpToString(1.));
-  EXPECT_EQ("1", FpToString(1e-0));
+  EXPECT_EQ("1.0", FpToString(1.));
+  EXPECT_EQ("1.0", FpToString(1e-0));
   EXPECT_EQ("0.1", FpToString(1e-1));
   EXPECT_EQ("0.01", FpToString(1e-2));
   EXPECT_EQ("0.001", FpToString(1e-3));
@@ -96,9 +109,9 @@ TEST(FpToStringTest, conversion_double) {
   EXPECT_EQ(convert_with_stringstream(1234567e-9, 7), FpToString(1234567e-9, 7));
   EXPECT_EQ(convert_with_stringstream(1234567e-9, 1), FpToString(1234567e-9, 1));
 
- // known example that is difficult to round
-  EXPECT_EQ("1", FpToString(0.9999, 2));
-  EXPECT_EQ("-1", FpToString(-0.9999, 2));
+  // known example that is difficult to round
+  EXPECT_EQ("1.0", FpToString(0.9999, 2));
+  EXPECT_EQ("-1.0", FpToString(-0.9999, 2));
 
   // some more random tests
   EXPECT_EQ("1.25", FpToString(1.25));
@@ -110,13 +123,13 @@ TEST(FpToStringTest, conversion_double) {
   EXPECT_EQ("1e-20", FpToString(0.1e-19));
   EXPECT_EQ("1.1e-20", FpToString(0.11e-19));
 
-  EXPECT_EQ("19", FpToString(18.9, 2));
-  EXPECT_EQ("20", FpToString(19.9, 2));
+  EXPECT_EQ("19.0", FpToString(18.9, 2));
+  EXPECT_EQ("20.0", FpToString(19.9, 2));
   EXPECT_EQ("2e+01", FpToString(19.9, 1));
   EXPECT_EQ("1.2e-05", FpToString(1.234e-5, 2));
   EXPECT_EQ("1.3e-05", FpToString(1.299e-5, 2));
 
-  EXPECT_EQ("-1", FpToString(-1.));
+  EXPECT_EQ("-1.0", FpToString(-1.));
   EXPECT_EQ("-1.25", FpToString(-1.25));
   EXPECT_EQ("-34.34", FpToString(-34.34));
   EXPECT_EQ("-1e+20", FpToString(-1e+20));
@@ -126,11 +139,25 @@ TEST(FpToStringTest, conversion_double) {
   EXPECT_EQ("-1e-20", FpToString(-0.1e-19));
   EXPECT_EQ("-1.1e-20", FpToString(-0.11e-19));
 
-  EXPECT_EQ("-19", FpToString(-18.9, 2));
-  EXPECT_EQ("-20", FpToString(-19.9, 2));
+  EXPECT_EQ("-19.0", FpToString(-18.9, 2));
+  EXPECT_EQ("-20.0", FpToString(-19.9, 2));
   EXPECT_EQ("-2e+01", FpToString(-19.9, 1));
   EXPECT_EQ("-1.2e-05", FpToString(-1.234e-5, 2));
   EXPECT_EQ("-1.3e-05", FpToString(-1.299e-5, 2));
+
+  // special values: 0, inf, -inf, NaN
+  EXPECT_EQ("0.0", FpToString(0.0));
+  EXPECT_EQ("inf", FpToString(std::numeric_limits<double>::infinity()));
+  EXPECT_EQ("-inf", FpToString(-std::numeric_limits<double>::infinity()));
+  EXPECT_EQ("nan", FpToString(std::numeric_limits<double>::quiet_NaN()));
+
+  // prints the same way as std::stringstream
+  EXPECT_EQ(convert_with_stringstream(std::numeric_limits<double>::infinity()),
+            FpToString(std::numeric_limits<double>::infinity()));
+  EXPECT_EQ(convert_with_stringstream(-std::numeric_limits<double>::infinity()),
+            FpToString(-std::numeric_limits<double>::infinity()));
+  EXPECT_EQ(convert_with_stringstream(std::numeric_limits<double>::quiet_NaN()),
+            FpToString(std::numeric_limits<double>::quiet_NaN()));
 }
 
 TEST(FpToStringTest, conversion_float) {
@@ -156,13 +183,13 @@ TEST(FpToStringTest, conversion_float) {
   EXPECT_EQ(convert_with_stringstream(1e9f), FpToString(1e9f));
 
   // Print by default values below 1e6 without scientific notation
-  EXPECT_EQ("1", FpToString(1.f));
-  EXPECT_EQ("1", FpToString(1e0f));
-  EXPECT_EQ("10", FpToString(1e1f));
-  EXPECT_EQ("100", FpToString(1e2f));
-  EXPECT_EQ("1000", FpToString(1e3f));
-  EXPECT_EQ("10000", FpToString(1e4f));
-  EXPECT_EQ("100000", FpToString(1e5f));
+  EXPECT_EQ("1.0", FpToString(1.f));
+  EXPECT_EQ("1.0", FpToString(1e0f));
+  EXPECT_EQ("10.0", FpToString(1e1f));
+  EXPECT_EQ("100.0", FpToString(1e2f));
+  EXPECT_EQ("1000.0", FpToString(1e3f));
+  EXPECT_EQ("10000.0", FpToString(1e4f));
+  EXPECT_EQ("100000.0", FpToString(1e5f));
   EXPECT_EQ("1e+06", FpToString(1e6f));
   EXPECT_EQ("1e+07", FpToString(1e7f));
   EXPECT_EQ("1e+08", FpToString(1e8f));
@@ -182,8 +209,8 @@ TEST(FpToStringTest, conversion_float) {
   EXPECT_EQ(convert_with_stringstream(1e-9f), FpToString(1e-9f));
 
   // Print by default values above 1e-5 without scientific notation
-  EXPECT_EQ("1", FpToString(1.f));
-  EXPECT_EQ("1", FpToString(1e-0f));
+  EXPECT_EQ("1.0", FpToString(1.f));
+  EXPECT_EQ("1.0", FpToString(1e-0f));
   EXPECT_EQ("0.1", FpToString(1e-1f));
   EXPECT_EQ("0.01", FpToString(1e-2f));
   EXPECT_EQ("0.001", FpToString(1e-3f));
@@ -201,9 +228,9 @@ TEST(FpToStringTest, conversion_float) {
   EXPECT_EQ(convert_with_stringstream(1234567e-9f, 7), FpToString(1234567e-9f, 7));
   EXPECT_EQ(convert_with_stringstream(1234567e-9f, 1), FpToString(1234567e-9f, 1));
 
- // known example that is difficult to round
-  EXPECT_EQ("1", FpToString(0.9999f, 2));
-  EXPECT_EQ("-1", FpToString(-0.9999f, 2));
+  // known example that is difficult to round
+  EXPECT_EQ("1.0", FpToString(0.9999f, 2));
+  EXPECT_EQ("-1.0", FpToString(-0.9999f, 2));
 
   // some more random tests
   EXPECT_EQ("1.25", FpToString(1.25f));
@@ -215,13 +242,13 @@ TEST(FpToStringTest, conversion_float) {
   EXPECT_EQ("1e-20", FpToString(0.1e-19f));
   EXPECT_EQ("1.1e-20", FpToString(0.11e-19f));
 
-  EXPECT_EQ("19", FpToString(18.9f, 2));
-  EXPECT_EQ("20", FpToString(19.9f, 2));
+  EXPECT_EQ("19.0", FpToString(18.9f, 2));
+  EXPECT_EQ("20.0", FpToString(19.9f, 2));
   EXPECT_EQ("2e+01", FpToString(19.9f, 1));
   EXPECT_EQ("1.2e-05", FpToString(1.234e-5f, 2));
   EXPECT_EQ("1.3e-05", FpToString(1.299e-5f, 2));
 
-  EXPECT_EQ("-1", FpToString(-1.f));
+  EXPECT_EQ("-1.0", FpToString(-1.f));
   EXPECT_EQ("-1.25", FpToString(-1.25f));
   EXPECT_EQ("-34.34", FpToString(-34.34f));
   EXPECT_EQ("-1e+20", FpToString(-1e+20f));
@@ -231,11 +258,25 @@ TEST(FpToStringTest, conversion_float) {
   EXPECT_EQ("-1e-20", FpToString(-0.1e-19f));
   EXPECT_EQ("-1.1e-20", FpToString(-0.11e-19f));
 
-  EXPECT_EQ("-19", FpToString(-18.9f, 2));
-  EXPECT_EQ("-20", FpToString(-19.9f, 2));
+  EXPECT_EQ("-19.0", FpToString(-18.9f, 2));
+  EXPECT_EQ("-20.0", FpToString(-19.9f, 2));
   EXPECT_EQ("-2e+01", FpToString(-19.9f, 1));
   EXPECT_EQ("-1.2e-05", FpToString(-1.234e-5f, 2));
   EXPECT_EQ("-1.3e-05", FpToString(-1.299e-5f, 2));
+
+  // special values: 0, inf, -inf, NaN
+  EXPECT_EQ("0.0", FpToString(0.0f));
+  EXPECT_EQ("inf", FpToString(std::numeric_limits<float>::infinity()));
+  EXPECT_EQ("-inf", FpToString(-std::numeric_limits<float>::infinity()));
+  EXPECT_EQ("nan", FpToString(std::numeric_limits<float>::quiet_NaN()));
+
+  // prints the same way as std::stringstream
+  EXPECT_EQ(convert_with_stringstream(std::numeric_limits<float>::infinity()),
+            FpToString(std::numeric_limits<float>::infinity()));
+  EXPECT_EQ(convert_with_stringstream(-std::numeric_limits<float>::infinity()),
+            FpToString(-std::numeric_limits<float>::infinity()));
+  EXPECT_EQ(convert_with_stringstream(std::numeric_limits<float>::quiet_NaN()),
+            FpToString(std::numeric_limits<float>::quiet_NaN()));
 }
 
 }  // namespace

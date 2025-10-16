@@ -4,6 +4,8 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <iomanip>
+#include <ios>
 #include <limits>
 #include <sstream>
 #include <tuple>
@@ -86,7 +88,8 @@ std::string FpToString(T v, int precision = 0) {
   if (v == 0 || std::isinf(v) || std::isnan(v)) {
     std::stringstream ss;
     ss.imbue(std::locale::classic());
-    ss << v;
+    // force the presecence of one decimal digit for 0
+    ss << std::fixed << std::setprecision(1) << v;
     return ss.str();
   }
 
@@ -204,6 +207,11 @@ std::string FpToString(T v, int precision = 0) {
       for (;digits_iter < digits_end; ++digits_iter) {
          *(output_ptr++) = *digits_iter;
       }
+    } else {
+        // if no digits after decimal point, print .0
+        // to make sure it is recognized as a floating point number
+        *(output_ptr++) = '.';
+        *(output_ptr++) = '0';
     }
   }
   *output_ptr = '\0';

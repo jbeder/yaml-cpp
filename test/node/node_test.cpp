@@ -765,7 +765,7 @@ TEST_F(NodeEmitterTest, SimpleFlowSeqNode) {
   node.push_back(4000.);
   node.push_back(1.5474251e+26f);
 
-  ExpectOutput("[1.5, 2.25, 3.125, 34.34, 56.56, 12.12, 78.78, 0.0003, 4000, 1.5474251e+26]", node);
+  ExpectOutput("[1.5, 2.25, 3.125, 34.34, 56.56, 12.12, 78.78, 0.0003, 4000.0, 1.5474251e+26]", node);
 }
 
 TEST_F(NodeEmitterTest, NestFlowSeqNode) {
