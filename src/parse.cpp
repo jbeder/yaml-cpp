@@ -53,7 +53,7 @@ std::vector<Node> LoadAll(std::istream& input) {
   Parser parser(input);
   while (true) {
     NodeBuilder builder;
-    if (!parser.HandleNextDocument(builder)) {
+    if (!parser.HandleNextDocument(builder) || builder.Root().IsNull()) {
       break;
     }
     docs.push_back(builder.Root());

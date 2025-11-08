@@ -17,23 +17,40 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
           cxx_standard: [11, 17, 20]
           build: [static, shared]
+          googletest: [build, system]
           generator: ["Default Generator", "MinGW Makefiles"]
           exclude:
+          - os: ubuntu-latest
+            cxx_standard: 11
+            googletest: system
           - os: macos-latest
             build: shared
           - os: macos-latest
             generator: "MinGW Makefiles"
           - os: ubuntu-latest
             generator: "MinGW Makefiles"
+          - os: macos-latest
+            googletest: system
+          - os: windows-latest
+            googletest: system
       env:
         YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
+        YAML_USE_SYSTEM_GTEST: ${{ matrix.googletest == 'system' && 'ON' || 'OFF' }}
         CMAKE_GENERATOR: >-
           ${{format(matrix.generator != 'Default Generator' && '-G "{0}"' || '', matrix.generator)}}
         CMAKE_INSTALL_PREFIX: "${{ github.workspace }}/install-prefix"
         CMAKE_BUILD_TYPE: Debug
+        CMAKE_CXX_FLAGS_DEBUG: ${{ matrix.googletest == 'build' && '-g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC' || '-g' }} 
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v3
+
+        - uses: awalsh128/cache-apt-pkgs-action@latest
+          if: matrix.os == 'ubuntu-latest'
+          with:
+            packages: googletest libgmock-dev libgtest-dev
+            version: 1.0
+
+        - uses: actions/checkout@v5
 
         - name: Configure
           run: |
@@ -44,7 +61,9 @@ jobs:
               -D CMAKE_CXX_STANDARD=${{ matrix.cxx_standard }} \
               -D CMAKE_INSTALL_PREFIX="${{ env.CMAKE_INSTALL_PREFIX }}" \
               -D CMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -D CMAKE_CXX_FLAGS_DEBUG="${{ env.CMAKE_CXX_FLAGS_DEBUG }}" \
               -D YAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }} \
+              -D YAML_USE_SYSTEM_GTEST=${{ env.YAML_USE_SYSTEM_GTEST }} \
               -D YAML_CPP_BUILD_TESTS=ON
 
         - name: Build
@@ -89,7 +108,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v5
 
         - name: Build
           run: |
@@ -107,7 +126,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v5
 
         - name: Build
           shell: bash

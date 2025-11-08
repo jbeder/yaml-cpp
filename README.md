@@ -31,6 +31,17 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 
   * `yaml-cpp` builds a static library by default, you may want to build a shared library by specifying `-DYAML_BUILD_SHARED_LIBS=ON`.
 
+  * [Debug mode of the GNU standard C++
+    library](https://gcc.gnu.org/onlinedocs/libstdc++/manual/debug_mode.html)
+    can be used when both `yaml-cpp` and client code is compiled with the
+    `_GLIBCXX_DEBUG` flag (e.g. by calling CMake with `-D
+    CMAKE_CXX_FLAGS_DEBUG='-g -D_GLIBCXX_DEBUG'` option).
+
+    Note that for `yaml-cpp` unit tests to run successfully, the _GoogleTest_
+    library also must be built with this flag, i.e. the system one cannot be
+    used (the _YAML_USE_SYSTEM_GTEST_ CMake option must be _OFF_, which is the
+    default).
+
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
 #### 2. Build it!
@@ -38,13 +49,30 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 
 **Note:** To clean up, just remove the `build` directory.
 
+## How to Integrate it within your project using CMake
+
+You can use for example FetchContent :
+
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+  yaml-cpp
+  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+  GIT_TAG <tag_name> # Can be a tag (yaml-cpp-x.x.x), a commit hash, or a branch name (master)
+)
+FetchContent_MakeAvailable(yaml-cpp)
+
+target_link_libraries(YOUR_LIBRARY PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
+```
+
 ## Recent Releases
 
-[yaml-cpp 0.6.0](https://github.com/jbeder/yaml-cpp/releases/tag/yaml-cpp-0.6.0) released! This release requires C++11, and no longer depends on Boost.
+[yaml-cpp 0.8.0](https://github.com/jbeder/yaml-cpp/releases/tag/0.8.0) released!
 
 [yaml-cpp 0.3.0](https://github.com/jbeder/yaml-cpp/releases/tag/release-0.3.0) is still available if you want the old API.
 
-**The old API will continue to be supported, and will still receive bugfixes!** The 0.3.x and 0.4.x versions will be old API releases, and 0.5.x and above will all be new API releases.
+**The old API will stop receiving bugfixes in 2026.** The 0.3.x versions provide the old API, and 0.5.x and above all provide the new API.
 
 # API Documentation 
 

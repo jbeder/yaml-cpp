@@ -2,13 +2,19 @@ find_package(Threads REQUIRED)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(BUILD_MOCK ON CACHE BOOL "" FORCE)
-set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(
-  "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.11.0"
-  "${CMAKE_CURRENT_BINARY_DIR}/prefix")
-
-include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.11.0/googletest/include")
+if(YAML_USE_SYSTEM_GTEST)
+  find_package(GTest)
+  if (NOT GTEST_FOUND)
+    message(FATAL_ERROR "system googletest was requested but not found")
+  endif()
+else()
+    add_subdirectory(
+      "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0"
+      "${CMAKE_CURRENT_BINARY_DIR}/prefix")
+    include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0/googletest/include")
+endif()
 
 set(test-new-api-pattern "new-api/*.cpp")
 set(test-source-pattern "*.cpp" "integration/*.cpp" "node/*.cpp")
@@ -38,6 +44,7 @@ target_link_libraries(yaml-cpp-tests
   PRIVATE
     Threads::Threads
     yaml-cpp
+    gtest
     gmock)
 
 set_property(TARGET yaml-cpp-tests PROPERTY CXX_STANDARD_REQUIRED ON)
