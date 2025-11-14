@@ -31,7 +31,7 @@ class NodeEvents {
   NodeEvents& operator=(const NodeEvents&) = delete;
   NodeEvents& operator=(NodeEvents&&) = delete;
 
-  void Emit(EventHandler& handler);
+  void Emit(EventHandler& handler, bool preserveMarks = false);
 
  private:
   class AliasManager {
@@ -52,8 +52,8 @@ class NodeEvents {
   };
 
   void Setup(const detail::node& node);
-  void Emit(const detail::node& node, EventHandler& handler,
-            AliasManager& am) const;
+  void Emit(const detail::node& node, EventHandler& handler, AliasManager& am,
+            bool preserveMarks) const;
   bool IsAliased(const detail::node& node) const;
 
  private:
