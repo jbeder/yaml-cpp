@@ -10,6 +10,7 @@ namespace {
 template <typename T>
 static std::string convert_with_stringstream(T v, size_t precision = 0) {
   std::stringstream ss;
+  ss.imbue(std::locale::classic());
   if (precision > 0) {
     ss << std::setprecision(precision);
   }
