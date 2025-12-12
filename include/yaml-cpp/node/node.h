@@ -16,6 +16,7 @@
 #include "yaml-cpp/node/detail/iterator_fwd.h"
 #include "yaml-cpp/node/ptr.h"
 #include "yaml-cpp/node/type.h"
+#include "yaml-cpp/noexcept.h"
 
 namespace YAML {
 namespace detail {
@@ -41,12 +42,13 @@ class YAML_CPP_API Node {
   using iterator = YAML::iterator;
   using const_iterator = YAML::const_iterator;
 
-  Node();
+  Node() YAML_CPP_NOEXCEPT;
   explicit Node(NodeType::value type);
   template <typename T>
   explicit Node(const T& rhs);
   explicit Node(const detail::iterator_value& rhs);
   Node(const Node& rhs);
+  Node(Node&& rhs) YAML_CPP_NOEXCEPT;
   ~Node();
 
   YAML::Mark Mark() const;
@@ -77,10 +79,12 @@ class YAML_CPP_API Node {
   void SetStyle(EmitterStyle::value style);
 
   // assignment
+  bool CheckValidMove(const Node& rhs) const YAML_CPP_NOEXCEPT;
   bool is(const Node& rhs) const;
   template <typename T>
   Node& operator=(const T& rhs);
   Node& operator=(const Node& rhs);
+  Node& operator=(Node&& rhs) YAML_CPP_NOEXCEPT;
   void reset(const Node& rhs = Node());
 
   // size/iterator
@@ -128,6 +132,7 @@ class YAML_CPP_API Node {
 
   void AssignData(const Node& rhs);
   void AssignNode(const Node& rhs);
+  void AssignNodeDetail(const Node& rhs) YAML_CPP_NOEXCEPT;
 
  private:
   bool m_isValid;
