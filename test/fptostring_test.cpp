@@ -1,6 +1,8 @@
 #include "yaml-cpp/fptostring.h"
 #include "gtest/gtest.h"
 
+#include <iomanip>
+
 namespace YAML {
 namespace {
 
