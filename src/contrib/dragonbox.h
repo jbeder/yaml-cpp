@@ -4023,44 +4023,44 @@ namespace jkj {
 
             // Policy kind detectors.
             struct is_sign_policy {
-                constexpr bool operator()(...) noexcept { return false; }
+                constexpr bool operator()(...) const noexcept { return false; }
                 template <class Policy, class = typename Policy::sign_policy>
-                constexpr bool operator()(dummy<Policy>) noexcept {
+                constexpr bool operator()(dummy<Policy>) const noexcept {
                     return true;
                 }
             };
             struct is_trailing_zero_policy {
-                constexpr bool operator()(...) noexcept { return false; }
+                constexpr bool operator()(...) const noexcept { return false; }
                 template <class Policy, class = typename Policy::trailing_zero_policy>
-                constexpr bool operator()(dummy<Policy>) noexcept {
+                constexpr bool operator()(dummy<Policy>) const noexcept {
                     return true;
                 }
             };
             struct is_decimal_to_binary_rounding_policy {
-                constexpr bool operator()(...) noexcept { return false; }
+                constexpr bool operator()(...) const noexcept { return false; }
                 template <class Policy, class = typename Policy::decimal_to_binary_rounding_policy>
-                constexpr bool operator()(dummy<Policy>) noexcept {
+                constexpr bool operator()(dummy<Policy>) const noexcept {
                     return true;
                 }
             };
             struct is_binary_to_decimal_rounding_policy {
-                constexpr bool operator()(...) noexcept { return false; }
+                constexpr bool operator()(...) const noexcept { return false; }
                 template <class Policy, class = typename Policy::binary_to_decimal_rounding_policy>
-                constexpr bool operator()(dummy<Policy>) noexcept {
+                constexpr bool operator()(dummy<Policy>) const noexcept {
                     return true;
                 }
             };
             struct is_cache_policy {
-                constexpr bool operator()(...) noexcept { return false; }
+                constexpr bool operator()(...) const noexcept { return false; }
                 template <class Policy, class = typename Policy::cache_policy>
-                constexpr bool operator()(dummy<Policy>) noexcept {
+                constexpr bool operator()(dummy<Policy>) const noexcept {
                     return true;
                 }
             };
             struct is_preferred_integer_types_policy {
-                constexpr bool operator()(...) noexcept { return false; }
+                constexpr bool operator()(...) const noexcept { return false; }
                 template <class Policy, class = typename Policy::preferred_integer_types_policy>
-                constexpr bool operator()(dummy<Policy>) noexcept {
+                constexpr bool operator()(dummy<Policy>) const noexcept {
                     return true;
                 }
             };

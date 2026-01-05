@@ -1,6 +1,8 @@
 #include "yaml-cpp/fptostring.h"
 #include "gtest/gtest.h"
 
+#include <iomanip>
+
 namespace YAML {
 namespace {
 
@@ -10,6 +12,7 @@ namespace {
 template <typename T>
 static std::string convert_with_stringstream(T v, size_t precision = 0) {
   std::stringstream ss;
+  ss.imbue(std::locale::classic());
   if (precision > 0) {
     ss << std::setprecision(precision);
   }
@@ -236,6 +239,10 @@ TEST(FpToStringTest, conversion_float) {
   EXPECT_EQ("-2e+01", FpToString(-19.9f, 1));
   EXPECT_EQ("-1.2e-05", FpToString(-1.234e-5f, 2));
   EXPECT_EQ("-1.3e-05", FpToString(-1.299e-5f, 2));
+}
+
+TEST(FpToStringTest, vulnerability_stack_buffer_overflow) {
+  EXPECT_EQ(FpToString(1.0e100, 200), "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 }
 
 }  // namespace

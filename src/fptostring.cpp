@@ -129,8 +129,13 @@ std::string FpToString(T v, int precision = 0) {
     }
   }
 
-  std::array<char, 28> output_buffer; // max digits of size_t plus sign, a dot and 2 letters for 'e+' or 'e-' and 4 letters for the exponent
+  // Case 1 - scientific notation: max digits of size_t plus sign, a dot and 2 letters for 'e+' or 'e-' and 4 letters for the exponent
+  // Case 2 - default notation: require up to precision number of digits and one for a potential sign
+  std::array<char, 28> output_buffer;
   auto output_ptr = &output_buffer[0];
+
+  // Helper variable that in Case 2 counts the overflowing number of zeros that do not fit into the buffer.
+  int overflow_zeros = 0;
 
   // print '-' symbol for negative numbers
   if (r.is_negative) {
@@ -172,18 +177,28 @@ std::string FpToString(T v, int precision = 0) {
 
   // case 2: default notation
   } else {
-    auto const digits_end   = digits.begin() + digits_ct;
-    auto digits_iter    = digits.begin();
+    auto const digits_end = digits.begin() + digits_ct;
+    auto digits_iter = digits.begin();
 
     // print digits before point
     int const before_decimal_digits = digits_ct + r.exponent;
     if (before_decimal_digits > 0) {
-      // print digits before point
+      // print non-zero digits before point
       for (int i{0}; i < std::min(before_decimal_digits, digits_ct); ++i) {
         *(output_ptr++) = *(digits_iter++);
       }
+
+      // number of digits that have to be zero
+      int const zero_digits_ct = before_decimal_digits - digits_ct;
+
+      // space left in the output_buffer (-1 because we need it for null-termination)
+      int const buffer_empty_space = output_buffer.data() + output_buffer.size() - output_ptr - 1;
+
+      // print all zeros not fitting into the buffer at the end of the function
+      overflow_zeros = std::max(0, zero_digits_ct - buffer_empty_space);
+
       // print trailing zeros before point
-      for (int i{0}; i < before_decimal_digits - digits_ct; ++i) {
+      for (int i{0}; i < zero_digits_ct - overflow_zeros; ++i) {
         *(output_ptr++) = '0';
       }
 
@@ -207,7 +222,9 @@ std::string FpToString(T v, int precision = 0) {
     }
   }
   *output_ptr = '\0';
-  return std::string{&output_buffer[0], output_ptr};
+  auto ret_value = std::string{&output_buffer[0], output_ptr};
+  ret_value.resize(ret_value.size() + overflow_zeros, '0');
+  return ret_value;
 }
 
 }
