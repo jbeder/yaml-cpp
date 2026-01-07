@@ -16,7 +16,7 @@ namespace YAML {
 namespace detail {
 class node_ref {
  public:
-  node_ref() : m_pData(new node_data) {}
+  node_ref() : m_pData(std::make_shared<node_data>()) {}
   node_ref(const node_ref&) = delete;
   node_ref& operator=(const node_ref&) = delete;
 

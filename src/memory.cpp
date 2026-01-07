@@ -18,7 +18,7 @@ void memory_holder::merge(memory_holder& rhs) {
 }
 
 node& memory::create_node() {
-  shared_node pNode(new node);
+  shared_node pNode(std::make_shared<node>());
   m_nodes.insert(pNode);
   return *pNode;
 }
