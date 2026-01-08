@@ -121,14 +121,17 @@ TEST_F(EmitterTest, NumberPrecision) {
   out.SetFloatPrecision(3);
   out.SetDoublePrecision(2);
   out << BeginSeq;
+  out << 1.0f;
   out << 3.1425926f;
+  out << 0.0;
+  out << 1.0;
   out << 53.5893;
   out << 2384626.4338;
   out << 1999926.4338;
   out << 9999926.4338;
   out << EndSeq;
 
-  ExpectEmit("- 3.14\n- 54\n- 2.4e+06\n- 2e+06\n- 1e+07");
+  ExpectEmit("- 1.0\n- 3.14\n- 0.0\n- 1.0\n- 54.0\n- 2.4e+06\n- 2e+06\n- 1e+07");
 }
 
 TEST_F(EmitterTest, SimpleSeq) {
