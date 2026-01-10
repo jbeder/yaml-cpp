@@ -53,8 +53,9 @@ endif()
 
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
 set(build-windows-dll $<AND:$<BOOL:${CMAKE_HOST_WIN32}>,${build-shared}>)
-set(not-msvc $<NOT:$<CXX_COMPILER_ID:MSVC>>)
 set(msvc-shared_rt $<BOOL:${YAML_MSVC_SHARED_RT}>)
+
+set(print-warnings $<NOT:$<OR:$<CXX_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:NVHPC>>>)
 
 if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
   set(CMAKE_MSVC_RUNTIME_LIBRARY
@@ -111,8 +112,8 @@ endif()
 if(YAML_CPP_MAIN_PROJECT)
   target_compile_options(yaml-cpp
     PRIVATE
-      $<${not-msvc}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
-      $<${not-msvc}:-pedantic -pedantic-errors>)
+      $<${print-warnings}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
+      $<${print-warnings}:-pedantic -pedantic-errors>)
 endif()
 
 target_compile_options(yaml-cpp
