@@ -22,6 +22,7 @@
 #include "yaml-cpp/node/detail/impl.h"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/node/emit.h"
+#include "yaml-cpp/dummy.h"
 
 // IWYU pragma: end_exports
 
