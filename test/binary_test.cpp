@@ -12,3 +12,10 @@ TEST(BinaryTest, DecodingNoCrashOnNegative) {
   const std::vector<unsigned char> &result = YAML::DecodeBase64(input);
   EXPECT_TRUE(result.empty());
 }
+
+TEST(BinaryTest, DecodingIncompleteString) {
+  // Note: the number of bytes is *not* a multiple of four.
+  std::string input{90, 71, 86, 104, 90};
+  const std::vector<unsigned char> &result = YAML::DecodeBase64(input);
+  EXPECT_TRUE(result.empty());
+}
