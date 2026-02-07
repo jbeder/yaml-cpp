@@ -50,7 +50,7 @@ jobs:
             packages: googletest libgmock-dev libgtest-dev
             version: 1.0
 
-        - uses: actions/checkout@v6.0.1
+        - uses: actions/checkout@v6.0.2
 
         - name: Configure
           run: |
@@ -108,7 +108,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v6.0.1
+        - uses: actions/checkout@v6.0.2
 
         - name: Build
           run: |
@@ -126,7 +126,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v6.0.1
+        - uses: actions/checkout@v6.0.2
 
         - name: Build
           shell: bash
