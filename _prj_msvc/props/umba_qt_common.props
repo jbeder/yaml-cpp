@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project=".\umba_3dp_qtdir.props" />
+
+  <PropertyGroup>
+      <QT_GENERATED_PATH>$(UMBA_OUTDIR)\_$(ProjectName)\GeneratedFiles</QT_GENERATED_PATH>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(QT_GENERATED_PATH);$(QT_INC_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <QtMoc>
+      <Define>STRICT;WIN32_LEAN_AND_MEAN;USE_UMBA_LOUT_COUT;%(PreprocessorDefinitions)</Define>
+      <IncludePath>$(UMBA_INC_DIRS);$(QT_GENERATED_PATH);$(QT_INC_PATH);%(AdditionalIncludeDirectories)</IncludePath>
+    </QtMoc>
+  </ItemDefinitionGroup>
+
+</Project>

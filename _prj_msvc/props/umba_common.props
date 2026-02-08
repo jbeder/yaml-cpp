@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- umba_msvcver.props must be included first -->
+
+  <Import Project=".\umba_stdcpp14.props" />
+
+  <PropertyGroup>
+
+    <!-- UMBA_PLATFORM_CONFIG_ROOT: x86\Release -->
+    <!-- UMBA_PLATFORM_CONFIG_ROOT: x64\Debug -->
+    <UMBA_PLATFORM_CONFIG_ROOT>$(PlatformShortName)\$(Configuration)</UMBA_PLATFORM_CONFIG_ROOT>
+
+    <!-- UMBA_MSVC_PLATFORM_CONFIG_ROOT: msvc2019\x86\Release -->
+    <!-- UMBA_MSVC_PLATFORM_CONFIG_ROOT: msvc2019\x64\Debug -->
+    <UMBA_TOOLSET_PLATFORM_CONFIG_ROOT>$(UMBA_MSVCVER)\$(UMBA_PLATFORM_CONFIG_ROOT)</UMBA_TOOLSET_PLATFORM_CONFIG_ROOT>
+
+  </PropertyGroup>
+
+</Project>
