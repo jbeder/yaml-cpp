@@ -12,3 +12,9 @@ TEST(BinaryTest, DecodingNoCrashOnNegative) {
   const std::vector<unsigned char> &result = YAML::DecodeBase64(input);
   EXPECT_TRUE(result.empty());
 }
+
+TEST(BinaryTest, DecodingTooShort) {
+  std::string input{90, 71, 86, 104, 90, 71, 74, 108, 90, 87, 89};
+  const std::vector<unsigned char> &result = YAML::DecodeBase64(input);
+  EXPECT_TRUE(result.empty());
+}
