@@ -105,7 +105,7 @@ target_include_directories(yaml-cpp
 if (NOT DEFINED CMAKE_CXX_STANDARD)
   set_target_properties(yaml-cpp
     PROPERTIES
-      CXX_STANDARD 14)
+      CXX_STANDARD 17)
 endif()
 
 if(YAML_CPP_MAIN_PROJECT)
