@@ -467,7 +467,7 @@ TEST(NodeSpecTest, Ex5_13_EscapedCharacters) {
   EXPECT_TRUE(doc.as<std::string>() ==
               "Fun with \x5C \x22 \x07 \x08 \x1B \x0C \x0A \x0D \x09 \x0B " +
                   std::string("\x00", 1) +
-                  " \x20 \xA0 \x85 \xe2\x80\xa8 \xe2\x80\xa9 A A A");
+                  " \x20 \xC2\xA0 \x85 \xe2\x80\xa8 \xe2\x80\xa9 A A A");
 }
 
 TEST(NodeSpecTest, Ex5_14_InvalidEscapedCharacters) {
