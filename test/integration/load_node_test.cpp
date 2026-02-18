@@ -375,9 +375,19 @@ TEST(NodeTest, InfiniteLoopNodes) {
   EXPECT_THROW(LoadAll(R"(,)"), ParserException);
 }
 
-TEST(NodeTest, MultipleDocuments) {
+TEST(NodeTest, MultipleDocumentsBeginning) {
   std::vector<Node> docs = LoadAll("\n---\n---\nA\n");
   EXPECT_EQ(docs.size(), 2);
+}
+
+TEST(NodeTest, MultipleDocumentsEnds) {
+  std::vector<Node> docs = LoadAll("\n...\nA\n...\n");
+  EXPECT_EQ(docs.size(), 2);
+}
+
+TEST(NodeTest, MultipleDocumentsEndsWithEmptyDocs) {
+  std::vector<Node> docs = LoadAll("\n...\nA\n...\n...\nB\n...");
+  EXPECT_EQ(docs.size(), 4);
 }
 
 struct NewLineStringsTestCase {
