@@ -22,7 +22,7 @@ inline Node::Node()
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
       m_invalidKey{},
-      m_pMemory(new detail::memory_holder),
+      m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pNode(&m_pMemory->create_node()) {
   m_pNode->set_type(type);
 }
@@ -31,7 +31,7 @@ template <typename T>
 inline Node::Node(const T& rhs)
     : m_isValid(true),
       m_invalidKey{},
-      m_pMemory(new detail::memory_holder),
+      m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pNode(&m_pMemory->create_node()) {
   Assign(rhs);
 }
