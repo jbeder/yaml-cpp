@@ -49,7 +49,7 @@ target_link_libraries(yaml-cpp-tests
 
 set_property(TARGET yaml-cpp-tests PROPERTY CXX_STANDARD_REQUIRED ON)
 if (NOT DEFINED CMAKE_CXX_STANDARD)
-  set_target_properties(yaml-cpp-tests PROPERTIES CXX_STANDARD 11)
+  set_target_properties(yaml-cpp-tests PROPERTIES CXX_STANDARD 17)
 endif()
 
 
