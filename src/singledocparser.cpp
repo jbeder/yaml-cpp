@@ -42,7 +42,7 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
   eventHandler.OnDocumentEnd();
 
   // and finally eat any doc ends we see
-  while (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
+  if (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
     m_scanner.pop();
 }
 
