@@ -461,6 +461,10 @@ TEST(LoadNodeTest, BlockCREncoded) {
   EXPECT_EQ(1, node["followup"].as<int>());
 }
 
+TEST(LoadNodeTest, IncorrectSeqEnd) {
+  EXPECT_THROW(Load("[foo]_bar"), ParserException);
+}
+
 
 }  // namespace
 }  // namespace YAML
