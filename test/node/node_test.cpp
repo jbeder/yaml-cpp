@@ -184,6 +184,22 @@ TEST(NodeTest, EqualRepresentationAfterMoveAssignment) {
   EXPECT_EQ(ss1.str(), ss2.str());
 }
 
+TEST(NodeTest, NodeIsNullWhenMovedFromByCtor) {
+  Node node1;
+  node1[1] = 1;
+  Node node2 = std::move(node1);
+  EXPECT_TRUE(node1.IsNull());
+}
+
+TEST(NodeTest, NodeIsNullWhenMovedFromByAssignment) {
+  Node node1;
+  Node node2;
+  node1[1] = 1;
+  node2[2] = 2;
+  node2 = std::move(node1);
+  EXPECT_TRUE(node1.IsNull());
+}
+
 TEST(NodeTest, MapElementRemoval) {
   Node node;
   node["foo"] = "bar";

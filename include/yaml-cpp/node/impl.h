@@ -12,11 +12,29 @@
 #include "yaml-cpp/node/detail/node.h"
 #include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/node.h"
+#include "yaml-cpp/noexcept.h"
+#include <cassert>
 #include <sstream>
 #include <string>
+#include <utility>
 
 namespace YAML {
-inline Node::Node()
+namespace detail {
+#if __cplusplus >= 201402L
+using ::std::exchange;
+#else
+template<class T, class U = T>
+T exchange(T& obj, U&& new_value) {
+  T old_value = std::move(obj);
+  obj = std::forward<U>(new_value);
+  return old_value;
+}
+#endif
+}  // namespace detail
+}  // namespace YAML
+
+namespace YAML {
+inline Node::Node() YAML_CPP_NOEXCEPT
     : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
 
 inline Node::Node(NodeType::value type)
@@ -43,6 +61,13 @@ inline Node::Node(const detail::iterator_value& rhs)
       m_pNode(rhs.m_pNode) {}
 
 inline Node::Node(const Node&) = default;
+
+inline Node::Node(Node&& rhs) YAML_CPP_NOEXCEPT
+    : m_isValid(detail::exchange(rhs.m_isValid, true)),
+      m_invalidKey(std::move(rhs.m_invalidKey)),
+      m_pMemory(std::move(rhs.m_pMemory)),
+      m_pNode(detail::exchange(rhs.m_pNode, nullptr)) {
+}
 
 inline Node::Node(Zombie)
     : m_isValid(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
@@ -194,6 +219,13 @@ inline void Node::SetStyle(EmitterStyle::value style) {
 }
 
 // assignment
+inline bool Node::CheckValidMove(const Node& rhs) const YAML_CPP_NOEXCEPT {
+  // Note: Both m_pNode's can be nullptr.
+  return
+    m_isValid && rhs.m_isValid &&
+    (!m_pNode || !rhs.m_pNode || !m_pNode->is(*rhs.m_pNode));
+}
+
 inline bool Node::is(const Node& rhs) const {
   if (!m_isValid || !rhs.m_isValid)
     throw InvalidNode(m_invalidKey);
@@ -212,6 +244,38 @@ inline Node& Node::operator=(const Node& rhs) {
   if (is(rhs))
     return *this;
   AssignNode(rhs);
+  return *this;
+}
+
+inline Node& Node::operator=(Node&& rhs) YAML_CPP_NOEXCEPT {
+  if (!CheckValidMove(rhs)) {
+    assert(false);
+    return *this;
+  }
+
+  Node tmp(std::move(rhs));
+
+  if (!m_pNode) {
+    // we don't have a node so do what AssignNode does in this case
+    m_pNode = tmp.m_pNode;
+    m_pMemory = tmp.m_pMemory;
+    return *this;
+  }
+
+  if (!tmp.m_pNode) {
+    // We have an m_pNode but tmp doesn't. Instead of calling tmp.EnsureNodeExists(),
+    // which can potentially throw, and then AssignNodeDetail, we do set_null() on it
+    // and swap with the empty, but valid, tmp. While this does not ensure m_pNode
+    // to exist afterwards as before (quite the opposite), it leaves us in a valid
+    // state.
+    m_pNode->set_null();
+    std::swap(*this, tmp);
+    return *this;
+  }
+
+  // Both m_pNode's are present and the merge should (hopefully) be noexcept.
+  AssignNodeDetail(tmp);
+
   return *this;
 }
 
@@ -264,6 +328,10 @@ inline void Node::AssignNode(const Node& rhs) {
     return;
   }
 
+  AssignNodeDetail(rhs);
+}
+
+inline void Node::AssignNodeDetail(const Node& rhs) YAML_CPP_NOEXCEPT {
   m_pNode->set_ref(*rhs.m_pNode);
   m_pMemory->merge(*rhs.m_pMemory);
   m_pNode = rhs.m_pNode;
