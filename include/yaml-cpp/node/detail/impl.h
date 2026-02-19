@@ -221,6 +221,14 @@ inline void node_data::force_insert(const Key& key, const Value& value,
   insert_map_pair(k, v);
 }
 
+inline void node_data::seq_push_back(node& rhs) {
+  m_sequence.push_back(&rhs);
+}
+
+inline void node_data::map_force_insert(node& key, node& value) {
+  insert_map_pair(key, value);
+}
+
 template <typename T>
 inline node& node_data::convert_to_node(const T& rhs,
                                         shared_memory_holder pMemory) {
