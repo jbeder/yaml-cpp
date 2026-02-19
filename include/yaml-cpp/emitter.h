@@ -9,11 +9,16 @@
 
 #include <cmath>
 #include <cstddef>
+#include <cstring>
 #include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <type_traits>
+
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+#include <string_view>
+#endif
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/dll.h"
@@ -21,6 +26,7 @@
 #include "yaml-cpp/emittermanip.h"
 #include "yaml-cpp/null.h"
 #include "yaml-cpp/ostream_wrapper.h"
+#include "yaml-cpp/fptostring.h"
 
 namespace YAML {
 class Binary;
@@ -67,6 +73,7 @@ class YAML_CPP_API Emitter {
   Emitter& SetLocalPrecision(const _Precision& precision);
 
   // overloads of write
+  Emitter& Write(const char* str, std::size_t size);
   Emitter& Write(const std::string& str);
   Emitter& Write(bool b);
   Emitter& Write(char ch);
@@ -141,6 +148,7 @@ inline Emitter& Emitter::WriteIntegralType(T value) {
   PrepareNode(EmitterNodeType::Scalar);
 
   std::stringstream stream;
+  stream.imbue(std::locale::classic());
   PrepareIntegralStream(stream);
   stream << value;
   m_stream << stream.str();
@@ -158,6 +166,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   PrepareNode(EmitterNodeType::Scalar);
 
   std::stringstream stream;
+  stream.imbue(std::locale::classic());
   SetStreamablePrecision<T>(stream);
 
   bool special = false;
@@ -178,7 +187,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   }
 
   if (!special) {
-    stream << value;
+    stream << FpToString(value, stream.precision());
   }
   m_stream << stream.str();
 
@@ -198,8 +207,13 @@ inline void Emitter::SetStreamablePrecision<double>(std::stringstream& stream) {
 }
 
 // overloads of insertion
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+inline Emitter& operator<<(Emitter& emitter, const std::string_view& v) {
+  return emitter.Write(v.data(), v.size());
+}
+#endif
 inline Emitter& operator<<(Emitter& emitter, const std::string& v) {
-  return emitter.Write(v);
+  return emitter.Write(v.data(), v.size());
 }
 inline Emitter& operator<<(Emitter& emitter, bool v) {
   return emitter.Write(v);
@@ -230,7 +244,7 @@ inline Emitter& operator<<(Emitter& emitter, const Binary& b) {
 }
 
 inline Emitter& operator<<(Emitter& emitter, const char* v) {
-  return emitter.Write(std::string(v));
+  return emitter.Write(v, std::strlen(v));
 }
 
 inline Emitter& operator<<(Emitter& emitter, int v) {

@@ -1,6 +1,6 @@
-# 3.5 is actually available almost everywhere, but this a good minimum.
-# 3.14 as the upper policy limit avoids CMake deprecation warnings.
-cmake_minimum_required(VERSION 3.4...3.14)
+# 3.5 is actually available almost everywhere.
+# 3.30 as the upper policy limit avoids CMake deprecation warnings.
+cmake_minimum_required(VERSION 3.5...3.30)
 
 # enable MSVC_RUNTIME_LIBRARY target property
 # see https://cmake.org/cmake/help/latest/policy/CMP0091.html
@@ -8,7 +8,7 @@ if(POLICY CMP0091)
   cmake_policy(SET CMP0091 NEW)
 endif()
 
-project(YAML_CPP VERSION 0.8.0 LANGUAGES CXX)
+project(YAML_CPP VERSION 0.9.0 LANGUAGES CXX)
 
 set(YAML_CPP_MAIN_PROJECT OFF)
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
@@ -28,6 +28,7 @@ option(YAML_CPP_INSTALL "Enable generation of yaml-cpp install targets" ${YAML_C
 option(YAML_CPP_FORMAT_SOURCE "Format source" ${YAML_CPP_MAIN_PROJECT})
 option(YAML_CPP_DISABLE_UNINSTALL  "Disable uninstallation of yaml-cpp" OFF)
 option(YAML_USE_SYSTEM_GTEST "Use system googletest if found" OFF)
+option(YAML_ENABLE_PIC "Use Position-Independent Code " ON)
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" OFF
@@ -91,7 +92,7 @@ set_property(TARGET yaml-cpp
     CXX_STANDARD_REQUIRED ON)
 
 if (NOT YAML_BUILD_SHARED_LIBS)
-  set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+      set_property(TARGET yaml-cpp PROPERTY POSITION_INDEPENDENT_CODE ${YAML_ENABLE_PIC})
 endif()
 
 target_include_directories(yaml-cpp
@@ -196,6 +197,7 @@ if (YAML_CPP_FORMAT_SOURCE AND YAML_CPP_CLANG_FORMAT_EXE)
     COMMAND clang-format --style=file -i $<TARGET_PROPERTY:yaml-cpp,SOURCES>
     COMMAND_EXPAND_LISTS
     COMMENT "Running clang-format"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     VERBATIM)
 endif()
 

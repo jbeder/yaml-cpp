@@ -48,6 +48,8 @@ const char* const UNKNOWN_TOKEN = "unknown token";
 const char* const DOC_IN_SCALAR = "illegal document indicator in scalar";
 const char* const EOF_IN_SCALAR = "illegal EOF in scalar";
 const char* const CHAR_IN_SCALAR = "illegal character in scalar";
+const char* const UNEXPECTED_SCALAR = "unexpected scalar";
+const char* const UNEXPECTED_FLOW = "plain value cannot start with flow indicator character";
 const char* const TAB_IN_INDENTATION =
     "illegal tab when looking for indentation";
 const char* const FLOW_END = "illegal flow end";
@@ -89,6 +91,7 @@ const char* const INVALID_TAG = "invalid tag";
 const char* const BAD_FILE = "bad file";
 const char* const MERGE_KEY_NEEDS_SINGLE_OR_SEQUENCE_OF_MAPS =
     "merge key needs either single map or sequence of maps";
+const char* const UNEXPECTED_TOKEN_AFTER_DOC = "unexpected token after end of document";
 
 template <typename T>
 inline const std::string KEY_NOT_FOUND_WITH_KEY(
