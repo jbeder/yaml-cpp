@@ -20,6 +20,9 @@ jobs:
           googletest: [build, system]
           generator: ["Default Generator", "MinGW Makefiles"]
           exclude:
+          - os: ubuntu-latest
+            cxx_standard: 11
+            googletest: system
           - os: macos-latest
             build: shared
           - os: macos-latest
@@ -47,7 +50,7 @@ jobs:
             packages: googletest libgmock-dev libgtest-dev
             version: 1.0
 
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v6.0.2
 
         - name: Configure
           run: |
@@ -105,7 +108,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v6.0.2
 
         - name: Build
           run: |
@@ -123,7 +126,7 @@ jobs:
           os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v6.0.2
 
         - name: Build
           shell: bash

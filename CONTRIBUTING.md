@@ -17,9 +17,9 @@ Commit messages should be in the imperative mood, as described in the [Git contr
 
 # Tests
 
-Please verify the tests pass by running the target `test/yaml-cpp-tests`.
+Please verify the tests pass by configuring CMake with `-D YAML_CPP_BUILD_TESTS=ON` and running the target `test/yaml-cpp-tests`.
 
-If you are adding functionality, add tests accordingly.
+If you are adding functionality, add tests accordingly. Note that the "spec tests" are reserved for examples directly from the YAML spec, so if you have new examples, put them in other test files.
 
 # Pull request process
 
