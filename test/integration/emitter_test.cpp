@@ -1780,5 +1780,47 @@ TEST_F(EmitterErrorTest, InvalidAlias) {
   ExpectEmitError(ErrorMsg::INVALID_ALIAS);
 }
 
+TEST_F(EmitterTest, ShowTrailingZero) {
+  out << BeginSeq;
+  out.SetShowTrailingZero(false);
+  out << 0.;
+  out << -0.;
+  out << 3.;
+  out << 42.;
+  out.SetShowTrailingZero(true);
+  out << 0.;
+  out << -0.;
+  out << 4.;
+  out << 51.;
+  out.SetShowTrailingZero(false);
+  out << 0.2;
+  out << 5.12;
+  out.SetShowTrailingZero(true);
+  out << 0.2;
+  out << 6.34;
+  out << std::numeric_limits<double>::infinity();
+  out << -std::numeric_limits<double>::infinity();
+  out << std::numeric_limits<double>::quiet_NaN();
+  out << std::numeric_limits<double>::signaling_NaN();
+  out << EndSeq;
+
+  ExpectEmit(R"(- 0
+- -0
+- 3
+- 42
+- 0.0
+- -0.0
+- 4.0
+- 51.0
+- 0.2
+- 5.12
+- 0.2
+- 6.34
+- .inf
+- -.inf
+- .nan
+- .nan)");
+}
+
 }  // namespace
 }  // namespace YAML
