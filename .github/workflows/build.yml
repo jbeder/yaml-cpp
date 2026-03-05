@@ -14,7 +14,7 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest]
+          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
           cxx_standard: [11, 17, 20]
           build: [static, shared]
           googletest: [build, system]
@@ -32,6 +32,8 @@ jobs:
           - os: macos-latest
             googletest: system
           - os: windows-latest
+            googletest: system
+          - os: windows-11-arm
             googletest: system
       env:
         YAML_BUILD_SHARED_LIBS: ${{ matrix.build == 'shared' && 'ON' || 'OFF' }}
@@ -105,7 +107,7 @@ jobs:
   bazel-build:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest]
+          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v6.0.2
@@ -123,7 +125,7 @@ jobs:
   bzlmod-build:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest]
+          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v6.0.2
