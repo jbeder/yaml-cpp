@@ -7,6 +7,7 @@
 #pragma once
 #endif
 
+#include <ostream>
 #include <string>
 #include <vector>
 
