@@ -7,8 +7,9 @@
 #pragma once
 #endif
 
-#include <ios>
+#include <istream>
 #include <memory>
+#include <ostream>
 
 #include "yaml-cpp/dll.h"
 
