@@ -147,13 +147,13 @@ void NodeBuilder::Pop() {
           ((nk.tag() == "tag:yaml.org,2002:merge" && nk.scalar() == "<<") ||
            (nk.tag() == "?" && nk.scalar() == "<<"))) {
         if (node.type() == NodeType::Map) {
-          m_mergeDicts.rbegin()->emplace_back(&node);
+          m_mergeDicts.back().emplace_back(&node);
           m_keys.pop_back();
         } else if (node.type() == NodeType::Sequence) {
           for (auto i = node.begin(); i != node.end(); i++) {
             auto v = *i;
             if ((*v).type() == NodeType::Map) {
-              m_mergeDicts.rbegin()->emplace_back(&(*v));
+              m_mergeDicts.back().emplace_back(&(*v));
             } else {
               throw ParserException(
                   node.mark(),
