@@ -119,6 +119,8 @@ class EmitterState {
   std::size_t GetFloatPrecision() const { return m_floatPrecision.get(); }
   bool SetDoublePrecision(std::size_t value, FmtScope::value scope);
   std::size_t GetDoublePrecision() const { return m_doublePrecision.get(); }
+  bool SetShowTrailingZero(bool value, FmtScope::value scope);
+  bool GetShowTrailingZero() const { return m_showTrailingZero.get(); }
 
  private:
   template <typename T>
@@ -146,6 +148,7 @@ class EmitterState {
   Setting<EMITTER_MANIP> m_mapKeyFmt;
   Setting<std::size_t> m_floatPrecision;
   Setting<std::size_t> m_doublePrecision;
+  Setting<bool>        m_showTrailingZero;
 
   SettingChanges m_modifiedSettings;
   SettingChanges m_globalModifiedSettings;

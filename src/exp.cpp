@@ -117,11 +117,11 @@ std::string Escape(Stream& in) {
     case 'N':
       return "\x85";
     case '_':
-      return "\xA0";
+      return "\xC2\xA0";      // NBSP (U+00A0)
     case 'L':
-      return "\xE2\x80\xA8";  // LS (#x2028)
+      return "\xE2\x80\xA8";  // LS (U+2028)
     case 'P':
-      return "\xE2\x80\xA9";  // PS (#x2029)
+      return "\xE2\x80\xA9";  // PS (U+2029)
     case 'x':
       return Escape(in, 2);
     case 'u':

@@ -65,6 +65,12 @@ inline void Node::EnsureNodeExists() const {
   }
 }
 
+inline void Node::Invalidate() {
+  m_isValid = false;
+  m_pNode = nullptr;
+  m_pMemory = nullptr;
+}
+
 inline bool Node::IsDefined() const {
   if (!m_isValid) {
     return false;
@@ -169,6 +175,14 @@ inline const std::string& Node::Scalar() const {
   if (!m_isValid)
     throw InvalidNode(m_invalidKey);
   return m_pNode ? m_pNode->scalar() : detail::node_data::empty_scalar();
+}
+
+YAML_ATTRIBUTE_NO_SANITIZE_ADDRESS
+inline const std::string& Node::UninstrumentedScalarForTesting() const {
+  if (m_isValid && m_pMemory != nullptr && m_pNode != nullptr)
+    throw InvalidNode("use-after-free");
+  else
+    throw BadDereference();
 }
 
 inline const std::string& Node::Tag() const {

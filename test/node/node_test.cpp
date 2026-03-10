@@ -305,6 +305,15 @@ TEST(NodeTest, MapIteratorWithUndefinedValues) {
   EXPECT_EQ(1, count);
 }
 
+TEST(NodeTest, DestroyedMapIterator) {
+  Node node;
+  node["key"] = "value";
+  Node valid_key_node = node.begin()->first;
+  EXPECT_EQ("key", valid_key_node.Scalar());
+  const Node& invalid_node = node.begin()->first;
+  EXPECT_THROW(invalid_node.UninstrumentedScalarForTesting(), BadDereference);
+}
+
 TEST(NodeTest, ConstIteratorOnConstUndefinedNode) {
   Node node;
   const Node& cn = node;

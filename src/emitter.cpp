@@ -90,6 +90,10 @@ bool Emitter::SetDoublePrecision(std::size_t n) {
   return m_pState->SetDoublePrecision(n, FmtScope::Global);
 }
 
+bool Emitter::SetShowTrailingZero(bool value) {
+  return m_pState->SetShowTrailingZero(value, FmtScope::Global);
+}
+
 void Emitter::RestoreGlobalModifiedSettings() {
   m_pState->RestoreGlobalModifiedSettings();
 }
@@ -762,6 +766,10 @@ std::size_t Emitter::GetFloatPrecision() const {
 
 std::size_t Emitter::GetDoublePrecision() const {
   return m_pState->GetDoublePrecision();
+}
+
+bool Emitter::GetShowTrailingZero() const {
+  return m_pState->GetShowTrailingZero();
 }
 
 const char* Emitter::ComputeFullBoolName(bool b) const {

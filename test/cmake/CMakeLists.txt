@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.30)
 project(yaml-cpp-consumer LANGUAGES CXX)
 
 find_package(yaml-cpp CONFIG REQUIRED)

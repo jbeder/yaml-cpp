@@ -58,8 +58,12 @@ class node_iterator_base {
 
   struct proxy {
     explicit proxy(const node_iterator_value<V>& x) : m_ref(x) {}
-    node_iterator_value<V>* operator->() { return std::addressof(m_ref); }
-    operator node_iterator_value<V>*() { return std::addressof(m_ref); }
+    node_iterator_value<V>* operator->() YAML_ATTRIBUTE_LIFETIME_BOUND {
+      return std::addressof(m_ref);
+    }
+    operator node_iterator_value<V>*() YAML_ATTRIBUTE_LIFETIME_BOUND {
+      return std::addressof(m_ref);
+    }
 
     node_iterator_value<V> m_ref;
   };

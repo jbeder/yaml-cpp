@@ -41,8 +41,13 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
 
   eventHandler.OnDocumentEnd();
 
+  // check if any tokens left after the text
+  if (!m_scanner.empty() && m_scanner.peek().type != Token::DOC_END
+      && m_scanner.peek().type != Token::DOC_START)
+    throw ParserException(m_scanner.mark(), ErrorMsg::UNEXPECTED_TOKEN_AFTER_DOC);
+
   // and finally eat any doc ends we see
-  while (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
+  if (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
     m_scanner.pop();
 }
 

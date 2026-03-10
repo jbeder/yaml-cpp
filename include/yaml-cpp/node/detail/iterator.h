@@ -30,8 +30,12 @@ class iterator_base {
 
   struct proxy {
     explicit proxy(const V& x) : m_ref(x) {}
-    V* operator->() { return std::addressof(m_ref); }
-    operator V*() { return std::addressof(m_ref); }
+    V* operator->() YAML_ATTRIBUTE_LIFETIME_BOUND {
+      return std::addressof(m_ref);
+    }
+    operator V*() YAML_ATTRIBUTE_LIFETIME_BOUND {
+      return std::addressof(m_ref);
+    }
 
     V m_ref;
   };
@@ -75,7 +79,7 @@ class iterator_base {
     return m_iterator != rhs.m_iterator;
   }
 
-  value_type operator*() const {
+  value_type operator*() const YAML_ATTRIBUTE_LIFETIME_BOUND {
     const typename base_type::value_type& v = *m_iterator;
     if (v.pNode)
       return value_type(Node(*v, m_pMemory));
@@ -84,7 +88,9 @@ class iterator_base {
     return value_type();
   }
 
-  proxy operator->() const { return proxy(**this); }
+  proxy operator->() const YAML_ATTRIBUTE_LIFETIME_BOUND {
+    return proxy(**this);
+  }
 
  private:
   base_type m_iterator;

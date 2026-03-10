@@ -28,7 +28,7 @@ namespace fp_formatting {
  * assert(buffer[1] == '2');
  * assert(buffer[2] == '3');
  */
-int ConvertToChars(char* begin, char* end, size_t value, int width=1) {
+int ConvertToChars(char* begin, char* end, uint64_t value, int width=1) {
   // precondition of this function (will trigger in debug build)
   assert(width >= 1);
   assert(end >= begin);       // end must be after begin

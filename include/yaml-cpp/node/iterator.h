@@ -27,6 +27,11 @@ struct iterator_value : public Node, std::pair<Node, Node> {
         std::pair<Node, Node>(Node(Node::ZombieNode), Node(Node::ZombieNode)) {}
   explicit iterator_value(const Node& key, const Node& value)
       : Node(Node::ZombieNode), std::pair<Node, Node>(key, value) {}
+  ~iterator_value() noexcept {
+    this->Node::Invalidate();
+    first.Invalidate();
+    second.Invalidate();
+  }
 };
 }
 }
