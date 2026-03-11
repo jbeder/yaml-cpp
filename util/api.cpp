@@ -41,7 +41,7 @@ int main() {
     root[2] = "two";  // [0, ~, two]  # forces root[1] to be initialized to null
 
     YAML::Value other = root;  // both point to the same thing
-    other[0] = 5;              // now root[0] is 0 also
+    other[0] = 5;              // now root[0] is 5 also
     other.push_back(root);     // &1 [5, ~, two, *1]
     other[3][0] = 0;           // &1 [0, ~, two, *1]   # since it's a true alias
     other.push_back(Copy(root));  // &1 [0, ~, two, *1, &2 [0, ~, two, *2]]
