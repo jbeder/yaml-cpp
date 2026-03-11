@@ -107,7 +107,7 @@ jobs:
   bazel-build:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
+          os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v6.0.2
@@ -125,7 +125,7 @@ jobs:
   bzlmod-build:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
+          os: [ubuntu-latest, windows-latest, macos-latest]
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v6.0.2
