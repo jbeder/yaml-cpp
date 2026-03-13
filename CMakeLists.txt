@@ -51,6 +51,8 @@ else()
   set(yaml-cpp-label-postfix "static")
 endif()
 
+set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_INSTALL_LIBDIR}/../")
+
 set(build-shared $<BOOL:${YAML_BUILD_SHARED_LIBS}>)
 set(build-windows-dll $<AND:$<BOOL:${CMAKE_HOST_WIN32}>,${build-shared}>)
 set(msvc-shared_rt $<BOOL:${YAML_MSVC_SHARED_RT}>)
