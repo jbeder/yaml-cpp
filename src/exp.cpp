@@ -115,7 +115,7 @@ std::string Escape(Stream& in) {
     case '/':
       return "/";
     case 'N':
-      return "\x85";
+      return "\xC2\x85";      // NEL (U+0085)
     case '_':
       return "\xC2\xA0";      // NBSP (U+00A0)
     case 'L':
