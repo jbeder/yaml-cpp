@@ -279,7 +279,12 @@ void node_data::reset_map() {
   m_undefinedPairs.clear();
 }
 
-void node_data::insert_map_pair(node& key, node& value) {
+void node_data::insert_map_pair(node& key, node& value, bool force) {
+  if (!force && !key.scalar().empty())
+    for (const auto& mapEntry : m_map)
+      if (mapEntry.first->scalar() == key.scalar())
+        throw NonUniqueMapKey(m_mark, key);
+
   m_map.emplace_back(&key, &value);
 
   if (!key.is_defined() || !value.is_defined())
