@@ -43,10 +43,7 @@ target_compile_options(yaml-cpp-tests
 target_link_libraries(yaml-cpp-tests
   PRIVATE
     Threads::Threads
-    yaml-cpp
-    yaml-cpp::yaml-cpp
-    GTest::gtest
-    GTest::gmock)
+    yaml-cpp)
 
 set_property(TARGET yaml-cpp-tests PROPERTY CXX_STANDARD_REQUIRED ON)
 if (NOT DEFINED CMAKE_CXX_STANDARD)
