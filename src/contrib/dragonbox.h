@@ -920,16 +920,20 @@ namespace jkj {
 #endif
                 }
 
-                template <template <stdr::size_t> class Info, stdr::int_least32_t min_exponent,
-                          stdr::int_least32_t max_exponent, stdr::size_t current_tier,
-                          stdr::int_least32_t supported_min_exponent = Info<current_tier>::min_exponent,
-                          stdr::int_least32_t supported_max_exponent = Info<current_tier>::max_exponent>
+                template <stdr::int_least32_t min_exponent,
+                          stdr::int_least32_t max_exponent,
+                          stdr::int_least32_t supported_min_exponent,
+                          stdr::int_least32_t supported_max_exponent
+                          >
                 constexpr bool is_in_range(int) noexcept {
                     return min_exponent >= supported_min_exponent &&
                            max_exponent <= supported_max_exponent;
                 }
-                template <template <stdr::size_t> class Info, stdr::int_least32_t min_exponent,
-                          stdr::int_least32_t max_exponent, stdr::size_t current_tier>
+                template <stdr::int_least32_t min_exponent,
+                          stdr::int_least32_t max_exponent,
+                          stdr::int_least32_t supported_min_exponent,
+                          stdr::int_least32_t supported_max_exponent
+                          >
                 constexpr bool is_in_range(...) noexcept {
                     // Supposed to be always false, but formally dependent on the template parameters.
                     static_assert(min_exponent > max_exponent,
@@ -939,7 +943,7 @@ namespace jkj {
 
                 template <template <stdr::size_t> class Info, stdr::int_least32_t min_exponent,
                           stdr::int_least32_t max_exponent, stdr::size_t current_tier = 0,
-                          bool = is_in_range<Info, min_exponent, max_exponent, current_tier>(0)>
+                          bool = is_in_range<min_exponent, max_exponent, Info<current_tier>::min_exponent, Info<current_tier>::max_exponent>(0)>
                 struct compute_impl;
 
                 template <template <stdr::size_t> class Info, stdr::int_least32_t min_exponent,
