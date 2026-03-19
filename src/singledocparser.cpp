@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <cstdio>
 #include <sstream>
 
@@ -42,8 +41,13 @@ void SingleDocParser::HandleDocument(EventHandler& eventHandler) {
 
   eventHandler.OnDocumentEnd();
 
+  // check if any tokens left after the text
+  if (!m_scanner.empty() && m_scanner.peek().type != Token::DOC_END
+      && m_scanner.peek().type != Token::DOC_START)
+    throw ParserException(m_scanner.mark(), ErrorMsg::UNEXPECTED_TOKEN_AFTER_DOC);
+
   // and finally eat any doc ends we see
-  while (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
+  if (!m_scanner.empty() && m_scanner.peek().type == Token::DOC_END)
     m_scanner.pop();
 }
 
@@ -93,9 +97,9 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
   // add non-specific tags
   if (tag.empty())
     tag = (token.type == Token::NON_PLAIN_SCALAR ? "!" : "?");
-  
-  if (token.type == Token::PLAIN_SCALAR 
-      && tag.compare("?") == 0 && IsNullString(token.value)) {
+
+  if (token.type == Token::PLAIN_SCALAR
+      && tag.compare("?") == 0 && IsNullString(token.value.data(), token.value.size())) {
     eventHandler.OnNull(mark, anchor);
     m_scanner.pop();
     return;
@@ -424,8 +428,11 @@ anchor_t SingleDocParser::RegisterAnchor(const std::string& name) {
 anchor_t SingleDocParser::LookupAnchor(const Mark& mark,
                                        const std::string& name) const {
   auto it = m_anchors.find(name);
-  if (it == m_anchors.end())
-    throw ParserException(mark, ErrorMsg::UNKNOWN_ANCHOR);
+  if (it == m_anchors.end()) {
+    std::stringstream ss;
+    ss << ErrorMsg::UNKNOWN_ANCHOR << name;
+    throw ParserException(mark, ss.str());
+  }
 
   return it->second;
 }

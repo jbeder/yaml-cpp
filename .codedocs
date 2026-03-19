@@ -8,7 +8,7 @@ EXAMPLE_PATH =
 
 # One or more directories and files to exclude from documentation generation.
 # Use relative paths with respect to the repository root directory.
-EXCLUDE = test/gtest-1.8.0/
+EXCLUDE = test/googletest-1.13.0/
 
 # One or more wildcard patterns to exclude files and directories from document
 # generation.

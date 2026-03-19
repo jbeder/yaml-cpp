@@ -7,7 +7,6 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/dll.h"
 #include <memory>
 
 namespace YAML {
@@ -25,5 +24,17 @@ using shared_memory_holder = std::shared_ptr<memory_holder>;
 using shared_memory = std::shared_ptr<memory>;
 }
 }
+
+#if defined(__has_cpp_attribute) && __has_cpp_attribute(msvc::lifetimebound)
+#define YAML_ATTRIBUTE_LIFETIME_BOUND [[msvc::lifetimebound]]
+#elif defined(__has_cpp_attribute) && __has_cpp_attribute(gnu::lifetimebound)
+#define YAML_ATTRIBUTE_LIFETIME_BOUND [[gnu::lifetimebound]]
+#elif defined(__has_cpp_attribute) && __has_cpp_attribute(clang::lifetimebound)
+#define YAML_ATTRIBUTE_LIFETIME_BOUND [[clang::lifetimebound]]
+#elif defined(__has_attribute) && __has_attribute(lifetimebound)
+#define YAML_ATTRIBUTE_LIFETIME_BOUND __attribute__((lifetimebound))
+#else
+#define YAML_ATTRIBUTE_LIFETIME_BOUND
+#endif
 
 #endif  // VALUE_PTR_H_62B23520_7C8E_11DE_8A39_0800200C9A66

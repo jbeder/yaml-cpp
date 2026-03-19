@@ -20,10 +20,10 @@ class NullEventHandler : public YAML::EventHandler {
   void OnScalar(const Mark&, const std::string&, anchor_t,
                 const std::string&) override {}
   void OnSequenceStart(const Mark&, const std::string&, anchor_t,
-                       YAML::EmitterStyle::value style) override {}
+                       YAML::EmitterStyle::value) override {}
   void OnSequenceEnd() override {}
   void OnMapStart(const Mark&, const std::string&, anchor_t,
-                  YAML::EmitterStyle::value style) override {}
+                  YAML::EmitterStyle::value) override {}
   void OnMapEnd() override {}
 };
 

@@ -5,19 +5,6 @@
 #include "yaml-cpp/eventhandler.h"
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 
-struct Params {
-  bool hasFile;
-  std::string fileName;
-};
-
-Params ParseArgs(int argc, char** argv) {
-  Params p;
-
-  std::vector<std::string> args(argv + 1, argv + argc);
-
-  return p;
-}
-
 class NullEventHandler : public YAML::EventHandler {
  public:
   void OnDocumentStart(const YAML::Mark&) override {}
@@ -47,8 +34,6 @@ void parse(std::istream& input) {
 }
 
 int main(int argc, char** argv) {
-  Params p = ParseArgs(argc, argv);
-
   if (argc > 1) {
     std::ifstream fin;
     fin.open(argv[1]);

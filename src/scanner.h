@@ -9,9 +9,7 @@
 
 #include <cstddef>
 #include <ios>
-#include <map>
 #include <queue>
-#include <set>
 #include <stack>
 #include <string>
 
@@ -179,6 +177,7 @@ class Scanner {
   // state info
   bool m_startedStream, m_endedStream;
   bool m_simpleKeyAllowed;
+  bool m_scalarValueAllowed;
   bool m_canBeJSONFlow;
   std::stack<SimpleKey> m_simpleKeys;
   std::stack<IndentMarker *> m_indents;

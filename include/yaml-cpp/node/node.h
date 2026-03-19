@@ -67,6 +67,7 @@ class YAML_CPP_API Node {
   template <typename T, typename S>
   T as(const S& fallback) const;
   const std::string& Scalar() const;
+  const std::string& UninstrumentedScalarForTesting() const;
 
   const std::string& Tag() const;
   void SetTag(const std::string& tag);
@@ -120,6 +121,7 @@ class YAML_CPP_API Node {
   explicit Node(detail::node& node, detail::shared_memory_holder pMemory);
 
   void EnsureNodeExists() const;
+  void Invalidate();
 
   template <typename T>
   void Assign(const T& rhs);

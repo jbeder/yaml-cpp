@@ -211,6 +211,9 @@ void Scanner::ScanValue() {
     m_simpleKeyAllowed = InBlockContext();
   }
 
+  // we are parsing a `key: value` pair; scalars are always allowed
+  m_scalarValueAllowed = true;
+
   // eat
   Mark mark = INPUT.mark();
   INPUT.eat(1);
@@ -360,6 +363,10 @@ void Scanner::ScanQuotedScalar() {
   // and scan
   scalar = ScanScalar(INPUT, params);
   m_simpleKeyAllowed = false;
+  // we just scanned a quoted scalar;
+  // we can only have another scalar in this line
+  // if we are in a flow, eg: `[ "foo", "bar" ]` is ok, but `"foo", "bar"` isn't.
+  m_scalarValueAllowed = InFlowContext();
   m_canBeJSONFlow = true;
 
   Token token(Token::NON_PLAIN_SCALAR, mark);

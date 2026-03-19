@@ -334,6 +334,92 @@ TEST(NodeTest, LoadQuotedNull) {
   EXPECT_EQ(node.as<std::string>(), "null");
 }
 
+TEST(NodeTest, LoadNonClosedQuotedString) {
+  EXPECT_THROW(Load(R"("foo)"), ParserException);
+}
+
+TEST(NodeTest, LoadWrongQuotedString) {
+  EXPECT_THROW(Load(R"("foo" [)"), ParserException);
+  EXPECT_THROW(Load(R"("foo", [)"), ParserException);
+}
+
+TEST(NodeTest, LoadUnquotedQuotedStrings) {
+  Node node = Load(R"(foo,"bar")");
+  EXPECT_EQ(node.as<std::string>(), "foo,\"bar\"");
+
+  node = Load(R"(foo,bar)");
+  EXPECT_EQ(node.as<std::string>(), "foo,bar");
+
+  node = Load(R"(foo,)");
+  EXPECT_EQ(node.as<std::string>(), "foo,");
+
+  node = Load(R"(foo "bar")");
+  EXPECT_EQ(node.as<std::string>(), "foo \"bar\"");
+}
+
+TEST(NodeTest, LoadCommaSeparatedStrings) {
+  EXPECT_THROW(Load(R"("foo","bar")"), ParserException);
+  EXPECT_THROW(Load(R"("foo",bar)"), ParserException);
+  EXPECT_THROW(Load(R"(,)"), ParserException);
+  EXPECT_THROW(Load(R"("foo",)"), ParserException);
+  EXPECT_THROW(Load(R"("foo","")"), ParserException);
+  EXPECT_THROW(Load(R"("foo",)"), ParserException);
+  EXPECT_THROW(Load(R"(,"foo")"), ParserException);
+  EXPECT_THROW(Load(R"(,foo)"), ParserException);
+}
+
+TEST(NodeTest, InfiniteLoopNodes) {
+  // Until yaml-cpp <= 0.8.0 this caused an infinite loop;
+  // After, it triggers an exception (but LoadAll is smart enough to avoid
+  // the infinite loop in any case).
+  EXPECT_THROW(LoadAll(R"(,)"), ParserException);
+}
+
+TEST(NodeTest, MultipleDocumentsBeginning) {
+  std::vector<Node> docs = LoadAll("\n---\n---\nA\n");
+  EXPECT_EQ(docs.size(), 2);
+}
+
+TEST(NodeTest, MultipleDocumentsEnds) {
+  std::vector<Node> docs = LoadAll("\n...\nA\n...\n");
+  EXPECT_EQ(docs.size(), 2);
+}
+
+TEST(NodeTest, MultipleDocumentsEndsWithEmptyDocs) {
+  std::vector<Node> docs = LoadAll("\n...\nA\n...\n...\nB\n...");
+  EXPECT_EQ(docs.size(), 4);
+}
+
+struct NewLineStringsTestCase {
+  std::string input;
+  std::string expected_content;
+  bool should_throw;
+};
+TEST(NodeTest, LoadNewLineStrings) {
+  std::vector<NewLineStringsTestCase> tests = {
+      {"foo\n, bar", "foo , bar", false},
+      {"foo\n, \"bar\"", "foo , \"bar\"", false},
+      {"\"foo\"\n, \"bar\"", "", true},
+      {"\"foo\"\n, bar", "", true},
+  };
+  for (const NewLineStringsTestCase& test : tests) {
+    if (test.should_throw) {
+      EXPECT_THROW(Load(test.input), ParserException);
+    } else {
+      Node node = Load(test.input);
+      Emitter emitter;
+      emitter << node;
+      EXPECT_EQ(NodeType::Scalar, node.Type());
+      EXPECT_EQ(test.expected_content, std::string(emitter.c_str()));
+    }
+  }
+}
+
+TEST(NodeTest, LoadSameLineStrings) {
+  EXPECT_THROW(Load(R"("foo" "bar")"), ParserException);
+  EXPECT_THROW(Load(R"("foo" bar)"), ParserException);
+}
+
 TEST(NodeTest, LoadTagWithParenthesis) {
     Node node = Load("!Complex(Tag) foo");
     EXPECT_EQ(node.Tag(), "!Complex(Tag)");
@@ -343,6 +429,44 @@ TEST(NodeTest, LoadTagWithParenthesis) {
 TEST(NodeTest, LoadTagWithNullScalar) {
   Node node = Load("!2");
   EXPECT_TRUE(node.IsNull());
+}
+
+TEST(LoadNodeTest, BlockCRNLEncoded) {
+  Node node = Load(
+      "blockText: |\r\n"
+      "  some arbitrary text \r\n"
+      "  spanning some \r\n"
+      "  lines, that are split \r\n"
+      "  by CR and NL\r\n"
+      "followup: 1");
+  EXPECT_EQ(
+      "some arbitrary text \nspanning some \nlines, that are split \nby CR and "
+      "NL\n",
+      node["blockText"].as<std::string>());
+  EXPECT_EQ(1, node["followup"].as<int>());
+}
+
+TEST(LoadNodeTest, BlockCREncoded) {
+  Node node = Load(
+      "blockText: |\r"
+      "  some arbitrary text \r"
+      "  spanning some \r"
+      "  lines, that are split \r"
+      "  by CR and NL\r"
+      "followup: 1");
+  EXPECT_EQ(
+      "some arbitrary text \nspanning some \nlines, that are split \nby CR and "
+      "NL\n",
+      node["blockText"].as<std::string>());
+  EXPECT_EQ(1, node["followup"].as<int>());
+}
+
+TEST(LoadNodeTest, IncorrectSeqEnd) {
+  EXPECT_THROW(Load("[foo]_bar"), ParserException);
+}
+
+TEST(LoadNodeTest, NonUniqueMapKey) {
+  EXPECT_THROW(Load("{a: A, b: B, a: A}"), NonUniqueMapKey);
 }
 
 }  // namespace

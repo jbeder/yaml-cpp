@@ -23,7 +23,7 @@ struct Tag {
   };
 
   Tag(const Token& token);
-  const std::string Translate(const Directives& directives);
+  std::string Translate(const Directives& directives);
 
   TYPE type;
   std::string handle, value;

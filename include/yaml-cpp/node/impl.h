@@ -22,7 +22,7 @@ inline Node::Node()
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
       m_invalidKey{},
-      m_pMemory(new detail::memory_holder),
+      m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pNode(&m_pMemory->create_node()) {
   m_pNode->set_type(type);
 }
@@ -31,7 +31,7 @@ template <typename T>
 inline Node::Node(const T& rhs)
     : m_isValid(true),
       m_invalidKey{},
-      m_pMemory(new detail::memory_holder),
+      m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pNode(&m_pMemory->create_node()) {
   Assign(rhs);
 }
@@ -42,7 +42,7 @@ inline Node::Node(const detail::iterator_value& rhs)
       m_pMemory(rhs.m_pMemory),
       m_pNode(rhs.m_pNode) {}
 
-inline Node::Node(const Node& rhs) = default;
+inline Node::Node(const Node&) = default;
 
 inline Node::Node(Zombie)
     : m_isValid(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
@@ -63,6 +63,12 @@ inline void Node::EnsureNodeExists() const {
     m_pNode = &m_pMemory->create_node();
     m_pNode->set_null();
   }
+}
+
+inline void Node::Invalidate() {
+  m_isValid = false;
+  m_pNode = nullptr;
+  m_pMemory = nullptr;
 }
 
 inline bool Node::IsDefined() const {
@@ -97,7 +103,7 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t;
+    T t = fallback;
     if (convert<T>::decode(node, t))
       return t;
     return fallback;
@@ -124,8 +130,8 @@ struct as_if<T, void> {
   const Node& node;
 
   T operator()() const {
-    if (!node.m_pNode)
-      throw TypedBadConversion<T>(node.Mark());
+    if (!node.m_pNode) // no fallback
+      throw InvalidNode(node.m_invalidKey);
 
     T t;
     if (convert<T>::decode(node, t))
@@ -140,6 +146,8 @@ struct as_if<std::string, void> {
   const Node& node;
 
   std::string operator()() const {
+    if (node.Type() == NodeType::Undefined) // no fallback
+      throw InvalidNode(node.m_invalidKey);
     if (node.Type() == NodeType::Null)
       return "null";
     if (node.Type() != NodeType::Scalar)
@@ -167,6 +175,14 @@ inline const std::string& Node::Scalar() const {
   if (!m_isValid)
     throw InvalidNode(m_invalidKey);
   return m_pNode ? m_pNode->scalar() : detail::node_data::empty_scalar();
+}
+
+YAML_ATTRIBUTE_NO_SANITIZE_ADDRESS
+inline const std::string& Node::UninstrumentedScalarForTesting() const {
+  if (m_isValid && m_pMemory != nullptr && m_pNode != nullptr)
+    throw InvalidNode("use-after-free");
+  else
+    throw BadDereference();
 }
 
 inline const std::string& Node::Tag() const {

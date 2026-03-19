@@ -24,7 +24,7 @@ class node {
   };
 
  public:
-  node() : m_pRef(new node_ref), m_dependencies{}, m_index{} {}
+  node() : m_pRef(std::make_shared<node_ref>()), m_dependencies{}, m_index{} {}
   node(const node&) = delete;
   node& operator=(const node&) = delete;
 
@@ -169,7 +169,7 @@ class node {
   using nodes = std::set<node*, less>;
   nodes m_dependencies;
   size_t m_index;
-  static std::atomic<size_t> m_amount;
+  static YAML_CPP_API std::atomic<size_t> m_amount;
 };
 }  // namespace detail
 }  // namespace YAML

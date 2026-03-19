@@ -154,16 +154,11 @@ produces
 # STL Containers, and Other Overloads #
 We overload `operator <<` for `std::vector`, `std::list`, and `std::map`, so you can write stuff like:
 
+{% raw %}
 ```cpp
-std::vector <int> squares;
-squares.push_back(1);
-squares.push_back(4);
-squares.push_back(9);
-squares.push_back(16);
+std::vector <int> squares = {1, 4, 9, 16};
 
-std::map <std::string, int> ages;
-ages["Daniel"] = 26;
-ages["Jesse"] = 24;
+std::map <std::string, int> ages = {{"Daniel", 26}, {"Jesse", 24}};
 
 YAML::Emitter out;
 out << YAML::BeginSeq;
@@ -171,6 +166,7 @@ out << YAML::Flow << squares;
 out << ages;
 out << YAML::EndSeq;
 ```
+{% endraw %}
 
 produces
 

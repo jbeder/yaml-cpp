@@ -40,6 +40,7 @@ class CustomAllocator : public std::allocator<T> {
 template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
 template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
 template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
+template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
 
 }  // anonymous namespace
 
@@ -190,6 +191,14 @@ TEST(NodeTest, MapElementRemoval) {
   EXPECT_TRUE(!node["foo"]);
 }
 
+TEST(NodeTest, MissingKey) {
+  Node node;
+  node["foo"] = "value";
+  EXPECT_TRUE(!node["bar"]);
+  EXPECT_EQ(NodeType::Undefined, node["bar"].Type());
+  EXPECT_THROW(node["bar"].as<std::string>(), InvalidNode);
+}
+
 TEST(NodeTest, MapIntegerElementRemoval) {
   Node node;
   node[1] = "hello";
@@ -296,6 +305,15 @@ TEST(NodeTest, MapIteratorWithUndefinedValues) {
   EXPECT_EQ(1, count);
 }
 
+TEST(NodeTest, DestroyedMapIterator) {
+  Node node;
+  node["key"] = "value";
+  Node valid_key_node = node.begin()->first;
+  EXPECT_EQ("key", valid_key_node.Scalar());
+  const Node& invalid_node = node.begin()->first;
+  EXPECT_THROW(invalid_node.UninstrumentedScalarForTesting(), BadDereference);
+}
+
 TEST(NodeTest, ConstIteratorOnConstUndefinedNode) {
   Node node;
   const Node& cn = node;
@@ -322,6 +340,47 @@ TEST(NodeTest, IteratorOnConstUndefinedNode) {
   }
   EXPECT_EQ(0, count);
 }
+  
+TEST(NodeTest, InteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+  
+TEST(NodeTest, ConstInteratorOnSequence) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (const_iterator it = node.begin(); it != node.end(); ++it)
+  {
+    EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+
+#if __cplusplus >= 201703L
+TEST(NodeTest, StdStringViewAsKey) {
+  Node node;
+  std::string_view key = "username";
+  node[key] = "monkey";
+  EXPECT_EQ("monkey", node[key].as<std::string>());
+}
+#endif
 
 TEST(NodeTest, SimpleSubkeys) {
   Node node;
@@ -349,6 +408,16 @@ TEST(NodeTest, StdArrayWrongSize) {
   node["evens"] = evens;
   EXPECT_THROW_REPRESENTATION_EXCEPTION(
       (node["evens"].as<std::array<int, 5>>()), ErrorMsg::BAD_CONVERSION);
+}
+
+TEST(NodeTest, StdValrray) {
+  std::valarray<int> evens{{2, 4, 6, 8, 10}};
+  Node node;
+  node["evens"] = evens;
+  std::valarray<int> actualEvens = node["evens"].as<std::valarray<int>>();
+  for (int i = 0; i < evens.size(); ++i) {
+    EXPECT_EQ(evens[i], actualEvens[i]);
+  }
 }
 
 TEST(NodeTest, StdVector) {
@@ -432,6 +501,34 @@ TEST(NodeTest, StdMapWithCustomAllocator) {
   Node node;
   node["squares"] = squares;
   CustomMap<int,int> actualSquares = node["squares"].as<CustomMap<int,int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedMap) {
+  std::unordered_map<int, int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  std::unordered_map<int, int> actualSquares = node["squares"].as<std::unordered_map<int, int>>();
+  EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
+  CustomUnorderedMap<int,int> squares;
+  squares[0] = 0;
+  squares[1] = 1;
+  squares[2] = 4;
+  squares[3] = 9;
+  squares[4] = 16;
+
+  Node node;
+  node["squares"] = squares;
+  CustomUnorderedMap<int,int> actualSquares = node["squares"].as<CustomUnorderedMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
@@ -645,6 +742,12 @@ TEST(NodeTest, AccessNonexistentKeyOnConstNode) {
   ASSERT_FALSE(other["5"]);
 }
 
+TEST(NodeTest, CreateMapWithFloatingPoint0Key) {
+  Node node;
+  node[0.1] = 1.0;
+  EXPECT_TRUE(node.IsMap());
+}
+
 class NodeEmitterTest : public ::testing::Test {
  protected:
   void ExpectOutput(const std::string& output, const Node& node) {
@@ -669,8 +772,15 @@ TEST_F(NodeEmitterTest, SimpleFlowSeqNode) {
   node.push_back(1.5);
   node.push_back(2.25);
   node.push_back(3.125);
+  node.push_back(34.34);
+  node.push_back(56.56);
+  node.push_back(12.12);
+  node.push_back(78.78);
+  node.push_back(0.0003);
+  node.push_back(4000.);
+  node.push_back(1.5474251e+26f);
 
-  ExpectOutput("[1.5, 2.25, 3.125]", node);
+  ExpectOutput("[1.5, 2.25, 3.125, 34.34, 56.56, 12.12, 78.78, 0.0003, 4000, 1.5474251e+26]", node);
 }
 
 TEST_F(NodeEmitterTest, NestFlowSeqNode) {
@@ -769,5 +879,17 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
 
   ExpectOutput("{position: [1.5, 2.25, 3.125]}", mapNode);
 }
+
+TEST_F(NodeEmitterTest, RobustAgainstLocale) {
+  std::locale::global(std::locale(""));
+  Node node;
+  node.push_back(1.5);
+  node.push_back(2.25);
+  node.push_back(3.125);
+  node.push_back(123456789);
+
+  ExpectOutput("- 1.5\n- 2.25\n- 3.125\n- 123456789", node);
+}
+
 }
 }

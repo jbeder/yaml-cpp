@@ -13,7 +13,7 @@
 
 namespace YAML {
 namespace detail {
-std::atomic<size_t> node::m_amount{0};
+YAML_CPP_API std::atomic<size_t> node::m_amount{0};
 
 const std::string& node_data::empty_scalar() {
   static const std::string svalue;
@@ -279,7 +279,12 @@ void node_data::reset_map() {
   m_undefinedPairs.clear();
 }
 
-void node_data::insert_map_pair(node& key, node& value) {
+void node_data::insert_map_pair(node& key, node& value, bool force) {
+  if (!force && !key.scalar().empty())
+    for (const auto& mapEntry : m_map)
+      if (mapEntry.first->scalar() == key.scalar())
+        throw NonUniqueMapKey(m_mark, key);
+
   m_map.emplace_back(&key, &value);
 
   if (!key.is_defined() || !value.is_defined())
@@ -310,6 +315,7 @@ void node_data::convert_sequence_to_map(const shared_memory_holder& pMemory) {
   reset_map();
   for (std::size_t i = 0; i < m_sequence.size(); i++) {
     std::stringstream stream;
+    stream.imbue(std::locale::classic());
     stream << i;
 
     node& key = pMemory->create_node();

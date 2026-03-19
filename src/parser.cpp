@@ -33,9 +33,24 @@ bool Parser::HandleNextDocument(EventHandler& eventHandler) {
     return false;
   }
 
+  auto oldPos = m_pScanner->peek().mark.pos;
+
   SingleDocParser sdp(*m_pScanner, *m_pDirectives);
   sdp.HandleDocument(eventHandler);
-  return true;
+
+  // checks if progress was made
+  // 1. if scanner has no more tokens, progress was made
+  if (m_pScanner->empty()) {
+    return true;
+  }
+
+  // 2. if token position has changed, progress was made
+  auto newPos = m_pScanner->peek().mark.pos;
+  if (newPos != oldPos) {
+    return true;
+  }
+  // No progress was made, no further processing
+  return false;
 }
 
 void Parser::ParseDirectives() {
@@ -77,6 +92,7 @@ void Parser::HandleYamlDirective(const Token& token) {
   }
 
   std::stringstream str(token.params[0]);
+  str.imbue(std::locale::classic());
   str >> m_pDirectives->version.major;
   str.get();
   str >> m_pDirectives->version.minor;

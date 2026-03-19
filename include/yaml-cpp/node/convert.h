@@ -12,9 +12,15 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <sstream>
 #include <type_traits>
+#include <valarray>
 #include <vector>
+
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+#include <string_view>
+#endif
 
 #include "yaml-cpp/binary.h"
 #include "yaml-cpp/node/impl.h"
@@ -22,6 +28,7 @@
 #include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/type.h"
 #include "yaml-cpp/null.h"
+#include "yaml-cpp/fptostring.h"
 
 
 namespace YAML {
@@ -87,6 +94,20 @@ struct convert<char[N]> {
   static Node encode(const char* rhs) { return Node(rhs); }
 };
 
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+template <>
+struct convert<std::string_view> {
+  static Node encode(std::string_view rhs) { return Node(std::string(rhs)); }
+
+  static bool decode(const Node& node, std::string_view& rhs) {
+    if (!node.IsScalar())
+      return false;
+    rhs = node.Scalar();
+    return true;
+  }
+};
+#endif
+
 template <>
 struct convert<_Null> {
   static Node encode(const _Null& /* rhs */) { return Node(); }
@@ -109,7 +130,7 @@ inner_encode(const T& rhs, std::stringstream& stream){
       stream << ".inf";
     }
   } else {
-    stream << rhs;
+    stream << FpToString(rhs, stream.precision());
   }
 }
 
@@ -127,7 +148,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
   if ((stream >> std::noskipws >> num) && (stream >> std::ws).eof()) {
     if (num >= (std::numeric_limits<T>::min)() &&
         num <= (std::numeric_limits<T>::max)()) {
-      rhs = num;
+      rhs = static_cast<T>(num);
       return true;
     }
   }
@@ -151,6 +172,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
                                                                            \
     static Node encode(const type& rhs) {                                  \
       std::stringstream stream;                                            \
+      stream.imbue(std::locale::classic());                                \
       stream.precision(std::numeric_limits<type>::max_digits10);           \
       conversion::inner_encode(rhs, stream);                               \
       return Node(stream.str());                                           \
@@ -162,6 +184,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
       }                                                                    \
       const std::string& input = node.Scalar();                            \
       std::stringstream stream(input);                                     \
+      stream.imbue(std::locale::classic());                                \
       stream.unsetf(std::ios::dec);                                        \
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
         return false;                                                      \
@@ -236,6 +259,32 @@ struct convert<std::map<K, V, C, A>> {
   }
 
   static bool decode(const Node& node, std::map<K, V, C, A>& rhs) {
+    if (!node.IsMap())
+      return false;
+
+    rhs.clear();
+    for (const auto& element : node)
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[element.first.template as<K>()] = element.second.template as<V>();
+#else
+      rhs[element.first.as<K>()] = element.second.as<V>();
+#endif
+    return true;
+  }
+};
+
+// std::unordered_map
+template <typename K, typename V, typename H, typename P, typename A>
+struct convert<std::unordered_map<K, V, H, P, A>> {
+  static Node encode(const std::unordered_map<K, V, H, P, A>& rhs) {
+    Node node(NodeType::Map);
+    for (const auto& element : rhs)
+      node.force_insert(element.first, element.second);
+    return node;
+  }
+
+  static bool decode(const Node& node, std::unordered_map<K, V, H, P, A>& rhs) {
     if (!node.IsMap())
       return false;
 
@@ -335,6 +384,37 @@ struct convert<std::array<T, N>> {
     return node.IsSequence() && node.size() == N;
   }
 };
+
+
+// std::valarray
+template <typename T>
+struct convert<std::valarray<T>> {
+  static Node encode(const std::valarray<T>& rhs) {
+    Node node(NodeType::Sequence);
+    for (const auto& element : rhs) {
+      node.push_back(element);
+    }
+    return node;
+  }
+
+  static bool decode(const Node& node, std::valarray<T>& rhs) {
+    if (!node.IsSequence()) {
+      return false;
+    }
+
+    rhs.resize(node.size());
+    for (auto i = 0u; i < node.size(); ++i) {
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs[i] = node[i].template as<T>();
+#else
+      rhs[i] = node[i].as<T>();
+#endif
+    }
+    return true;
+  }
+};
+
 
 // std::pair
 template <typename T, typename U>
