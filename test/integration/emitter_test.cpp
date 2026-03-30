@@ -1822,5 +1822,16 @@ TEST_F(EmitterTest, ShowTrailingZero) {
 - .nan)");
 }
 
+TEST_F(EmitterTest, CommentInsideMapValueIsIndented) {
+  out << YAML::BeginMap << YAML::Key << "foo"
+      << YAML::BeginMap << YAML::Comment("Comment")
+      << YAML::Key << "bar" << YAML::Value << true
+      << YAML::EndMap << YAML::EndMap;
+
+  ExpectEmit("foo:\n"
+             "  # Comment\n"
+             "  bar: true");
+}
+
 }  // namespace
 }  // namespace YAML
