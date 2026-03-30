@@ -947,10 +947,12 @@ Emitter& Emitter::Write(const _Comment& comment) {
 
   PrepareNode(EmitterNodeType::NoType);
 
-  if (m_stream.col() == 0)
+  if (m_stream.col() == 0 &&
+      m_pState->CurGroupNodeType() == EmitterNodeType::BlockMap) {
     m_stream << IndentTo(m_pState->CurIndent());
-  else
+  } else if (m_stream.col() > 0) {
     m_stream << Indentation(m_pState->GetPreCommentIndent());
+  }
   Utils::WriteComment(m_stream, comment.content.data(), comment.content.size(),
                       m_pState->GetPostCommentIndent());
 
