@@ -686,6 +686,12 @@ TEST_F(EmitterTest, LocalTagRetainedAfterLoadingNode) {
   EXPECT_EQ(expected, emitter.c_str());
 }
 
+TEST_F(EmitterTest, SecondaryTag) {
+  out << SecondaryTag("str") << "123";
+
+  ExpectEmit("!!str 123");
+}
+
 TEST_F(EmitterTest, ComplexDoc) {
   out << BeginMap;
   out << Key << "receipt";
@@ -1001,16 +1007,18 @@ TEST_F(EmitterTest, Unicode) {
 
 TEST_F(EmitterTest, DoubleQuotedUnicode) {
   out << DoubleQuoted << "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
-  ExpectEmit("\"\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2\""); 
+  ExpectEmit("\"\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2\"");
 }
 
 TEST_F(EmitterTest, EscapedJsonString) {
   out.SetStringFormat(DoubleQuoted);
   out.SetOutputCharset(EscapeAsJson);
   out << "\" \\ "
-    "\x01 \x02 \x03 \x04 \x05 \x06 \x07 \x08 \x09 \x0A \x0B \x0C \x0D \x0E \x0F "
-    "\x10 \x11 \x12 \x13 \x14 \x15 \x16 \x17 \x18 \x19 \x1A \x1B \x1C \x1D \x1E \x1F "
-    "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
+         "\x01 \x02 \x03 \x04 \x05 \x06 \x07 \x08 \x09 \x0A \x0B \x0C \x0D "
+         "\x0E \x0F "
+         "\x10 \x11 \x12 \x13 \x14 \x15 \x16 \x17 \x18 \x19 \x1A \x1B \x1C "
+         "\x1D \x1E \x1F "
+         "\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2";
 
   ExpectEmit(R"("\" \\ \u0001 \u0002 \u0003 \u0004 \u0005 \u0006 \u0007 \b \t )"
              R"(\n \u000b \f \r \u000e \u000f \u0010 \u0011 \u0012 \u0013 )"
@@ -1020,22 +1028,14 @@ TEST_F(EmitterTest, EscapedJsonString) {
 }
 
 TEST_F(EmitterTest, EscapedCharacters) {
-  out << BeginSeq 
-    << '\x00'
-    << '\x0C'
-    << '\x0D'
-    << EndSeq;
+  out << BeginSeq << '\x00' << '\x0C' << '\x0D' << EndSeq;
 
   ExpectEmit("- \"\\x00\"\n- \"\\f\"\n- \"\\r\"");
 }
 
 TEST_F(EmitterTest, CharactersEscapedAsJson) {
   out.SetOutputCharset(EscapeAsJson);
-  out << BeginSeq
-    << '\x00'
-    << '\x0C'
-    << '\x0D'
-    << EndSeq;
+  out << BeginSeq << '\x00' << '\x0C' << '\x0D' << EndSeq;
 
   ExpectEmit("- \"\\u0000\"\n- \"\\f\"\n- \"\\r\"");
 }
@@ -1597,7 +1597,7 @@ TEST_F(EmitterTest, NaN) {
       "bar: .nan");
 }
 
-TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) { 
+TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) {
   out << YAML::BeginMap;
 
   out << YAML::Key << "NodeA" << YAML::Value << YAML::BeginMap;
