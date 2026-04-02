@@ -120,7 +120,7 @@ void EmitFromEvents::EmitProps(const std::string& tag, anchor_t anchor) {
     if (tag[0] == '!') {
 	  auto prefix_end = tag.begin() + 1;
 	  while (prefix_end != tag.end() && *prefix_end != '!') {
-		++ prefix_end;
+		++prefix_end;
 	  }
 	  if(prefix_end == tag.begin() + 1) {
         m_emitter << SecondaryTag(std::string(tag.begin() + 2, tag.end()));
