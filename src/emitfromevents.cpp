@@ -118,19 +118,19 @@ void EmitFromEvents::BeginNode() {
 void EmitFromEvents::EmitProps(const std::string& tag, anchor_t anchor) {
   if (!tag.empty() && tag != "?" && tag != "!" && tag != "!!") {
     if (tag[0] == '!') {
-	  auto prefix_end = tag.begin() + 1;
-	  while (prefix_end != tag.end() && *prefix_end != '!') {
-		++prefix_end;
-	  }
-	  if (prefix_end == tag.begin() + 1) {
+      auto prefix_end = tag.begin() + 1;
+      while (prefix_end != tag.end() && *prefix_end != '!') {
+        ++prefix_end;
+      }
+      if (prefix_end == tag.begin() + 1) {
         m_emitter << SecondaryTag(std::string(tag.begin() + 2, tag.end()));
       } else if (prefix_end == tag.end()) {
         m_emitter << LocalTag(std::string(tag.begin() + 1, tag.end()));
       } else if (prefix_end + 1 != tag.end()){
-		m_emitter << LocalTag(std::string(tag.begin() + 1, prefix_end), std::string(prefix_end + 1, tag.end()));
-	  } else {
-		m_emitter << VerbatimTag(tag);
-	  }
+        m_emitter << LocalTag(std::string(tag.begin() + 1, prefix_end), std::string(prefix_end + 1, tag.end()));
+      } else {
+        m_emitter << VerbatimTag(tag);
+      }
     } else {
       m_emitter << VerbatimTag(tag);
     }
