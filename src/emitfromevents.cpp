@@ -117,10 +117,6 @@ void EmitFromEvents::BeginNode() {
 
 void EmitFromEvents::EmitProps(const std::string& tag, anchor_t anchor) {
   if (!tag.empty() && tag != "?" && tag != "!"){
-      if (tag[0] == '!') {
-        m_emitter << LocalTag(std::string(tag.begin()+1, tag.end()));
-      } else {
-        m_emitter << VerbatimTag(tag);
     if (tag.size() >= 2 && tag[0] == '!' && tag[1] == '!') {
       // Tags like "!!str" use the secondary tag handle; emit them through
       // SecondaryTag so the rendered output keeps both bangs instead of
