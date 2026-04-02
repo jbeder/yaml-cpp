@@ -666,6 +666,46 @@ TEST_F(EmitterTest, SecondaryTag) {
   ExpectEmit("!!str 123");
 }
 
+TEST_F(EmitterTest, SetVerbatimTag) {
+  Node node, root;
+  node = 42;
+  node.SetTag("hello");
+  root["num"] = node;
+  out << root;
+
+  ExpectEmit("num: !<hello> 42");
+}
+
+TEST_F(EmitterTest, SetLocalTag) {
+  Node node, root;
+  node = 42;
+  node.SetTag("!foo");
+  root["num"] = node;
+  out << root;
+
+  ExpectEmit("num: !foo 42");
+}
+
+TEST_F(EmitterTest, SetLocalTagInNameHandle) {
+  Node node, root;
+  node = 42;
+  node.SetTag("!a!foo");
+  root["num"] = node;
+  out << root;
+
+  ExpectEmit("num: !a!foo 42");
+}
+
+TEST_F(EmitterTest, SetSecondaryTag) {
+  Node node, root;
+  node = 123;
+  node.SetTag("!!str");
+  root["hello"] = node;
+  out << root;
+
+  ExpectEmit("hello: !!str 123");
+}
+
 TEST_F(EmitterTest, ComplexDoc) {
   out << BeginMap;
   out << Key << "receipt";
