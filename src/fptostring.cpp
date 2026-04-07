@@ -131,7 +131,7 @@ std::string FpToString(T v, int precision = 0) {
 
   // Case 1 - scientific notation: max digits of size_t plus sign, a dot and 2 letters for 'e+' or 'e-' and 4 letters for the exponent
   // Case 2 - default notation: require up to precision number of digits and one for a potential sign
-  std::array<char, 28> output_buffer;
+  std::array<char, 32> output_buffer;
   auto output_ptr = &output_buffer[0];
 
   // Helper variable that in Case 2 counts the overflowing number of zeros that do not fit into the buffer.
