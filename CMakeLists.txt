@@ -21,6 +21,7 @@ option(YAML_CPP_FORMAT_SOURCE "Format source" ${YAML_CPP_MAIN_PROJECT})
 option(YAML_CPP_DISABLE_UNINSTALL  "Disable uninstallation of yaml-cpp" OFF)
 option(YAML_USE_SYSTEM_GTEST "Use system googletest if found" OFF)
 option(YAML_ENABLE_PIC "Use Position-Independent Code " ON)
+option(YAML_CPP_USE_STRICT_FLAGS "Uses strict compilation flags e.g.: -Wall" ${YAML_CPP_MAIN_PROJECT})
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" OFF
@@ -92,7 +93,7 @@ if (NOT DEFINED CMAKE_CXX_STANDARD)
       CXX_STANDARD 11)
 endif()
 
-if(YAML_CPP_MAIN_PROJECT)
+if (YAML_CPP_USE_STRICT_FLAGS)
   target_compile_options(yaml-cpp
     PRIVATE
       $<${print-warnings}:-Wall -Wextra -Wshadow -Weffc++ -Wno-long-long>
