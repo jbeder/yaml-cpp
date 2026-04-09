@@ -192,7 +192,8 @@ std::string FpToString(T v, int precision = 0) {
       int const zero_digits_ct = before_decimal_digits - digits_ct;
 
       // space left in the output_buffer (-1 because we need it for null-termination)
-      int const buffer_empty_space = output_buffer.data() + output_buffer.size() - output_ptr - 1;
+      int const buffer_empty_space = static_cast<int>(
+          output_buffer.data() + output_buffer.size() - output_ptr - 1);
 
       // print all zeros not fitting into the buffer at the end of the function
       overflow_zeros = std::max(0, zero_digits_ct - buffer_empty_space);
@@ -231,11 +232,11 @@ std::string FpToString(T v, int precision = 0) {
 }
 
 std::string FpToString(float v, size_t precision) {
-  return detail::fp_formatting::FpToString(v, precision);
+  return detail::fp_formatting::FpToString(v, static_cast<int>(precision));
 }
 
 std::string FpToString(double v, size_t precision) {
-  return detail::fp_formatting::FpToString(v, precision);
+  return detail::fp_formatting::FpToString(v, static_cast<int>(precision));
 }
 
 /**
