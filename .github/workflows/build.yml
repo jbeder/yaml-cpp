@@ -104,6 +104,24 @@ jobs:
               --config ${{ env.CMAKE_BUILD_TYPE }} \
               --verbose
 
+  cmake-config-oldest-cmake:
+    name: CMake version range config check (Ubuntu 24.04)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check CMake 3.15
+        uses: ./.github/actions/quick_cmake
+        with:
+          cmake-version: "3.15"
+        if: success() || failure()
+
+      - name: Check CMake 4.3
+        uses: ./.github/actions/quick_cmake
+        with:
+          cmake-version: "4.3"
+        if: success() || failure()
+
   bazel-build:
       strategy:
         matrix:
