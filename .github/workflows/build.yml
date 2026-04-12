@@ -15,7 +15,7 @@ jobs:
         fail-fast: false
         matrix:
           os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
-          cxx_standard: [11, 17, 20]
+          cxx_standard: [11, 20, 23]
           build: [static, shared]
           googletest: [build, system]
           generator: ["Default Generator", "MinGW Makefiles"]
