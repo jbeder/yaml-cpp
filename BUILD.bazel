@@ -10,6 +10,9 @@ cc_library(
     name = "yaml-cpp_internal",
     visibility = ["//:__subpackages__"],
     strip_include_prefix = "src",
+    copts = [
+        "-std=c++11",
+    ],
     hdrs = glob(["src/**/*.h"]),
 )
 
@@ -17,6 +20,9 @@ cc_library(
     name = "yaml-cpp",
     visibility = ["//visibility:public"],
     includes = ["include"],
+    copts = [
+        "-std=c++11",
+    ],
     hdrs = glob(["include/**/*.h"]),
     srcs = glob(["src/**/*.cpp", "src/**/*.h"]),
     defines = yaml_cpp_defines,
