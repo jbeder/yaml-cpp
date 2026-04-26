@@ -16,9 +16,15 @@ If you find a bug, post an [issue](https://github.com/jbeder/yaml-cpp/issues)! I
 
 **Note:** If you don't use the provided installer for your platform, make sure that you add `CMake`'s bin folder to your path.
 
-#### 1. Navigate into the source directory, create build folder and run `CMake`:
+#### 1. Clone the repository
+```sh
+git clone https://github.com/jbeder/yaml-cpp.git
+```
+
+#### 2. Navigate into the root directory of the repository, create a build folder and run `CMake`:
 
 ```sh
+cd yaml-cpp
 mkdir build
 cd build
 cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
@@ -44,10 +50,27 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 
   * For more options on customizing the build, see the [CMakeLists.txt](https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt) file.
 
-#### 2. Build it!
+#### 3. Build it!
   * The command you'll need to run depends on the generator you chose earlier.
 
 **Note:** To clean up, just remove the `build` directory.
+
+### Options
+There are multiple options that can be set when calling `cmake`.
+
+Standard:
+- `YAML_BUILD_SHARED_LIBS`: Build yaml-cpp shared libraryif the library should be build as a shared or static library (default: ${BUILD_SHARED_LIBS})
+- `YAML_CPP_BUILD_CONTRIB`: Enable yaml-cpp contrib in library (default: ON)
+- `YAML_CPP_BUILD_TESTS`:   Enable yaml-cpp tests (default: OFF)
+- `YAML_CPP_BUILD_TOOLS`:   Enable parse tools (default: ON)
+- `YAML_CPP_CLANG_FORMAT_EXE`: Path to the clang format executable
+- `YAML_CPP_DISABLE_UNINSTALL`: Disable uninstallation of yaml-cpp (default: OFF)
+- `YAML_CPP_FORMAT_SOURCE`: Format source (default: ${YAML_CPP_MAIN_PROJECT})
+- `YAML_CPP_INSTALL`: Enable generation of yaml-cpp install targets (default: ${YAML_CPP_MAIN_PROJECT})
+- `YAML_CPP_INSTALL_CMAKEDIR`: Path to install the CMake package to
+- `YAML_MSVC_SHARED_RT`: MSVC: Build yaml-cpp with shared runtime libs (/MD) (default: ON)
+- `YAML_ENABLE_PIC`: Use Position-Independent Code (default: ON)
+- `YAML_USE_SYSTEM_GTEST`: Use system googletest if found (default: OFF)
 
 ## How to Integrate it within your project using CMake
 
