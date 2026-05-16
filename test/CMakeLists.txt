@@ -11,20 +11,13 @@ if(YAML_USE_SYSTEM_GTEST)
   endif()
 else()
     add_subdirectory(
-      "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0"
+      "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.16.0"
       "${CMAKE_CURRENT_BINARY_DIR}/prefix")
-    include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0/googletest/include")
+    include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.16.0/googletest/include")
 endif()
 
-set(test-new-api-pattern "new-api/*.cpp")
-set(test-source-pattern "*.cpp" "integration/*.cpp" "node/*.cpp")
-if (CMAKE_VERSION VERSION_GREATER 3.11)
-  list(INSERT test-new-api-pattern 0 CONFIGURE_DEPENDS)
-  list(INSERT test-source-pattern 0 CONFIGURE_DEPENDS)
-endif()
-
-file(GLOB test-new-api-sources ${test-new-api-pattern})
-file(GLOB test-sources ${test-source-pattern})
+file(GLOB test-new-api-sources CONFIGURE_DEPENDS "new-api/*.cpp")
+file(GLOB test-sources CONFIGURE_DEPENDS "*.cpp" "integration/*.cpp" "node/*.cpp")
 
 add_executable(yaml-cpp-tests "")
 target_sources(yaml-cpp-tests

@@ -366,7 +366,28 @@ bool WriteDoubleQuotedString(ostream_wrapper& out, const char* str, std::size_t 
 
 bool WriteLiteralString(ostream_wrapper& out, const char* str, std::size_t size,
                         std::size_t indent) {
-  out << "|\n";
+  // depending on the numbers of new lines at the end of the string
+  // we need to use 'clip (-)', 'strip (default)' or 'keep' (+) annotation.
+  // if there is no newline at the end, we need 'clip'
+  // if there is single new line at the end, we need 'strip'
+  // otherwise 'keep'
+  //
+  // see YAML spec 1.2 chapter '8.1.1.2 Block Chomping Indicator' for more information
+  // https://yaml.org/spec/1.2.2/#8112-block-chomping-indicator
+
+
+  // The chomping depends on the number of new lines.
+  // The output following this 'WriteLiteralString' call will add an additional '\n',
+  // because of this we need to remove one in the case of 'strip' and 'keep'.
+  if (size == 0 || str[size-1] != '\n') { // clip
+      out << "|-\n";
+  } else if (size == 1 || str[size-2] != '\n') { // strip
+    out << "|\n";
+    size -= 1;
+  } else { // 'keep'
+    out << "|+\n";
+    size -= 1;
+  }
   int codePoint;
   for (const char* i = str;
        GetNextCodePointAndAdvance(codePoint, i, str + size);) {

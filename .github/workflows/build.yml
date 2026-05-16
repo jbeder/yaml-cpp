@@ -15,7 +15,7 @@ jobs:
         fail-fast: false
         matrix:
           os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
-          cxx_standard: [11, 17, 20]
+          cxx_standard: [11, 20, 23]
           build: [static, shared]
           googletest: [build, system]
           generator: ["Default Generator", "MinGW Makefiles"]
@@ -104,10 +104,28 @@ jobs:
               --config ${{ env.CMAKE_BUILD_TYPE }} \
               --verbose
 
+  cmake-config-oldest-cmake:
+    name: CMake version range config check (Ubuntu 24.04)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check CMake 3.15
+        uses: ./.github/actions/quick_cmake
+        with:
+          cmake-version: "3.15"
+        if: success() || failure()
+
+      - name: Check CMake 4.3
+        uses: ./.github/actions/quick_cmake
+        with:
+          cmake-version: "4.3"
+        if: success() || failure()
+
   bazel-build:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest]
+          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v6.0.2
@@ -125,7 +143,7 @@ jobs:
   bzlmod-build:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, macos-latest]
+          os: [ubuntu-latest, windows-latest, macos-latest, windows-11-arm]
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v6.0.2

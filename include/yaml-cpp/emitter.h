@@ -189,7 +189,7 @@ inline Emitter& Emitter::WriteStreamable(T value) {
   }
 
   if (!special) {
-    auto value_as_str = FpToString(value, stream.precision());
+    auto value_as_str = FpToString(value, static_cast<size_t>(stream.precision()));
     if (GetShowTrailingZero()) {
         bool isInScientificNotation = (value_as_str.find('e') != std::string::npos);
         bool hasDot                 = (value_as_str.find('.') != std::string::npos);
