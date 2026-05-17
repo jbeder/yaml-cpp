@@ -231,6 +231,33 @@ TEST(NodeTest, EmitEmptyNode) {
   EXPECT_EQ("", std::string(emitter.c_str()));
 }
 
+// Regression for #1373: emitting a node whose tag begins with "!!"
+// (a YAML secondary tag handle, e.g. "!!str") used to bail out with
+// INVALID_TAG and truncate the output after the first '!'.
+TEST(NodeTest, EmitSetTagSecondaryHandle) {
+  Node root;
+  Node string_node{"hello"};
+  string_node.SetTag("!!str");
+  root["some_string"] = string_node;
+  root["some_int"] = 2;
+
+  Emitter emitter;
+  emitter << root;
+  EXPECT_EQ("some_string: !!str hello\nsome_int: 2",
+            std::string(emitter.c_str()));
+}
+
+TEST(NodeTest, EmitSetTagPrimaryHandle) {
+  Node root;
+  Node string_node{"hello"};
+  string_node.SetTag("!mytag");
+  root["v"] = string_node;
+
+  Emitter emitter;
+  emitter << root;
+  EXPECT_EQ("v: !mytag hello", std::string(emitter.c_str()));
+}
+
 TEST(NodeTest, ParseNodeStyle) {
   EXPECT_EQ(EmitterStyle::Flow, Load("[1, 2, 3]").Style());
   EXPECT_EQ(EmitterStyle::Flow, Load("{foo: bar}").Style());
