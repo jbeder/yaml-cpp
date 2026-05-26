@@ -119,6 +119,10 @@ self: *1
 *3 : *2
 ```
 
+# Anchors and aliases #
+
+The node API shares data between aliases but does not expose anchor names as strings. To read `&anchor` / `*alias` events from a file, use `YAML::Parser` with `YAML::EventHandler` (`OnAnchor`, `OnAlias`). See [Anchors and aliases](Anchors-and-Aliases.md).
+
 # How Sequences Turn Into Maps #
 
 Sequences can be turned into maps by asking for non-integer keys. For example,

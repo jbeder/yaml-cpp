@@ -4,7 +4,7 @@
 
 ## Usage
 
-See [Tutorial](https://github.com/jbeder/yaml-cpp/wiki/Tutorial) and [How to Emit YAML](https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML) for reference. For the old API (until 0.5.0), see [How To Parse A Document](https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)).
+See [Tutorial](docs/Tutorial.md), [How to Emit YAML](docs/How-To-Emit-YAML.md), and [Anchors and aliases](docs/Anchors-and-Aliases.md) for reference. For the old API (until 0.5.0), see [How To Parse A Document](https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)).
 
 ## Any Problems?
 
