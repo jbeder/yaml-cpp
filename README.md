@@ -61,6 +61,10 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
   GIT_TAG <tag_name> # Can be a tag (yaml-cpp-x.x.x), a commit hash, or a branch name (master)
 )
+# Install rules (CMake package config, headers, etc.) are enabled only when yaml-cpp is
+# the top-level CMake project. When embedding via FetchContent, set this before
+# FetchContent_MakeAvailable if you need install targets in your build tree:
+# set(YAML_CPP_INSTALL ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(yaml-cpp)
 
 target_link_libraries(YOUR_LIBRARY PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
