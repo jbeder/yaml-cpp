@@ -199,3 +199,7 @@ YAML::Node node = YAML::Load("start: [1, 3, 0]");
 Vec3 v = node["start"].as<Vec3>();
 node["end"] = Vec3(2, -1, 0);
 ```
+
+# Error handling #
+
+Parsing failures, file I/O errors, bad type conversions, and invalid node operations throw exceptions derived from `YAML::Exception`. Missing map keys are **not** errors: use `if (node["key"])` before `.as<T>()`. See [Error handling](Error-Handling.md) for the full list of exception types and examples.
