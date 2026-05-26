@@ -24,6 +24,8 @@ cd build
 cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 ```
 
+The `..` at the end points CMake at the source tree root (where `CMakeLists.txt` lives), since you are configuring from inside `build/`.
+
   * The `generator` option is the build system you'd like to use. Run `cmake` without arguments to see a full list of available generators.
     * On Windows, you might use "Visual Studio 12 2013" (VS 2013 32-bits), or "Visual Studio 14 2015 Win64" (VS 2015 64-bits).
     * On OS X, you might use "Xcode".
