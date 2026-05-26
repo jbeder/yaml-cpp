@@ -151,6 +151,52 @@ produces
 - *fred
 ```
 
+# Explicit tags #
+
+YAML [tags](https://yaml.org/spec/1.2.2/#24-tags) can be attached to the next emitted value (scalar, sequence, or map). Use the helpers from `yaml-cpp/emittermanip.h`:
+
+| Helper | Example output (scalar `bar`) |
+|--------|-------------------------------|
+| `LocalTag("foo")` | `!foo bar` |
+| `LocalTag("a", "foo")` | `!a!foo bar` |
+| `SecondaryTag("tag:example.com,2000:app/int")` | `!<tag:example.com,2000:app/int> bar` |
+| `VerbatimTag("!foo")` | `!<!foo> bar` |
+
+The tag applies to the **next** item in the stream (same lifetime rules as other manipulators). Examples:
+
+```cpp
+YAML::Emitter out;
+out << YAML::LocalTag("my-light") << "fluorescent";
+```
+
+produces
+
+```yaml
+!my-light fluorescent
+```
+
+Tagged map key:
+
+```cpp
+YAML::Emitter out;
+out << YAML::BeginMap;
+out << YAML::Key << YAML::LocalTag("innerMap") << YAML::BeginMap;
+out << YAML::Key << "key" << YAML::Value << "value";
+out << YAML::EndMap;
+out << YAML::Value << "outerValue";
+out << YAML::EndMap;
+```
+
+produces
+
+```yaml
+? !innerMap
+  key: value
+: outerValue
+```
+
+When emitting an existing `YAML::Node`, you can set or preserve tags with `node.SetTag("!my-light")` before `out << node;` (tags from parsing are kept when re-emitting).
+
 # STL Containers, and Other Overloads #
 We overload `operator <<` for `std::vector`, `std::list`, and `std::map`, so you can write stuff like:
 
