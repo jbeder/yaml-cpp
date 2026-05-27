@@ -67,9 +67,31 @@ TEST_F(EmitterTest, UnterminatedStdStringViewScalar) {
 #endif
 
 TEST_F(EmitterTest, SimpleQuotedScalar) {
-  Node n(Load("\"test\""));
+  const std::string quoted = "\"test\"";
+  Node n(Load(quoted));
   out << n;
-  ExpectEmit("test");
+  ExpectEmit(quoted);
+}
+
+TEST_F(EmitterTest, QuotedScalarFalse) {
+  const std::string quoted = "\"false\"";
+  Node n(Load(quoted));
+  out << n;
+  ExpectEmit(quoted);
+}
+
+TEST_F(EmitterTest, QuotedScalarTrue) {
+  const std::string quoted = "\"true\"";
+  Node n(Load(quoted));
+  out << n;
+  ExpectEmit(quoted);
+}
+
+TEST_F(EmitterTest, QuotedScalarInt) {
+  const std::string quoted = "\"3\"";
+  Node n(Load(quoted));
+  out << n;
+  ExpectEmit(quoted);
 }
 
 TEST_F(EmitterTest, DumpAndSize) {
