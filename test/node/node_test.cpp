@@ -41,6 +41,7 @@ template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
 template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
 template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
 template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
+template <class K, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedSet = std::unordered_set<K,H,P,CustomAllocator<K>>;
 
 }  // anonymous namespace
 
@@ -530,6 +531,34 @@ TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
   node["squares"] = squares;
   CustomUnorderedMap<int,int> actualSquares = node["squares"].as<CustomUnorderedMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedSet) {
+  std::unordered_set<int> primes;
+  primes.insert(2);
+  primes.insert(3);
+  primes.insert(5);
+  primes.insert(7);
+  primes.insert(11);
+  primes.insert(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<std::unordered_set<int>>());
+}
+
+TEST(NodeTest, StdUnorderedSetWithCustomAllocator) {
+  CustomUnorderedSet<int> primes;
+  primes.insert(2);
+  primes.insert(3);
+  primes.insert(5);
+  primes.insert(7);
+  primes.insert(11);
+  primes.insert(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<CustomUnorderedSet<int>>());
 }
 
 TEST(NodeTest, StdPair) {
