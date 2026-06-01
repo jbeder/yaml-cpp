@@ -976,8 +976,34 @@ Emitter& Emitter::Write(const Binary& binary) {
   if (!good())
     return *this;
 
+  const StringFormat::value strFormat = binary.size() == 0 ? 
+      Utils::ComputeStringFormat("", 0, m_pState->GetStringFormat(),
+                                 m_pState->CurGroupFlowType(), false) : 
+      Utils::ComputeStringFormat("a", 1, m_pState->GetStringFormat(),
+                                 m_pState->CurGroupFlowType(), false);
+
+  if (strFormat == StringFormat::Literal) 
+    m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
+  
   PrepareNode(EmitterNodeType::Scalar);
-  Utils::WriteBinary(m_stream, binary);
+
+  switch (strFormat) {
+    // case StringFormat::Plain:		// to avoid changing the default behavior
+    //   m_stream.write(EncodeBase64(binary.data(), binary.size()));
+    //   break;
+    case StringFormat::SingleQuoted:
+      Utils::WriteSingleQuotedBinary(m_stream, binary);
+      break;
+    case StringFormat::Plain:
+    case StringFormat::DoubleQuoted:
+      Utils::WriteBinary(m_stream, binary);
+      break;
+    case StringFormat::Literal:
+      Utils::WriteLiteralBinary(m_stream, binary, 
+                                m_pState->CurIndent() + m_pState->GetIndent());
+      break;
+  }
+
   StartedScalar();
 
   return *this;
