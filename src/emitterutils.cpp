@@ -516,5 +516,18 @@ bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
                           StringEscaping::None);
   return true;
 }
+
+bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent) {
+  std::string encoded = EncodeBase64(binary.data(), binary.size());
+  WriteLiteralString(out, encoded.data(), encoded.size(), indent);
+  return true;
+}
+
+bool WriteSingleQuotedBinary(ostream_wrapper& out, const Binary& binary) {
+  std::string encoded = EncodeBase64(binary.data(), binary.size());
+  WriteSingleQuotedString(out, encoded.data(), encoded.size());
+  return true;
+}
+
 }  // namespace Utils
 }  // namespace YAML

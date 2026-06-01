@@ -1191,6 +1191,34 @@ TEST_F(EmitterTest, EmptyBinary) {
   ExpectEmit("!!binary \"\"");
 }
 
+TEST_F(EmitterTest, BinaryStyles) {
+  Binary binary(reinterpret_cast<const unsigned char*>("Hello, World!"), 13);
+  out << BeginMap;
+  out << Key << "auto";
+  out << Value << Auto << binary;
+  out << Key << "single";
+  out << Value << SingleQuoted << binary;
+  out << Key << "double";
+  out << Value << DoubleQuoted << binary;
+  out << Key << "literal";
+  out << Value << Literal << binary;
+  out << Key << "literal_empty";
+  out << Value << Literal << Binary(reinterpret_cast<const unsigned char*>(""), 0);
+  out << Key << "literal_indented";
+  out << Value << Literal << Indent(8) << binary;
+  ExpectEmit(
+      "auto: !!binary \"SGVsbG8sIFdvcmxkIQ==\"\n"
+      "single: !!binary \'SGVsbG8sIFdvcmxkIQ==\'\n"
+      "double: !!binary \"SGVsbG8sIFdvcmxkIQ==\"\n"
+      "literal: !!binary |-\n"
+      "  SGVsbG8sIFdvcmxkIQ==\n"
+      "literal_empty: !!binary |-\n"
+      "\n"
+      "literal_indented: !!binary |-\n"
+      "        SGVsbG8sIFdvcmxkIQ=="
+  );
+}
+
 TEST_F(EmitterTest, ColonAtEndOfScalar) {
   out << "a:";
   ExpectEmit("\"a:\"");
@@ -1468,8 +1496,8 @@ TEST_F(EmitterTest, Infinity) {
   out << YAML::EndMap;
 
   ExpectEmit(
-	  "foo: .inf\n"
-	  "bar: .inf");
+      "foo: .inf\n"
+      "bar: .inf");
 }
 
 TEST_F(EmitterTest, NegInfinity) {
@@ -1481,8 +1509,8 @@ TEST_F(EmitterTest, NegInfinity) {
   out << YAML::EndMap;
 
   ExpectEmit(
-	  "foo: -.inf\n"
-	  "bar: -.inf");
+      "foo: -.inf\n"
+      "bar: -.inf");
 }
 
 TEST_F(EmitterTest, NaN) {
@@ -1494,8 +1522,8 @@ TEST_F(EmitterTest, NaN) {
   out << YAML::EndMap;
 
   ExpectEmit(
-	  "foo: .nan\n"
-	  "bar: .nan");
+      "foo: .nan\n"
+      "bar: .nan");
 }
 
 TEST_F(EmitterTest, ComplexFlowSeqEmbeddingAMapWithNewLine) { 
