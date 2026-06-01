@@ -18,6 +18,7 @@ EmitterState::EmitterState()
       m_indent(2),
       m_preCommentIndent(2),
       m_postCommentIndent(1),
+      m_wrap(80),
       m_seqFmt(Block),
       m_mapFmt(Block),
       m_mapKeyFmt(Auto),
@@ -349,6 +350,11 @@ bool EmitterState::SetPostCommentIndent(std::size_t value,
     return false;
 
   _Set(m_postCommentIndent, value, scope);
+  return true;
+}
+
+bool EmitterState::SetWrap(std::size_t value, FmtScope::value scope) {
+  _Set(m_wrap, value, scope);
   return true;
 }
 

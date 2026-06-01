@@ -544,9 +544,24 @@ bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
   return true;
 }
 
-bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent) {
+bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent, std::size_t wrap) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
-  WriteLiteralString(out, encoded.data(), encoded.size(), indent);
+  std::string wrapped = "";
+  if(wrap) {
+    if(wrap <= indent) return false;
+    wrap -= indent;
+    std::size_t point = wrap;
+    for(std::size_t i = 0; i < encoded.size(); i++) {
+      if(i == point) {
+        wrapped += '\n';
+        point += wrap;
+      }
+      wrapped += encoded[i];
+    }
+  }
+  else
+    wrapped = encoded;
+  WriteLiteralString(out, wrapped.data(), wrapped.size(), indent);
   return true;
 }
 

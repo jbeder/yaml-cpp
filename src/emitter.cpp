@@ -145,6 +145,11 @@ Emitter& Emitter::SetLocalIndent(const _Indent& indent) {
   return *this;
 }
 
+Emitter& Emitter::SetLocalWrap(const _Wrap& wrap) {
+  m_pState->SetWrap(wrap.value, FmtScope::Local);
+  return *this;
+}
+
 Emitter& Emitter::SetLocalPrecision(const _Precision& precision) {
   if (precision.floatPrecision >= 0)
     m_pState->SetFloatPrecision(precision.floatPrecision, FmtScope::Local);
@@ -998,7 +1003,8 @@ Emitter& Emitter::Write(const Binary& binary) {
       break;
     case StringFormat::Literal:
       Utils::WriteLiteralBinary(m_stream, binary, 
-                                m_pState->CurIndent() + m_pState->GetIndent());
+                                m_pState->CurIndent() + m_pState->GetIndent(), 
+                                m_pState->GetWrap());
       break;
   }
 
