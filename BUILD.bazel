@@ -6,11 +6,19 @@ yaml_cpp_defines = select({
     "//conditions:default": [],
 })
 
+yaml_copts = select({
+    "@platforms//os:windows": [],
+    "//conditions:default": [
+        "-fexceptions",
+    ],
+})
+
 cc_library(
     name = "yaml-cpp_internal",
     visibility = ["//:__subpackages__"],
     strip_include_prefix = "src",
     hdrs = glob(["src/**/*.h"]),
+    copts = yaml_copts,
 )
 
 cc_library(
@@ -20,4 +28,5 @@ cc_library(
     hdrs = glob(["include/**/*.h"]),
     srcs = glob(["src/**/*.cpp", "src/**/*.h"]),
     defines = yaml_cpp_defines,
+    copts = yaml_copts,
 )
