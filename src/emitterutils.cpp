@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <iomanip>
 #include <sstream>
+#include <stdint.h>
 
 #include "emitterutils.h"
 #include "exp.h"
