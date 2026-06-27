@@ -1,5 +1,6 @@
-roject "yaml-cpp"
+project "yaml-cpp"
 	kind "StaticLib"
+	systemversion "latest"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
@@ -20,17 +21,14 @@ roject "yaml-cpp"
 		"include"
 	}
 
-	defines
-	{
-		"YAML_CPP_STATIC_DEFINE"
-	}
-
 	filter "system:windows"
-		systemversion "latest"
+		defines
+		{
+			"YAML_CPP_STATIC_DEFINE"
+		}
 
 	filter "system:linux"
 		pic "On"
-		systemversion "latest"
 
 	filter "configurations:Debug"
 		runtime "Debug"
