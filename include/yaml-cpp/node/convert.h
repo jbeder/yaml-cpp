@@ -13,6 +13,7 @@
 #include <list>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 #include <sstream>
 #include <type_traits>
 #include <valarray>
@@ -304,6 +305,32 @@ struct convert<std::unordered_map<K, V, H, P, A>> {
       rhs[element.first.template as<K>()] = element.second.template as<V>();
 #else
       rhs[element.first.as<K>()] = element.second.as<V>();
+#endif
+    return true;
+  }
+};
+
+// std::unordered_set
+template <typename T, typename H, typename P, typename A>
+struct convert<std::unordered_set<T, H, P, A>> {
+  static Node encode(const std::unordered_set<T, H, P, A>& rhs) {
+    Node node(NodeType::Sequence);
+    for (const auto& element : rhs)
+      node.push_back(element);
+    return node;
+  }
+
+  static bool decode(const Node& node, std::unordered_set<T, H, P, A>& rhs) {
+    if (!node.IsSequence())
+      return false;
+
+    rhs.clear();
+    for (const auto& element : node)
+#if defined(__GNUC__) && __GNUC__ < 4
+      // workaround for GCC 3:
+      rhs.insert(element.template as<T>());
+#else
+      rhs.insert(element.as<T>());
 #endif
     return true;
   }
