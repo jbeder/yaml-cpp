@@ -976,11 +976,9 @@ Emitter& Emitter::Write(const Binary& binary) {
   if (!good())
     return *this;
 
-  const StringFormat::value strFormat = binary.size() == 0 ? 
-      Utils::ComputeStringFormat("", 0, m_pState->GetStringFormat(),
-                                 m_pState->CurGroupFlowType(), false) : 
-      Utils::ComputeStringFormat("a", 1, m_pState->GetStringFormat(),
-                                 m_pState->CurGroupFlowType(), false);
+  const StringFormat::value strFormat = 
+      Utils::ComputeBinaryFormat(binary, m_pState->GetStringFormat(),
+                                 m_pState->CurGroupFlowType());
 
   if (strFormat == StringFormat::Literal) 
     m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
@@ -988,12 +986,12 @@ Emitter& Emitter::Write(const Binary& binary) {
   PrepareNode(EmitterNodeType::Scalar);
 
   switch (strFormat) {
-    // case StringFormat::Plain:		// to avoid changing the default behavior
-    //   m_stream.write(EncodeBase64(binary.data(), binary.size()));
-    //   break;
     case StringFormat::SingleQuoted:
       Utils::WriteSingleQuotedBinary(m_stream, binary);
       break;
+    // For a long period of time, this function outputed the DoubleQuoted form
+    // regardless of the options. In order not to change the default behavior,
+    // when strFormat is Plain, it is still treated as DoubleQuoted.
     case StringFormat::Plain:
     case StringFormat::DoubleQuoted:
       Utils::WriteBinary(m_stream, binary);
