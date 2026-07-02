@@ -69,6 +69,18 @@ TEST(NodeTest, IntScalar) {
   EXPECT_EQ(15, node.as<int>());
 }
 
+TEST(NodeTest, OctalScalar) {
+  // YAML 1.2 octal prefix "0o..." (#1251)
+  EXPECT_EQ(83, Node("0o123").as<int>());
+  EXPECT_EQ(7u, Node("0o7").as<unsigned>());
+  // Legacy leading-zero octal and other bases still work
+  EXPECT_EQ(83, Node("0123").as<int>());
+  EXPECT_EQ(255, Node("0xff").as<int>());
+  EXPECT_EQ(123, Node("123").as<int>());
+  // "0o" followed by non-octal digits must not be reinterpreted as hex
+  EXPECT_EQ(-1, Node("0oxff").as<int>(-1));
+}
+
 TEST(NodeTest, SimpleAppendSequence) {
   Node node;
   node.push_back(10);

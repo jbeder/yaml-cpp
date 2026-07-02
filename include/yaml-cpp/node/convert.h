@@ -164,6 +164,15 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
   }
   return false;
 }
+
+// Rewrite a valid YAML 1.2 octal scalar ("0o14") to the stream-parseable "014".
+inline std::string NormalizeOctalPrefix(std::string s) {
+  if (s.size() > 2 && s[0] == '0' && (s[1] == 'o' || s[1] == 'O') &&
+      s.find_first_not_of("01234567", 2) == std::string::npos) {
+    s.erase(1, 1);
+  }
+  return s;
+}
 }
 
 #define YAML_DEFINE_CONVERT_STREAMABLE(type, negative_op)                  \
@@ -183,7 +192,7 @@ ConvertStreamTo(std::stringstream& stream, T& rhs) {
         return false;                                                      \
       }                                                                    \
       const std::string& input = node.Scalar();                            \
-      std::stringstream stream(input);                                     \
+      std::stringstream stream(conversion::NormalizeOctalPrefix(input));   \
       stream.imbue(std::locale::classic());                                \
       stream.unsetf(std::ios::dec);                                        \
       if ((stream.peek() == '-') && std::is_unsigned<type>::value) {       \
