@@ -539,20 +539,19 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
 
 bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
-  WriteDoubleQuotedString(out, encoded.data(), encoded.size(),
-                          StringEscaping::None);
-  return true;
+  return WriteDoubleQuotedString(out, encoded.data(), encoded.size(),
+                                 StringEscaping::None);
 }
 
 bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent, std::size_t wrap) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
   std::string wrapped = "";
-  if(wrap) {
-    if(wrap <= indent) return false;
+  if (wrap) {
+    if (wrap <= indent) return false;
     wrap -= indent;
     std::size_t point = wrap;
-    for(std::size_t i = 0; i < encoded.size(); i++) {
-      if(i == point) {
+    for (std::size_t i = 0; i < encoded.size(); i++) {
+      if (i == point) {
         wrapped += '\n';
         point += wrap;
       }
@@ -561,14 +560,12 @@ bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t 
   }
   else
     wrapped = encoded;
-  WriteLiteralString(out, wrapped.data(), wrapped.size(), indent);
-  return true;
+  return WriteLiteralString(out, wrapped.data(), wrapped.size(), indent);
 }
 
 bool WriteSingleQuotedBinary(ostream_wrapper& out, const Binary& binary) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
-  WriteSingleQuotedString(out, encoded.data(), encoded.size());
-  return true;
+  return WriteSingleQuotedString(out, encoded.data(), encoded.size());
 }
 
 }  // namespace Utils
