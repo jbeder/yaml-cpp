@@ -33,6 +33,9 @@ StringFormat::value ComputeStringFormat(const char* str, std::size_t size,
                                         EMITTER_MANIP strFormat,
                                         FlowType::value flowType,
                                         bool escapeNonAscii);
+StringFormat::value ComputeBinaryFormat(const Binary &bin,
+                                        EMITTER_MANIP strFormat,
+                                        FlowType::value flowType);
 
 bool WriteSingleQuotedString(ostream_wrapper& out, const char* str, std::size_t size);
 bool WriteDoubleQuotedString(ostream_wrapper& out, const char* str, std::size_t size,
@@ -49,6 +52,8 @@ bool WriteTag(ostream_wrapper& out, const std::string& str, bool verbatim);
 bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
                         const std::string& tag);
 bool WriteBinary(ostream_wrapper& out, const Binary& binary);
+bool WriteSingleQuotedBinary(ostream_wrapper& out, const Binary& binary);
+bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent);
 }
 }
 

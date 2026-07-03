@@ -976,8 +976,32 @@ Emitter& Emitter::Write(const Binary& binary) {
   if (!good())
     return *this;
 
+  const StringFormat::value strFormat = 
+      Utils::ComputeBinaryFormat(binary, m_pState->GetStringFormat(),
+                                 m_pState->CurGroupFlowType());
+
+  if (strFormat == StringFormat::Literal) 
+    m_pState->SetMapKeyFormat(YAML::LongKey, FmtScope::Local);
+  
   PrepareNode(EmitterNodeType::Scalar);
-  Utils::WriteBinary(m_stream, binary);
+
+  switch (strFormat) {
+    case StringFormat::SingleQuoted:
+      Utils::WriteSingleQuotedBinary(m_stream, binary);
+      break;
+    // For a long period of time, this function outputed the DoubleQuoted form
+    // regardless of the options. In order not to change the default behavior,
+    // when strFormat is Plain, it is still treated as DoubleQuoted.
+    case StringFormat::Plain:
+    case StringFormat::DoubleQuoted:
+      Utils::WriteBinary(m_stream, binary);
+      break;
+    case StringFormat::Literal:
+      Utils::WriteLiteralBinary(m_stream, binary, 
+                                m_pState->CurIndent() + m_pState->GetIndent());
+      break;
+  }
+
   StartedScalar();
 
   return *this;

@@ -297,6 +297,33 @@ StringFormat::value ComputeStringFormat(const char* str, std::size_t size,
   return StringFormat::DoubleQuoted;
 }
 
+StringFormat::value ComputeBinaryFormat(const Binary &bin,
+                                        EMITTER_MANIP strFormat,
+                                        FlowType::value flowType) {
+  // Equivalent to calling ComputeStringFormat with the base64
+  // encoded form of 'bin'.
+  switch (strFormat) {
+    case Auto:
+      if (bin.size() > 0u) {
+        return StringFormat::Plain; 
+      }
+      return StringFormat::DoubleQuoted;
+    case SingleQuoted:
+      return StringFormat::SingleQuoted;
+    case DoubleQuoted:
+      return StringFormat::DoubleQuoted;
+    case Literal:
+      if (flowType == FlowType::Flow) {
+        return StringFormat::DoubleQuoted;
+      }
+      return StringFormat::Literal;
+    default:
+      break;
+  }
+
+  return StringFormat::DoubleQuoted;
+}
+
 bool WriteSingleQuotedString(ostream_wrapper& out, const char* str, std::size_t size) {
   out << "'";
   int codePoint;
@@ -516,5 +543,18 @@ bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
                           StringEscaping::None);
   return true;
 }
+
+bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent) {
+  std::string encoded = EncodeBase64(binary.data(), binary.size());
+  WriteLiteralString(out, encoded.data(), encoded.size(), indent);
+  return true;
+}
+
+bool WriteSingleQuotedBinary(ostream_wrapper& out, const Binary& binary) {
+  std::string encoded = EncodeBase64(binary.data(), binary.size());
+  WriteSingleQuotedString(out, encoded.data(), encoded.size());
+  return true;
+}
+
 }  // namespace Utils
 }  // namespace YAML

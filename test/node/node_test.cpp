@@ -41,6 +41,7 @@ template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
 template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
 template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
 template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
+template <class K, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedSet = std::unordered_set<K,H,P,CustomAllocator<K>>;
 
 }  // anonymous namespace
 
@@ -67,6 +68,18 @@ TEST(NodeTest, IntScalar) {
   Node node = Node(15);
   EXPECT_TRUE(node.IsScalar());
   EXPECT_EQ(15, node.as<int>());
+}
+
+TEST(NodeTest, OctalScalar) {
+  // YAML 1.2 octal prefix "0o..." (#1251)
+  EXPECT_EQ(83, Node("0o123").as<int>());
+  EXPECT_EQ(7u, Node("0o7").as<unsigned>());
+  // Legacy leading-zero octal and other bases still work
+  EXPECT_EQ(83, Node("0123").as<int>());
+  EXPECT_EQ(255, Node("0xff").as<int>());
+  EXPECT_EQ(123, Node("123").as<int>());
+  // "0o" followed by non-octal digits must not be reinterpreted as hex
+  EXPECT_EQ(-1, Node("0oxff").as<int>(-1));
 }
 
 TEST(NodeTest, SimpleAppendSequence) {
@@ -530,6 +543,34 @@ TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
   node["squares"] = squares;
   CustomUnorderedMap<int,int> actualSquares = node["squares"].as<CustomUnorderedMap<int,int>>();
   EXPECT_EQ(squares, actualSquares);
+}
+
+TEST(NodeTest, StdUnorderedSet) {
+  std::unordered_set<int> primes;
+  primes.insert(2);
+  primes.insert(3);
+  primes.insert(5);
+  primes.insert(7);
+  primes.insert(11);
+  primes.insert(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<std::unordered_set<int>>());
+}
+
+TEST(NodeTest, StdUnorderedSetWithCustomAllocator) {
+  CustomUnorderedSet<int> primes;
+  primes.insert(2);
+  primes.insert(3);
+  primes.insert(5);
+  primes.insert(7);
+  primes.insert(11);
+  primes.insert(13);
+
+  Node node;
+  node["primes"] = primes;
+  EXPECT_EQ(primes, node["primes"].as<CustomUnorderedSet<int>>());
 }
 
 TEST(NodeTest, StdPair) {
