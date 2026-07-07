@@ -1219,6 +1219,67 @@ TEST_F(EmitterTest, BinaryStyles) {
   );
 }
 
+TEST_F(EmitterTest, BinaryWrap) {
+  Binary binary(reinterpret_cast<const unsigned char*>(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eiusmod "
+    "tempor incididunt ut labore et dolore magna aliqua."
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
+    "nisi ut aliquip exea commodo consequat."
+  ), 226);
+
+  out << BeginMap;
+  out << Key << "wrap80";
+  out << Value << Literal << binary;
+  out << Key << "wrap80_indent4";
+  out << Value << Literal << Indent(4) << binary;
+  out << Key << "wrap60";
+  out << Value << Literal << Wrap(60) << binary;
+  out << Key << "wrap60_indent4";
+  out << Value << Literal << Wrap(60) << Indent(4) << binary;
+  out << Key << "wrap_off";
+  out << Value << Literal << Wrap(0) << binary;
+  out << Key << "wrap_off_indent4";
+  out << Value << Literal << Wrap(0) << Indent(4) << binary;
+  ExpectEmit(
+      "wrap80: !!binary |-\n"
+      "  TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gU2\n"
+      "  VkIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1bnQgdXQgbGFib3JlIGV0IGRvbG9yZSBtYWduYSBhbGlx\n"
+      "  dWEuVXQgZW5pbSBhZCBtaW5pbSB2ZW5pYW0sIHF1aXMgbm9zdHJ1ZCBleGVyY2l0YXRpb24gdWxsYW\n"
+      "  1jbyBsYWJvcmlzIG5pc2kgdXQgYWxpcXVpcCBleGVhIGNvbW1vZG8gY29uc2VxdWF0Lg==\n"
+      "wrap80_indent4: !!binary |-\n"
+      "    TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4g\n"
+      "    U2VkIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1bnQgdXQgbGFib3JlIGV0IGRvbG9yZSBtYWduYSBh\n"
+      "    bGlxdWEuVXQgZW5pbSBhZCBtaW5pbSB2ZW5pYW0sIHF1aXMgbm9zdHJ1ZCBleGVyY2l0YXRpb24g\n"
+      "    dWxsYW1jbyBsYWJvcmlzIG5pc2kgdXQgYWxpcXVpcCBleGVhIGNvbW1vZG8gY29uc2VxdWF0Lg==\n"
+      "wrap60: !!binary |-\n"
+      "  TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaX\n"
+      "  Bpc2NpbmcgZWxpdC4gU2VkIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1bnQg\n"
+      "  dXQgbGFib3JlIGV0IGRvbG9yZSBtYWduYSBhbGlxdWEuVXQgZW5pbSBhZC\n"
+      "  BtaW5pbSB2ZW5pYW0sIHF1aXMgbm9zdHJ1ZCBleGVyY2l0YXRpb24gdWxs\n"
+      "  YW1jbyBsYWJvcmlzIG5pc2kgdXQgYWxpcXVpcCBleGVhIGNvbW1vZG8gY2\n"
+      "  9uc2VxdWF0Lg==\n"
+      "wrap60_indent4: !!binary |-\n"
+      "    TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFk\n"
+      "    aXBpc2NpbmcgZWxpdC4gU2VkIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1\n"
+      "    bnQgdXQgbGFib3JlIGV0IGRvbG9yZSBtYWduYSBhbGlxdWEuVXQgZW5p\n"
+      "    bSBhZCBtaW5pbSB2ZW5pYW0sIHF1aXMgbm9zdHJ1ZCBleGVyY2l0YXRp\n"
+      "    b24gdWxsYW1jbyBsYWJvcmlzIG5pc2kgdXQgYWxpcXVpcCBleGVhIGNv\n"
+      "    bW1vZG8gY29uc2VxdWF0Lg==\n"
+      "wrap_off: !!binary |-\n"
+      "  TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZW"
+      "xpdC4gU2VkIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1bnQgdXQgbGFib3JlIGV0IGRvbG9yZS"
+      "BtYWduYSBhbGlxdWEuVXQgZW5pbSBhZCBtaW5pbSB2ZW5pYW0sIHF1aXMgbm9zdHJ1ZCBleG"
+      "VyY2l0YXRpb24gdWxsYW1jbyBsYWJvcmlzIG5pc2kgdXQgYWxpcXVpcCBleGVhIGNvbW1vZG"
+      "8gY29uc2VxdWF0Lg==\n"
+      "wrap_off_indent4: !!binary |-\n"
+      "    TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2Npbmcg"
+      "ZWxpdC4gU2VkIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1bnQgdXQgbGFib3JlIGV0IGRvbG9y"
+      "ZSBtYWduYSBhbGlxdWEuVXQgZW5pbSBhZCBtaW5pbSB2ZW5pYW0sIHF1aXMgbm9zdHJ1ZCBl"
+      "eGVyY2l0YXRpb24gdWxsYW1jbyBsYWJvcmlzIG5pc2kgdXQgYWxpcXVpcCBleGVhIGNvbW1v"
+      "ZG8gY29uc2VxdWF0Lg=="
+  );
+}
+
 TEST_F(EmitterTest, ColonAtEndOfScalar) {
   out << "a:";
   ExpectEmit("\"a:\"");

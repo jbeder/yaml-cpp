@@ -53,7 +53,7 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
                         const std::string& tag);
 bool WriteBinary(ostream_wrapper& out, const Binary& binary);
 bool WriteSingleQuotedBinary(ostream_wrapper& out, const Binary& binary);
-bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent);
+bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent, std::size_t wrap);
 }
 }
 

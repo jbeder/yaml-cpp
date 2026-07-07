@@ -71,6 +71,7 @@ class YAML_CPP_API Emitter {
   // local setters
   Emitter& SetLocalValue(EMITTER_MANIP value);
   Emitter& SetLocalIndent(const _Indent& indent);
+  Emitter& SetLocalWrap(const _Wrap& wrap);
   Emitter& SetLocalPrecision(const _Precision& precision);
 
   // overloads of write
@@ -296,6 +297,10 @@ inline Emitter& operator<<(Emitter& emitter, EMITTER_MANIP value) {
 
 inline Emitter& operator<<(Emitter& emitter, _Indent indent) {
   return emitter.SetLocalIndent(indent);
+}
+
+inline Emitter& operator<<(Emitter& emitter, _Wrap wrap) {
+  return emitter.SetLocalWrap(wrap);
 }
 
 inline Emitter& operator<<(Emitter& emitter, _Precision precision) {

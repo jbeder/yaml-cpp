@@ -76,6 +76,13 @@ struct _Indent {
 
 inline _Indent Indent(int value) { return _Indent(value); }
 
+struct _Wrap {
+  _Wrap(int value_) : value(value_) {}
+  int value;
+};
+
+inline _Wrap Wrap(int value) { return _Wrap(value); }
+
 struct _Alias {
   _Alias(const std::string& content_) : content(content_) {}
   std::string content;
