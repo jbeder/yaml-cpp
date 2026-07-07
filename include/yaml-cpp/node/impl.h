@@ -396,8 +396,10 @@ inline void Node::force_insert(const Key& key, const Value& value) {
 
 template <typename Key>
 inline bool Node::contains(const Key& key) const {
-  EnsureNodeExists();
-  return ((const detail::node*)m_pNode)->get(key, m_pMemory) != nullptr;
+  if (!m_isValid)
+    throw InvalidNode(m_invalidKey);
+  if (!m_pNode) return false;
+  return (static_cast<const detail::node*>(m_pNode))->get(key, m_pMemory) != nullptr;
 }
 
 // free functions
