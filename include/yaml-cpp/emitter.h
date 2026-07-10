@@ -234,7 +234,7 @@ inline Emitter& operator<<(Emitter& emitter, char v) {
   return emitter.Write(v);
 }
 inline Emitter& operator<<(Emitter& emitter, unsigned char v) {
-  return emitter.Write(static_cast<char>(v));
+  return emitter.WriteIntegralType(static_cast<unsigned int>(v));
 }
 inline Emitter& operator<<(Emitter& emitter, const _Alias& v) {
   return emitter.Write(v);

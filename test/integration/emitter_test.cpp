@@ -3,6 +3,8 @@
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 #include "gtest/gtest.h"
 
+#include <cstdint>
+
 namespace YAML {
 namespace {
 
@@ -115,6 +117,14 @@ TEST_F(EmitterTest, IntBase) {
   out << EndSeq;
 
   ExpectEmit("- 1024\n- 0x400\n- 02000");
+}
+
+TEST_F(EmitterTest, EightBitIntegers) {
+  out << BeginSeq;
+  out << std::uint8_t{16};
+  out << EndSeq;
+
+  ExpectEmit("- 16");
 }
 
 TEST_F(EmitterTest, NumberPrecision) {
