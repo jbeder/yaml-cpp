@@ -126,7 +126,10 @@ bool Scanner::VerifySimpleKey() {
 }
 
 void Scanner::PopAllSimpleKeys() {
-  while (!m_simpleKeys.empty())
+  while (!m_simpleKeys.empty()) {
+    if (m_simpleKeys.top().flowLevel == 0)
+      m_simpleKeys.top().Invalidate();
     m_simpleKeys.pop();
+  }
 }
 }  // namespace YAML

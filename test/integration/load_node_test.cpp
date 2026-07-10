@@ -271,6 +271,41 @@ struct ParserExceptionTestCase {
   std::string expected_exception;
 };
 
+TEST(LoadNodeTest, RejectTrailingScalarInBlockMap) {
+  const std::vector<std::string> inputs = {
+      "---\nfoo: bar\nnot-a-key\n",
+      "---\nfoo: bar\nnot-a-key\n# A comment",
+  };
+
+  for (const std::string& input : inputs) {
+    try {
+      Load(input);
+      FAIL() << "Expected trailing scalar to be rejected, input: " << input;
+    } catch (const ParserException& e) {
+      EXPECT_EQ(ErrorMsg::END_OF_MAP, e.msg);
+      EXPECT_EQ(2, e.mark.line);
+      EXPECT_EQ(0, e.mark.column);
+    }
+  }
+}
+
+TEST(LoadNodeTest, AcceptValidDocumentsWhenPoppingSimpleKeys) {
+  Node scalar = Load("not-a-key");
+  EXPECT_TRUE(scalar.IsScalar());
+  EXPECT_EQ("not-a-key", scalar.as<std::string>());
+
+  Node explicit_key = Load("? key");
+  ASSERT_TRUE(explicit_key.IsMap());
+  ASSERT_EQ(1, explicit_key.size());
+  EXPECT_TRUE(explicit_key["key"].IsNull());
+
+  Node map = Load("foo: bar\nbaz: qux\n...");
+  ASSERT_TRUE(map.IsMap());
+  ASSERT_EQ(2, map.size());
+  EXPECT_EQ("bar", map["foo"].as<std::string>());
+  EXPECT_EQ("qux", map["baz"].as<std::string>());
+}
+
 TEST(NodeTest, IncompleteJson) {
   std::vector<ParserExceptionTestCase> tests = {
       {"JSON map without value", "{\"access\"", ErrorMsg::END_OF_MAP_FLOW},
