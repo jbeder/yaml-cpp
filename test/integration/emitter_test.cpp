@@ -119,7 +119,7 @@ TEST_F(EmitterTest, IntBase) {
   ExpectEmit("- 1024\n- 0x400\n- 02000");
 }
 
-TEST_F(EmitterTest, EightBitIntegers) {
+TEST_F(EmitterTest, UnsignedEightBitInteger) {
   out << BeginSeq;
   out << std::uint8_t{16};
   out << EndSeq;
