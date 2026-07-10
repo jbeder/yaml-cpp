@@ -64,6 +64,13 @@ TEST(NodeTest, SimpleScalar) {
   EXPECT_EQ("Hello, World!", node.as<std::string>());
 }
 
+TEST(NodeTest, DefaultNodeHasEmptyNullScalar) {
+  Node node;
+  EXPECT_TRUE(node.IsNull());
+  EXPECT_EQ("", node.Scalar());
+  EXPECT_EQ("", node.as<std::string>());
+}
+
 TEST(NodeTest, IntScalar) {
   Node node = Node(15);
   EXPECT_TRUE(node.IsScalar());

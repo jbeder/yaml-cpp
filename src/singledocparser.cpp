@@ -100,7 +100,7 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
 
   if (token.type == Token::PLAIN_SCALAR
       && tag.compare("?") == 0 && IsNullString(token.value.data(), token.value.size())) {
-    eventHandler.OnNull(mark, anchor);
+    eventHandler.OnNull(mark, anchor, token.value);
     m_scanner.pop();
     return;
   }

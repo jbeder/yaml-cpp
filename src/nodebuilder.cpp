@@ -38,6 +38,13 @@ void NodeBuilder::OnNull(const Mark& mark, anchor_t anchor) {
   Pop();
 }
 
+void NodeBuilder::OnNull(const Mark& mark, anchor_t anchor,
+                         const std::string& value) {
+  detail::node& node = Push(mark, anchor);
+  node.set_null(value);
+  Pop();
+}
+
 void NodeBuilder::OnAlias(const Mark& /* mark */, anchor_t anchor) {
   detail::node& node = *m_anchors[anchor];
   Push(node);

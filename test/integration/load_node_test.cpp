@@ -18,6 +18,13 @@ TEST(LoadNodeTest, FallbackValues) {
   EXPECT_EQ(2, node["x"].as<int>());
   EXPECT_EQ(2, node["x"].as<int>(5));
   EXPECT_EQ(5, node["y"].as<int>(5));
+
+  Node map = Load("{foo: bar}");
+  Node sequence = Load("[foo]");
+  EXPECT_THROW(map.as<std::string>(), TypedBadConversion<std::string>);
+  EXPECT_THROW(sequence.as<std::string>(), TypedBadConversion<std::string>);
+  EXPECT_EQ("fallback", map.as<std::string>("fallback"));
+  EXPECT_EQ("fallback", sequence.as<std::string>("fallback"));
 }
 
 TEST(LoadNodeTest, NumericConversion) {
@@ -346,8 +353,50 @@ TEST(NodeTest, IncorrectFlow) {
 TEST(NodeTest, LoadTildeAsNull) {
   Node node = Load("~");
   ASSERT_TRUE(node.IsNull());
-  EXPECT_EQ(node.as<std::string>(), "null");
-  EXPECT_EQ(node.as<std::string>("~"), "null");
+  EXPECT_EQ(node.Scalar(), "~");
+  EXPECT_EQ(node.as<std::string>(), "~");
+  EXPECT_EQ(node.as<std::string>("fallback"), "~");
+}
+
+TEST(NodeTest, LoadNullPreservesSourceText) {
+  Node node = Load(
+      "empty:\n"
+      "lowercase: null\n"
+      "capitalized: Null\n"
+      "uppercase: NULL\n"
+      "quoted: \"null\"");
+
+  EXPECT_TRUE(node["empty"].IsNull());
+  EXPECT_EQ(node["empty"].Scalar(), "");
+  EXPECT_EQ(node["empty"].as<std::string>(), "");
+
+  EXPECT_TRUE(node["lowercase"].IsNull());
+  EXPECT_EQ(node["lowercase"].Scalar(), "null");
+  EXPECT_EQ(node["lowercase"].as<std::string>(), "null");
+
+  EXPECT_TRUE(node["capitalized"].IsNull());
+  EXPECT_EQ(node["capitalized"].Scalar(), "Null");
+  EXPECT_EQ(node["capitalized"].as<std::string>(), "Null");
+
+  EXPECT_TRUE(node["uppercase"].IsNull());
+  EXPECT_EQ(node["uppercase"].Scalar(), "NULL");
+  EXPECT_EQ(node["uppercase"].as<std::string>(), "NULL");
+
+  EXPECT_TRUE(node["quoted"].IsScalar());
+  EXPECT_EQ(node["quoted"].Scalar(), "null");
+  EXPECT_EQ(node["quoted"].as<std::string>(), "null");
+}
+
+TEST(NodeTest, LoadStructuralNullsHaveEmptyScalar) {
+  Node flowMap = Load("{key:}");
+  ASSERT_TRUE(flowMap["key"].IsNull());
+  EXPECT_EQ(flowMap["key"].Scalar(), "");
+  EXPECT_EQ(flowMap["key"].as<std::string>(), "");
+
+  Node blockSequence = Load("-\n");
+  ASSERT_TRUE(blockSequence[0].IsNull());
+  EXPECT_EQ(blockSequence[0].Scalar(), "");
+  EXPECT_EQ(blockSequence[0].as<std::string>(), "");
 }
 
 TEST(NodeTest, LoadNullWithStrTag) {

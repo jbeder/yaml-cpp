@@ -38,6 +38,7 @@ class YAML_CPP_API node_data {
   void set_type(NodeType::value type);
   void set_tag(const std::string& tag);
   void set_null();
+  void set_null(const std::string& scalar);
   void set_scalar(const std::string& scalar);
   void set_style(EmitterStyle::value style);
 

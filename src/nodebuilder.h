@@ -39,6 +39,8 @@ class NodeBuilder : public EventHandler {
   void OnDocumentEnd() override;
 
   void OnNull(const Mark& mark, anchor_t anchor) override;
+  void OnNull(const Mark& mark, anchor_t anchor,
+              const std::string& value) override;
   void OnAlias(const Mark& mark, anchor_t anchor) override;
   void OnScalar(const Mark& mark, const std::string& tag,
                         anchor_t anchor, const std::string& value) override;

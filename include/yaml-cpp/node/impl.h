@@ -117,7 +117,7 @@ struct as_if<std::string, S> {
 
   std::string operator()(const S& fallback) const {
     if (node.Type() == NodeType::Null)
-      return "null";
+      return node.Scalar();
     if (node.Type() != NodeType::Scalar)
       return fallback;
     return node.Scalar();
@@ -149,7 +149,7 @@ struct as_if<std::string, void> {
     if (node.Type() == NodeType::Undefined) // no fallback
       throw InvalidNode(node.m_invalidKey);
     if (node.Type() == NodeType::Null)
-      return "null";
+      return node.Scalar();
     if (node.Type() != NodeType::Scalar)
       throw TypedBadConversion<std::string>(node.Mark());
     return node.Scalar();

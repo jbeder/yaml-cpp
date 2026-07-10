@@ -23,6 +23,10 @@ class EventHandler {
   virtual void OnDocumentEnd() = 0;
 
   virtual void OnNull(const Mark& mark, anchor_t anchor) = 0;
+  virtual void OnNull(const Mark& mark, anchor_t anchor,
+                      const std::string& /*value*/) {
+    OnNull(mark, anchor);
+  }
   virtual void OnAlias(const Mark& mark, anchor_t anchor) = 0;
   virtual void OnScalar(const Mark& mark, const std::string& tag,
                         anchor_t anchor, const std::string& value) = 0;

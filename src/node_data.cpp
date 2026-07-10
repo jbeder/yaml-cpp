@@ -75,9 +75,12 @@ void node_data::set_tag(const std::string& tag) { m_tag = tag; }
 
 void node_data::set_style(EmitterStyle::value style) { m_style = style; }
 
-void node_data::set_null() {
+void node_data::set_null() { set_null(""); }
+
+void node_data::set_null(const std::string& scalar) {
   m_isDefined = true;
   m_type = NodeType::Null;
+  m_scalar = scalar;
 }
 
 void node_data::set_scalar(const std::string& scalar) {
