@@ -82,6 +82,10 @@ class node {
     mark_defined();
     m_pRef->set_null();
   }
+  void set_null(const std::string& scalar) {
+    mark_defined();
+    m_pRef->set_null(scalar);
+  }
   void set_scalar(const std::string& scalar) {
     mark_defined();
     m_pRef->set_scalar(scalar);

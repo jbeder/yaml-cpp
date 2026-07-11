@@ -34,6 +34,7 @@ class node_ref {
   void set_type(NodeType::value type) { m_pData->set_type(type); }
   void set_tag(const std::string& tag) { m_pData->set_tag(tag); }
   void set_null() { m_pData->set_null(); }
+  void set_null(const std::string& scalar) { m_pData->set_null(scalar); }
   void set_scalar(const std::string& scalar) { m_pData->set_scalar(scalar); }
   void set_style(EmitterStyle::value style) { m_pData->set_style(style); }
 
