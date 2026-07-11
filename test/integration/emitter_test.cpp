@@ -535,6 +535,15 @@ TEST_F(EmitterTest, AliasAndAnchor) {
   ExpectEmit("- &fred\n  name: Fred\n  age: 42\n- *fred");
 }
 
+TEST_F(EmitterTest, AnchorWithTilde) {
+  out << BeginSeq;
+  out << Anchor("foo~bar") << "value";
+  out << Alias("foo~bar");
+  out << EndSeq;
+
+  ExpectEmit("- &foo~bar value\n- *foo~bar");
+}
+
 TEST_F(EmitterTest, AliasOnKey) {
   out << BeginSeq;
   out << Anchor("name") << "Name";

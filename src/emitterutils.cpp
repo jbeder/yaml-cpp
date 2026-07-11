@@ -39,7 +39,7 @@ bool IsAnchorChar(int ch) {  // test for ns-anchor-char
     return false;
   }
 
-  if (ch < 0x7E) {
+  if (ch <= 0x7E) {
     return true;
   }
 
