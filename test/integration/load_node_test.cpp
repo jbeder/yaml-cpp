@@ -273,6 +273,7 @@ struct ParserExceptionTestCase {
 
 TEST(LoadNodeTest, RejectTrailingScalarInBlockMap) {
   const std::vector<std::string> inputs = {
+      "---\nfoo: bar\nnot-a-key",
       "---\nfoo: bar\nnot-a-key\n",
       "---\nfoo: bar\nnot-a-key\n# A comment",
   };

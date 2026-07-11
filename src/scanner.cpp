@@ -280,6 +280,7 @@ void Scanner::EndStream() {
     INPUT.ResetColumn();
   }
 
+  InvalidateSimpleKey();
   PopAllIndents();
   PopAllSimpleKeys();
 
