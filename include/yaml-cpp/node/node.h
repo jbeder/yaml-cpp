@@ -114,6 +114,9 @@ class YAML_CPP_API Node {
   template <typename Key, typename Value>
   void force_insert(const Key& key, const Value& value);
 
+  template <typename Key>
+  bool contains(const Key& key) const;
+
  private:
   enum Zombie { ZombieNode };
   explicit Node(Zombie);

@@ -212,6 +212,31 @@ TEST(NodeTest, MissingKey) {
   EXPECT_THROW(node["bar"].as<std::string>(), InvalidNode);
 }
 
+TEST(NodeTest, MapContains) {
+  Node node, key;
+  node["foo"] = "value";
+  node["bar"] = "eulav";
+  node[1] = "hello";
+  key["test"] = "asdf";
+  key["test2"] = "ghjkl";
+  node[key] = 123;
+  EXPECT_TRUE(node.contains("foo"));
+  EXPECT_TRUE(node.contains("bar"));
+  EXPECT_TRUE(node.contains(1));
+  EXPECT_TRUE(node.contains(key));
+  EXPECT_TRUE(!node.contains("baz"));
+  EXPECT_TRUE(!node.contains(2));
+
+  node.remove("foo");
+  node.remove(key);
+  EXPECT_TRUE(!node.contains("foo"));
+  EXPECT_TRUE(node.contains("bar"));
+  EXPECT_TRUE(node.contains(1));
+  EXPECT_TRUE(!node.contains(key));
+  EXPECT_TRUE(!node.contains("baz"));
+  EXPECT_TRUE(!node.contains(2));
+}
+
 TEST(NodeTest, MapIntegerElementRemoval) {
   Node node;
   node[1] = "hello";

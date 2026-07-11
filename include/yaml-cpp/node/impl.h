@@ -394,6 +394,14 @@ inline void Node::force_insert(const Key& key, const Value& value) {
   m_pNode->force_insert(key, value, m_pMemory);
 }
 
+template <typename Key>
+inline bool Node::contains(const Key& key) const {
+  if (!m_isValid)
+    throw InvalidNode(m_invalidKey);
+  if (!m_pNode) return false;
+  return (static_cast<const detail::node*>(m_pNode))->get(key, m_pMemory) != nullptr;
+}
+
 // free functions
 inline bool operator==(const Node& lhs, const Node& rhs) { return lhs.is(rhs); }
 }  // namespace YAML
