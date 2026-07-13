@@ -1946,5 +1946,55 @@ TEST_F(EmitterTest, ShowTrailingZero) {
 - .nan)");
 }
 
+TEST_F(EmitterTest, EmitEmptyNode) {
+  Node node;
+  out << node;
+  ExpectEmit("");
+}
+
+TEST_F(EmitterTest, SetVerbatimTag) {
+  Node node, root;
+  node = 42;
+  node.SetTag("hello");
+  root["num"] = node;
+
+  out << root;
+  ExpectEmit("num: !<hello> 42");
+}
+
+// Regression for #1373: emitting a node whose tag begins with "!!"
+// (a YAML secondary tag handle, e.g. "!!str") used to bail out with
+// INVALID_TAG and truncate the output after the first '!'.
+TEST_F(EmitterTest, EmitSetTagSecondaryHandle) {
+  Node root;
+  Node string_node{"hello"};
+  string_node.SetTag("!!str");
+  root["some_string"] = string_node;
+  root["some_int"] = 2;
+
+  out << root;
+  ExpectEmit("some_string: !!str hello\nsome_int: 2");
+}
+
+TEST_F(EmitterTest, EmitSetTagPrimaryHandle) {
+  Node root;
+  Node string_node{"hello"};
+  string_node.SetTag("!mytag");
+  root["v"] = string_node;
+
+  out << root;
+  ExpectEmit("v: !mytag hello");
+}
+
+TEST_F(EmitterTest, EmitSetLocalTagInNameHandle) {
+  Node node, root;
+  node = 42;
+  node.SetTag("!a!foo");
+  root["num"] = node;
+
+  out << root;
+  ExpectEmit("num: !a!foo 42");
+}
+
 }  // namespace
 }  // namespace YAML
