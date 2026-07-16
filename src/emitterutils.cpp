@@ -39,7 +39,7 @@ bool IsAnchorChar(int ch) {  // test for ns-anchor-char
     return false;
   }
 
-  if (ch < 0x7E) {
+  if (ch <= 0x7E) {
     return true;
   }
 
@@ -539,21 +539,33 @@ bool WriteTagWithPrefix(ostream_wrapper& out, const std::string& prefix,
 
 bool WriteBinary(ostream_wrapper& out, const Binary& binary) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
-  WriteDoubleQuotedString(out, encoded.data(), encoded.size(),
-                          StringEscaping::None);
-  return true;
+  return WriteDoubleQuotedString(out, encoded.data(), encoded.size(),
+                                 StringEscaping::None);
 }
 
-bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent) {
+bool WriteLiteralBinary(ostream_wrapper& out, const Binary& binary, std::size_t indent, std::size_t wrap) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
-  WriteLiteralString(out, encoded.data(), encoded.size(), indent);
-  return true;
+  std::string wrapped = "";
+  if (wrap) {
+    if (wrap <= indent) return false;
+    wrap -= indent;
+    std::size_t point = wrap;
+    for (std::size_t i = 0; i < encoded.size(); i++) {
+      if (i == point) {
+        wrapped += '\n';
+        point += wrap;
+      }
+      wrapped += encoded[i];
+    }
+  }
+  else
+    wrapped = encoded;
+  return WriteLiteralString(out, wrapped.data(), wrapped.size(), indent);
 }
 
 bool WriteSingleQuotedBinary(ostream_wrapper& out, const Binary& binary) {
   std::string encoded = EncodeBase64(binary.data(), binary.size());
-  WriteSingleQuotedString(out, encoded.data(), encoded.size());
-  return true;
+  return WriteSingleQuotedString(out, encoded.data(), encoded.size());
 }
 
 }  // namespace Utils
