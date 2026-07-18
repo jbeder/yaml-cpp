@@ -55,8 +55,7 @@ if (NOT DEFINED CMAKE_MSVC_RUNTIME_LIBRARY)
     MultiThreaded$<$<CONFIG:Debug>:Debug>$<${msvc-shared_rt}:DLL>)
 endif()
 
-file(GLOB yaml-cpp-contrib-sources CONFIGURE_DEPENDS "src/contrib/*.cpp")
-file(GLOB yaml-cpp-sources CONFIGURE_DEPENDS "src/*.cpp")
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/yaml-cpp-sources.cmake")
 
 set(msvc-rt $<TARGET_PROPERTY:MSVC_RUNTIME_LIBRARY>)
 
