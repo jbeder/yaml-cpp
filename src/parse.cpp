@@ -20,6 +20,9 @@ Node Load(const char* input) {
 }
 
 Node Load(std::istream& input) {
+  if (!input) {
+    throw BadFile();
+  }
   Parser parser(input);
   NodeBuilder builder;
   if (!parser.HandleNextDocument(builder)) {
@@ -49,6 +52,10 @@ std::vector<Node> LoadAll(const char* input) {
 
 std::vector<Node> LoadAll(std::istream& input) {
   std::vector<Node> docs;
+
+  if (!input) {
+    throw BadFile();
+  }
 
   Parser parser(input);
   while (true) {

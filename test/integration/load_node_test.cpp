@@ -1,5 +1,7 @@
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 
+#include <sstream>
+
 #include "gtest/gtest.h"
 
 namespace YAML {
@@ -8,6 +10,24 @@ TEST(LoadNodeTest, Reassign) {
   Node node = Load("foo");
   node = Node();
   EXPECT_TRUE(node.IsNull());
+}
+
+TEST(LoadNodeTest, LoadFailedStreamThrows) {
+  std::istringstream stream;
+  stream.setstate(std::ios_base::failbit);
+  EXPECT_THROW(Load(stream), BadFile);
+}
+
+TEST(LoadNodeTest, LoadBadStreamThrows) {
+  std::istringstream stream;
+  stream.setstate(std::ios_base::badbit);
+  EXPECT_THROW(Load(stream), BadFile);
+}
+
+TEST(LoadNodeTest, LoadAllFailedStreamThrows) {
+  std::istringstream stream;
+  stream.setstate(std::ios_base::failbit);
+  EXPECT_THROW(LoadAll(stream), BadFile);
 }
 
 TEST(LoadNodeTest, FallbackValues) {

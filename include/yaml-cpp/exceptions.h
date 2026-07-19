@@ -296,9 +296,10 @@ class YAML_CPP_API EmitterException : public Exception {
 
 class YAML_CPP_API BadFile : public Exception {
  public:
-  explicit BadFile(const std::string& filename)
+  explicit BadFile(const std::string& filename = "")
       : Exception(Mark::null_mark(),
-                  std::string(ErrorMsg::BAD_FILE) + ": " + filename) {}
+                  std::string(ErrorMsg::BAD_FILE) +
+                      (filename.empty() ? "" : (": " + filename))) {}
   BadFile(const BadFile&) = default;
   ~BadFile() YAML_CPP_NOEXCEPT override;
 };
