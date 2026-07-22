@@ -28,7 +28,12 @@ class node {
   node(const node&) = delete;
   node& operator=(const node&) = delete;
 
-  bool is(const node& rhs) const { return m_pRef == rhs.m_pRef; }
+  // if set_data points us at the same data as another node then we want the
+  // same id. maybe set_data has single-owner semantics and this is unnecessary,
+  // but this is not clear (yet)
+  // alt: return m_pRef->id(); // (void*)this;
+  void *id() const YAML_CPP_NOEXCEPT { return m_pRef.get(); }
+  bool is(const node& rhs) const { return id() == rhs.id(); }
   const node_ref* ref() const { return m_pRef.get(); }
 
   bool is_defined() const { return m_pRef->is_defined(); }
@@ -71,6 +76,14 @@ class node {
     m_pRef->set_data(*rhs.m_pRef);
   }
 
+  void copy_contents(const node& rhs) {
+    if (&rhs == this) return;
+    m_pRef = std::make_shared<node_ref>();
+    if (rhs.is_defined())
+      mark_defined();
+    m_pRef->copy_contents(*rhs.m_pRef);
+  }
+
   void set_mark(const Mark& mark) { m_pRef->set_mark(mark); }
 
   void set_type(NodeType::value type) {
@@ -110,14 +123,33 @@ class node {
   }
   node_iterator end() { return m_pRef->end(); }
 
+  void modify(modify_values const& f) {
+    m_pRef->modify(f);
+  }
+
+  void map_modify(modify_key_values const& f) {
+    m_pRef->map_modify(f);
+  }
+
   // sequence
   void push_back(node& input, shared_memory_holder pMemory) {
     m_pRef->push_back(input, pMemory);
     input.add_dependency(*this);
     m_index = m_amount.fetch_add(1);
   }
+  // \pre IsSequence(), rhs held in our memory
+  void seq_push_back(node& rhs) {
+    m_pRef->seq_push_back(rhs);
+  }
+  // map
   void insert(node& key, node& value, shared_memory_holder pMemory) {
     m_pRef->insert(key, value, pMemory);
+    key.add_dependency(*this);
+    value.add_dependency(*this);
+  }
+  // \pre IsMap(), key, value held in our memory
+  void map_force_insert(node& key, node& value) {
+    m_pRef->map_force_insert(key, value);
     key.add_dependency(*this);
     value.add_dependency(*this);
   }
