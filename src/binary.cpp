@@ -3,7 +3,7 @@
 #include <cctype>
 
 namespace YAML {
-static const char encoding[] =
+static constexpr char encoding[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 std::string EncodeBase64(const unsigned char *data, std::size_t size) {
@@ -44,7 +44,7 @@ std::string EncodeBase64(const unsigned char *data, std::size_t size) {
   return ret;
 }
 
-static const unsigned char decoding[] = {
+static constexpr unsigned char decoding[] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 62,  255,

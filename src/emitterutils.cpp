@@ -229,7 +229,7 @@ std::pair<uint16_t, uint16_t> EncodeUTF16SurrogatePair(int codePoint) {
 }
 
 void WriteDoubleQuoteEscapeSequence(ostream_wrapper& out, int codePoint, StringEscaping::value stringEscapingStyle) {
-  static const char hexDigits[] = "0123456789abcdef";
+  static constexpr char hexDigits[] = "0123456789abcdef";
 
   out << "\\";
   int digits = 8;
