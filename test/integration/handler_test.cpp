@@ -72,5 +72,53 @@ TEST_F(HandlerTest, CommentOnNewlineOfMapValueWithManySpace) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse("key: value\n    # comment");
 }
+
+// examples from issue #1163
+TEST_F(HandlerTest, LiteralScalarWithTagAndLargeIndentation) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "key"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0, "multiple\nwords"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse("key:\n- !!str |\n   multiple\n   words");
+}
+
+TEST_F(HandlerTest, LiteralScalarWithTagAndSmallIndentation_NotBlockSequence) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "key"));
+  EXPECT_CALL(handler, OnScalar(_, "!t", 0, "multiple\nwords"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse("key: !t |\n multiple\n words");
+}
+
+TEST_F(HandlerTest, LiteralScalarWithTagAndSmallIndentation_ApplicationTag) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "key"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "!t", 0, "multiple\nwords"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse("key:\n- !t |\n multiple\n words");
+}
+
+TEST_F(HandlerTest, LiteralScalarWithTagAndSmallIndentation_StandardTag) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "key"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0, "multiple\nwords"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse("key:\n- !!str |\n  multiple\n  words");
+}
+
 }  // namespace
 }  // namespace YAML

@@ -168,6 +168,17 @@ void Scanner::ScanNextToken() {
   // special scalars
   if (InBlockContext() && (INPUT.peek() == Keys::LiteralScalar ||
                            INPUT.peek() == Keys::FoldedScalar)) {
+    // if we begin parsing a literal scalar with an unverified potential 
+    // simple key pushed, that may be a tag to the literal scalar, and
+    // should be removed to avoid wrong indentation limit
+    // eg:
+    // - !!str |
+    //  literal
+    //  scalar
+    if (!m_simpleKeys.empty() &&
+      m_simpleKeys.top().pKey->status == Token::UNVERIFIED) {
+        PopIndent();
+    }
     return ScanBlockScalar();
   }
 
