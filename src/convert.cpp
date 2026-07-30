@@ -45,8 +45,8 @@ bool convert<bool>::decode(const Node& node, bool& rhs) {
   // we can't use iostream bool extraction operators as they don't
   // recognize all possible values in the table below (taken from
   // http://yaml.org/type/bool.html)
-  static const struct {
-    std::string truename, falsename;
+  static constexpr struct {
+    const char *truename, *falsename;
   } names[] = {
       {"y", "n"},
       {"yes", "no"},
