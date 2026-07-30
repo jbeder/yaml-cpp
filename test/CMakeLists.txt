@@ -47,6 +47,11 @@ endif()
 
 
 add_test(NAME yaml-cpp::test COMMAND yaml-cpp-tests)
+add_test(
+  NAME yaml-cpp::source-list
+  COMMAND ${CMAKE_COMMAND}
+    -D YAML_CPP_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+    -P ${PROJECT_SOURCE_DIR}/test/cmake/verify-source-list.cmake)
 
 if (build-windows-dll)
   add_custom_command(
