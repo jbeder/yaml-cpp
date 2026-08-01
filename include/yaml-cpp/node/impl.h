@@ -303,6 +303,14 @@ inline iterator Node::begin() {
   return m_pNode ? iterator(m_pNode->begin(), m_pMemory) : iterator();
 }
 
+inline const_reverse_iterator Node::rbegin() const {
+  return const_reverse_iterator(end());
+}
+
+inline reverse_iterator Node::rbegin() {
+  return reverse_iterator(end());
+}
+
 inline const_iterator Node::end() const {
   if (!m_isValid)
     return const_iterator();
@@ -313,6 +321,14 @@ inline iterator Node::end() {
   if (!m_isValid)
     return iterator();
   return m_pNode ? iterator(m_pNode->end(), m_pMemory) : iterator();
+}
+
+inline const_reverse_iterator Node::rend() const {
+  return const_reverse_iterator(begin());
+}
+
+inline reverse_iterator Node::rend() {
+  return reverse_iterator(begin());
 }
 
 // sequence
