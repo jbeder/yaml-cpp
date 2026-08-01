@@ -343,6 +343,17 @@ TEST(NodeTest, MapIteratorWithUndefinedValues) {
   EXPECT_EQ(1, count);
 }
 
+TEST(NodeTest, MapIteratorWithUndefinedValuesBackward) {
+  Node node;
+  node["key"] = "value";
+  node["undefined"];
+
+  std::size_t count = 0;
+  for (const_iterator it = node.end(); it != node.begin(); --it)
+    count++;
+  EXPECT_EQ(1, count);
+}
+
 TEST(NodeTest, DestroyedMapIterator) {
   Node node;
   node["key"] = "value";
@@ -390,6 +401,22 @@ TEST(NodeTest, InteratorOnSequence) {
   for (iterator it = node.begin(); it != node.end(); ++it)
   {
     EXPECT_FALSE(it->IsNull());
+    count++;
+  }
+  EXPECT_EQ(3, count);
+}
+  
+TEST(NodeTest, InteratorOnSequenceBackward) {
+  Node node;
+  node[0] = "a";
+  node[1] = "b";
+  node[2] = "c";
+  EXPECT_TRUE(node.IsSequence());
+  
+  std::size_t count = 0;
+  for (iterator it = node.end(); it != node.begin(); --it)
+  {
+    EXPECT_FALSE(prev(it)->IsNull());
     count++;
   }
   EXPECT_EQ(3, count);
