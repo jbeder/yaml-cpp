@@ -40,6 +40,8 @@ class YAML_CPP_API Node {
 
   using iterator = YAML::iterator;
   using const_iterator = YAML::const_iterator;
+  using reverse_iterator = YAML::reverse_iterator;
+  using const_reverse_iterator = YAML::const_reverse_iterator;
 
   Node();
   explicit Node(NodeType::value type);
@@ -89,9 +91,13 @@ class YAML_CPP_API Node {
 
   const_iterator begin() const;
   iterator begin();
+  const_reverse_iterator rbegin() const;
+  reverse_iterator rbegin();
 
   const_iterator end() const;
   iterator end();
+  const_reverse_iterator rend() const;
+  reverse_iterator rend();
 
   // sequence
   template <typename T>
