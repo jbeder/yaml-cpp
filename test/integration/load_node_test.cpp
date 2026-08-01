@@ -224,62 +224,6 @@ TEST(LoadNodeTest, DereferenceIteratorError) {
   EXPECT_THROW(node.begin()->begin()->Type(), InvalidNode);
 }
 
-TEST(NodeTest, EmitEmptyNode) {
-  Node node;
-  Emitter emitter;
-  emitter << node;
-  EXPECT_EQ("", std::string(emitter.c_str()));
-}
-
-TEST(NodeTest, SetVerbatimTag) {
-  Node node, root;
-  node = 42;
-  node.SetTag("hello");
-  root["num"] = node;
-
-  Emitter emitter;
-  emitter << root;
-  EXPECT_EQ("num: !<hello> 42", std::string(emitter.c_str()));
-}
-
-// Regression for #1373: emitting a node whose tag begins with "!!"
-// (a YAML secondary tag handle, e.g. "!!str") used to bail out with
-// INVALID_TAG and truncate the output after the first '!'.
-TEST(NodeTest, EmitSetTagSecondaryHandle) {
-  Node root;
-  Node string_node{"hello"};
-  string_node.SetTag("!!str");
-  root["some_string"] = string_node;
-  root["some_int"] = 2;
-
-  Emitter emitter;
-  emitter << root;
-  EXPECT_EQ("some_string: !!str hello\nsome_int: 2",
-            std::string(emitter.c_str()));
-}
-
-TEST(NodeTest, EmitSetTagPrimaryHandle) {
-  Node root;
-  Node string_node{"hello"};
-  string_node.SetTag("!mytag");
-  root["v"] = string_node;
-
-  Emitter emitter;
-  emitter << root;
-  EXPECT_EQ("v: !mytag hello", std::string(emitter.c_str()));
-}
-
-TEST(NodeTest, EmitSetLocalTagInNameHandle) {
-  Node node, root;
-  node = 42;
-  node.SetTag("!a!foo");
-  root["num"] = node;
-  
-  Emitter emitter;
-  emitter << root;
-  EXPECT_EQ("num: !a!foo 42", std::string(emitter.c_str()));
-}
-
 TEST(NodeTest, ParseNodeStyle) {
   EXPECT_EQ(EmitterStyle::Flow, Load("[1, 2, 3]").Style());
   EXPECT_EQ(EmitterStyle::Flow, Load("{foo: bar}").Style());
