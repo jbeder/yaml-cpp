@@ -69,7 +69,7 @@ class node_iterator_base {
   };
 
  public:
-  using iterator_category = std::forward_iterator_tag;
+  using iterator_category = std::bidirectional_iterator_tag;
   using value_type = node_iterator_value<V>;
   using difference_type = std::ptrdiff_t;
   using pointer = node_iterator_value<V>*;
@@ -140,9 +140,30 @@ class node_iterator_base {
     return *this;
   }
 
+  node_iterator_base<V>& operator--() {
+    switch (m_type) {
+      case iterator_type::NoneType:
+        break;
+      case iterator_type::Sequence:
+        --m_seqIt;
+        break;
+      case iterator_type::Map:
+        --m_mapIt;
+        m_mapIt = decrement_until_defined(m_mapIt);
+        break;
+    }
+    return *this;
+  }
+
   node_iterator_base<V> operator++(int) {
     node_iterator_base<V> iterator_pre(*this);
     ++(*this);
+    return iterator_pre;
+  }
+
+  node_iterator_base<V> operator--(int) {
+    node_iterator_base<V> iterator_pre(*this);
+    --(*this);
     return iterator_pre;
   }
 
@@ -163,6 +184,12 @@ class node_iterator_base {
   MapIter increment_until_defined(MapIter it) {
     while (it != m_mapEnd && !is_defined(it))
       ++it;
+    return it;
+  }
+
+  MapIter decrement_until_defined(MapIter it) {
+    while (!is_defined(it))
+      --it;
     return it;
   }
 
