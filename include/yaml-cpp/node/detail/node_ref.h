@@ -27,8 +27,15 @@ class node_ref {
   const std::string& tag() const { return m_pData->tag(); }
   EmitterStyle::value style() const { return m_pData->style(); }
 
+  // needed if we allow copy_contents
+  void *id() const YAML_CPP_NOEXCEPT { return m_pData.get(); }
   void mark_defined() { m_pData->mark_defined(); }
   void set_data(const node_ref& rhs) { m_pData = rhs.m_pData; }
+  void copy_contents(const node_ref& rhs) {
+    if (&rhs == this) return;
+    node_data *r = rhs.m_pData.get();
+    m_pData = std::make_shared<node_data>(*r);
+  }
 
   void set_mark(const Mark& mark) { m_pData->set_mark(mark); }
   void set_type(NodeType::value type) { m_pData->set_type(type); }
@@ -50,12 +57,30 @@ class node_ref {
   }
   node_iterator end() { return m_pData->end(); }
 
+  void modify(modify_values const& f) {
+    m_pData->modify(f);
+  }
+
+  void map_modify(modify_key_values const& f) {
+    m_pData->map_modify(f);
+  }
+
   // sequence
   void push_back(node& node, shared_memory_holder pMemory) {
     m_pData->push_back(node, pMemory);
   }
+  // \pre IsSequence, node in our memory
+  void seq_push_back(node& node) {
+    m_pData->seq_push_back(node);
+  }
+
+  // map
   void insert(node& key, node& value, shared_memory_holder pMemory) {
     m_pData->insert(key, value, pMemory);
+  }
+  // \pre IsMap, key value held in our memory
+  void map_force_insert(node& key, node& value) {
+    m_pData->map_force_insert(key, value);
   }
 
   // indexing
