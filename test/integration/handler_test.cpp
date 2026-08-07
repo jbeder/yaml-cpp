@@ -75,7 +75,7 @@ TEST_F(HandlerTest, CommentOnNewlineOfMapValueWithManySpace) {
 
 // example from issue #1475: a stale simple key (from a plain scalar spanning
 // a line break) must not pop an unrelated indent when parsing a block scalar
-TEST_F(HandlerTest, LiteralScalarWithMultilineTag) {
+TEST_F(HandlerTest, LiteralScalarWithMultiLineUnverifiedPotentialSimpleKey) {
   EXPECT_THROW_PARSER_EXCEPTION(IgnoreParse("!\n: |\nb\n>\n|\n  !\n>"),
                                 ErrorMsg::END_OF_MAP);
 }
