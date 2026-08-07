@@ -401,6 +401,9 @@ void Scanner::PopAllIndents() {
 }
 
 void Scanner::PopIndent() {
+  if (m_indents.empty()) {
+    ThrowParserException(ErrorMsg::INDENT_STACK_UNDERFLOW);
+  }
   const IndentMarker& indent = *m_indents.top();
   m_indents.pop();
 
