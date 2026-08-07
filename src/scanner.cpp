@@ -179,7 +179,7 @@ void Scanner::ScanNextToken() {
       m_simpleKeys.top().pKey->status == Token::UNVERIFIED) {
       // if the top of the indents does not match the unverified simple key,
       // just invalidate the simple key and do not pop indent to avoid crash.
-      // eg: an unverified key on a previous line, like issue #1475.
+      // eg: an unverified key crossing lines, like issue #1475.
       if (m_simpleKeys.top().pIndent && !m_indents.empty() &&
           m_indents.top() == m_simpleKeys.top().pIndent) {
         PopIndent();
