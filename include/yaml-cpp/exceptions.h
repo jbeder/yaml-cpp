@@ -92,6 +92,8 @@ const char* const BAD_FILE = "bad file";
 const char* const UNEXPECTED_TOKEN_AFTER_DOC = "unexpected token after end of document";
 const char* const NON_UNIQUE_MAP_KEY = "map keys must be unique";
 
+const char* const INDENT_STACK_UNDERFLOW = "indentation stack underflow (please report this bug to yaml-cpp)";
+
 template <typename T>
 inline const std::string KEY_NOT_FOUND_WITH_KEY(
     const T&, typename disable_if<is_numeric<T>>::type* = 0) {
