@@ -43,6 +43,23 @@ template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V
 template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
 template <class K, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedSet = std::unordered_set<K,H,P,CustomAllocator<K>>;
 
+struct Vec3 {
+  double x, y, z;
+  bool operator==(const Vec3& rhs) const {
+    return x == rhs.x && y == rhs.y && z == rhs.z;
+  }
+};
+
+#ifdef YAML_CPP_USE_OPTIONAL
+struct NonDefCtorVec3 {
+  double x, y, z;
+  NonDefCtorVec3(double x, double y, double z) : x(x), y(y), z(z) {}
+  bool operator==(const NonDefCtorVec3& rhs) const {
+    return x == rhs.x && y == rhs.y && z == rhs.z;
+  }
+};
+#endif
+
 }  // anonymous namespace
 
 using ::testing::AnyOf;
@@ -57,6 +74,43 @@ using ::testing::Eq;
   }
 
 namespace YAML {
+
+template<>
+struct convert<Vec3> {
+  static Node encode(const Vec3& rhs) {
+    Node node;
+    node.push_back(rhs.x);
+    node.push_back(rhs.y);
+    node.push_back(rhs.z);
+    return node;
+  }
+
+  static bool decode(const Node& node, Vec3& rhs) {
+    if(!node.IsSequence() || node.size() != 3) {
+      return false;
+    }
+
+    rhs.x = node[0].as<double>();
+    rhs.y = node[1].as<double>();
+    rhs.z = node[2].as<double>();
+    return true;
+  }
+};
+
+#ifdef YAML_CPP_USE_OPTIONAL
+template <>
+struct convert<std::optional<NonDefCtorVec3>> {
+  static bool decode(const Node& node, std::optional<NonDefCtorVec3>& rhs) {
+    if (!node.IsSequence() || node.size() != 3) {
+      return false;
+    }
+    rhs.emplace(node[0].as<double>(), node[1].as<double>(), node[2].as<double>());
+
+    return true;
+  }
+};
+#endif
+
 namespace {
 TEST(NodeTest, SimpleScalar) {
   Node node = Node("Hello, World!");
@@ -909,6 +963,28 @@ TEST(NodeTest, CreateMapWithFloatingPoint0Key) {
   Node node;
   node[0.1] = 1.0;
   EXPECT_TRUE(node.IsMap());
+}
+
+TEST(NodeTest, CustomClassDecoding) {
+  YAML::Node node;
+  node.push_back(1.0);
+  node.push_back(2.0);
+  node.push_back(3.0);
+  ASSERT_TRUE(node.IsSequence());
+  EXPECT_EQ(node.as<Vec3>(), (Vec3{1.0, 2.0, 3.0}));
+}
+
+TEST(NodeTest, CustomNonDefaultConstructibleClassDecoding) {
+#ifdef YAML_CPP_USE_OPTIONAL
+  YAML::Node node;
+  node.push_back(1.0);
+  node.push_back(2.0);
+  node.push_back(3.0);
+  ASSERT_TRUE(node.IsSequence());
+  EXPECT_EQ(node.as<NonDefCtorVec3>(), (NonDefCtorVec3{1.0, 2.0, 3.0}));
+#else
+  GTEST_SKIP() << "Compile with C++17 for customizing non-default-constructible custom types.";
+#endif
 }
 
 class NodeEmitterTest : public ::testing::Test {
