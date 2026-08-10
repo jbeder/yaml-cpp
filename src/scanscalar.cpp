@@ -175,7 +175,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
           if (!nextEmptyLine && foldedNewlineCount > 0) {
             scalar += std::string(foldedNewlineCount - 1, '\n');
             if (foldedNewlineStartedMoreIndented ||
-                nextMoreIndented | !foundNonEmptyLine) {
+                nextMoreIndented || !foundNonEmptyLine) {
               scalar += "\n";
             }
             foldedNewlineCount = 0;
