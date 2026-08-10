@@ -2059,5 +2059,32 @@ TEST_F(EmitterTest, EmitSetLocalTagInNameHandle) {
   ExpectEmit("num: !a!foo 42");
 }
 
+TEST_F(EmitterTest, EmitMultiDocsWithTags) {
+   out << YAML::BeginDoc
+       << YAML::LocalTag("The_Tag")
+       << YAML::BeginSeq
+       << "Some Value"
+       << YAML::EndSeq
+       << YAML::EndDoc;
+
+   out << YAML::BeginDoc
+       << YAML::LocalTag("The_Tag")
+       << YAML::BeginSeq
+       << "Some Value"
+       << YAML::EndSeq
+       << YAML::EndDoc;
+
+  ExpectEmit(
+        "---\n"
+        "!The_Tag\n"
+        "- Some Value\n"
+        "...\n"
+        "---\n"
+        "!The_Tag\n"
+        "- Some Value\n"
+        "...\n");
+}
+
+
 }  // namespace
 }  // namespace YAML
