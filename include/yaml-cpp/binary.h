@@ -30,7 +30,7 @@ class YAML_CPP_API Binary {
   bool owned() const { return !m_unownedData; }
   std::size_t size() const { return owned() ? m_data.size() : m_unownedSize; }
   const unsigned char *data() const {
-    return owned() ? &m_data[0] : m_unownedData;
+    return owned() ? m_data.data() : m_unownedData;
   }
 
   void swap(std::vector<unsigned char> &rhs) {
