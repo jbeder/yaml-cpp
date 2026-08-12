@@ -84,11 +84,11 @@ void Parser::HandleDirective(const Token& token) {
 
 void Parser::HandleYamlDirective(const Token& token) {
   if (token.params.size() != 1) {
-    YAML_throw<ParserException>(token.mark, ErrorMsg::YAML_DIRECTIVE_ARGS);
+    raise<ParserException>(token.mark, ErrorMsg::YAML_DIRECTIVE_ARGS);
   }
 
   if (!m_pDirectives->version.isDefault) {
-    YAML_throw<ParserException>(token.mark, ErrorMsg::REPEATED_YAML_DIRECTIVE);
+    raise<ParserException>(token.mark, ErrorMsg::REPEATED_YAML_DIRECTIVE);
   }
 
   std::stringstream str(token.params[0]);
@@ -97,12 +97,12 @@ void Parser::HandleYamlDirective(const Token& token) {
   str.get();
   str >> m_pDirectives->version.minor;
   if (!str || str.peek() != EOF) {
-    YAML_throw<ParserException>(
+    raise<ParserException>(
         token.mark, std::string(ErrorMsg::YAML_VERSION) + token.params[0]);
   }
 
   if (m_pDirectives->version.major > 1) {
-    YAML_throw<ParserException>(token.mark, ErrorMsg::YAML_MAJOR_VERSION);
+    raise<ParserException>(token.mark, ErrorMsg::YAML_MAJOR_VERSION);
   }
 
   m_pDirectives->version.isDefault = false;
@@ -111,12 +111,12 @@ void Parser::HandleYamlDirective(const Token& token) {
 
 void Parser::HandleTagDirective(const Token& token) {
   if (token.params.size() != 2)
-    YAML_throw<ParserException>(token.mark, ErrorMsg::TAG_DIRECTIVE_ARGS);
+    raise<ParserException>(token.mark, ErrorMsg::TAG_DIRECTIVE_ARGS);
 
   const std::string& handle = token.params[0];
   const std::string& prefix = token.params[1];
   if (m_pDirectives->tags.find(handle) != m_pDirectives->tags.end()) {
-    YAML_throw<ParserException>(token.mark, ErrorMsg::REPEATED_TAG_DIRECTIVE);
+    raise<ParserException>(token.mark, ErrorMsg::REPEATED_TAG_DIRECTIVE);
   }
 
   m_pDirectives->tags[handle] = prefix;

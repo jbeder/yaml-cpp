@@ -184,7 +184,7 @@ void node_data::push_back(node& node,
   }
 
   if (m_type != NodeType::Sequence)
-    YAML_throw<BadPushback>();
+    raise<BadPushback>();
 
   m_sequence.push_back(&node);
 }
@@ -200,7 +200,7 @@ void node_data::insert(node& key, node& value,
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      YAML_throw<BadSubscript>(m_mark, key);
+      raise<BadSubscript>(m_mark, key);
   }
 
   insert_map_pair(key, value);
@@ -231,7 +231,7 @@ node& node_data::get(node& key, const shared_memory_holder& pMemory) {
       convert_to_map(pMemory);
       break;
     case NodeType::Scalar:
-      YAML_throw<BadSubscript>(m_mark, key);
+      raise<BadSubscript>(m_mark, key);
   }
 
   for (const auto& it : m_map) {
@@ -283,7 +283,7 @@ void node_data::insert_map_pair(node& key, node& value, bool force) {
   if (!force && !key.scalar().empty())
     for (const auto& mapEntry : m_map)
       if (mapEntry.first->scalar() == key.scalar())
-        YAML_throw<NonUniqueMapKey>(m_mark, key);
+        raise<NonUniqueMapKey>(m_mark, key);
 
   m_map.emplace_back(&key, &value);
 

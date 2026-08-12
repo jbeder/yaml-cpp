@@ -10,25 +10,46 @@
 #include "yaml-cpp/mark.h"
 #include "yaml-cpp/noexcept.h"
 #include "yaml-cpp/traits.h"
+#include <exception>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 
 namespace YAML {
 
-#if defined(__cpp_exceptions) || (defined(_MSC_VER) && defined(_CPPUNWIND))
-template<typename Ex, typename... Args>
-YAML_CPP_NORETURN void YAML_throw(Args&&... args) {
-  throw Ex(std::forward<Args>(args)...);
-}
-#else
-YAML_CPP_NORETURN void handle_exception(const char* what);
 
+YAML_CPP_API extern thread_local void(*handle_exception_local)(const char* what);
+YAML_CPP_API extern void(*handle_exception)(const char* what);
+
+/** Function to trigger an exception state
+ *
+ * Instead of throwing an exception directly, it first tries
+ * to call handle_exception_local, if no handle is registered
+ * it will call handle_exception, if no handle is registered
+ * it will throw an exception. (Asumming YAML_CPP_USE_EXCEPTIONS is not turned off)
+ *
+ * - handle_exception_local is a 'thread_local' variable, allowing to register
+ *   handlers when running multi threaded processes but wishing for a different
+ *   handlers in each thread. Set to 'nullptr' to deactivate this handler.
+ * - handle_exception is a global handler which will be considered if
+ *   'handle_exception_local == nullptr'. Set to 'nullptr' to deactivate handler.
+ *
+ * Note: Handlers are expected to not return, if they return std::terminate() is being called.
+ */
 template<typename Ex, typename... Args>
-YAML_CPP_NORETURN void YAML_throw(Args&&... args) {
-  handle_exception(Ex(std::forward<Args>(args)...).what());
-}
+YAML_CPP_NORETURN void raise(Args&&... args) {
+  if (handle_exception_local) {
+    handle_exception_local(Ex(std::forward<Args>(args)...).what());
+  } else if (handle_exception) {
+    handle_exception(Ex(std::forward<Args>(args)...).what());
+  }
+#if !defined(YAML_CPP_DISABLE_EXCEPTIONS)
+  else {
+    throw Ex(std::forward<Args>(args)...);
+  }
 #endif
+ std::terminate(); // The handle_exception() call should have terminated
+}
 
 // error messages
 namespace ErrorMsg {

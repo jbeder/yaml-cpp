@@ -49,7 +49,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
           break;
         }
         if (params.onDocIndicator == THROW) {
-          YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
+          raise<ParserException>(INPUT.mark(), ErrorMsg::DOC_IN_SCALAR);
         }
       }
 
@@ -85,7 +85,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
     // eof? if we're looking to eat something, then we throw
     if (!INPUT) {
       if (params.eatEnd) {
-        YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::EOF_IN_SCALAR);
+        raise<ParserException>(INPUT.mark(), ErrorMsg::EOF_IN_SCALAR);
       }
       break;
     }
@@ -135,7 +135,7 @@ std::string ScanScalar(Stream& INPUT, ScanScalarParams& params) {
       // we check for tabs that masquerade as indentation
       if (INPUT.peek() == '\t' && INPUT.column() < params.indent &&
           params.onTabInIndentation == THROW) {
-        YAML_throw<ParserException>(INPUT.mark(), ErrorMsg::TAB_IN_INDENTATION);
+        raise<ParserException>(INPUT.mark(), ErrorMsg::TAB_IN_INDENTATION);
       }
 
       if (!params.eatLeadingWhitespace) {

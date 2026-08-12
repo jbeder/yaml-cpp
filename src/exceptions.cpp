@@ -3,6 +3,9 @@
 
 namespace YAML {
 
+YAML_CPP_API thread_local void(*handle_exception_local)(const char* what) = nullptr;
+YAML_CPP_API void(*handle_exception)(const char* what) = nullptr;
+
 // These destructors are defined out-of-line so the vtable is only emitted once.
 Exception::~Exception() YAML_CPP_NOEXCEPT = default;
 ParserException::~ParserException() YAML_CPP_NOEXCEPT = default;

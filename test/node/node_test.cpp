@@ -911,6 +911,30 @@ TEST(NodeTest, CreateMapWithFloatingPoint0Key) {
   EXPECT_TRUE(node.IsMap());
 }
 
+TEST(NodeTest, CallExceptionHandler) {
+  Node node;
+  node["foo"] = "value";
+  EXPECT_TRUE(!node["bar"]);
+
+  // Check if global exception handler was called
+  YAML::handle_exception = [](const char* what) {
+    throw std::runtime_error("error");
+  };
+  EXPECT_THROW(node["bar"].as<std::string>(), std::runtime_error);
+
+  // Check if local exception handler was called
+  // and if it takes presedence over global handler
+  YAML::handle_exception_local = [](const char* what) {
+    throw std::domain_error("error");
+  };
+  EXPECT_THROW(node["bar"].as<std::string>(), std::domain_error);
+
+  // Check if exception was thrown
+  YAML::handle_exception = nullptr;
+  YAML::handle_exception_local = nullptr;
+  EXPECT_THROW(node["bar"].as<std::string>(), InvalidNode);
+}
+
 class NodeEmitterTest : public ::testing::Test {
  protected:
   void ExpectOutput(const std::string& output, const Node& node) {
