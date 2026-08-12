@@ -1,6 +1,16 @@
 #ifndef YAML_H_FPTOSTRING
 #define YAML_H_FPTOSTRING
 
+
+// IWYU pragma: private, include "yaml-cpp/yaml.h"
+// IWYU pragma: friend "yaml-cpp/.*"
+
+
+
+
+
+
+
 #include "yaml-cpp/dll.h"
 
 #include <string>

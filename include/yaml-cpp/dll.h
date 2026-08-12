@@ -1,6 +1,16 @@
 #ifndef DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
 #define DLL_H_62B23520_7C8E_11DE_8A39_0800200C9A66
 
+
+// IWYU pragma: private, include "yaml-cpp/yaml.h"
+// IWYU pragma: friend "yaml-cpp/.*"
+
+
+
+
+
+
+
 // Definition YAML_CPP_STATIC_DEFINE using to building YAML-CPP as static
 // library (definition created by CMake or defined manually)
 
