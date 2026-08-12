@@ -27,7 +27,8 @@ cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" OFF
   "BUILD_TESTING;YAML_CPP_MAIN_PROJECT" OFF)
 cmake_dependent_option(YAML_MSVC_SHARED_RT
-  "MSVC: Build yaml-cpp with shared runtime libs (/MD)" ON
+  "MSVC: Build yaml-cpp with shared runtime libs (/MD). When building a static library, leave OFF for /MT to match statically-linked apps."
+  ${YAML_BUILD_SHARED_LIBS}
   "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
 set(YAML_CPP_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/yaml-cpp"
   CACHE STRING "Path to install the CMake package to")
