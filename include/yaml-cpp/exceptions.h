@@ -17,9 +17,12 @@
 
 namespace YAML {
 
+using ExceptionHandle = void(*)(const char*);
+YAML_CPP_API void set_handle_exception_local(ExceptionHandle handle);
+YAML_CPP_API void set_handle_exception(ExceptionHandle handle);
+YAML_CPP_API ExceptionHandle get_handle_exception_local();
+YAML_CPP_API ExceptionHandle get_handle_exception();
 
-YAML_CPP_API extern thread_local void(*handle_exception_local)(const char* what);
-YAML_CPP_API extern void(*handle_exception)(const char* what);
 
 /** Function to trigger an exception state
  *
@@ -38,10 +41,10 @@ YAML_CPP_API extern void(*handle_exception)(const char* what);
  */
 template<typename Ex, typename... Args>
 YAML_CPP_NORETURN void raise(Args&&... args) {
-  if (handle_exception_local) {
-    handle_exception_local(Ex(std::forward<Args>(args)...).what());
-  } else if (handle_exception) {
-    handle_exception(Ex(std::forward<Args>(args)...).what());
+  if (get_handle_exception_local()) {
+    get_handle_exception_local()(Ex(std::forward<Args>(args)...).what());
+  } else if (get_handle_exception()) {
+    get_handle_exception()(Ex(std::forward<Args>(args)...).what());
   }
 #if !defined(YAML_CPP_DISABLE_EXCEPTIONS)
   else {
