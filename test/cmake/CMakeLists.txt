@@ -18,4 +18,13 @@ add_executable(main main.cpp)
 if (NOT DEFINED CMAKE_CXX_STANDARD)
   set_target_properties(main PROPERTIES CXX_STANDARD 11)
 endif()
+if(MSVC)
+  if(YAML_CPP_SHARED_LIBS_BUILT)
+    set_property(TARGET main PROPERTY MSVC_RUNTIME_LIBRARY
+      MultiThreaded$<$<CONFIG:Debug>:Debug>DLL)
+  else()
+    set_property(TARGET main PROPERTY MSVC_RUNTIME_LIBRARY
+      MultiThreaded$<$<CONFIG:Debug>:Debug>)
+  endif()
+endif()
 target_link_libraries(main PRIVATE ${YAML_CPP_LIBRARIES})
