@@ -18,3 +18,9 @@ TEST(BinaryTest, DecodingTooShort) {
   const std::vector<unsigned char> &result = YAML::DecodeBase64(input);
   EXPECT_TRUE(result.empty());
 }
+
+TEST(BinaryTest, EmptyBinary) {
+    YAML::Binary b;
+    EXPECT_TRUE(b.size() == 0);
+    EXPECT_TRUE(b.data() == b.data()); // caused UB in the past
+}
