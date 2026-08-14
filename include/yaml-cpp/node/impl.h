@@ -24,6 +24,17 @@
 #include <sstream>
 #include <string>
 
+// Check YAML_CPP_USE_OPTIONAL is set and language standard provides supports
+// if available and supported include required header
+// otherwise remove YAML_CPP_USE_OPTIONAL definition
+#ifdef YAML_CPP_USE_OPTIONAL
+#if __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
+#include <optional>
+#else
+#undef YAML_CPP_USE_OPTIONAL
+#endif
+#endif
+
 namespace YAML {
 inline Node::Node()
     : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
@@ -103,6 +114,54 @@ inline NodeType::value Node::Type() const {
 // access
 
 // template helpers
+#ifdef YAML_CPP_USE_OPTIONAL
+template <typename T>
+struct decode_box : std::optional<T> {
+  decode_box() = default;
+  template <typename S>
+  decode_box(S&&) {}
+};
+
+template <typename T>
+struct convert<decode_box<T>> {
+  static bool decode(const Node& node, decode_box<T>& rhs) {
+    return convert<std::optional<T>>::decode(node, rhs);
+  }
+};
+template <typename T>
+struct convert<std::optional<T>> {
+  static bool decode(const Node& node, std::optional<T>& rhs) {
+    if (node.IsNull()) {
+      return false;
+    }
+    rhs.emplace();
+    if (!convert<T>::decode(node, *rhs)) {
+      rhs.reset();
+      return false;
+    }
+    return true;
+  }
+};
+
+
+#else
+
+template <typename T>
+struct decode_box {
+  T t;
+  T& operator*() {
+    return t;
+  }
+};
+template <typename T>
+struct convert<decode_box<T>> {
+  static bool decode(const Node& node, decode_box<T>& rhs) {
+    return convert<T>::decode(node, *rhs);
+  }
+};
+
+#endif
+
 template <typename T, typename S>
 struct as_if {
   explicit as_if(const Node& node_) : node(node_) {}
@@ -112,9 +171,9 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t = fallback;
-    if (convert<T>::decode(node, t))
-      return t;
+    decode_box<T> t{fallback};
+    if (convert<decltype(t)>::decode(node, t))
+      return *t;
     return fallback;
   }
 };
@@ -142,9 +201,9 @@ struct as_if<T, void> {
     if (!node.m_pNode) // no fallback
       throw InvalidNode(node.m_invalidKey);
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
+    decode_box<T> t;
+    if (convert<decltype(t)>::decode(node, t))
+      return *t;
     throw TypedBadConversion<T>(node.Mark());
   }
 };
