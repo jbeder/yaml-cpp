@@ -27,11 +27,12 @@ cmake [-G generator] [-DYAML_BUILD_SHARED_LIBS=on|OFF] ..
 
   * `yaml-cpp` builds a static library by default, you may want to build a shared library by specifying `-DYAML_BUILD_SHARED_LIBS=ON`.
 
-  * On Windows with MSVC, static builds default to the static CRT (`/MT`) so yaml-cpp can link into
-    statically-linked applications (e.g. static MFC). Set `-DYAML_MSVC_SHARED_RT=ON` if you need
-    the dynamic CRT (`/MD`) instead. When linking yaml-cpp statically into your project, define
-    `YAML_CPP_STATIC_DEFINE` in your target (or consume the `yaml-cpp::yaml-cpp` imported target,
-    which sets it automatically).
+ * On Windows with MSVC, static builds default to the static CRT (`/MT`) so yaml-cpp can link into
+ statically-linked applications (e.g. static MFC). Set `-DYAML_MSVC_SHARED_RT=ON` if you need
+ the dynamic CRT (`/MD`) instead. When using CMake, link the `yaml-cpp::yaml-cpp` imported target
+ (e.g. `target_link_libraries(your_target PRIVATE yaml-cpp::yaml-cpp)`), which sets the needed
+ defines automatically. If you are not using CMake, define `YAML_CPP_STATIC_DEFINE` for your
+ target when linking the static library.
 
   * [Debug mode of the GNU standard C++
     library](https://gcc.gnu.org/onlinedocs/libstdc++/manual/debug_mode.html)
