@@ -22,6 +22,7 @@ option(YAML_CPP_DISABLE_UNINSTALL  "Disable uninstallation of yaml-cpp" OFF)
 option(YAML_USE_SYSTEM_GTEST "Use system googletest if found" OFF)
 option(YAML_ENABLE_PIC "Use Position-Independent Code " ON)
 option(YAML_CPP_USE_STRICT_FLAGS "Uses strict compilation flags e.g.: -Wall" ${YAML_CPP_MAIN_PROJECT})
+option(YAML_CPP_DISABLE_EXCEPTIONS "Disable use of exceptions see YAML::handle_exception(_local)." OFF)
 
 cmake_dependent_option(YAML_CPP_BUILD_TESTS
   "Enable yaml-cpp tests" OFF
@@ -32,7 +33,7 @@ cmake_dependent_option(YAML_MSVC_SHARED_RT
   "CMAKE_SYSTEM_NAME MATCHES Windows" OFF)
 set(YAML_CPP_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/yaml-cpp"
   CACHE STRING "Path to install the CMake package to")
- 
+
 if (YAML_CPP_FORMAT_SOURCE)
     find_program(YAML_CPP_CLANG_FORMAT_EXE NAMES clang-format)
 endif()
@@ -122,6 +123,10 @@ target_sources(yaml-cpp
 
 if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX "d")
+endif()
+
+if (YAML_CPP_DISABLE_EXCEPTIONS)
+  target_compile_definitions(yaml-cpp PUBLIC -DYAML_CPP_DISABLE_EXCEPTIONS)
 endif()
 
 set_target_properties(yaml-cpp PROPERTIES
