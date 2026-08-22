@@ -79,6 +79,9 @@ jobs:
         - name: Run Tests
           shell: bash
           run: |
+            if [[ "${{ matrix.os }}" == "windows-latest" && "${{ matrix.generator }}" == "MinGW Makefiles" ]]; then
+              export PATH="/c/mingw64/bin:$PATH"
+            fi
             ctest \
               --test-dir build \
               --build-config ${{ env.CMAKE_BUILD_TYPE }} \

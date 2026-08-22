@@ -1,13 +1,69 @@
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 
+#include <sstream>
+#include <string>
+
 #include "gtest/gtest.h"
 
 namespace YAML {
 namespace {
+class FailingStreamBuf : public std::stringbuf {
+ public:
+  explicit FailingStreamBuf(const std::string& input)
+      : std::stringbuf(input), first_read_(true) {}
+
+ protected:
+  std::streamsize xsgetn(char* output, std::streamsize count) override {
+    if (first_read_) {
+      first_read_ = false;
+      return std::stringbuf::xsgetn(output, count > 32 ? 32 : count);
+    }
+    throw std::ios_base::failure("simulated read failure");
+  }
+
+ private:
+  bool first_read_;
+};
+
 TEST(LoadNodeTest, Reassign) {
   Node node = Load("foo");
   node = Node();
   EXPECT_TRUE(node.IsNull());
+}
+
+TEST(LoadNodeTest, RejectsFailedInputStream) {
+  std::istringstream stream("key: value");
+  stream.setstate(std::ios_base::failbit);
+  EXPECT_THROW(Load(stream), BadStream);
+}
+
+TEST(LoadNodeTest, RejectsBadInputStream) {
+  std::istringstream stream("key: value");
+  stream.setstate(std::ios_base::badbit);
+  EXPECT_THROW(Load(stream), BadStream);
+}
+
+TEST(LoadNodeTest, LoadAllRejectsFailedInputStream) {
+  std::istringstream stream("---\nfirst\n---\nsecond\n");
+  stream.setstate(std::ios_base::failbit);
+  EXPECT_THROW(LoadAll(stream), BadStream);
+}
+
+TEST(LoadNodeTest, RejectsInputStreamFailureWhileReading) {
+  FailingStreamBuf buffer("value: " + std::string(128, 'a'));
+  std::istream stream(&buffer);
+  EXPECT_THROW(Load(stream), BadStream);
+}
+
+TEST(LoadNodeTest, EmptyInputStreamRemainsNull) {
+  std::istringstream stream;
+  EXPECT_TRUE(Load(stream).IsNull());
+}
+
+TEST(LoadNodeTest, EofInputStreamRemainsNull) {
+  std::istringstream stream;
+  stream.setstate(std::ios_base::eofbit);
+  EXPECT_TRUE(Load(stream).IsNull());
 }
 
 TEST(LoadNodeTest, FallbackValues) {

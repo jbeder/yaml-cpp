@@ -98,6 +98,7 @@ const char* const INVALID_ANCHOR = "invalid anchor";
 const char* const INVALID_ALIAS = "invalid alias";
 const char* const INVALID_TAG = "invalid tag";
 const char* const BAD_FILE = "bad file";
+const char* const BAD_STREAM = "bad stream";
 const char* const UNEXPECTED_TOKEN_AFTER_DOC = "unexpected token after end of document";
 const char* const NON_UNIQUE_MAP_KEY = "map keys must be unique";
 
@@ -303,6 +304,13 @@ class YAML_CPP_API EmitterException : public Exception {
       : Exception(Mark::null_mark(), msg_) {}
   EmitterException(const EmitterException&) = default;
   ~EmitterException() YAML_CPP_NOEXCEPT override;
+};
+
+class YAML_CPP_API BadStream : public Exception {
+ public:
+  BadStream() : Exception(Mark::null_mark(), ErrorMsg::BAD_STREAM) {}
+  BadStream(const BadStream&) = default;
+  ~BadStream() YAML_CPP_NOEXCEPT override;
 };
 
 class YAML_CPP_API BadFile : public Exception {

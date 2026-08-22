@@ -1,6 +1,7 @@
 #include <istream>
 
 #include "stream.h"
+#include "yaml-cpp/exceptions.h"
 
 #ifndef YAML_PREFETCH_SIZE
 #define YAML_PREFETCH_SIZE 2048
@@ -192,8 +193,8 @@ Stream::Stream(std::istream& input)
       m_nPrefetchedUsed(0) {
   using char_traits = std::istream::traits_type;
 
-  if (!input)
-    return;
+  if (input.fail())
+    throw BadStream();
 
   // Determine (or guess) the character-set by reading the BOM, if any.  See
   // the YAML specification for the determination algorithm.
@@ -202,6 +203,8 @@ Stream::Stream(std::istream& input)
   UtfIntroState state = uis_start;
   for (; !s_introFinalState[state];) {
     std::istream::int_type ch = input.get();
+    if (input.bad() || (input.fail() && !input.eof()))
+      throw BadStream();
     intro[nIntroUsed++] = ch;
     UtfIntroCharType charType = IntroCharTypeOf(ch);
     UtfIntroState newState = s_introTransitions[state][charType];
@@ -240,7 +243,7 @@ Stream::Stream(std::istream& input)
   ReadAheadTo(0);
 }
 
-Stream::~Stream() { delete[] m_pPrefetched; }
+Stream::~Stream() = default;
 
 char Stream::peek() const {
   if (m_readahead.empty()) {
@@ -423,9 +426,16 @@ inline char* ReadBuffer(unsigned char* pBuffer) {
 unsigned char Stream::GetNextByte() const {
   if (m_nPrefetchedUsed >= m_nPrefetchedAvailable) {
     std::streambuf* pBuf = m_input.rdbuf();
-    m_nPrefetchedAvailable = static_cast<std::size_t>(
-        pBuf->sgetn(ReadBuffer(m_pPrefetched), YAML_PREFETCH_SIZE));
+    try {
+      m_nPrefetchedAvailable = static_cast<std::size_t>(
+          pBuf->sgetn(ReadBuffer(m_pPrefetched.get()), YAML_PREFETCH_SIZE));
+    } catch (const std::ios_base::failure&) {
+      throw BadStream();
+    }
     m_nPrefetchedUsed = 0;
+    if (m_input.fail()) {
+      throw BadStream();
+    }
     if (!m_nPrefetchedAvailable) {
       m_input.setstate(std::ios_base::eofbit);
     }
