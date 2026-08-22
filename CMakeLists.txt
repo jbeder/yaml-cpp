@@ -142,6 +142,11 @@ write_basic_package_version_file(
   "${PROJECT_BINARY_DIR}/yaml-cpp-config-version.cmake"
   COMPATIBILITY AnyNewerVersion)
 
+if (YAML_BUILD_SHARED_LIBS)
+  set(YAML_CPP_PKG_CONFIG_CFLAGS_PRIVATE "")
+else()
+  set(YAML_CPP_PKG_CONFIG_CFLAGS_PRIVATE "-DYAML_CPP_STATIC_DEFINE")
+endif()
 configure_file(yaml-cpp.pc.in yaml-cpp.pc @ONLY)
 
 if (YAML_CPP_INSTALL)

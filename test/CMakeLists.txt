@@ -52,6 +52,12 @@ add_test(
   COMMAND ${CMAKE_COMMAND}
     -D YAML_CPP_SOURCE_DIR=${PROJECT_SOURCE_DIR}
     -P ${PROJECT_SOURCE_DIR}/test/cmake/verify-source-list.cmake)
+add_test(
+  NAME yaml-cpp::pkg-config
+  COMMAND ${CMAKE_COMMAND}
+    -D YAML_CPP_PC_FILE=${PROJECT_BINARY_DIR}/yaml-cpp.pc
+    -D YAML_BUILD_SHARED_LIBS=${YAML_BUILD_SHARED_LIBS}
+    -P ${PROJECT_SOURCE_DIR}/test/cmake/verify-pkg-config.cmake)
 
 if (build-windows-dll)
   add_custom_command(
