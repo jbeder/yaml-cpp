@@ -10,9 +10,7 @@ namespace {
 class FailingStreamBuf : public std::stringbuf {
  public:
   explicit FailingStreamBuf(const std::string& input)
-      : std::stringbuf(input), stream_(nullptr), first_read_(true) {}
-
-  void Bind(std::istream& stream) { stream_ = &stream; }
+      : std::stringbuf(input), first_read_(true) {}
 
  protected:
   std::streamsize xsgetn(char* output, std::streamsize count) override {
@@ -20,12 +18,10 @@ class FailingStreamBuf : public std::stringbuf {
       first_read_ = false;
       return std::stringbuf::xsgetn(output, count > 32 ? 32 : count);
     }
-    stream_->setstate(std::ios_base::badbit);
-    return 0;
+    throw std::ios_base::failure("simulated read failure");
   }
 
  private:
-  std::istream* stream_;
   bool first_read_;
 };
 
@@ -56,7 +52,6 @@ TEST(LoadNodeTest, LoadAllRejectsFailedInputStream) {
 TEST(LoadNodeTest, RejectsInputStreamFailureWhileReading) {
   FailingStreamBuf buffer("value: " + std::string(128, 'a'));
   std::istream stream(&buffer);
-  buffer.Bind(stream);
   EXPECT_THROW(Load(stream), BadStream);
 }
 

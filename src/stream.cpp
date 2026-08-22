@@ -425,12 +425,21 @@ inline char* ReadBuffer(unsigned char* pBuffer) {
 
 unsigned char Stream::GetNextByte() const {
   if (m_nPrefetchedUsed >= m_nPrefetchedAvailable) {
-    std::streambuf* pBuf = m_input.rdbuf();
-    m_nPrefetchedAvailable = static_cast<std::size_t>(
-        pBuf->sgetn(ReadBuffer(m_pPrefetched.get()), YAML_PREFETCH_SIZE));
+    try {
+      m_input.read(ReadBuffer(m_pPrefetched.get()), YAML_PREFETCH_SIZE);
+    } catch (const std::ios_base::failure&) {
+      if (m_input.bad() || !m_input.eof()) {
+        throw BadStream();
+      }
+    }
+    m_nPrefetchedAvailable = static_cast<std::size_t>(m_input.gcount());
     m_nPrefetchedUsed = 0;
-    if (m_input.fail()) {
+    if (m_input.bad() || (m_input.fail() && !m_input.eof())) {
       throw BadStream();
+    }
+    if (m_input.eof()) {
+      m_input.clear(m_nPrefetchedAvailable ? std::ios_base::goodbit
+                                           : std::ios_base::eofbit);
     }
     if (!m_nPrefetchedAvailable) {
       m_input.setstate(std::ios_base::eofbit);
