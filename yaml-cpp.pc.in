@@ -9,3 +9,4 @@ Version: @YAML_CPP_VERSION@
 Requires:
 Libs: -L${libdir} -lyaml-cpp
 Cflags: -I${includedir}
+Cflags.private: @YAML_CPP_PKG_CONFIG_CFLAGS_PRIVATE@
