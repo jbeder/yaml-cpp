@@ -224,7 +224,7 @@ public:
     node["a"] = a;
     return node;
   }
-  
+
   int a;
 };
 
@@ -252,7 +252,7 @@ public:
 
 // Implementation of convert::{encode,decode} for all classes derived from or being A
 namespace YAML {
-  template<typename T> 
+  template<typename T>
   struct convert<T, typename std::enable_if<std::is_base_of<A, T>::value>::type> {
     static Node encode(const T &rhs) {
       Node node = rhs.emit();
@@ -274,4 +274,26 @@ B b = node.as<B>();
 b.a = 12;
 b.b = 42;
 node = b;
+```
+
+# Handle Exceptions
+Yaml-cpp uses a lot of exceptions. If this is not desired use the `handle_exception_local` and `handle_exception` handlers.
+Both are function pointers expecting to be pointed to function that accepts a `const char*` as argument.
+The `handle_exception_local` has to be registered for every thread (it is `thread_local`, while
+`handle_exception` is truly global variable.
+`handle_exception_local` is considered before calling `handle_exception`. These functions are expected to not return.
+If non of the handlers is set a exception will be thrown. If a truly exception free version is desired set `YAML_CPP_DISABLE_EXCEPTIONS` to `OFF`.
+
+Usage example:
+```
+void my_custom_exception_handler(const char* what) {
+  std::cout << "some exception occurred: " << what << "\n";
+  std::terminate();
+}
+...
+int main() {
+  YAML::handle_exception = &my_custom_exception_handler;
+  // from now on handle_exception will be called instead of an exception
+  ...
+}
 ```
