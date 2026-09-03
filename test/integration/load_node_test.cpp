@@ -25,6 +25,22 @@ class FailingStreamBuf : public std::stringbuf {
   bool first_read_;
 };
 
+// Fails on the very first read, which the buffer above cannot do: it serves 32
+// bytes before throwing, so Stream's constructor completes and the failure is
+// raised later, during scanning.  Stream's constructor ends in ReadAheadTo(0),
+// so a buffer that throws immediately makes the failure escape the constructor
+// itself - a different path, and the one that used to leak the prefetch buffer
+// because ~Stream cannot run for an object that was never constructed.
+class ImmediatelyFailingStreamBuf : public std::stringbuf {
+ public:
+  ImmediatelyFailingStreamBuf() : std::stringbuf(std::string()) {}
+
+ protected:
+  std::streamsize xsgetn(char*, std::streamsize) override {
+    throw std::ios_base::failure("simulated read failure");
+  }
+};
+
 TEST(LoadNodeTest, Reassign) {
   Node node = Load("foo");
   node = Node();
@@ -51,6 +67,12 @@ TEST(LoadNodeTest, LoadAllRejectsFailedInputStream) {
 
 TEST(LoadNodeTest, RejectsInputStreamFailureWhileReading) {
   FailingStreamBuf buffer("value: " + std::string(128, 'a'));
+  std::istream stream(&buffer);
+  EXPECT_THROW(Load(stream), BadStream);
+}
+
+TEST(LoadNodeTest, RejectsInputStreamFailureOnFirstRead) {
+  ImmediatelyFailingStreamBuf buffer;
   std::istream stream(&buffer);
   EXPECT_THROW(Load(stream), BadStream);
 }
