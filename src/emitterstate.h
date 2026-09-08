@@ -72,6 +72,8 @@ class EmitterState {
     return m_hasAnchor || m_hasTag || m_hasNonContent;
   }
   bool HasBegunContent() const { return m_hasAnchor || m_hasTag; }
+  void SetLastLiteralEnd(std::size_t pos) { m_lastLiteralEnd = pos; }
+  std::size_t LastLiteralEnd() const { return m_lastLiteralEnd; }
 
   void ClearModifiedSettings();
   void RestoreGlobalModifiedSettings();
@@ -200,6 +202,7 @@ class EmitterState {
   bool m_hasTag;
   bool m_hasNonContent;
   std::size_t m_docCount;
+  std::size_t m_lastLiteralEnd;
 };
 
 template <typename T>

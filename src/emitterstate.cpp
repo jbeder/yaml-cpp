@@ -34,7 +34,8 @@ EmitterState::EmitterState()
       m_hasAlias(false),
       m_hasTag(false),
       m_hasNonContent(false),
-      m_docCount(0) {}
+      m_docCount(0),
+      m_lastLiteralEnd(0) {}
 
 EmitterState::~EmitterState() = default;
 

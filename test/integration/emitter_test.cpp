@@ -454,6 +454,76 @@ TEST_F(EmitterTest, LiteralWithAndWithoutTrailingEmptyLines) {
       "- something");
 }
 
+TEST_F(EmitterTest, CommentAfterLiteral) {
+  out << Literal << "Hello\nworld" << Comment("A comment");
+
+  ExpectEmit("|-\n  Hello\n  world\n# A comment");
+  EXPECT_EQ("Hello\nworld", Load(out.c_str()).as<std::string>());
+}
+
+TEST_F(EmitterTest, CommentAfterLiteralPreservesTrailingNewlines) {
+  out << BeginSeq;
+  out << Literal << "A\nB\n" << Comment("clip");
+  out << Literal << "A\nB\n\n\n" << Comment("keep");
+  out << EndSeq;
+
+  ExpectEmit("- |\n  A\n  B\n# clip\n- |+\n  A\n  B\n\n\n# keep");
+  const Node parsed = Load(out.c_str());
+  EXPECT_EQ("A\nB\n", parsed[0].as<std::string>());
+  EXPECT_EQ("A\nB\n\n\n", parsed[1].as<std::string>());
+}
+
+TEST_F(EmitterTest, CommentAfterLiteralWithExplicitNewline) {
+  out << Literal << "A\n\n" << Newline << Comment("A comment");
+
+  ExpectEmit("|+\n  A\n\n# A comment");
+  EXPECT_EQ("A\n\n", Load(out.c_str()).as<std::string>());
+}
+
+TEST_F(EmitterTest, CommentAfterLiteralInNestedMap) {
+  out << BeginMap << Key << "outer" << Value << BeginMap;
+  out << Key << "literal" << Value << Literal << "Hello\nworld";
+  out << Comment("A comment");
+  out << Key << "plain" << Value << "text" << Comment("inline comment");
+  out << EndMap << EndMap;
+
+  ExpectEmit(
+      "outer:\n"
+      "  literal: |-\n"
+      "    Hello\n"
+      "    world\n"
+      "  # A comment\n"
+      "  plain: text  # inline comment");
+  const Node parsed = Load(out.c_str());
+  EXPECT_EQ("Hello\nworld", parsed["outer"]["literal"].as<std::string>());
+  EXPECT_EQ("text", parsed["outer"]["plain"].as<std::string>());
+}
+
+TEST_F(EmitterTest, CommentAfterLiteralKey) {
+  out << BeginMap << Key << Literal << "Hello\nworld" << Comment("A comment");
+  out << Value << "value" << EndMap;
+
+  ExpectEmit("? |-\n  Hello\n  world\n# A comment\n: value");
+  EXPECT_EQ("value", Load(out.c_str())["Hello\nworld"].as<std::string>());
+}
+
+TEST_F(EmitterTest, CommentAfterLiteralBinary) {
+  const unsigned char data[] = {'H', 'e', 'l', 'l', 'o'};
+  out << Literal << Binary(data, sizeof(data)) << Comment("A comment");
+
+  ExpectEmit("!!binary |-\n  SGVsbG8=\n# A comment");
+  EXPECT_EQ(Binary(data, sizeof(data)), Load(out.c_str()).as<Binary>());
+}
+
+TEST_F(EmitterTest, CommentAfterLiteralInOutputStream) {
+  std::ostringstream stream;
+  Emitter emitter(stream);
+  emitter << Literal << "Hello\nworld" << Comment("A comment");
+
+  EXPECT_TRUE(emitter.good());
+  EXPECT_EQ("|-\n  Hello\n  world\n# A comment", stream.str());
+  EXPECT_EQ("Hello\nworld", Load(stream.str()).as<std::string>());
+}
 
 TEST_F(EmitterTest, AutoLongKeyScalar) {
   out << BeginMap;

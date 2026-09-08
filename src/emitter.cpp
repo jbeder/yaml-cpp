@@ -751,6 +751,7 @@ Emitter& Emitter::Write(const char* str, std::size_t size) {
     case StringFormat::Literal:
       Utils::WriteLiteralString(m_stream, str, size,
                                 m_pState->CurIndent() + m_pState->GetIndent());
+      m_pState->SetLastLiteralEnd(m_stream.pos());
       break;
   }
 
@@ -948,6 +949,9 @@ Emitter& Emitter::Write(const _Comment& comment) {
   if (!good())
     return *this;
 
+  if (m_stream.pos() > 0 && m_stream.pos() == m_pState->LastLiteralEnd())
+    m_stream << "\n";
+
   PrepareNode(EmitterNodeType::NoType);
 
   if (m_stream.col() == 0 &&
@@ -1007,6 +1011,7 @@ Emitter& Emitter::Write(const Binary& binary) {
       Utils::WriteLiteralBinary(m_stream, binary, 
                                 m_pState->CurIndent() + m_pState->GetIndent(), 
                                 m_pState->GetWrap());
+      m_pState->SetLastLiteralEnd(m_stream.pos());
       break;
   }
 
