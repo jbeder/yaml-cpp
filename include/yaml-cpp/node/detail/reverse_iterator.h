@@ -20,6 +20,7 @@
 #include "yaml-cpp/node/ptr.h"
 #include <cstddef>
 #include <iterator>
+#include <type_traits>
 
 namespace YAML {
 namespace detail {
@@ -90,7 +91,8 @@ class reverse_iterator_base {
     return current;
   }
 
-  value_type operator*() const YAML_ATTRIBUTE_LIFETIME_BOUND {
+  typename std::remove_reference<reference>::type operator*() const
+      YAML_ATTRIBUTE_LIFETIME_BOUND {
     Iter _tmp = current;
     return *(--_tmp);
   }
