@@ -127,6 +127,17 @@ TEST_F(EmitterTest, UnsignedEightBitInteger) {
   ExpectEmit("- 16");
 }
 
+TEST_F(EmitterTest, SignedEightBitInteger) {
+  // int8_t has no operator<< of its own and reaches the int overload by
+  // integral promotion; pin that so adding one cannot silently make it a char
+  out << BeginSeq;
+  out << std::int8_t{16};
+  out << std::int8_t{-7};
+  out << EndSeq;
+
+  ExpectEmit("- 16\n- -7");
+}
+
 TEST_F(EmitterTest, NumberPrecision) {
   out.SetFloatPrecision(3);
   out.SetDoublePrecision(2);
