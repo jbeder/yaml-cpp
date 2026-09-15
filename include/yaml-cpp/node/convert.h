@@ -145,7 +145,16 @@ inner_encode(const T& rhs, std::stringstream& stream){
 }
 
 template <typename T>
-typename std::enable_if<!std::is_floating_point<T>::value, void>::type
+typename std::enable_if<(std::is_same<T, unsigned char>::value ||
+                         std::is_same<T, signed char>::value), void>::type
+inner_encode(const T& rhs, std::stringstream& stream) {
+  stream << static_cast<int>(rhs);
+}
+
+template <typename T>
+typename std::enable_if<(!std::is_floating_point<T>::value &&
+                         !std::is_same<T, unsigned char>::value &&
+                         !std::is_same<T, signed char>::value), void>::type
 inner_encode(const T& rhs, std::stringstream& stream){
   stream << rhs;
 }
