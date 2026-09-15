@@ -89,8 +89,8 @@ TEST(NodeTest, EightBitIntegerScalar) {
   EXPECT_EQ("16", Node(std::uint8_t{16}).Scalar());
   EXPECT_EQ("65", Node(std::uint8_t{65}).Scalar());
   EXPECT_EQ("-7", Node(std::int8_t{-7}).Scalar());
-  EXPECT_EQ(200, +Node(std::uint8_t{200}).as<std::uint8_t>());
-  EXPECT_EQ(-7, +Node(std::int8_t{-7}).as<std::int8_t>());
+  EXPECT_EQ(std::uint8_t{200}, Node(std::uint8_t{200}).as<std::uint8_t>());
+  EXPECT_EQ(std::int8_t{-7}, Node(std::int8_t{-7}).as<std::int8_t>());
   EXPECT_EQ("a", Node('a').Scalar());
   EXPECT_EQ('a', Node('a').as<char>());
 }
