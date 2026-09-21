@@ -11,196 +11,151 @@
 #include <string>
 
 #include "regex_yaml.h"
-#include "stream.h"
 
 namespace YAML {
+class Stream;
 ////////////////////////////////////////////////////////////////////////////////
 // Here we store a bunch of expressions for matching different parts of the
 // file.
 
 namespace Exp {
-// misc
-inline const RegEx& Empty() {
-  static const RegEx e;
-  return e;
-}
-inline const RegEx& Space() {
-  static const RegEx e = RegEx(' ');
-  return e;
-}
-inline const RegEx& Tab() {
-  static const RegEx e = RegEx('\t');
-  return e;
-}
-inline const RegEx& Blank() {
-  static const RegEx e = Space() | Tab();
-  return e;
-}
-inline const RegEx& Break() {
-  static const RegEx e = RegEx('\n') | RegEx("\r\n") | RegEx('\r');
-  return e;
-}
-inline const RegEx& BlankOrBreak() {
-  static const RegEx e = Blank() | Break();
-  return e;
-}
-inline const RegEx& Digit() {
-  static const RegEx e = RegEx('0', '9');
-  return e;
-}
-inline const RegEx& Alpha() {
-  static const RegEx e = RegEx('a', 'z') | RegEx('A', 'Z');
-  return e;
-}
-inline const RegEx& AlphaNumeric() {
-  static const RegEx e = Alpha() | Digit();
-  return e;
-}
-inline const RegEx& Word() {
-  static const RegEx e = AlphaNumeric() | RegEx('-');
-  return e;
-}
-inline const RegEx& Hex() {
-  static const RegEx e = Digit() | RegEx('A', 'F') | RegEx('a', 'f');
-  return e;
-}
-// Valid Unicode code points that are not part of c-printable (YAML 1.2, sec.
-// 5.1)
-inline const RegEx& NotPrintable() {
-  static const RegEx e =
-      RegEx(0) |
-      RegEx("\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F", REGEX_OR) |
-      RegEx(0x0E, 0x1F) |
-      (RegEx('\xC2') + (RegEx('\x80', '\x84') | RegEx('\x86', '\x9F')));
-  return e;
-}
-inline const RegEx& Utf8_ByteOrderMark() {
-  static const RegEx e = RegEx("\xEF\xBB\xBF");
-  return e;
-}
+namespace Patterns {
+using Empty = YAML::Empty;
+using Space = CharSet<' '>;
+using Tab = CharSet<'\t'>;
+using Blank = CharSet<' ', '\t'>;
+using LineFeed = Byte<'\n'>;
+using CarriageReturnLineFeed = Seq<Byte<'\r'>, Byte<'\n'>>;
+using Break = Or<LineFeed, CarriageReturnLineFeed, Byte<'\r'>>;
+using BlankOrBreak = Or<Blank, Break>;
+using Digit = Range<'0', '9'>;
+using Alpha = Or<Range<'a', 'z'>, Range<'A', 'Z'>>;
+using AlphaNumeric = Or<Alpha, Digit>;
+using Word = Or<AlphaNumeric, Byte<'-'>>;
+using Hex = Or<Digit, Range<'A', 'F'>, Range<'a', 'f'>>;
 
-// actual tags
+using NotPrintableBytes =
+    CharSet<'\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\a', '\b', '\v',
+            '\f', '\x7F'>;
+using NotPrintableUtf8Tail = Or<Range<0x80, 0x84>, Range<0x86, 0x9F>>;
+using NotPrintableUtf8 = Seq<Byte<0xC2>, NotPrintableUtf8Tail>;
+using NotPrintable =
+    Or<Byte<0>, NotPrintableBytes, Range<0x0E, 0x1F>, NotPrintableUtf8>;
+using Utf8ByteOrderMark = Seq<Byte<0xEF>, Byte<0xBB>, Byte<0xBF>>;
 
-inline const RegEx& DocStart() {
-  static const RegEx e = RegEx("---") + (BlankOrBreak() | RegEx());
-  return e;
-}
-inline const RegEx& DocEnd() {
-  static const RegEx e = RegEx("...") + (BlankOrBreak() | RegEx());
-  return e;
-}
-inline const RegEx& DocIndicator() {
-  static const RegEx e = DocStart() | DocEnd();
-  return e;
-}
-inline const RegEx& BlockEntry() {
-  static const RegEx e = RegEx('-') + (BlankOrBreak() | RegEx());
-  return e;
-}
-inline const RegEx& Key() {
-  static const RegEx e = RegEx('?') + BlankOrBreak();
-  return e;
-}
-inline const RegEx& KeyInFlow() {
-  static const RegEx e = RegEx('?') + BlankOrBreak();
-  return e;
-}
-inline const RegEx& Value() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx());
-  return e;
-}
-inline const RegEx& ValueInFlow() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx(",]}", REGEX_OR));
-  return e;
-}
-inline const RegEx& ValueInJSONFlow() {
-  static const RegEx e = RegEx(':');
-  return e;
-}
-inline const RegEx& Ampersand() {
-  static const RegEx e = RegEx('&');
-  return e;
-}
-inline const RegEx Comment() {
-  static const RegEx e = RegEx('#');
-  return e;
-}
-inline const RegEx& Anchor() {
-  static const RegEx e = !(RegEx("[]{},", REGEX_OR) | BlankOrBreak());
-  return e;
-}
-inline const RegEx& AnchorEnd() {
-  static const RegEx e = RegEx("?:,]}%@`", REGEX_OR) | BlankOrBreak();
-  return e;
-}
-inline const RegEx& URI() {
-  static const RegEx e = Word() | RegEx("#;/?:@&=+$,_.!~*'()[]", REGEX_OR) |
-                         (RegEx('%') + Hex() + Hex());
-  return e;
-}
-inline const RegEx& Tag() {
-  static const RegEx e = Word() | RegEx("#;/?:@&=+$_.~*'()", REGEX_OR) |
-                         (RegEx('%') + Hex() + Hex());
-  return e;
-}
+using DocumentStartPrefix = Seq<Byte<'-'>, Byte<'-'>, Byte<'-'>>;
+using DocumentEndPrefix = Seq<Byte<'.'>, Byte<'.'>, Byte<'.'>>;
+using DocumentMarkerSuffix = Or<BlankOrBreak, Empty>;
+using DocumentStart = Seq<DocumentStartPrefix, DocumentMarkerSuffix>;
+using DocumentEnd = Seq<DocumentEndPrefix, DocumentMarkerSuffix>;
+using DocumentIndicator = Or<DocumentStart, DocumentEnd>;
+using BlockEntry = Seq<Byte<'-'>, DocumentMarkerSuffix>;
+using Key = Seq<Byte<'?'>, BlankOrBreak>;
+using KeyInFlow = Key;
+using Value = Seq<Byte<':'>, DocumentMarkerSuffix>;
+using FlowValueTerminators = CharSet<',', ']', '}'>;
+using ValueInFlow = Seq<Byte<':'>, Or<BlankOrBreak, FlowValueTerminators>>;
+using ValueInJSONFlow = Byte<':'>;
+using Ampersand = Byte<'&'>;
+using Comment = Byte<'#'>;
+using AnchorTerminators = CharSet<'[', ']', '{', '}', ','>;
+using Anchor = Not<Or<AnchorTerminators, BlankOrBreak>>;
+using AnchorEnd =
+    Or<CharSet<'?', ':', ',', ']', '}', '%', '@', 0x60>, BlankOrBreak>;
 
-// Plain scalar rules:
-// . Cannot start with a blank.
-// . Can never start with any of , [ ] { } # & * ! | > \' \" % @ `
-// . In the block context - ? : must be not be followed with a space.
-// . In the flow context ? is illegal and : and - must not be followed with a
-// space.
-inline const RegEx& PlainScalar() {
-  static const RegEx e =
-      !(BlankOrBreak() | RegEx(",[]{}#&*!|>\'\"%@`", REGEX_OR) |
-        (RegEx("-?:", REGEX_OR) + (BlankOrBreak() | RegEx())));
-  return e;
-}
-inline const RegEx& PlainScalarInFlow() {
-  static const RegEx e =
-      !(BlankOrBreak() | RegEx("?,[]{}#&*!|>\'\"%@`", REGEX_OR) |
-        (RegEx("-:", REGEX_OR) + (Blank() | RegEx())));
-  return e;
-}
-inline const RegEx& EndScalar() {
-  static const RegEx e = RegEx(':') + (BlankOrBreak() | RegEx());
-  return e;
-}
-inline const RegEx& EndScalarInFlow() {
-  static const RegEx e =
-      (RegEx(':') + (BlankOrBreak() | RegEx() | RegEx(",]}", REGEX_OR))) |
-      RegEx(",?[]{}", REGEX_OR);
-  return e;
-}
+using UriCharacters =
+    CharSet<'#', ';', '/', '?', ':', '@', '&', '=', '+', '$', ',', '_', '.',
+            '!', '~', '*', '\'', '(', ')', '[', ']'>;
+using TagCharacters = CharSet<'#', ';', '/', '?', ':', '@', '&', '=', '+', '$',
+                              '_', '.', '~', '*', '\'', '(', ')'>;
+using PercentEncoded = Seq<Byte<'%'>, Hex, Hex>;
+using Uri = Or<Word, UriCharacters, PercentEncoded>;
+using Tag = Or<Word, TagCharacters, PercentEncoded>;
 
-inline const RegEx& ScanScalarEndInFlow() {
-  static const RegEx e = (EndScalarInFlow() | (BlankOrBreak() + Comment()));
-  return e;
-}
+using PlainScalarTerminators =
+    CharSet<',', '[', ']', '{', '}', '#', '&', '*', '!', '|', '>', '\'', '"',
+            '%', '@', 0x60>;
+using PlainScalarIndicators = CharSet<'-', '?', ':'>;
+using PlainScalarRejection =
+    Or<BlankOrBreak, PlainScalarTerminators,
+       Seq<PlainScalarIndicators, Or<BlankOrBreak, Empty>>>;
+using PlainScalar = Not<PlainScalarRejection>;
 
-inline const RegEx& ScanScalarEnd() {
-  static const RegEx e = EndScalar() | (BlankOrBreak() + Comment());
-  return e;
-}
-inline const RegEx& EscSingleQuote() {
-  static const RegEx e = RegEx("\'\'");
-  return e;
-}
-inline const RegEx& EscBreak() {
-  static const RegEx e = RegEx('\\') + Break();
-  return e;
-}
+using PlainScalarFlowTerminators =
+    CharSet<'?', ',', '[', ']', '{', '}', '#', '&', '*', '!', '|', '>', '\'',
+            '"', '%', '@', 0x60>;
+using PlainScalarFlowIndicators = CharSet<'-', ':'>;
+using PlainScalarFlowRejection =
+    Or<BlankOrBreak, PlainScalarFlowTerminators,
+       Seq<PlainScalarFlowIndicators, Or<Blank, Empty>>>;
+using PlainScalarInFlow = Not<PlainScalarFlowRejection>;
 
-inline const RegEx& ChompIndicator() {
-  static const RegEx e = RegEx("+-", REGEX_OR);
-  return e;
-}
-inline const RegEx& Chomp() {
-  static const RegEx e = (ChompIndicator() + Digit()) |
-                         (Digit() + ChompIndicator()) | ChompIndicator() |
-                         Digit();
-  return e;
-}
+using EndScalar = Seq<Byte<':'>, DocumentMarkerSuffix>;
+using FlowScalarTerminators = CharSet<',', '?', '[', ']', '{', '}'>;
+using EndScalarInFlowPrefix =
+    Seq<Byte<':'>, Or<BlankOrBreak, Empty, FlowValueTerminators>>;
+using EndScalarInFlow = Or<EndScalarInFlowPrefix, FlowScalarTerminators>;
+using CommentAfterBreak = Seq<BlankOrBreak, Comment>;
+using ScanScalarEndInFlow = Or<EndScalarInFlow, CommentAfterBreak>;
+using ScanScalarEnd = Or<EndScalar, CommentAfterBreak>;
+using EscSingleQuote = Seq<Byte<'\''>, Byte<'\''>>;
+using EscBreak = Seq<Byte<'\\'>, Break>;
+using SingleQuoteEnd = And<Byte<'\''>, Not<EscSingleQuote>>;
+using DoubleQuoteEnd = Byte<'"'>;
+using ChompIndicator = CharSet<'+', '-'>;
+using Chomp = Or<Seq<ChompIndicator, Digit>, Seq<Digit, ChompIndicator>,
+                 ChompIndicator, Digit>;
+using DisallowedWhitespace = Or<Tab, Ampersand>;
+using DisallowedBreak = Or<Break, DisallowedWhitespace>;
+using DisallowedEncoding = Or<Utf8ByteOrderMark, DisallowedBreak>;
+using DisallowedCharacters = Or<NotPrintable, DisallowedEncoding>;
+using DisallowedAfterComment = Or<CommentAfterBreak, DisallowedCharacters>;
+using DisallowedFlow = Or<EndScalarInFlow, DisallowedAfterComment>;
+using DisallowedBlock = Or<EndScalar, DisallowedAfterComment>;
+}  // namespace Patterns
+
+const RegEx& Empty();
+const RegEx& Space();
+const RegEx& Tab();
+const RegEx& Blank();
+const RegEx& Break();
+const RegEx& BlankOrBreak();
+const RegEx& Digit();
+const RegEx& Alpha();
+const RegEx& AlphaNumeric();
+const RegEx& Word();
+const RegEx& Hex();
+const RegEx& NotPrintable();
+const RegEx& Utf8_ByteOrderMark();
+const RegEx& DocStart();
+const RegEx& DocEnd();
+const RegEx& DocIndicator();
+const RegEx& BlockEntry();
+const RegEx& Key();
+const RegEx& KeyInFlow();
+const RegEx& Value();
+const RegEx& ValueInFlow();
+const RegEx& ValueInJSONFlow();
+const RegEx& Ampersand();
+const RegEx& Comment();
+const RegEx& Anchor();
+const RegEx& AnchorEnd();
+const RegEx& URI();
+const RegEx& Tag();
+const RegEx& PlainScalar();
+const RegEx& PlainScalarInFlow();
+const RegEx& EndScalar();
+const RegEx& EndScalarInFlow();
+const RegEx& ScanScalarEndInFlow();
+const RegEx& ScanScalarEnd();
+const RegEx& EscSingleQuote();
+const RegEx& EscBreak();
+const RegEx& SingleQuoteEnd();
+const RegEx& DoubleQuoteEnd();
+const RegEx& ChompIndicator();
+const RegEx& Chomp();
+const RegEx& DisallowedFlow();
+const RegEx& DisallowedBlock();
 
 // and some functions
 std::string Escape(Stream& in);

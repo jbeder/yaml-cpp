@@ -1,8 +1,6 @@
 #include <sstream>
 
 #include "exp.h"
-#include "regex_yaml.h"
-#include "regeximpl.h"
 #include "scanner.h"
 #include "scanscalar.h"
 #include "scantag.h"  // IWYU pragma: keep
@@ -341,8 +339,7 @@ void Scanner::ScanQuotedScalar() {
 
   // setup the scanning parameters
   ScanScalarParams params;
-  RegEx end = (single ? RegEx(quote) & !Exp::EscSingleQuote() : RegEx(quote));
-  params.end = &end;
+  params.end = single ? &Exp::SingleQuoteEnd() : &Exp::DoubleQuoteEnd();
   params.eatEnd = true;
   params.escape = (single ? '\'' : '\\');
   params.indent = 0;

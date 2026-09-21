@@ -24,7 +24,6 @@ set(yaml-cpp-sources
   src/ostream_wrapper.cpp
   src/parse.cpp
   src/parser.cpp
-  src/regex_yaml.cpp
   src/scanner.cpp
   src/scanscalar.cpp
   src/scantag.cpp

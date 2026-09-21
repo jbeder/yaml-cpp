@@ -6,8 +6,6 @@
 #include "emitterutils.h"
 #include "exp.h"
 #include "indentation.h"
-#include "regex_yaml.h"
-#include "regeximpl.h"
 #include "stringsource.h"
 #include "yaml-cpp/binary.h"  // IWYU pragma: keep
 #include "yaml-cpp/null.h"
@@ -174,16 +172,8 @@ bool IsValidPlainScalar(const char* str, std::size_t size, FlowType::value flowT
   }
 
   // then check until something is disallowed
-  static const RegEx disallowed_flow =
-      Exp::EndScalarInFlow() | (Exp::BlankOrBreak() + Exp::Comment()) |
-      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
-      Exp::Tab() | Exp::Ampersand();
-  static const RegEx disallowed_block =
-      Exp::EndScalar() | (Exp::BlankOrBreak() + Exp::Comment()) |
-      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark() | Exp::Break() |
-      Exp::Tab() | Exp::Ampersand();
   const RegEx& disallowed =
-      flowType == FlowType::Flow ? disallowed_flow : disallowed_block;
+      flowType == FlowType::Flow ? Exp::DisallowedFlow() : Exp::DisallowedBlock();
 
   StringCharSource buffer(str, size);
   while (buffer) {

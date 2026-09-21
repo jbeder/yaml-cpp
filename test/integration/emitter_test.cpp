@@ -4,6 +4,8 @@
 #include "gtest/gtest.h"
 
 #include <cstdint>
+#include <cstdlib>
+#include <iostream>
 
 namespace YAML {
 namespace {
@@ -2132,6 +2134,49 @@ TEST_F(EmitterTest, EmitMultiDocsWithTags) {
         "...\n");
 }
 
+#if GTEST_HAS_DEATH_TEST
+// Test covering #1281: emitting from a static destructor during program
+// termination must not quote plain scalar keys or values due to destroyed
+// internal regular expression matchers.
+TEST(EmitterDeathTest, EmitInStaticDestructorWithoutDoubleQuotes) {
+  EXPECT_EXIT(
+      {
+        struct StaticDestructorEmitter {
+          ~StaticDestructorEmitter() {
+            YAML::Emitter emitter;
+            emitter << YAML::BeginMap << YAML::Key << "Test";
+            emitter << YAML::BeginMap;
+            emitter << YAML::Key << "String1" << YAML::Value << "String1";
+            emitter << YAML::Key << "String2" << YAML::Value << "String2";
+            emitter << YAML::EndMap;
+            emitter << YAML::EndMap;
+
+            const std::string expected =
+                "Test:\n"
+                "  String1: String1\n"
+                "  String2: String2";
+
+            if (emitter.c_str() == expected) {
+              std::_Exit(0);
+            }
+            std::cerr << "Expected:\n"
+                      << expected << "\nActual:\n"
+                      << emitter.c_str() << std::endl;
+            std::_Exit(1);
+          }
+        };
+
+        static StaticDestructorEmitter s_emitter;
+        // Warm up the emitter to ensure regex matchers are initialized:
+        YAML::Emitter warmup;
+        warmup << YAML::BeginMap << YAML::Key << "warmup" << YAML::Value
+               << "warmup" << YAML::EndMap;
+
+        std::exit(2);
+      },
+      ::testing::ExitedWithCode(0), "");
+}
+#endif
 
 }  // namespace
 }  // namespace YAML
