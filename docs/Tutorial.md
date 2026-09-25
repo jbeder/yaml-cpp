@@ -200,6 +200,37 @@ Vec3 v = node["start"].as<Vec3>();
 node["end"] = Vec3(2, -1, 0);
 ```
 
+## Non-default constructible types
+Yaml-cpp also supports types that are not default constructible. For this we need to return the `YAML::expected` type
+Assuming you have:
+
+```cpp
+class Vec3 {
+  double x, y, z;
+public:
+  Vec3(double x, double y, double z} : x{x}, y{y}, z{z} {}
+};
+```
+
+you could write (for encoding the previous `convert<Vec3>` with the `encode` method is required)
+
+```cpp
+namespace YAML {
+template<>
+struct convert<Vec3> {
+  static bool decode(const Node& node) -> expected<Vec3> {
+    if(!node.IsSequence() || node.size() != 3) {
+      return unexpected{};
+    }
+    return expected<Vec3> {
+        node[0].as<double>(),
+        node[1].as<double>(),
+        node[2].as<double>()
+    };
+  }
+};
+}
+
 ## Partial specialization
 
 If you need to specialize the `convert` struct for a set of types instead of just one you can use partial specialization with the help of `std::enable_if` (SFINAE).
