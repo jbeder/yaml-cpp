@@ -281,6 +281,18 @@ inline void Node::AssignNode(const Node& rhs) {
     throw InvalidNode(m_invalidKey);
   rhs.EnsureNodeExists();
 
+  if (!m_isProxy) {
+    // PROTOTYPE B: this handle is a reference (created by copying a plain
+    // handle, e.g. a named variable). Reassigning it rebinds the handle only;
+    // the document is left untouched, so other handles sharing the same
+    // underlying node (e.g. the document root) are not affected.
+    m_pMemory = rhs.m_pMemory;
+    m_pNode = rhs.m_pNode;
+    return;
+  }
+
+  // Legacy semantics: this handle is a view into the document, so assignment
+  // mutates the document (creates an alias to rhs).
   if (!m_pNode) {
     m_pNode = rhs.m_pNode;
     m_pMemory = rhs.m_pMemory;
@@ -377,7 +389,9 @@ template <typename Key>
 inline Node Node::operator[](const Key& key) {
   EnsureNodeExists();
   detail::node& value = m_pNode->get(key, m_pMemory);
-  return Node(value, m_pMemory);
+  Node result(value, m_pMemory);
+  result.m_isProxy = true;
+  return result;
 }
 
 template <typename Key>
@@ -403,7 +417,9 @@ inline Node Node::operator[](const Node& key) {
   key.EnsureNodeExists();
   m_pMemory->merge(*key.m_pMemory);
   detail::node& value = m_pNode->get(*key.m_pNode, m_pMemory);
-  return Node(value, m_pMemory);
+  Node result(value, m_pMemory);
+  result.m_isProxy = true;
+  return result;
 }
 
 inline bool Node::remove(const Node& key) {

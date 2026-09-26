@@ -102,10 +102,18 @@ class iterator_base {
 
   value_type operator*() const YAML_ATTRIBUTE_LIFETIME_BOUND {
     const typename base_type::value_type& v = *m_iterator;
-    if (v.pNode)
-      return value_type(Node(*v, m_pMemory));
-    if (v.first && v.second)
-      return value_type(Node(*v.first, m_pMemory), Node(*v.second, m_pMemory));
+    if (v.pNode) {
+      value_type result(Node(*v, m_pMemory));
+      result.m_isProxy = true;
+      return result;
+    }
+    if (v.first && v.second) {
+      value_type result(Node(*v.first, m_pMemory), Node(*v.second, m_pMemory));
+      result.m_isProxy = true;
+      result.first.m_isProxy = true;
+      result.second.m_isProxy = true;
+      return result;
+    }
     return value_type();
   }
 

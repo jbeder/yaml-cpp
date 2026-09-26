@@ -155,6 +155,12 @@ class YAML_CPP_API Node {
   std::string m_invalidKey;
   mutable detail::shared_memory_holder m_pMemory;
   mutable detail::node* m_pNode;
+  // True if this handle was created by document access (operator[] / iterator
+  // dereference), i.e. it acts as a *view* into the document; assignment
+  // through it mutates the document (creates aliases). Handles obtained by
+  // copying a plain handle are *references*; assigning to them only rebinds
+  // the handle and never touches the document.
+  mutable bool m_isProxy = false;
 };
 
 YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);

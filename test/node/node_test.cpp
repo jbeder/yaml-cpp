@@ -5,6 +5,7 @@
 #include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/yaml.h"  // IWYU pragma: keep (Load)
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -799,6 +800,40 @@ TEST(NodeTest, TempMapVariableAlias) {
   EXPECT_EQ("value", node["other"].as<std::string>());
   EXPECT_EQ(node["key"], node["other"]);
 }
+
+TEST(NodeTest, ReassigningHandleDoesNotCorruptDocument) {
+  // https://github.com/jbeder/yaml-cpp/issues/1275
+  Node cfg = Load("Test:\n  Level1: \"Some string\"\n");
+  Node currentNode = cfg;
+  currentNode = currentNode["Test"];
+  EXPECT_EQ("Some string", currentNode["Level1"].as<std::string>());
+
+  // Rebinding a plain handle to the root must not modify the document.
+  currentNode = cfg;
+  EXPECT_EQ(NodeType::Map, cfg.Type());
+  EXPECT_EQ(1, cfg.size());
+  EXPECT_TRUE(cfg["Test"].IsMap());
+
+  currentNode = currentNode["Test"];
+  EXPECT_EQ("Some string", currentNode["Level1"].as<std::string>());
+  EXPECT_EQ("Some string", cfg["Test"]["Level1"].as<std::string>());
+  EXPECT_EQ("Test:\n  Level1: Some string", Dump(cfg));
+}
+
+TEST(NodeTest, ReassigningHandleToSubnodeKeepsDocumentIntact) {
+  Node cfg = Load("a:\n  b: 1\n");
+  Node sub = cfg["a"];
+  Node walker = cfg;
+  walker = sub;
+  EXPECT_EQ(1, walker["b"].as<int>());
+
+  // The document must not be modified by the reassignments above.
+  EXPECT_EQ(NodeType::Map, cfg.Type());
+  EXPECT_EQ(1, cfg.size());
+  EXPECT_EQ(1, cfg["a"]["b"].as<int>());
+  EXPECT_TRUE(cfg["a"] == sub);
+}
+
 
 TEST(NodeTest, Bool) {
   Node node;
