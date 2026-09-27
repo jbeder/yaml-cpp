@@ -89,10 +89,15 @@ class YAML_CPP_API Node {
   void SetStyle(EmitterStyle::value style);
 
   // assignment
+  // Assigning through a handle from operator[] or iterator dereference (a
+  // *view*) mutates the document, creating an alias. Assigning through any
+  // other handle (a *reference*, e.g. `Node n = doc;`) rebinds the handle
+  // only; see the Tutorial.
   bool is(const Node& rhs) const;
   template <typename T>
   Node& operator=(const T& rhs);
   Node& operator=(const Node& rhs);
+  // Rebinds to `rhs` without modifying any document.
   void reset(const Node& rhs = Node());
 
   // size/iterator
@@ -136,7 +141,12 @@ class YAML_CPP_API Node {
   enum Zombie { ZombieNode };
   explicit Node(Zombie);
   explicit Node(Zombie, const std::string&);
+  // Wraps the root of a freshly built document (NodeBuilder::Root()).
   explicit Node(detail::node& node, detail::shared_memory_holder pMemory);
+  // Same, but wraps an element of a document (operator[] / iterator), so the
+  // handle is a *view*: assigning through it mutates the document.
+  enum View { ViewNode };
+  Node(View, detail::node& node, detail::shared_memory_holder pMemory);
 
   void EnsureNodeExists() const;
   void Invalidate();
@@ -150,17 +160,15 @@ class YAML_CPP_API Node {
   void AssignNode(const Node& rhs);
 
  private:
-  bool m_isValid;
+  // Bit-fields, so that m_isView does not change sizeof(Node).
+  bool m_isValid : 1;
+  // True if this handle refers to an element of a document (operator[] or
+  // iterator dereference): assigning through it mutates the document.
+  bool m_isView : 1;
   // String representation of invalid key, if the node is invalid.
   std::string m_invalidKey;
   mutable detail::shared_memory_holder m_pMemory;
   mutable detail::node* m_pNode;
-  // True if this handle was created by document access (operator[] / iterator
-  // dereference), i.e. it acts as a *view* into the document; assignment
-  // through it mutates the document (creates aliases). Handles obtained by
-  // copying a plain handle are *references*; assigning to them only rebinds
-  // the handle and never touches the document.
-  mutable bool m_isProxy = false;
 };
 
 YAML_CPP_API bool operator==(const Node& lhs, const Node& rhs);

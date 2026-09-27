@@ -834,6 +834,55 @@ TEST(NodeTest, ReassigningHandleToSubnodeKeepsDocumentIntact) {
   EXPECT_TRUE(cfg["a"] == sub);
 }
 
+// Assigning through a handle obtained from a const Node must have the same
+// (document-mutating) semantics as through a non-const Node.
+TEST(NodeTest, ConstAccessYieldsViewSemantics) {
+  Node node;
+  node["foo"] = "value";
+  const Node& cnode = node;
+  Node view = cnode["foo"];
+  view = Node(42);
+  EXPECT_EQ(42, node["foo"].as<int>());
+}
+
+// Direct- and copy-initialization from an iterator_value must yield handles
+// with identical (document-mutating) semantics.
+TEST(NodeTest, IteratorValueCopyAndDirectInitAreEquivalent) {
+  {
+    Node node = Load("[1, 2, 3]");
+    Node copyInit = *node.begin();  // copy-initialization
+    copyInit = Node(100);
+    EXPECT_EQ(100, node[0].as<int>());
+  }
+  {
+    Node node = Load("[1, 2, 3]");
+    Node directInit(*node.begin());  // direct-initialization
+    directInit = Node(200);
+    EXPECT_EQ(200, node[0].as<int>());
+  }
+}
+
+// reset() must produce a plain reference, so that assigning through the
+// handle afterwards rebinds instead of mutating the document.
+TEST(NodeTest, ResetTurnsAViewIntoAReference) {
+  Node node;
+  node["foo"] = "value";
+  Node view = node["foo"];
+  view.reset();
+  view = Node(99);  // rebinds, must not touch the document
+  EXPECT_EQ("value", node["foo"].as<std::string>());
+}
+
+// The root of a freshly loaded document is a plain reference: assigning it
+// rebinds and must not rewrite the document it pointed into.
+TEST(NodeTest, LoadedRootAssignmentRebinds) {
+  Node cfg = Load("a:\n  b: 1\n");
+  Node cfg2 = Load("c:\n  d: 2\n");
+  cfg = cfg2;  // rebinding; must not modify either document
+  EXPECT_EQ(1, cfg2.size());
+  EXPECT_EQ(2, cfg["c"]["d"].as<int>());
+  EXPECT_EQ("c:\n  d: 2", Dump(cfg2));
+}
 
 TEST(NodeTest, Bool) {
   Node node;

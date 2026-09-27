@@ -26,10 +26,12 @@
 
 namespace YAML {
 inline Node::Node()
-    : m_isValid(true), m_invalidKey{}, m_pMemory(nullptr), m_pNode(nullptr) {}
+    : m_isValid(true), m_isView(false), m_invalidKey{}, m_pMemory(nullptr),
+      m_pNode(nullptr) {}
 
 inline Node::Node(NodeType::value type)
     : m_isValid(true),
+      m_isView(false),
       m_invalidKey{},
       m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pNode(&m_pMemory->create_node()) {
@@ -39,6 +41,7 @@ inline Node::Node(NodeType::value type)
 template <typename T>
 inline Node::Node(const T& rhs)
     : m_isValid(true),
+      m_isView(false),
       m_invalidKey{},
       m_pMemory(std::make_shared<detail::memory_holder>()),
       m_pNode(&m_pMemory->create_node()) {
@@ -46,21 +49,22 @@ inline Node::Node(const T& rhs)
 }
 
 inline Node::Node(const detail::iterator_value& rhs)
-    : m_isValid(rhs.m_isValid),
-      m_invalidKey(rhs.m_invalidKey),
-      m_pMemory(rhs.m_pMemory),
-      m_pNode(rhs.m_pNode) {}
+    : Node(static_cast<const Node&>(rhs)) {}
 
 inline Node::Node(const Node&) = default;
 
 inline Node::Node(Zombie)
-    : m_isValid(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
+    : m_isValid(false), m_isView(false), m_invalidKey{}, m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(Zombie, const std::string& key)
-    : m_isValid(false), m_invalidKey(key), m_pMemory{}, m_pNode(nullptr) {}
+    : m_isValid(false), m_isView(false), m_invalidKey(key), m_pMemory{}, m_pNode(nullptr) {}
 
 inline Node::Node(detail::node& node, detail::shared_memory_holder pMemory)
-    : m_isValid(true), m_invalidKey{}, m_pMemory(pMemory), m_pNode(&node) {}
+    : m_isValid(true), m_isView(false), m_invalidKey{}, m_pMemory(std::move(pMemory)), m_pNode(&node) {}
+
+// Element of a document (operator[] / iterator dereference): a *view*.
+inline Node::Node(View, detail::node& node, detail::shared_memory_holder pMemory)
+    : m_isValid(true), m_isView(true), m_invalidKey{}, m_pMemory(std::move(pMemory)), m_pNode(&node) {}
 
 inline Node::~Node() = default;
 
@@ -241,6 +245,7 @@ inline Node& Node::operator=(const Node& rhs) {
 inline void Node::reset(const YAML::Node& rhs) {
   if (!m_isValid || !rhs.m_isValid)
     throw InvalidNode(m_invalidKey);
+  m_isView = false;
   m_pMemory = rhs.m_pMemory;
   m_pNode = rhs.m_pNode;
 }
@@ -281,18 +286,16 @@ inline void Node::AssignNode(const Node& rhs) {
     throw InvalidNode(m_invalidKey);
   rhs.EnsureNodeExists();
 
-  if (!m_isProxy) {
-    // PROTOTYPE B: this handle is a reference (created by copying a plain
-    // handle, e.g. a named variable). Reassigning it rebinds the handle only;
-    // the document is left untouched, so other handles sharing the same
-    // underlying node (e.g. the document root) are not affected.
+  if (!m_isView) {
+    // Plain reference: rebinding this handle must not modify the document
+    // (e.g. the root) that it pointed into.
     m_pMemory = rhs.m_pMemory;
     m_pNode = rhs.m_pNode;
     return;
   }
 
-  // Legacy semantics: this handle is a view into the document, so assignment
-  // mutates the document (creates an alias to rhs).
+  // View: assignment mutates the document (re-points the element at rhs,
+  // creating an alias), as in `node["key"] = other;`
   if (!m_pNode) {
     m_pNode = rhs.m_pNode;
     m_pMemory = rhs.m_pMemory;
@@ -382,16 +385,14 @@ inline const Node Node::operator[](const Key& key) const {
   if (!value) {
     return Node(ZombieNode, key_to_string(key));
   }
-  return Node(*value, m_pMemory);
+  return Node(ViewNode, *value, m_pMemory);
 }
 
 template <typename Key>
 inline Node Node::operator[](const Key& key) {
   EnsureNodeExists();
   detail::node& value = m_pNode->get(key, m_pMemory);
-  Node result(value, m_pMemory);
-  result.m_isProxy = true;
-  return result;
+  return Node(ViewNode, value, m_pMemory);
 }
 
 template <typename Key>
@@ -417,9 +418,7 @@ inline Node Node::operator[](const Node& key) {
   key.EnsureNodeExists();
   m_pMemory->merge(*key.m_pMemory);
   detail::node& value = m_pNode->get(*key.m_pNode, m_pMemory);
-  Node result(value, m_pMemory);
-  result.m_isProxy = true;
-  return result;
+  return Node(ViewNode, value, m_pMemory);
 }
 
 inline bool Node::remove(const Node& key) {
