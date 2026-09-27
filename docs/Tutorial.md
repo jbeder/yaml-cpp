@@ -119,6 +119,37 @@ self: *1
 *3 : *2
 ```
 
+# Views and References #
+
+Assignment through a `YAML::Node` handle means one of two things, depending on
+where the handle came from:
+
+* A handle returned by `operator[]` or by dereferencing an iterator is a
+  **view** of an element of a collection. Assigning through a view *modifies
+  the containing document*: the element is re-pointed at the assigned node,
+  creating an alias if that node is part of some document. All the
+  alias-building examples above work this way.
+
+* Any other handle — for example a named variable initialized with
+  `YAML::Node n = doc;`, or the root node returned by `YAML::Load` — is a
+  plain **reference**. Assigning through a reference *rebinds* the handle; no
+  document is modified. This is handy for walking a document with a
+  cursor-like variable:
+
+```cpp
+YAML::Node cfg = YAML::Load("Test:\n  Level1: Some string\n");
+YAML::Node currentNode = cfg;
+currentNode = currentNode["Test"];   // descend
+currentNode = cfg;                   // go back up - works at any time
+```
+
+To turn a view back into a plain reference, use `reset()`:
+
+```cpp
+YAML::Node view = doc["a"];
+view.reset(doc);   // further assignments rebind instead of modifying the document
+```
+
 # How Sequences Turn Into Maps #
 
 Sequences can be turned into maps by asking for non-integer keys. For example,
