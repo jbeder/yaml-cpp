@@ -454,6 +454,7 @@ TEST_F(EmitterTest, LiteralWithAndWithoutTrailingEmptyLines) {
   out << BeginSeq;
   out << Literal << "A\nB";
   out << Literal << "A\nB\n";
+  out << Literal << "A\nB\n\n";
   out << Literal << "A\nB\n\n\n";
   out << "something";
   out << EndSeq;
@@ -462,6 +463,7 @@ TEST_F(EmitterTest, LiteralWithAndWithoutTrailingEmptyLines) {
       "- |-\n  A\n  B\n"
       "- |\n  A\n  B\n"
       "- |+\n  A\n  B\n\n\n"
+      "- |+\n  A\n  B\n\n\n\n"
       "- something");
 }
 
