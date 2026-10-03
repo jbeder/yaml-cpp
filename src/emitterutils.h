@@ -41,7 +41,8 @@ bool WriteSingleQuotedString(ostream_wrapper& out, const char* str, std::size_t 
 bool WriteDoubleQuotedString(ostream_wrapper& out, const char* str, std::size_t size,
                              StringEscaping::value stringEscaping);
 bool WriteLiteralString(ostream_wrapper& out, const char* str, std::size_t size,
-                        std::size_t indent);
+                        std::size_t indent,
+                        bool* needs_trailing_newline = nullptr);
 bool WriteChar(ostream_wrapper& out, char ch,
                StringEscaping::value stringEscapingStyle);
 bool WriteComment(ostream_wrapper& out, const char* str, std::size_t size,

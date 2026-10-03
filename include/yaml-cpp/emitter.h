@@ -149,6 +149,13 @@ class YAML_CPP_API Emitter {
  private:
   std::unique_ptr<EmitterState> m_pState;
   ostream_wrapper m_stream;
+
+  // Set when the last thing written was a literal block scalar whose
+  // chomping style ('strip' or 'keep') still owes the stream a trailing
+  // line break. Normally the next node emitted supplies that break as a
+  // side effect of starting its own line, but if nothing else is emitted,
+  // c_str() has to add it itself so the scalar round-trips correctly.
+  mutable bool m_literalNeedsTrailingNewline = false;
 };
 
 template <typename T>

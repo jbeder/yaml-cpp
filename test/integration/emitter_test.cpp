@@ -465,6 +465,29 @@ TEST_F(EmitterTest, LiteralWithAndWithoutTrailingEmptyLines) {
       "- something");
 }
 
+TEST_F(EmitterTest, LiteralTrailingNewlinesRoundTripAsLastMapValue) {
+  // A literal scalar using the 'strip' or 'keep' chomping style used to
+  // lose a trailing newline whenever it was the very last thing written,
+  // because the emitter counted on whatever came after it to supply one
+  // more '\n'. With nothing following, that line break was never written.
+  out << BeginMap;
+  out << Key << "data" << Value << Literal << "hello\nworld\n\n";
+  out << EndMap;
+
+  Node reparsed = Load(out.c_str());
+  EXPECT_EQ(reparsed["data"].as<std::string>(), "hello\nworld\n\n");
+}
+
+TEST_F(EmitterTest, LiteralTrailingNewlinesRoundTripAsLastSeqEntry) {
+  out << BeginSeq;
+  out << "before";
+  out << Literal << "hello\n";
+  out << EndSeq;
+
+  Node reparsed = Load(out.c_str());
+  EXPECT_EQ(reparsed[1].as<std::string>(), "hello\n");
+}
+
 TEST_F(EmitterTest, SingleQuotedWithCarriageReturn) {
   out << BeginMap;
   out << Key << "key" << Value << SingleQuoted << "a\rb";

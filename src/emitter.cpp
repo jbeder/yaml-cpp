@@ -18,7 +18,13 @@ Emitter::Emitter(std::ostream& stream)
 
 Emitter::~Emitter() = default;
 
-const char* Emitter::c_str() const { return m_stream.str(); }
+const char* Emitter::c_str() const {
+  if (m_literalNeedsTrailingNewline) {
+    const_cast<Emitter*>(this)->m_stream << "\n";
+    m_literalNeedsTrailingNewline = false;
+  }
+  return m_stream.str();
+}
 
 std::size_t Emitter::size() const { return m_stream.pos(); }
 
@@ -282,6 +288,11 @@ void Emitter::EmitNewline() {
 // Put the stream in a state so we can simply write the next node
 // E.g., if we're in a sequence, write the "- "
 void Emitter::PrepareNode(EmitterNodeType::value child) {
+  // Whatever we're about to emit starts its own line (or continues the
+  // current one), so any line break a previous literal block scalar was
+  // relying on us to provide is no longer something c_str() needs to add.
+  m_literalNeedsTrailingNewline = false;
+
   switch (m_pState->CurGroupNodeType()) {
     case EmitterNodeType::NoType:
       PrepareTopNode(child);
@@ -750,7 +761,8 @@ Emitter& Emitter::Write(const char* str, std::size_t size) {
       break;
     case StringFormat::Literal:
       Utils::WriteLiteralString(m_stream, str, size,
-                                m_pState->CurIndent() + m_pState->GetIndent());
+                                m_pState->CurIndent() + m_pState->GetIndent(),
+                                &m_literalNeedsTrailingNewline);
       break;
   }
 

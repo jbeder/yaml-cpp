@@ -395,7 +395,7 @@ bool WriteDoubleQuotedString(ostream_wrapper& out, const char* str, std::size_t 
 }
 
 bool WriteLiteralString(ostream_wrapper& out, const char* str, std::size_t size,
-                        std::size_t indent) {
+                        std::size_t indent, bool* needs_trailing_newline) {
   // depending on the numbers of new lines at the end of the string
   // we need to use 'clip (-)', 'strip (default)' or 'keep' (+) annotation.
   // if there is no newline at the end, we need 'clip'
@@ -405,18 +405,29 @@ bool WriteLiteralString(ostream_wrapper& out, const char* str, std::size_t size,
   // see YAML spec 1.2 chapter '8.1.1.2 Block Chomping Indicator' for more information
   // https://yaml.org/spec/1.2.2/#8112-block-chomping-indicator
 
+  if (needs_trailing_newline)
+    *needs_trailing_newline = false;
 
-  // The chomping depends on the number of new lines.
-  // The output following this 'WriteLiteralString' call will add an additional '\n',
-  // because of this we need to remove one in the case of 'strip' and 'keep'.
+  // The chomping depends on the number of new lines. Whatever is emitted
+  // after this call normally starts with the '\n' that separates it from
+  // this node, and that's the one we rely on for the final line break of
+  // the 'strip' and 'keep' styles below, so we drop one from what we write
+  // here. But when this literal happens to be the very last thing emitted
+  // (no sibling or closing node follows it), that '\n' never materializes
+  // and the caller needs to know a line break is still owed so it can add
+  // one itself once the document is finalized.
   if (size == 0 || str[size-1] != '\n') { // clip
       out << "|-\n";
   } else if (size == 1 || str[size-2] != '\n') { // strip
     out << "|\n";
     size -= 1;
+    if (needs_trailing_newline)
+      *needs_trailing_newline = true;
   } else { // 'keep'
     out << "|+\n";
     size -= 1;
+    if (needs_trailing_newline)
+      *needs_trailing_newline = true;
   }
   int codePoint;
   for (const char* i = str;
