@@ -199,26 +199,28 @@ bool IsValidPlainScalar(const char* str, std::size_t size, FlowType::value flowT
   return true;
 }
 
-bool IsValidSingleQuotedScalar(const char* str, std::size_t size, bool escapeNonAscii) {
-  // TODO: check for non-printable characters?
+bool IsValidSingleQuotedScalar(const char* str, std::size_t size,
+                               bool escapeNonAscii) {
+  // TODO: check for non-printable characters outside the C0 range.
   return std::none_of(str, str + size, [=](char ch) {
-    return (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch))) ||
-           (ch == '\n') || (ch == '\r');
+    const unsigned char byte = static_cast<unsigned char>(ch);
+    return (escapeNonAscii && byte >= 0x80) || (byte < 0x20 && ch != '\t');
   });
 }
 
-bool IsValidLiteralScalar(const char* str, std::size_t size, FlowType::value flowType,
-                          bool escapeNonAscii) {
+bool IsValidLiteralScalar(const char* str, std::size_t size,
+                          FlowType::value flowType, bool escapeNonAscii) {
   if (flowType == FlowType::Flow) {
     return false;
   }
 
-  // TODO: check for non-printable characters?
+  // TODO: check for non-printable characters outside the C0 range.
   // A carriage return is a line break to the parser, so a block scalar cannot
   // carry one; leave those to the double-quoted form.
   return std::none_of(str, str + size, [=](char ch) {
-    return (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch))) ||
-           (ch == '\r');
+    const unsigned char byte = static_cast<unsigned char>(ch);
+    return (escapeNonAscii && byte >= 0x80) ||
+           (byte < 0x20 && ch != '\t' && ch != '\n');
   });
 }
 

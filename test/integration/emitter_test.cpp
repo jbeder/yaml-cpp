@@ -481,6 +481,81 @@ TEST_F(EmitterTest, LiteralWithCarriageReturn) {
   ExpectEmit("key: \"a\\rb\"");
 }
 
+TEST_F(EmitterTest, ForcedStylesWithDisallowedC0Controls) {
+  const char hex[] = "0123456789abcdef";
+  for (const auto style : {SingleQuoted, Literal}) {
+    SCOPED_TRACE(style);
+    for (int code = 0; code < 0x20; ++code) {
+      if (code == '\t' || code == '\n' || code == '\r') {
+        continue;
+      }
+      SCOPED_TRACE(code);
+      const std::string value =
+          std::string("a") + static_cast<char>(code) + "b";
+      std::string escaped = "\\x";
+      escaped += hex[code >> 4];
+      escaped += hex[code & 0x0f];
+      if (code == '\b') {
+        escaped = "\\b";
+      } else if (code == '\f') {
+        escaped = "\\f";
+      }
+
+      Emitter emitter;
+      emitter << BeginMap << Key << "key" << Value << style << value << EndMap;
+      ASSERT_TRUE(emitter.good()) << emitter.GetLastError();
+      const std::string emitted(emitter.c_str(), emitter.size());
+      EXPECT_EQ("key: \"a" + escaped + "b\"", emitted);
+      EXPECT_EQ(value, Load(emitted)["key"].as<std::string>());
+    }
+  }
+}
+
+TEST_F(EmitterTest, SingleQuotedPreservesTabAndUnicode) {
+  const std::string value =
+      "a\t\xC3\xA9\xC2\x85\xE2\x82\xAC\xF0\x9F\x98\x80"
+      "b";
+  out << SingleQuoted << value;
+
+  ExpectEmit("'" + value + "'");
+  EXPECT_EQ(value,
+            Load(std::string(out.c_str(), out.size())).as<std::string>());
+}
+
+TEST_F(EmitterTest, LiteralPreservesTabNewlineAndUnicode) {
+  const std::string first = "a\t\xC3\xA9\xC2\x85\xE2\x82\xAC\xF0\x9F\x98\x80";
+  const std::string value = first + "\nb";
+  out << Literal << value;
+
+  ExpectEmit("|-\n  " + first + "\n  b");
+  EXPECT_EQ(value,
+            Load(std::string(out.c_str(), out.size())).as<std::string>());
+}
+
+TEST_F(EmitterTest, ForcedStylesWithEscapeNonAscii) {
+  const std::string value =
+      "a\xC3\xA9"
+      "b";
+  for (const auto style : {SingleQuoted, Literal}) {
+    SCOPED_TRACE(style);
+    Emitter emitter;
+    emitter << EscapeNonAscii << style << value;
+
+    ASSERT_TRUE(emitter.good()) << emitter.GetLastError();
+    const std::string emitted(emitter.c_str(), emitter.size());
+    EXPECT_EQ("\"a\\xe9b\"", emitted);
+    EXPECT_EQ(value, Load(emitted).as<std::string>());
+  }
+}
+
+TEST_F(EmitterTest, LiteralWithControlInFlowSequence) {
+  const std::string value("a\0b", 3);
+  out << Flow << BeginSeq << Literal << value << EndSeq;
+
+  ExpectEmit("[\"a\\x00b\"]");
+  EXPECT_EQ(value,
+            Load(std::string(out.c_str(), out.size()))[0].as<std::string>());
+}
 
 TEST_F(EmitterTest, AutoLongKeyScalar) {
   out << BeginMap;
