@@ -5,6 +5,7 @@
 #include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/yaml.h"  // IWYU pragma: keep (Load)
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -798,6 +799,89 @@ TEST(NodeTest, TempMapVariableAlias) {
   EXPECT_EQ("value", node["key"].as<std::string>());
   EXPECT_EQ("value", node["other"].as<std::string>());
   EXPECT_EQ(node["key"], node["other"]);
+}
+
+TEST(NodeTest, ReassigningHandleDoesNotCorruptDocument) {
+  // https://github.com/jbeder/yaml-cpp/issues/1275
+  Node cfg = Load("Test:\n  Level1: \"Some string\"\n");
+  Node currentNode = cfg;
+  currentNode = currentNode["Test"];
+  EXPECT_EQ("Some string", currentNode["Level1"].as<std::string>());
+
+  // Rebinding a plain handle to the root must not modify the document.
+  currentNode = cfg;
+  EXPECT_EQ(NodeType::Map, cfg.Type());
+  EXPECT_EQ(1, cfg.size());
+  EXPECT_TRUE(cfg["Test"].IsMap());
+
+  currentNode = currentNode["Test"];
+  EXPECT_EQ("Some string", currentNode["Level1"].as<std::string>());
+  EXPECT_EQ("Some string", cfg["Test"]["Level1"].as<std::string>());
+  EXPECT_EQ("Test:\n  Level1: Some string", Dump(cfg));
+}
+
+TEST(NodeTest, ReassigningHandleToSubnodeKeepsDocumentIntact) {
+  Node cfg = Load("a:\n  b: 1\n");
+  Node sub = cfg["a"];
+  Node walker = cfg;
+  walker = sub;
+  EXPECT_EQ(1, walker["b"].as<int>());
+
+  // The document must not be modified by the reassignments above.
+  EXPECT_EQ(NodeType::Map, cfg.Type());
+  EXPECT_EQ(1, cfg.size());
+  EXPECT_EQ(1, cfg["a"]["b"].as<int>());
+  EXPECT_TRUE(cfg["a"] == sub);
+}
+
+// Assigning through a handle obtained from a const Node must have the same
+// (document-mutating) semantics as through a non-const Node.
+TEST(NodeTest, ConstAccessYieldsViewSemantics) {
+  Node node;
+  node["foo"] = "value";
+  const Node& cnode = node;
+  Node view = cnode["foo"];
+  view = Node(42);
+  EXPECT_EQ(42, node["foo"].as<int>());
+}
+
+// Direct- and copy-initialization from an iterator_value must yield handles
+// with identical (document-mutating) semantics.
+TEST(NodeTest, IteratorValueCopyAndDirectInitAreEquivalent) {
+  {
+    Node node = Load("[1, 2, 3]");
+    Node copyInit = *node.begin();  // copy-initialization
+    copyInit = Node(100);
+    EXPECT_EQ(100, node[0].as<int>());
+  }
+  {
+    Node node = Load("[1, 2, 3]");
+    Node directInit(*node.begin());  // direct-initialization
+    directInit = Node(200);
+    EXPECT_EQ(200, node[0].as<int>());
+  }
+}
+
+// reset() must produce a plain reference, so that assigning through the
+// handle afterwards rebinds instead of mutating the document.
+TEST(NodeTest, ResetTurnsAViewIntoAReference) {
+  Node node;
+  node["foo"] = "value";
+  Node view = node["foo"];
+  view.reset();
+  view = Node(99);  // rebinds, must not touch the document
+  EXPECT_EQ("value", node["foo"].as<std::string>());
+}
+
+// The root of a freshly loaded document is a plain reference: assigning it
+// rebinds and must not rewrite the document it pointed into.
+TEST(NodeTest, LoadedRootAssignmentRebinds) {
+  Node cfg = Load("a:\n  b: 1\n");
+  Node cfg2 = Load("c:\n  d: 2\n");
+  cfg = cfg2;  // rebinding; must not modify either document
+  EXPECT_EQ(1, cfg2.size());
+  EXPECT_EQ(2, cfg["c"]["d"].as<int>());
+  EXPECT_EQ("c:\n  d: 2", Dump(cfg2));
 }
 
 TEST(NodeTest, Bool) {
