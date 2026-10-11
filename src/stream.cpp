@@ -395,7 +395,7 @@ void Stream::StreamInUtf16() const {
         // Deal with the next UTF-16 unit
         if (chLow < 0xD800 || chLow >= 0xE000) {
           // Easiest case: queue the codepoint and return
-          QueueUnicodeCodepoint(m_readahead, ch);
+          QueueUnicodeCodepoint(m_readahead, chLow);
           return;
         }
         // Start the loop over with the new high surrogate
