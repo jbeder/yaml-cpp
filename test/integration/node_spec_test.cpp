@@ -3,6 +3,8 @@
 
 #include "gtest/gtest.h"
 
+#include <cmath>
+
 #define EXPECT_THROW_PARSER_EXCEPTION(statement, message) \
   ASSERT_THROW(statement, ParserException);               \
   try {                                                   \
@@ -237,7 +239,39 @@ TEST(NodeSpecTest, Ex2_18_MultiLineFlowScalars) {
               "So does this quoted scalar.\n");
 }
 
-// TODO: 2.19 - 2.22 schema tags
+TEST(NodeSpecTest, Ex2_19_Integers) {
+  Node doc = Load(ex2_19);
+  EXPECT_EQ(12345, doc["canonical"].as<int>());
+  EXPECT_EQ(12345, doc["decimal"].as<int>());
+  EXPECT_EQ(12, doc["octal"].as<int>());
+  EXPECT_EQ(12, doc["hexadecimal"].as<int>());
+}
+
+TEST(NodeSpecTest, Ex2_20_FloatingPoint) {
+  Node doc = Load(ex2_20);
+  EXPECT_DOUBLE_EQ(1230.15, doc["canonical"].as<double>());
+  EXPECT_DOUBLE_EQ(1230.15, doc["exponential"].as<double>());
+  EXPECT_DOUBLE_EQ(1230.15, doc["fixed"].as<double>());
+  EXPECT_TRUE(std::isinf(doc["negative infinity"].as<double>()));
+  EXPECT_LT(doc["negative infinity"].as<double>(), 0.0);
+  EXPECT_TRUE(std::isnan(doc["not a number"].as<double>()));
+}
+
+TEST(NodeSpecTest, Ex2_21_Miscellaneous) {
+  Node doc = Load(ex2_21);
+  EXPECT_TRUE(doc[Null].IsNull());
+  EXPECT_TRUE(doc["booleans"][0].as<bool>());
+  EXPECT_FALSE(doc["booleans"][1].as<bool>());
+  EXPECT_EQ("012345", doc["string"].as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex2_22_Timestamps) {
+  Node doc = Load(ex2_22);
+  EXPECT_EQ("2001-12-15T02:59:43.1Z", doc["canonical"].as<std::string>());
+  EXPECT_EQ("2001-12-14t21:59:43.10-05:00", doc["iso8601"].as<std::string>());
+  EXPECT_EQ("2001-12-14 21:59:43.10 -5", doc["spaced"].as<std::string>());
+  EXPECT_EQ("2002-12-14", doc["date"].as<std::string>());
+}
 
 TEST(NodeSpecTest, Ex2_23_VariousExplicitTags) {
   Node doc = Load(ex2_23);
@@ -392,7 +426,11 @@ TEST(NodeSpecTest, Ex2_28_LogFile) {
   }
 }
 
-// TODO: 5.1 - 5.2 BOM
+TEST(NodeSpecTest, Ex5_1_ByteOrderMark) { EXPECT_TRUE(Load(ex5_1).IsNull()); }
+
+TEST(NodeSpecTest, Ex5_2_InvalidByteOrderMark) {
+  EXPECT_THROW(Load(ex5_2), ParserException);
+}
 
 TEST(NodeSpecTest, Ex5_3_BlockStructureIndicators) {
   Node doc = Load(ex5_3);
@@ -443,8 +481,14 @@ TEST(NodeSpecTest, Ex5_8_QuotedScalarIndicators) {
   EXPECT_EQ("text", doc["double"].as<std::string>());
 }
 
-// TODO: 5.9 directive
-// TODO: 5.10 reserved indicator
+TEST(NodeSpecTest, Ex5_9_DirectiveIndicator) {
+  Node doc = Load(ex5_9);
+  EXPECT_EQ("text", doc.as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex5_10_InvalidUseOfReservedIndicators) {
+  EXPECT_THROW(Load(ex5_10), ParserException);
+}
 
 TEST(NodeSpecTest, Ex5_11_LineBreakCharacters) {
   Node doc = Load(ex5_11);
@@ -979,14 +1023,12 @@ TEST(NodeSpecTest, Ex8_4_ChompingFinalLineBreak) {
   EXPECT_EQ("text\n", doc["keep"].as<std::string>());
 }
 
-TEST(NodeSpecTest, DISABLED_Ex8_5_ChompingTrailingLines) {
+TEST(NodeSpecTest, Ex8_5_ChompingTrailingLines) {
   Node doc = Load(ex8_5);
   EXPECT_EQ(3, doc.size());
   EXPECT_EQ("# text", doc["strip"].as<std::string>());
   EXPECT_EQ("# text\n", doc["clip"].as<std::string>());
-  // NOTE: I believe this is a bug in the YAML spec -
-  // it should be "# text\n\n"
-  EXPECT_EQ("# text\n", doc["keep"].as<std::string>());
+  EXPECT_EQ("# text\n\n", doc["keep"].as<std::string>());
 }
 
 TEST(NodeSpecTest, Ex8_6_EmptyScalarChomping) {
@@ -1107,13 +1149,11 @@ TEST(NodeSpecTest, Ex8_20_BlockNodeTypes) {
   EXPECT_EQ("bar", doc[2]["foo"].as<std::string>());
 }
 
-TEST(NodeSpecTest, DISABLED_Ex8_21_BlockScalarNodes) {
+TEST(NodeSpecTest, Ex8_21_BlockScalarNodes) {
   Node doc = Load(ex8_21);
   EXPECT_EQ(2, doc.size());
-  // NOTE: I believe this is a bug in the YAML spec -
-  // it should be "value\n"
-  EXPECT_EQ("value", doc["literal"].as<std::string>());
-  EXPECT_EQ("value", doc["folded"].as<std::string>());
+  EXPECT_EQ("value\n", doc["literal"].as<std::string>());
+  EXPECT_EQ("value\n", doc["folded"].as<std::string>());
   EXPECT_EQ("!foo", doc["folded"].Tag());
 }
 
@@ -1126,6 +1166,144 @@ TEST(NodeSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_EQ("nested", doc["sequence"][1][0].as<std::string>());
   EXPECT_EQ(1, doc["mapping"].size());
   EXPECT_EQ("bar", doc["mapping"]["foo"].as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex9_1_DocumentPrefix) {
+  EXPECT_EQ("Document", Load(ex9_1).as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex9_2_DocumentMarkers) {
+  EXPECT_EQ("Document", Load(ex9_2).as<std::string>());
+}
+
+TEST(NodeSpecTest, DISABLED_Ex9_3_BareDocuments) {
+  // SPEC_GAP: yaml-cpp rejects a bare literal document after an empty
+  // document marker.
+  std::vector<Node> docs = LoadAll(ex9_3);
+  ASSERT_EQ(2u, docs.size());
+  EXPECT_EQ("Bare document", docs[0].as<std::string>());
+  EXPECT_EQ("%!PS-Adobe-2.0\n", docs[1].as<std::string>());
+}
+
+TEST(NodeSpecTest, DISABLED_Ex9_4_ExplicitDocuments) {
+  // SPEC_GAP: yaml-cpp rejects the percent character in this flow key.
+  std::vector<Node> docs = LoadAll(ex9_4);
+  ASSERT_EQ(2u, docs.size());
+  ASSERT_EQ(1u, docs[0].size());
+  EXPECT_EQ(20, docs[0]["matches %"].as<int>());
+  EXPECT_TRUE(docs[1].IsNull());
+}
+
+TEST(NodeSpecTest, DISABLED_Ex9_5_DirectivesDocuments) {
+  // SPEC_GAP: yaml-cpp rejects a directive document containing this literal
+  // block scalar.
+  std::vector<Node> docs = LoadAll(ex9_5);
+  ASSERT_EQ(2u, docs.size());
+  EXPECT_EQ("%!PS-Adobe-2.0\n", docs[0].as<std::string>());
+  EXPECT_TRUE(docs[1].IsNull());
+}
+
+TEST(NodeSpecTest, Ex9_6_Stream) {
+  std::vector<Node> docs = LoadAll(ex9_6);
+  ASSERT_EQ(3u, docs.size());
+  EXPECT_EQ("Document", docs[0].as<std::string>());
+  EXPECT_TRUE(docs[1].IsNull());
+  ASSERT_EQ(1u, docs[2].size());
+  EXPECT_EQ(20, docs[2]["matches %"].as<int>());
+}
+
+TEST(NodeSpecTest, Ex10_1_MapExamples) {
+  Node doc = Load(ex10_1);
+  EXPECT_EQ(2u, doc.size());
+  EXPECT_EQ("Evans", doc["Block style"]["Clark"].as<std::string>());
+  EXPECT_EQ("döt Net", doc["Block style"]["Ingy"].as<std::string>());
+  EXPECT_EQ("Ben-Kiki", doc["Flow style"]["Oren"].as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex10_2_SequenceExamples) {
+  Node doc = Load(ex10_2);
+  EXPECT_EQ(2u, doc.size());
+  ASSERT_EQ(3u, doc["Block style"].size());
+  EXPECT_EQ("Clark Evans", doc["Block style"][0].as<std::string>());
+  EXPECT_EQ("Ingy döt Net", doc["Block style"][1].as<std::string>());
+  EXPECT_EQ("Oren Ben-Kiki", doc["Flow style"][2].as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex10_3_StringExamples) {
+  Node doc = Load(ex10_3);
+  EXPECT_EQ("String: just a theory.", doc["Block style"].as<std::string>());
+  EXPECT_EQ("String: just a theory.", doc["Flow style"].as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex10_4_NullExamples) {
+  Node doc = Load(ex10_4);
+  ASSERT_EQ(2u, doc.size());
+  bool found_null_key = false;
+  bool found_null_value = false;
+  for (Node::const_iterator it = doc.begin(); it != doc.end(); ++it) {
+    if (it->first.Tag() == "tag:yaml.org,2002:null") {
+      found_null_key = true;
+      EXPECT_EQ("null", it->first.as<std::string>());
+      EXPECT_EQ("value for null key", it->second.as<std::string>());
+    } else if (it->first.as<std::string>() == "key with null value") {
+      found_null_value = true;
+      EXPECT_EQ("tag:yaml.org,2002:null", it->second.Tag());
+      EXPECT_EQ("null", it->second.as<std::string>());
+    }
+  }
+  EXPECT_TRUE(found_null_key);
+  EXPECT_TRUE(found_null_value);
+}
+
+TEST(NodeSpecTest, Ex10_5_BooleanExamples) {
+  Node doc = Load(ex10_5);
+  EXPECT_TRUE(doc["YAML is a superset of JSON"].as<bool>());
+  EXPECT_FALSE(doc["Pluto is a planet"].as<bool>());
+}
+
+TEST(NodeSpecTest, Ex10_6_IntegerExamples) {
+  Node doc = Load(ex10_6);
+  EXPECT_EQ(-12, doc["negative"].as<int>());
+  EXPECT_EQ(0, doc["zero"].as<int>());
+  EXPECT_EQ(34, doc["positive"].as<int>());
+}
+
+TEST(NodeSpecTest, Ex10_7_FloatingPointExamples) {
+  Node doc = Load(ex10_7);
+  EXPECT_DOUBLE_EQ(-1.0, doc["negative"].as<double>());
+  EXPECT_DOUBLE_EQ(0.0, doc["zero"].as<double>());
+  EXPECT_DOUBLE_EQ(23000.0, doc["positive"].as<double>());
+  EXPECT_TRUE(std::isinf(doc["infinity"].as<double>()));
+  EXPECT_GT(doc["infinity"].as<double>(), 0.0);
+  EXPECT_TRUE(std::isnan(doc["not a number"].as<double>()));
+}
+
+TEST(NodeSpecTest, DISABLED_Ex10_8_JsonTagResolution) {
+  // SPEC_GAP: yaml-cpp uses the YAML 1.1-compatible resolver for several
+  // values that YAML 1.2 JSON resolution leaves as strings.
+  Node doc = Load(ex10_8);
+  EXPECT_TRUE(doc["A null"].IsNull());
+  EXPECT_TRUE(doc["Booleans"][0].as<bool>());
+  EXPECT_FALSE(doc["Booleans"][1].as<bool>());
+  EXPECT_EQ("True", doc["Invalid"][0].as<std::string>());
+  EXPECT_EQ("Null", doc["Invalid"][1].as<std::string>());
+  EXPECT_EQ("0o7", doc["Invalid"][2].as<std::string>());
+  EXPECT_EQ("0x3A", doc["Invalid"][3].as<std::string>());
+  EXPECT_EQ("+12.3", doc["Invalid"][4].as<std::string>());
+}
+
+TEST(NodeSpecTest, Ex10_9_CoreTagResolution) {
+  Node doc = Load(ex10_9);
+  EXPECT_TRUE(doc["A null"].IsNull());
+  EXPECT_TRUE(doc["Also a null"].IsNull());
+  EXPECT_EQ("", doc["Not a null"].as<std::string>());
+  EXPECT_TRUE(doc["Booleans"][0].as<bool>());
+  EXPECT_TRUE(doc["Booleans"][1].as<bool>());
+  EXPECT_FALSE(doc["Booleans"][2].as<bool>());
+  EXPECT_FALSE(doc["Booleans"][3].as<bool>());
+  EXPECT_EQ(7, doc["Integers"][1].as<int>());
+  EXPECT_EQ(58, doc["Integers"][2].as<int>());
+  EXPECT_DOUBLE_EQ(0.5, doc["Floats"][2].as<double>());
 }
 
 TEST(NodeSpecTest, FlowMapNotClosed) {
