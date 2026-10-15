@@ -23,7 +23,7 @@
 #include "yaml-cpp/node/ptr.h"
 #include <cstddef>
 #include <iterator>
-
+#include <type_traits>
 
 namespace YAML {
 namespace detail {
@@ -52,7 +52,7 @@ class iterator_base {
 
  public:
   using iterator_category = std::bidirectional_iterator_tag;
-  using value_type = V;
+  using value_type = typename std::remove_cv<V>::type;
   using difference_type = std::ptrdiff_t;
   using pointer = V*;
   using reference = V&;
@@ -100,13 +100,13 @@ class iterator_base {
     return m_iterator != rhs.m_iterator;
   }
 
-  value_type operator*() const YAML_ATTRIBUTE_LIFETIME_BOUND {
+  V operator*() const YAML_ATTRIBUTE_LIFETIME_BOUND {
     const typename base_type::value_type& v = *m_iterator;
     if (v.pNode)
-      return value_type(Node(*v, m_pMemory));
+      return V(Node(*v, m_pMemory));
     if (v.first && v.second)
-      return value_type(Node(*v.first, m_pMemory), Node(*v.second, m_pMemory));
-    return value_type();
+      return V(Node(*v.first, m_pMemory), Node(*v.second, m_pMemory));
+    return V();
   }
 
   proxy operator->() const YAML_ATTRIBUTE_LIFETIME_BOUND {
