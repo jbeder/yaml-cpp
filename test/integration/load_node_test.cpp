@@ -540,5 +540,26 @@ TEST(LoadNodeTest, NonUniqueMapKey) {
   EXPECT_THROW(Load("{a: A, b: B, a: A}"), NonUniqueMapKey);
 }
 
+TEST(LoadNodeTest, PreserveTrailingNewlinesInQuotedScalars) {
+  for (char quote : {'\'', '"'}) {
+    for (std::size_t trailing = 0; trailing <= 4; ++trailing) {
+      SCOPED_TRACE(::testing::Message()
+                   << "quote=" << quote << ", trailing=" << trailing);
+      std::string input = "value: ";
+      input += quote;
+      input += "a\n\n  b";
+      if (trailing > 0) {
+        input += std::string(trailing + 1, '\n');
+        input += "  ";
+      }
+      input += quote;
+      input += '\n';
+
+      EXPECT_EQ("a\nb" + std::string(trailing, '\n'),
+                Load(input)["value"].as<std::string>());
+    }
+  }
+}
+
 }  // namespace
 }  // namespace YAML
