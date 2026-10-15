@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "exp.h"
+#include "regex_stream.h"
 #include "stream.h"
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 
@@ -10,6 +11,63 @@ struct Mark;
 
 namespace YAML {
 namespace Exp {
+namespace {
+template <typename Pattern>
+const RegEx& Matcher() {
+  static constexpr RegEx expression = MakeStreamRegEx<Pattern>();
+  return expression;
+}
+}  // namespace
+
+const RegEx& Empty() { return Matcher<Patterns::Empty>(); }
+const RegEx& Space() { return Matcher<Patterns::Space>(); }
+const RegEx& Tab() { return Matcher<Patterns::Tab>(); }
+const RegEx& Blank() { return Matcher<Patterns::Blank>(); }
+const RegEx& Break() { return Matcher<Patterns::Break>(); }
+const RegEx& BlankOrBreak() { return Matcher<Patterns::BlankOrBreak>(); }
+const RegEx& Digit() { return Matcher<Patterns::Digit>(); }
+const RegEx& Alpha() { return Matcher<Patterns::Alpha>(); }
+const RegEx& AlphaNumeric() { return Matcher<Patterns::AlphaNumeric>(); }
+const RegEx& Word() { return Matcher<Patterns::Word>(); }
+const RegEx& Hex() { return Matcher<Patterns::Hex>(); }
+const RegEx& NotPrintable() { return Matcher<Patterns::NotPrintable>(); }
+const RegEx& Utf8_ByteOrderMark() {
+  return Matcher<Patterns::Utf8ByteOrderMark>();
+}
+const RegEx& DocStart() { return Matcher<Patterns::DocumentStart>(); }
+const RegEx& DocEnd() { return Matcher<Patterns::DocumentEnd>(); }
+const RegEx& DocIndicator() { return Matcher<Patterns::DocumentIndicator>(); }
+const RegEx& BlockEntry() { return Matcher<Patterns::BlockEntry>(); }
+const RegEx& Key() { return Matcher<Patterns::Key>(); }
+const RegEx& KeyInFlow() { return Matcher<Patterns::KeyInFlow>(); }
+const RegEx& Value() { return Matcher<Patterns::Value>(); }
+const RegEx& ValueInFlow() { return Matcher<Patterns::ValueInFlow>(); }
+const RegEx& ValueInJSONFlow() { return Matcher<Patterns::ValueInJSONFlow>(); }
+const RegEx& Ampersand() { return Matcher<Patterns::Ampersand>(); }
+const RegEx& Comment() { return Matcher<Patterns::Comment>(); }
+const RegEx& Anchor() { return Matcher<Patterns::Anchor>(); }
+const RegEx& AnchorEnd() { return Matcher<Patterns::AnchorEnd>(); }
+const RegEx& URI() { return Matcher<Patterns::Uri>(); }
+const RegEx& Tag() { return Matcher<Patterns::Tag>(); }
+const RegEx& PlainScalar() { return Matcher<Patterns::PlainScalar>(); }
+const RegEx& PlainScalarInFlow() {
+  return Matcher<Patterns::PlainScalarInFlow>();
+}
+const RegEx& EndScalar() { return Matcher<Patterns::EndScalar>(); }
+const RegEx& EndScalarInFlow() { return Matcher<Patterns::EndScalarInFlow>(); }
+const RegEx& ScanScalarEndInFlow() {
+  return Matcher<Patterns::ScanScalarEndInFlow>();
+}
+const RegEx& ScanScalarEnd() { return Matcher<Patterns::ScanScalarEnd>(); }
+const RegEx& EscSingleQuote() { return Matcher<Patterns::EscSingleQuote>(); }
+const RegEx& EscBreak() { return Matcher<Patterns::EscBreak>(); }
+const RegEx& SingleQuoteEnd() { return Matcher<Patterns::SingleQuoteEnd>(); }
+const RegEx& DoubleQuoteEnd() { return Matcher<Patterns::DoubleQuoteEnd>(); }
+const RegEx& ChompIndicator() { return Matcher<Patterns::ChompIndicator>(); }
+const RegEx& Chomp() { return Matcher<Patterns::Chomp>(); }
+const RegEx& DisallowedFlow() { return Matcher<Patterns::DisallowedFlow>(); }
+const RegEx& DisallowedBlock() { return Matcher<Patterns::DisallowedBlock>(); }
+
 unsigned ParseHex(const std::string& str, const Mark& mark) {
   unsigned value = 0;
   for (char ch : str) {
