@@ -146,7 +146,7 @@ void SingleDocParser::HandleNode(EventHandler& eventHandler) {
       break;
   }
 
-  if (tag == "?")
+  if (tag == "?" || tag == "tag:yaml.org,2002:null")
     eventHandler.OnNull(mark, anchor);
   else
     eventHandler.OnScalar(mark, tag, anchor, "");

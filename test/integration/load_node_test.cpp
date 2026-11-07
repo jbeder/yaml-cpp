@@ -405,6 +405,13 @@ TEST(NodeTest, LoadQuotedNull) {
   EXPECT_EQ(node.as<std::string>(), "null");
 }
 
+TEST(NodeTest, LoadNullWithNullTag) {
+  Node doc = Load("---\ntest: !!null \nfoo: bar");
+  EXPECT_TRUE(doc["test"].IsNull());
+  EXPECT_FALSE(doc["test"].IsScalar());
+  EXPECT_EQ(doc["foo"].as<std::string>(), "bar");
+}
+
 TEST(NodeTest, LoadNonClosedQuotedString) {
   EXPECT_THROW(Load(R"("foo)"), ParserException);
 }
