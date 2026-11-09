@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <cassert>
 
 #include "nodebuilder.h"
@@ -74,15 +73,14 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
   m_mapDepth++;
   if (m_mapKeys.size() < m_mapDepth)
     m_mapKeys.emplace_back();
-  m_mapKeys[m_mapDepth - 1].list.clear();
 }
 
 void NodeBuilder::OnMapEnd() {
   assert(m_mapDepth > 0);
   m_mapDepth--;
-  MapKeys& keys = m_mapKeys[m_mapDepth];
-  if (!keys.set.empty())
-    std::unordered_set<std::string>().swap(keys.set);
+  std::unordered_set<std::string>& keys = m_mapKeys[m_mapDepth];
+  if (!keys.empty())
+    std::unordered_set<std::string>().swap(keys);
   Pop();
 }
 
@@ -141,19 +139,7 @@ void NodeBuilder::CheckUniqueKey(const detail::node& map,
   if (scalar.empty())
     return;
 
-  MapKeys& keys = m_mapKeys[m_mapDepth - 1];
-  bool duplicate;
-  if (keys.set.empty() && keys.list.size() < 16) {
-    duplicate = std::any_of(keys.list.begin(), keys.list.end(),
-                            [&](const std::string* s) { return *s == scalar; });
-    keys.list.push_back(&scalar);
-  } else {
-    if (keys.set.empty())
-      for (const std::string* s : keys.list)
-        keys.set.insert(*s);
-    duplicate = !keys.set.insert(scalar).second;
-  }
-  if (duplicate)
+  if (!m_mapKeys[m_mapDepth - 1].insert(scalar).second)
     throw NonUniqueMapKey(map.mark(), key);
 }
 

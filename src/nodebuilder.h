@@ -72,13 +72,8 @@ class NodeBuilder : public EventHandler {
   std::vector<PushedKey> m_keys;
   std::size_t m_mapDepth;
 
-  // Scalar keys of each open map, indexed by depth. The first 16 go in a
-  // list; after that they all move to a hash set.
-  struct MapKeys {
-    std::vector<const std::string*> list{};
-    std::unordered_set<std::string> set{};
-  };
-  std::vector<MapKeys> m_mapKeys;
+  // Scalar keys of each open map, indexed by depth.
+  std::vector<std::unordered_set<std::string>> m_mapKeys;
 };
 }  // namespace YAML
 
