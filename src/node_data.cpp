@@ -203,7 +203,8 @@ void node_data::insert(node& key, node& value,
       throw BadSubscript(m_mark, key);
   }
 
-  insert_map_pair(key, value);
+  // NodeBuilder, the only caller, checks for duplicate keys.
+  insert_map_pair(key, value, true);
 }
 
 // indexing
@@ -320,7 +321,7 @@ void node_data::convert_sequence_to_map(const shared_memory_holder& pMemory) {
 
     node& key = pMemory->create_node();
     key.set_scalar(stream.str());
-    insert_map_pair(key, *m_sequence[i]);
+    insert_map_pair(key, *m_sequence[i], true);  // index keys are unique
   }
 
   reset_sequence();

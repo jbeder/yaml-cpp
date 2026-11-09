@@ -1,6 +1,8 @@
+#include <algorithm>
 #include <cassert>
 
 #include "nodebuilder.h"
+#include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/detail/node.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/node.h"
@@ -15,7 +17,8 @@ NodeBuilder::NodeBuilder()
       m_stack{},
       m_anchors{},
       m_keys{},
-      m_mapDepth(0) {
+      m_mapDepth(0),
+      m_mapKeys{} {
   m_anchors.push_back(nullptr);  // since the anchors start at 1
 }
 
@@ -69,11 +72,17 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
   node.set_tag(tag);
   node.set_style(style);
   m_mapDepth++;
+  if (m_mapKeys.size() < m_mapDepth)
+    m_mapKeys.emplace_back();
+  m_mapKeys[m_mapDepth - 1].list.clear();
 }
 
 void NodeBuilder::OnMapEnd() {
   assert(m_mapDepth > 0);
   m_mapDepth--;
+  MapKeys& keys = m_mapKeys[m_mapDepth];
+  if (!keys.set.empty())
+    std::unordered_set<std::string>().swap(keys.set);
   Pop();
 }
 
@@ -114,6 +123,7 @@ void NodeBuilder::Pop() {
     assert(!m_keys.empty());
     PushedKey& key = m_keys.back();
     if (key.second) {
+      CheckUniqueKey(collection, *key.first);
       collection.insert(*key.first, node, m_pMemory);
       m_keys.pop_back();
     } else {
@@ -123,6 +133,28 @@ void NodeBuilder::Pop() {
     assert(false);
     m_stack.clear();
   }
+}
+
+void NodeBuilder::CheckUniqueKey(const detail::node& map,
+                                 const detail::node& key) {
+  const std::string& scalar = key.scalar();
+  if (scalar.empty())
+    return;
+
+  MapKeys& keys = m_mapKeys[m_mapDepth - 1];
+  bool duplicate;
+  if (keys.set.empty() && keys.list.size() < 16) {
+    duplicate = std::any_of(keys.list.begin(), keys.list.end(),
+                            [&](const std::string* s) { return *s == scalar; });
+    keys.list.push_back(&scalar);
+  } else {
+    if (keys.set.empty())
+      for (const std::string* s : keys.list)
+        keys.set.insert(*s);
+    duplicate = !keys.set.insert(scalar).second;
+  }
+  if (duplicate)
+    throw NonUniqueMapKey(map.mark(), key);
 }
 
 void NodeBuilder::RegisterAnchor(anchor_t anchor, detail::node& node) {
