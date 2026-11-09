@@ -540,5 +540,70 @@ TEST(LoadNodeTest, NonUniqueMapKey) {
   EXPECT_THROW(Load("{a: A, b: B, a: A}"), NonUniqueMapKey);
 }
 
+std::string BlockMapWithKeys(int size, const std::string& indent = "") {
+  std::string yaml;
+  for (int i = 0; i < size; i++)
+    yaml += indent + "k" + std::to_string(i) + ": " + std::to_string(i) + "\n";
+  return yaml;
+}
+
+std::string FlowMapWithKeys(int size) {
+  std::string yaml = "{";
+  for (int i = 0; i < size; i++)
+    yaml += (i ? ", k" : "k") + std::to_string(i) + ": " + std::to_string(i);
+  return yaml + "}";
+}
+
+TEST(LoadNodeTest, NonUniqueMapKeyInLargeMap) {
+  for (int size : {1, 15, 16, 17, 40, 1000}) {
+    const std::string map = BlockMapWithKeys(size);
+    const std::string last = "k" + std::to_string(size - 1);
+    EXPECT_NO_THROW(Load(map));
+    EXPECT_THROW(Load(map + "k0: x\n"), NonUniqueMapKey);
+    EXPECT_THROW(Load(map + last + ": x\n"), NonUniqueMapKey);
+    EXPECT_THROW(Load(map + "new: x\n" + last + ": x\n"), NonUniqueMapKey);
+  }
+}
+
+TEST(LoadNodeTest, LargeMapKeepsKeyOrder) {
+  Node node = Load(BlockMapWithKeys(1000));
+  ASSERT_EQ(1000u, node.size());
+  int i = 0;
+  for (const auto& kv : node) {
+    EXPECT_EQ("k" + std::to_string(i), kv.first.as<std::string>());
+    EXPECT_EQ(i, kv.second.as<int>());
+    i++;
+  }
+}
+
+TEST(LoadNodeTest, NonUniqueMapKeyIsCheckedPerMap) {
+  const std::string big = FlowMapWithKeys(40);
+  EXPECT_NO_THROW(Load("[" + big + ", " + big + ", {k0: a, k39: b}]"));
+  EXPECT_NO_THROW(Load("{k0: " + big + ", k1: " + big + "}"));
+  EXPECT_THROW(Load("{k0: " + big + ", k1: 1, k0: 2}"), NonUniqueMapKey);
+  EXPECT_THROW(Load("[{k0: {k0: 1, k0: 2}}]"), NonUniqueMapKey);
+  EXPECT_THROW(Load("{a: " + big.substr(0, big.size() - 1) + ", k7: x}}"),
+               NonUniqueMapKey);
+}
+
+TEST(LoadNodeTest, NonUniqueMapKeyThroughAlias) {
+  EXPECT_THROW(Load("[&x a, {*x : 1, a: 2}]"), NonUniqueMapKey);
+  EXPECT_THROW(Load("[&x a, {a: 1, *x : 2}]"), NonUniqueMapKey);
+}
+
+TEST(LoadNodeTest, NonUniqueMapKeyReportsMapMark) {
+  const std::string yaml = "a: 1\nb:\n" + BlockMapWithKeys(20, "  ");
+  const Mark mark = Load(yaml)["b"].Mark();
+  try {
+    Load(yaml + "  k3: x\n");
+    FAIL() << "expected NonUniqueMapKey";
+  } catch (const NonUniqueMapKey& e) {
+    EXPECT_EQ(mark.pos, e.mark.pos);
+    EXPECT_EQ(mark.line, e.mark.line);
+    EXPECT_EQ(mark.column, e.mark.column);
+    EXPECT_EQ(ErrorMsg::NON_UNIQUE_MAP_KEY, e.msg);
+  }
+}
+
 }  // namespace
 }  // namespace YAML

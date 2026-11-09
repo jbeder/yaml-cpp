@@ -7,6 +7,8 @@
 #pragma once
 #endif
 
+#include <string>
+#include <unordered_set>
 #include <vector>
 
 #include "yaml-cpp/anchor.h"
@@ -56,6 +58,7 @@ class NodeBuilder : public EventHandler {
   void Push(detail::node& node);
   void Pop();
   void RegisterAnchor(anchor_t anchor, detail::node& node);
+  void CheckUniqueKey(const detail::node& map, const detail::node& key);
 
  private:
   detail::shared_memory_holder m_pMemory;
@@ -68,6 +71,9 @@ class NodeBuilder : public EventHandler {
   using PushedKey = std::pair<detail::node*, bool>;
   std::vector<PushedKey> m_keys;
   std::size_t m_mapDepth;
+
+  // Scalar keys of each open map, indexed by depth.
+  std::vector<std::unordered_set<std::string>> m_mapKeys;
 };
 }  // namespace YAML
 

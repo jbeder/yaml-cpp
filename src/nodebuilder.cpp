@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "nodebuilder.h"
+#include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/detail/node.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/node.h"
@@ -15,7 +16,8 @@ NodeBuilder::NodeBuilder()
       m_stack{},
       m_anchors{},
       m_keys{},
-      m_mapDepth(0) {
+      m_mapDepth(0),
+      m_mapKeys{} {
   m_anchors.push_back(nullptr);  // since the anchors start at 1
 }
 
@@ -69,11 +71,16 @@ void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
   node.set_tag(tag);
   node.set_style(style);
   m_mapDepth++;
+  if (m_mapKeys.size() < m_mapDepth)
+    m_mapKeys.emplace_back();
 }
 
 void NodeBuilder::OnMapEnd() {
   assert(m_mapDepth > 0);
   m_mapDepth--;
+  std::unordered_set<std::string>& keys = m_mapKeys[m_mapDepth];
+  if (!keys.empty())
+    std::unordered_set<std::string>().swap(keys);
   Pop();
 }
 
@@ -114,6 +121,7 @@ void NodeBuilder::Pop() {
     assert(!m_keys.empty());
     PushedKey& key = m_keys.back();
     if (key.second) {
+      CheckUniqueKey(collection, *key.first);
       collection.insert(*key.first, node, m_pMemory);
       m_keys.pop_back();
     } else {
@@ -123,6 +131,16 @@ void NodeBuilder::Pop() {
     assert(false);
     m_stack.clear();
   }
+}
+
+void NodeBuilder::CheckUniqueKey(const detail::node& map,
+                                 const detail::node& key) {
+  const std::string& scalar = key.scalar();
+  if (scalar.empty())
+    return;
+
+  if (!m_mapKeys[m_mapDepth - 1].insert(scalar).second)
+    throw NonUniqueMapKey(map.mark(), key);
 }
 
 void NodeBuilder::RegisterAnchor(anchor_t anchor, detail::node& node) {
