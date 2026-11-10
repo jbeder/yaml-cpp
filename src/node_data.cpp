@@ -3,6 +3,7 @@
 #include <iterator>
 #include <sstream>
 
+#include "never_destroyed.h"
 #include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/node/detail/memory.h"
 #include "yaml-cpp/node/detail/node.h"  // IWYU pragma: keep
@@ -16,7 +17,7 @@ namespace detail {
 YAML_CPP_API std::atomic<size_t> node::m_amount{0};
 
 const std::string& node_data::empty_scalar() {
-  static const std::string svalue;
+  static const never_destroyed<std::string> svalue;
   return svalue;
 }
 
