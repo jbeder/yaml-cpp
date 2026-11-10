@@ -416,7 +416,6 @@ bool WriteLiteralString(ostream_wrapper& out, const char* str, std::size_t size,
     size -= 1;
   } else { // 'keep'
     out << "|+\n";
-    size -= 1;
   }
   int codePoint;
   for (const char* i = str;
