@@ -199,21 +199,41 @@ bool IsValidPlainScalar(const char* str, std::size_t size, FlowType::value flowT
   return true;
 }
 
-bool IsValidSingleQuotedScalar(const char* str, std::size_t size, bool escapeNonAscii) {
-  // TODO: check for non-printable characters?
+bool HasNonPrintable(const char* str, std::size_t size) {
+  static const RegEx disallowed =
+      Exp::NotPrintable() | Exp::Utf8_ByteOrderMark();
+  StringCharSource buffer(str, size);
+  while (buffer) {
+    if (disallowed.Matches(buffer)) {
+      return true;
+    }
+    ++buffer;
+  }
+  return false;
+}
+
+bool IsValidSingleQuotedScalar(const char* str, std::size_t size,
+                               bool escapeNonAscii) {
+  if (HasNonPrintable(str, size)) {
+    return false;
+  }
+
   return std::none_of(str, str + size, [=](char ch) {
     return (escapeNonAscii && (0x80 <= static_cast<unsigned char>(ch))) ||
            (ch == '\n') || (ch == '\r');
   });
 }
 
-bool IsValidLiteralScalar(const char* str, std::size_t size, FlowType::value flowType,
-                          bool escapeNonAscii) {
+bool IsValidLiteralScalar(const char* str, std::size_t size,
+                          FlowType::value flowType, bool escapeNonAscii) {
   if (flowType == FlowType::Flow) {
     return false;
   }
 
-  // TODO: check for non-printable characters?
+  if (HasNonPrintable(str, size)) {
+    return false;
+  }
+
   // A carriage return is a line break to the parser, so a block scalar cannot
   // carry one; leave those to the double-quoted form.
   return std::none_of(str, str + size, [=](char ch) {

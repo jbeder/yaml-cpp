@@ -481,6 +481,39 @@ TEST_F(EmitterTest, LiteralWithCarriageReturn) {
   ExpectEmit("key: \"a\\rb\"");
 }
 
+TEST_F(EmitterTest, SingleQuotedControlCharacters) {
+  const std::string values[] = {std::string("a\0b", 3), std::string("c\1d", 3)};
+  out << BeginSeq << SingleQuoted << values[0] << values[1] << EndSeq;
+  ASSERT_EQ(std::string("- \"a\\x00b\"\n- \"c\\x01d\""),
+            std::string(out.c_str()));
+  const Node emitted = Load(out.c_str());
+  EXPECT_EQ(values[0], emitted[0].as<std::string>());
+  EXPECT_EQ(values[1], emitted[1].as<std::string>());
+}
+
+TEST_F(EmitterTest, LiteralControlCharacters) {
+  const std::string values[] = {std::string("a\0b", 3), std::string("c\1d", 3)};
+  out << BeginSeq << Literal << values[0] << values[1] << EndSeq;
+  ASSERT_EQ(std::string("- \"a\\x00b\"\n- \"c\\x01d\""),
+            std::string(out.c_str()));
+  const Node emitted = Load(out.c_str());
+  EXPECT_EQ(values[0], emitted[0].as<std::string>());
+  EXPECT_EQ(values[1], emitted[1].as<std::string>());
+}
+
+TEST_F(EmitterTest, SingleQuotedByteOrderMark) {
+  const std::string value("a\357\273\277b", 5);
+  out << SingleQuoted << value;
+  ASSERT_EQ(std::string("\"a\\ufeffb\""), std::string(out.c_str()));
+  EXPECT_EQ(value, Load(out.c_str()).as<std::string>());
+}
+
+TEST_F(EmitterTest, LiteralByteOrderMark) {
+  const std::string value("a\357\273\277b", 5);
+  out << Literal << value;
+  ASSERT_EQ(std::string("\"a\\ufeffb\""), std::string(out.c_str()));
+  EXPECT_EQ(value, Load(out.c_str()).as<std::string>());
+}
 
 TEST_F(EmitterTest, AutoLongKeyScalar) {
   out << BeginMap;
