@@ -636,7 +636,11 @@ TEST_F(HandlerSpecTest, Ex2_28_LogFile) {
   Parse(ex2_28);
 }
 
-// TODO: 5.1 - 5.2 BOM
+TEST_F(HandlerSpecTest, Ex5_1_ByteOrderMark) { Parse(ex5_1); }
+
+TEST_F(HandlerSpecTest, Ex5_2_InvalidByteOrderMark) {
+  EXPECT_THROW(IgnoreParse(ex5_2), ParserException);
+}
 
 TEST_F(HandlerSpecTest, Ex5_3_BlockStructureIndicators) {
   EXPECT_CALL(handler, OnDocumentStart(_));
@@ -717,8 +721,16 @@ TEST_F(HandlerSpecTest, Ex5_8_QuotedScalarIndicators) {
   Parse(ex5_8);
 }
 
-// TODO: 5.9 directive
-// TODO: 5.10 reserved indicator
+TEST_F(HandlerSpecTest, Ex5_9_DirectiveIndicator) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "text"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex5_9);
+}
+
+TEST_F(HandlerSpecTest, Ex5_10_InvalidUseOfReservedIndicators) {
+  EXPECT_THROW(IgnoreParse(ex5_10), ParserException);
+}
 
 TEST_F(HandlerSpecTest, Ex5_11_LineBreakCharacters) {
   EXPECT_CALL(handler, OnDocumentStart(_));
@@ -1440,7 +1452,7 @@ TEST_F(HandlerSpecTest, Ex8_4_ChompingFinalLineBreak) {
   Parse(ex8_4);
 }
 
-TEST_F(HandlerSpecTest, DISABLED_Ex8_5_ChompingTrailingLines) {
+TEST_F(HandlerSpecTest, Ex8_5_ChompingTrailingLines) {
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "strip"));
@@ -1448,9 +1460,7 @@ TEST_F(HandlerSpecTest, DISABLED_Ex8_5_ChompingTrailingLines) {
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "clip"));
   EXPECT_CALL(handler, OnScalar(_, "!", 0, "# text\n"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "keep"));
-  // NOTE: I believe this is a bug in the YAML spec -
-  // it should be "# text\n\n"
-  EXPECT_CALL(handler, OnScalar(_, "!", 0, "# text\n"));
+  EXPECT_CALL(handler, OnScalar(_, "!", 0, "# text\n\n"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(ex8_5);
@@ -1646,15 +1656,13 @@ TEST_F(HandlerSpecTest, Ex8_20_BlockNodeTypes) {
   Parse(ex8_20);
 }
 
-TEST_F(HandlerSpecTest, DISABLED_Ex8_21_BlockScalarNodes) {
+TEST_F(HandlerSpecTest, Ex8_21_BlockScalarNodes) {
   EXPECT_CALL(handler, OnDocumentStart(_));
   EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "literal"));
-  // NOTE: I believe this is a bug in the YAML spec
-  // - it should be "value\n"
-  EXPECT_CALL(handler, OnScalar(_, "!", 0, "value"));
+  EXPECT_CALL(handler, OnScalar(_, "!", 0, "value\n"));
   EXPECT_CALL(handler, OnScalar(_, "?", 0, "folded"));
-  EXPECT_CALL(handler, OnScalar(_, "!foo", 0, "value"));
+  EXPECT_CALL(handler, OnScalar(_, "!foo", 0, "value\n"));
   EXPECT_CALL(handler, OnMapEnd());
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(ex8_21);
@@ -1682,5 +1690,276 @@ TEST_F(HandlerSpecTest, Ex8_22_BlockCollectionNodes) {
   EXPECT_CALL(handler, OnDocumentEnd());
   Parse(ex8_22);
 }
+
+TEST_F(HandlerSpecTest, Ex9_1_DocumentPrefix) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Document"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex9_1);
+}
+
+TEST_F(HandlerSpecTest, Ex9_2_DocumentMarkers) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Document"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex9_2);
+}
+
+TEST_F(HandlerSpecTest, DISABLED_Ex9_3_BareDocuments) {
+  // SPEC_GAP: yaml-cpp rejects a bare literal document after an empty
+  // document marker.
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Bare document"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "!", 0, "%!PS-Adobe-2.0\n"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex9_3);
+}
+
+TEST_F(HandlerSpecTest, DISABLED_Ex9_4_ExplicitDocuments) {
+  // SPEC_GAP: yaml-cpp rejects the percent character in this flow key.
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "matches %"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "20"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex9_4);
+}
+
+TEST_F(HandlerSpecTest, DISABLED_Ex9_5_DirectivesDocuments) {
+  // SPEC_GAP: yaml-cpp rejects a directive document containing this literal
+  // block scalar.
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "!", 0, "%!PS-Adobe-2.0\n"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex9_5);
+}
+
+TEST_F(HandlerSpecTest, Ex9_6_Stream) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Document"));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnDocumentEnd());
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "matches %"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "20"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex9_6);
+}
+
+TEST_F(HandlerSpecTest, Ex10_1_MapExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Block style"));
+  EXPECT_CALL(handler,
+              OnMapStart(_, "tag:yaml.org,2002:map", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Clark"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Evans"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Ingy"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "döt Net"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Oren"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Ben-Kiki"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Flow style"));
+  EXPECT_CALL(handler,
+              OnMapStart(_, "tag:yaml.org,2002:map", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Clark"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Evans"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Ingy"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "döt Net"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Oren"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Ben-Kiki"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_1);
+}
+
+TEST_F(HandlerSpecTest, Ex10_2_SequenceExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Block style"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "tag:yaml.org,2002:seq", 0,
+                                       EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Clark Evans"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Ingy döt Net"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Oren Ben-Kiki"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Flow style"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "tag:yaml.org,2002:seq", 0,
+                                       EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Clark Evans"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Ingy döt Net"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Oren Ben-Kiki"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_2);
+}
+
+TEST_F(HandlerSpecTest, Ex10_3_StringExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Block style"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0,
+                                "String: just a theory."));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Flow style"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:str", 0,
+                                "String: just a theory."));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_3);
+}
+
+TEST_F(HandlerSpecTest, Ex10_4_NullExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:null", 0, "null"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "value for null key"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "key with null value"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:null", 0, "null"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_4);
+}
+
+TEST_F(HandlerSpecTest, Ex10_5_BooleanExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "YAML is a superset of JSON"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:bool", 0, "true"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Pluto is a planet"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:bool", 0, "false"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_5);
+}
+
+TEST_F(HandlerSpecTest, Ex10_6_IntegerExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "negative"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:int", 0, "-12"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "zero"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:int", 0, "0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "positive"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:int", 0, "34"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_6);
+}
+
+TEST_F(HandlerSpecTest, Ex10_7_FloatingPointExamples) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "negative"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:float", 0, "-1"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "zero"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:float", 0, "0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "positive"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:float", 0, "2.3e4"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "infinity"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:float", 0, ".inf"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "not a number"));
+  EXPECT_CALL(handler, OnScalar(_, "tag:yaml.org,2002:float", 0, ".nan"));
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_7);
+}
+
+TEST_F(HandlerSpecTest, DISABLED_Ex10_8_JsonTagResolution) {
+  // SPEC_GAP: yaml-cpp emits "Null" as an implicit null event, while the
+  // YAML 1.2 JSON schema requires that value to remain a string scalar.
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "A null"));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Booleans"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "true"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "false"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Integers"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "3"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-19"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Floats"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0."));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-0.0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "12e03"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-2E+05"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Invalid"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "True"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Null"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0o7"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0x3A"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "+12.3"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_8);
+}
+
+TEST_F(HandlerSpecTest, Ex10_9_CoreTagResolution) {
+  EXPECT_CALL(handler, OnDocumentStart(_));
+  EXPECT_CALL(handler, OnMapStart(_, "?", 0, EmitterStyle::Block));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "A null"));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Also a null"));
+  EXPECT_CALL(handler, OnNull(_, 0));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Not a null"));
+  EXPECT_CALL(handler, OnScalar(_, "!", 0, ""));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Booleans"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "true"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "True"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "false"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "FALSE"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Integers"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0o7"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0x3A"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-19"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Floats"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "0."));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-0.0"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, ".5"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "+12e03"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-2E+05"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "Also floats"));
+  EXPECT_CALL(handler, OnSequenceStart(_, "?", 0, EmitterStyle::Flow));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, ".inf"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "-.Inf"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, "+.INF"));
+  EXPECT_CALL(handler, OnScalar(_, "?", 0, ".NAN"));
+  EXPECT_CALL(handler, OnSequenceEnd());
+  EXPECT_CALL(handler, OnMapEnd());
+  EXPECT_CALL(handler, OnDocumentEnd());
+  Parse(ex10_9);
+}
+
 }  // namespace
 }  // namespace YAML
