@@ -349,7 +349,7 @@ void Scanner::ScanQuotedScalar() {
   params.fold = FOLD_FLOW;
   params.eatLeadingWhitespace = true;
   params.trimTrailingSpaces = false;
-  params.chomp = CLIP;
+  params.chomp = KEEP;
   params.onDocIndicator = THROW;
 
   // insert a potential simple key
