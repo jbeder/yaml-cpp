@@ -1,6 +1,4 @@
 #include "exp.h"
-#include "regex_yaml.h"
-#include "regeximpl.h"
 #include "stream.h"
 #include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 #include "yaml-cpp/mark.h"
