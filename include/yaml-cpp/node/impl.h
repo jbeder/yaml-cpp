@@ -21,8 +21,10 @@
 #include "yaml-cpp/node/detail/node.h"
 #include "yaml-cpp/node/iterator.h"
 #include "yaml-cpp/node/node.h"
+#include "yaml-cpp/expected.h"
 #include <sstream>
 #include <string>
+#include <utility>
 
 namespace YAML {
 inline Node::Node()
@@ -100,9 +102,34 @@ inline NodeType::value Node::Type() const {
   return m_pNode ? m_pNode->type() : NodeType::Null;
 }
 
-// access
+// fallback expected converter
+template <typename T>
+struct convert<expected<T>> {
+  static auto decode(const Node& node) -> expected<T> {
+    return decode_impl<T>(node, 0);
+  }
 
-// template helpers
+  template <typename T2 = T>
+  static auto decode_impl(const Node& node, long long x) -> expected<T> {
+    if (node.IsNull()) {
+      return unexpected{};
+    }
+    T t;
+    if (!convert<T>::decode(node, t)) {
+      return unexpected{};
+    }
+    return expected<T>{std::move(t)};
+  }
+
+  template <typename T2 = T>
+  static auto decode_impl(const Node& node, int x) -> decltype(convert<T2>::decode(std::declval<Node>()))  {
+    if (node.IsNull()) {
+      return unexpected{};
+    }
+    return convert<T>::decode(node);
+  }
+};
+
 template <typename T, typename S>
 struct as_if {
   explicit as_if(const Node& node_) : node(node_) {}
@@ -112,10 +139,12 @@ struct as_if {
     if (!node.m_pNode)
       return fallback;
 
-    T t = fallback;
-    if (convert<T>::decode(node, t))
-      return t;
-    return fallback;
+    auto t = convert<expected<T>>::decode(node);
+
+    if (!t) {
+      return fallback;
+    }
+    return *t;
   }
 };
 
@@ -142,10 +171,11 @@ struct as_if<T, void> {
     if (!node.m_pNode) // no fallback
       throw InvalidNode(node.m_invalidKey);
 
-    T t;
-    if (convert<T>::decode(node, t))
-      return t;
-    throw TypedBadConversion<T>(node.Mark());
+    auto t = convert<expected<T>>::decode(node);
+    if (!t) {
+        throw TypedBadConversion<T>(node.Mark());
+    }
+    return *t;
   }
 };
 
