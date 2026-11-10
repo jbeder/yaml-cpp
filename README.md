@@ -7,6 +7,7 @@
 See [Tutorial](https://github.com/jbeder/yaml-cpp/wiki/Tutorial) and [How to Emit YAML](https://github.com/jbeder/yaml-cpp/wiki/How-To-Emit-YAML) for reference. For the old API (until 0.5.0), see [How To Parse A Document](https://github.com/jbeder/yaml-cpp/wiki/How-To-Parse-A-Document-(Old-API)).
 
 ## How to Build
+### CMake
 
 `yaml-cpp` uses [CMake](http://www.cmake.org) to support cross-platform building. Install [CMake](http://www.cmake.org) _(Resources -> Download)_ before proceeding. The basic steps to build are:
 
@@ -68,6 +69,29 @@ FetchContent_MakeAvailable(yaml-cpp)
 
 target_link_libraries(YOUR_LIBRARY PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
 ```
+
+### Bazel
+
+#### Build
+
+```bash
+$ bazel build :yaml-cpp
+```
+
+#### External Dependency
+
+```python
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+# ----------------------------------------------------------------------
+# Yaml parser
+# ----------------------------------------------------------------------
+git_repository(
+    name = "yaml_parser",
+    remote = "https://github.com/yicm/yaml-cpp.git",
+    commit = "c5d1fcf",
+)
+```
+
 
 ## Recent Releases
 
