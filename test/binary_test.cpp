@@ -27,6 +27,12 @@ TEST(BinaryTest, DecodingWhitespaceBetweenPadding) {
   EXPECT_EQ(std::vector<unsigned char>{'M'}, result);
 }
 
+TEST(BinaryTest, DecodingInvalidPadding) {
+  for (const char *input : {"=AAA", "A=AA", "AA=A", "TQ==AAAA", "TQ=\nA"}) {
+    EXPECT_TRUE(YAML::DecodeBase64(input).empty()) << input;
+  }
+}
+
 TEST(BinaryTest, EmptyBinary) {
     YAML::Binary b;
     EXPECT_TRUE(b.size() == 0);
