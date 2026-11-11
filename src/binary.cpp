@@ -81,6 +81,10 @@ std::vector<unsigned char> DecodeBase64(const std::string &input) {
       // skip newlines
       continue;
     }
+    if ((previous_was_padding && input[i] != '=') ||
+        (input[i] == '=' && cnt < 2)) {
+      return ret_type();
+    }
     unsigned char d = decoding[static_cast<unsigned char>(input[i])];
     if (d == 255)
       return ret_type();
