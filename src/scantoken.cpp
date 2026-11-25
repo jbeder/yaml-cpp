@@ -341,8 +341,14 @@ void Scanner::ScanQuotedScalar() {
 
   // setup the scanning parameters
   ScanScalarParams params;
-  RegEx end = (single ? RegEx(quote) & !Exp::EscSingleQuote() : RegEx(quote));
-  params.end = &end;
+  // Dont rebuild RegEx every time, as it involves dynamic memory allocation for subpatterns
+  static const RegEx singleQuoteEnd = RegEx('\'') & !Exp::EscSingleQuote();
+  static const RegEx doubleQuoteEnd('"');
+  if (single) {
+    params.end = &singleQuoteEnd;
+  } else {
+    params.end = &doubleQuoteEnd;
+  }
   params.eatEnd = true;
   params.escape = (single ? '\'' : '\\');
   params.indent = 0;
