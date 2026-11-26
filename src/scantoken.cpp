@@ -1,4 +1,5 @@
 #include <sstream>
+#include <utility>
 
 #include "exp.h"
 #include "regex_yaml.h"
@@ -325,9 +326,8 @@ void Scanner::ScanPlainScalar() {
   // if(Exp::IllegalCharInScalar.Matches(INPUT))
   //	throw ParserException(INPUT.mark(), ErrorMsg::CHAR_IN_SCALAR);
 
-  Token token(Token::PLAIN_SCALAR, mark);
-  token.value = scalar;
-  m_tokens.push(token);
+  m_tokens.emplace(Token::PLAIN_SCALAR, mark);
+  m_tokens.back().value = std::move(scalar);
 }
 
 // QuotedScalar
@@ -369,9 +369,8 @@ void Scanner::ScanQuotedScalar() {
   m_scalarValueAllowed = InFlowContext();
   m_canBeJSONFlow = true;
 
-  Token token(Token::NON_PLAIN_SCALAR, mark);
-  token.value = scalar;
-  m_tokens.push(token);
+  m_tokens.emplace(Token::NON_PLAIN_SCALAR, mark);
+  m_tokens.back().value = std::move(scalar);
 }
 
 // BlockScalarToken
@@ -437,8 +436,7 @@ void Scanner::ScanBlockScalar() {
   m_simpleKeyAllowed = true;
   m_canBeJSONFlow = false;
 
-  Token token(Token::NON_PLAIN_SCALAR, mark);
-  token.value = scalar;
-  m_tokens.push(token);
+  m_tokens.emplace(Token::NON_PLAIN_SCALAR, mark);
+  m_tokens.back().value = std::move(scalar);
 }
 }  // namespace YAML
