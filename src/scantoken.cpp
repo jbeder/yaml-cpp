@@ -369,7 +369,6 @@ void Scanner::ScanQuotedScalar() {
   m_scalarValueAllowed = InFlowContext();
   m_canBeJSONFlow = true;
 
-  
   m_tokens.emplace(Token::NON_PLAIN_SCALAR, mark);
   m_tokens.back().value = std::move(scalar);
 }
